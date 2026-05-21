@@ -1,0 +1,12 @@
+linters:
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - unused
+    - ineffassign
+    - misspell
+
+issues:
+  exclude-dirs:
+    - internal/api  # generated code

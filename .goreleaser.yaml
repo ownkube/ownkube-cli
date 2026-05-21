@@ -1,0 +1,57 @@
+version: 2
+
+builds:
+  - binary: okctl
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X github.com/ownkube/okctl/internal/version.Version={{.Version}}
+      - -X github.com/ownkube/okctl/internal/version.Commit={{.ShortCommit}}
+      - -X github.com/ownkube/okctl/internal/version.Date={{.Date}}
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+
+brews:
+  - name: okctl
+    repository:
+      owner: ownkube
+      name: homebrew-tap
+      branch: main
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    homepage: "https://github.com/ownkube/ownkube-cli"
+    description: "Command-line interface for the Ownkube developer platform"
+    license: "MIT"
+    commit_author:
+      name: ownkube-bot
+      email: bot@ownkube.io
+    directory: Formula
+    install: |
+      bin.install "okctl"
+      generate_completions_from_executable(bin/"okctl", "completion")
+    test: |
+      system "#{bin}/okctl", "version"
+    skip_upload: auto
