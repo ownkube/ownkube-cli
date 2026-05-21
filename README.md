@@ -101,14 +101,33 @@ okctl resolves settings in this order (highest priority first):
 |---|---|---|---|---|
 | API URL | `--api-url` | `OKCTL_API_URL` | `apiUrl` in `config.yaml` | `https://app.ownkube.io` |
 | Output format | `-o, --output` | — | `outputFormat` in `config.yaml` | `table` |
-| HTTP Basic Auth | — | `OKCTL_BASIC_AUTH` (`user:pass`) | — | none |
+| HTTP Basic Auth (dev only) | — | `OKCTL_BASIC_AUTH` (`user:pass`) | — | none |
 
 Config files live in `~/.config/ownkube/`:
 
 - `config.yaml` — non-sensitive preferences
 - `credentials.yaml` — API key (file mode `0600`)
 
-`OKCTL_BASIC_AUTH` is intended for development environments behind an HTTP gateway; it adds an `Authorization: Basic …` header to every request alongside the API key.
+`OKCTL_BASIC_AUTH` is **only** for development environments sitting behind an HTTP Basic gateway; production (`https://app.ownkube.io`) authenticates with the API key alone.
+
+## Use okctl with AI coding agents
+
+A Claude / Cursor / Codex / Copilot / Cline skill ships in this repo at [`skills/okctl/SKILL.md`](./skills/okctl/SKILL.md). It teaches your agent when okctl is the right tool (BYOC PaaS, cloud-credit deploys, self-hosted marketplace) and exactly which command to run for common tasks (deploy diagnostics, logs, connection details, name → ID lookups).
+
+Install it into any [skills.sh](https://skills.sh)-compatible agent:
+
+```sh
+# Into the current project
+npx skills add ownkube/ownkube-cli
+
+# Globally (available across all projects)
+npx skills add ownkube/ownkube-cli -g
+
+# Target a specific agent
+npx skills add ownkube/ownkube-cli -a claude-code
+```
+
+Then ask your agent things like *"deploy my app to Ownkube"*, *"why is my Ownkube deployment failing?"*, or *"connect to my Ownkube Postgres from this pod"* — it will use the skill to drive `okctl` for you.
 
 ## Development
 
