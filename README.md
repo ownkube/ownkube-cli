@@ -127,8 +127,9 @@ okctl resolves settings in this order (highest priority first):
 
 | Setting | Flag | Env var | Config file | Default |
 |---|---|---|---|---|
-| API URL | `--api-url` | `OKCTL_API_URL` | `apiUrl` in `config.yaml` | `https://app.ownkube.io` |
-| Output format | `-o, --output` | — | `outputFormat` in `config.yaml` | `table` |
+| API URL | `--api-url` | `OKCTL_API_URL` | `api_url` in `config.yaml` | `https://app.ownkube.io` |
+| Output format | `-o, --output` | — | `output_format` in `config.yaml` | `table` |
+| Organization | `--organization` | `OKCTL_ORGANIZATION` | `organization` in `config.yaml` | none |
 | HTTP Basic Auth (dev only) | — | `OKCTL_BASIC_AUTH` (`user:pass`) | — | none |
 
 Config files live in `~/.config/ownkube/`:

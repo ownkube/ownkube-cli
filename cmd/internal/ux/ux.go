@@ -20,6 +20,7 @@ import (
 type Globals struct {
 	APIURL       string
 	OutputFormat string
+	Organization string
 	Config       *config.Manager
 }
 
@@ -34,6 +35,10 @@ func APIURL() string { return g.APIURL }
 
 // OutputFormat returns the resolved output format ("table", "json", "yaml").
 func OutputFormat() string { return g.OutputFormat }
+
+// Organization returns the resolved default organization ID, or "" when none is
+// configured (single-org accounts don't need one).
+func Organization() string { return g.Organization }
 
 // IsStructured reports whether the output format expects a structured
 // (machine-readable) encoder rather than a human-readable table.
@@ -63,7 +68,7 @@ func RequireClient() (*client.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	return client.New(g.APIURL, creds.APIKey)
+	return client.New(g.APIURL, creds.APIKey, g.Organization)
 }
 
 // Print writes data using the configured output format.

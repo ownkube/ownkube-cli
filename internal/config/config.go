@@ -17,6 +17,10 @@ const (
 type Config struct {
 	APIURL       string `yaml:"api_url,omitempty"`
 	OutputFormat string `yaml:"output_format,omitempty"`
+	// Organization is the default org ID sent as the x-ownkube-organization
+	// header. Required for org-scoped commands when the account belongs to
+	// more than one organization.
+	Organization string `yaml:"organization,omitempty"`
 }
 
 // Credentials holds auth info stored in credentials.yaml (0600).
@@ -135,6 +139,8 @@ func (cfg *Config) Get(key string) (string, error) {
 		return cfg.APIURL, nil
 	case "output_format":
 		return cfg.OutputFormat, nil
+	case "organization":
+		return cfg.Organization, nil
 	default:
 		return "", fmt.Errorf("unknown config key: %s", key)
 	}
@@ -147,8 +153,10 @@ func (cfg *Config) Set(key, value string) error {
 		cfg.APIURL = value
 	case "output_format":
 		cfg.OutputFormat = value
+	case "organization":
+		cfg.Organization = value
 	default:
-		return fmt.Errorf("unknown config key: %s (valid keys: api_url, output_format)", key)
+		return fmt.Errorf("unknown config key: %s (valid keys: api_url, output_format, organization)", key)
 	}
 	return nil
 }

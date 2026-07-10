@@ -64,7 +64,8 @@ func Status() *cobra.Command {
 				return nil
 			}
 
-			c, err := client.New(ux.APIURL(), creds.APIKey)
+			// /v1/info is user-level (org-agnostic); no org scoping needed.
+			c, err := client.New(ux.APIURL(), creds.APIKey, "")
 			if err != nil {
 				return err
 			}
@@ -174,7 +175,7 @@ func runLogin(cmd *cobra.Command, args []string) error {
 	}
 
 	fmt.Fprintf(cmd.OutOrStdout(), "Verifying credentials...\n")
-	c, err := client.New(ux.APIURL(), apiKey)
+	c, err := client.New(ux.APIURL(), apiKey, "")
 	if err != nil {
 		return err
 	}

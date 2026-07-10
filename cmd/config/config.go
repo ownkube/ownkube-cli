@@ -22,7 +22,7 @@ func getCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "get <key>",
 		Short: "Get a configuration value",
-		Long:  "Get a CLI configuration value.\n\nValid keys: api_url, output_format",
+		Long:  "Get a CLI configuration value.\n\nValid keys: api_url, output_format, organization",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg, err := ux.Config().LoadConfig()
@@ -47,7 +47,7 @@ func setCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "set <key> <value>",
 		Short: "Set a configuration value",
-		Long:  "Set a CLI configuration value.\n\nValid keys: api_url, output_format",
+		Long:  "Set a CLI configuration value.\n\nValid keys: api_url, output_format, organization",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg, err := ux.Config().LoadConfig()
@@ -82,6 +82,7 @@ func viewCmd() *cobra.Command {
 				{"KEY", "VALUE"},
 				{"api_url", displayVal(cfg.APIURL)},
 				{"output_format", displayVal(cfg.OutputFormat)},
+				{"organization", displayVal(cfg.Organization)},
 			})
 		},
 	}

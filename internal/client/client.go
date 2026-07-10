@@ -18,17 +18,23 @@ type Client struct {
 	apiURL string
 }
 
-// New creates a new Client targeting the given API base URL with the provided API key.
+// New creates a new Client targeting the given API base URL with the provided
+// API key. When organization is non-empty it is sent as the
+// x-ownkube-organization header, scoping org-bound requests — required when the
+// account belongs to more than one organization.
 //
 // If OKCTL_BASIC_AUTH is set ("user:pass"), it is sent as an HTTP Basic
 // Authorization header on every request — useful for dev environments behind
 // an HTTP gateway.
-func New(apiURL, apiKey string) (*Client, error) {
+func New(apiURL, apiKey, organization string) (*Client, error) {
 	basicUser, basicPass, hasBasic := parseBasicAuthEnv(os.Getenv("OKCTL_BASIC_AUTH"))
 
 	editor := api.WithRequestEditorFn(func(ctx context.Context, req *http.Request) error {
 		req.Header.Set("x-api-key", apiKey)
 		req.Header.Set("User-Agent", "okctl/"+version.Version)
+		if organization != "" {
+			req.Header.Set("x-ownkube-organization", organization)
+		}
 		if hasBasic {
 			req.SetBasicAuth(basicUser, basicPass)
 		}
@@ -439,6 +445,12 @@ func (c *Client) DeleteAwsAccount(ctx context.Context, accountID string) error {
 func checkError(status int, candidates []*api.ErrorResponse, body []byte) error {
 	for _, e := range candidates {
 		if e != nil {
+			if e.Code == "ORGANIZATION_REQUIRED" {
+				return fmt.Errorf(
+					"you belong to multiple organizations — select one with --organization <id>, " +
+						"OKCTL_ORGANIZATION, or 'okctl config set organization <id>' " +
+						"(list them with 'okctl organizations list')")
+			}
 			return fmt.Errorf("API error %d (%s): %s", status, e.Code, e.Error)
 		}
 	}

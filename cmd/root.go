@@ -23,6 +23,7 @@ import (
 var (
 	flagAPIURL string
 	flagOutput string
+	flagOrg    string
 )
 
 var rootCmd = &cobra.Command{
@@ -43,10 +44,15 @@ var rootCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
+		org, err := resolveOrganization(mgr)
+		if err != nil {
+			return err
+		}
 
 		ux.Set(ux.Globals{
 			APIURL:       apiURL,
 			OutputFormat: out,
+			Organization: org,
 			Config:       mgr,
 		})
 		return nil
@@ -58,6 +64,7 @@ var rootCmd = &cobra.Command{
 func init() {
 	rootCmd.PersistentFlags().StringVar(&flagAPIURL, "api-url", "", "Ownkube API URL (env: OKCTL_API_URL)")
 	rootCmd.PersistentFlags().StringVarP(&flagOutput, "output", "o", "", "Output format: table, json, yaml")
+	rootCmd.PersistentFlags().StringVar(&flagOrg, "organization", "", "Organization ID for org-scoped commands (env: OKCTL_ORGANIZATION)")
 
 	rootCmd.AddCommand(
 		auth.Login(),
@@ -97,6 +104,23 @@ func resolveAPIURL(mgr *cfgpkg.Manager) (string, error) {
 		return cfg.APIURL, nil
 	}
 	return cfgpkg.DefaultAPIURL, nil
+}
+
+// resolveOrganization applies the priority chain: flag > env > config.
+// An empty result is valid — single-org accounts don't need one, and the
+// server resolves the sole membership automatically.
+func resolveOrganization(mgr *cfgpkg.Manager) (string, error) {
+	if flagOrg != "" {
+		return flagOrg, nil
+	}
+	if v := os.Getenv("OKCTL_ORGANIZATION"); v != "" {
+		return v, nil
+	}
+	cfg, err := mgr.LoadConfig()
+	if err != nil {
+		return "", err
+	}
+	return cfg.Organization, nil
 }
 
 // resolveOutputFormat applies the priority chain: flag > config > default.
