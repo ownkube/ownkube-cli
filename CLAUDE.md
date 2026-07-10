@@ -43,9 +43,13 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
   - `cmd/auth/`: `login`, `logout`, `status`.
   - `cmd/config/`: `config get|set|view`.
   - `cmd/deploy/`: `deploy list|get|create|update|delete|status|logs|revisions|rollback|auto-deploy|connection`.
+  - `cmd/aws/`: `aws connect|list|get|verify|reconnect|resync|delete` — the only
+    write command tree. `connect` handles browser handoff (default), autonomous
+    `--deploy` (shells out to the `aws` CLI), and polls the account until
+    `verified`/`failed`.
   - `cmd/internal/ux/`: shared helpers — `RequireClient`, `Print`, `Deref`,
-    `ReadFileOrStdin`, `IsStructured`, `APIURL`, `Config`. Set once per
-    invocation by `cmd/root.go`'s `PersistentPreRunE` via `ux.Set(...)`.
+    `ReadFileOrStdin`, `IsStructured`, `APIURL`, `Config`, `OpenBrowser`. Set
+    once per invocation by `cmd/root.go`'s `PersistentPreRunE` via `ux.Set(...)`.
   - `completion.go`, `version.go`: small leaf commands kept flat.
 - **internal/api/**: GENERATED Go client from `api/openapi.json` — do NOT edit.
 - **internal/client/**: Thin wrapper around generated client (API key

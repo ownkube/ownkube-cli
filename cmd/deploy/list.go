@@ -45,7 +45,7 @@ the API does not support listing across all clusters at once.`,
 			rows := [][]string{{"ID", "NAME", "TYPE", "STATUS", "CLUSTER", "HOSTNAME"}}
 			for _, d := range deps {
 				rows = append(rows, []string{
-					d.Id, d.Name, string(d.ResourceType), d.Status, d.ClusterId, ux.Deref(d.PublicHostname),
+					d.Id, d.Name, string(d.ResourceType), d.Status, ux.Deref(d.ClusterId), ux.Deref(d.PublicHostname),
 				})
 			}
 			return ux.Print(cmd.OutOrStdout(), rows)

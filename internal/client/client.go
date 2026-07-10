@@ -315,6 +315,124 @@ func (c *Client) GetRegistry(ctx context.Context, id string) (*api.Registry, err
 }
 
 // ---------------------------------------------------------------------------
+// AWS onboarding
+// ---------------------------------------------------------------------------
+
+// ConnectAws calls POST /v1/aws/connect. It starts a new cross-account
+// onboarding and returns both a browser handoff URL and a machine-readable
+// stack template for autonomous deployment.
+func (c *Client) ConnectAws(ctx context.Context) (*api.AwsConnectResponse, error) {
+	resp, err := c.inner.PostV1AwsConnectWithResponse(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("API request failed: %w", err)
+	}
+	if err := checkError(resp.StatusCode(), errorsFromConnectAws(resp), resp.Body); err != nil {
+		return nil, err
+	}
+	if resp.JSON200 == nil {
+		return nil, unexpectedStatus(resp.StatusCode(), resp.Body)
+	}
+	return resp.JSON200, nil
+}
+
+// ListAwsAccounts calls GET /v1/aws/accounts.
+func (c *Client) ListAwsAccounts(ctx context.Context) ([]api.AwsAccount, error) {
+	resp, err := c.inner.GetV1AwsAccountsWithResponse(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("API request failed: %w", err)
+	}
+	if err := checkError(resp.StatusCode(), errorsFromListAwsAccounts(resp), resp.Body); err != nil {
+		return nil, err
+	}
+	if resp.JSON200 == nil {
+		return nil, unexpectedStatus(resp.StatusCode(), resp.Body)
+	}
+	return resp.JSON200.Accounts, nil
+}
+
+// GetAwsAccount calls GET /v1/aws/accounts/{accountId}.
+func (c *Client) GetAwsAccount(ctx context.Context, accountID string) (*api.AwsAccount, error) {
+	resp, err := c.inner.GetV1AwsAccountsAccountIdWithResponse(ctx, accountID)
+	if err != nil {
+		return nil, fmt.Errorf("API request failed: %w", err)
+	}
+	if err := checkError(resp.StatusCode(), errorsFromGetAwsAccount(resp), resp.Body); err != nil {
+		return nil, err
+	}
+	if resp.JSON200 == nil {
+		return nil, unexpectedStatus(resp.StatusCode(), resp.Body)
+	}
+	return resp.JSON200, nil
+}
+
+// VerifyAwsAccount calls POST /v1/aws/accounts/{accountId}/verify. When
+// awsAccountID is non-empty it is sent as a query param to verify immediately
+// (autonomous mode) instead of waiting for the stack's phone-home.
+func (c *Client) VerifyAwsAccount(ctx context.Context, accountID, awsAccountID string) (*api.AwsVerifyResponse, error) {
+	params := &api.PostV1AwsAccountsAccountIdVerifyParams{}
+	if awsAccountID != "" {
+		params.AwsAccountId = &awsAccountID
+	}
+	resp, err := c.inner.PostV1AwsAccountsAccountIdVerifyWithResponse(ctx, accountID, params)
+	if err != nil {
+		return nil, fmt.Errorf("API request failed: %w", err)
+	}
+	if err := checkError(resp.StatusCode(), errorsFromVerifyAws(resp), resp.Body); err != nil {
+		return nil, err
+	}
+	if resp.JSON200 == nil {
+		return nil, unexpectedStatus(resp.StatusCode(), resp.Body)
+	}
+	return resp.JSON200, nil
+}
+
+// ReconnectAwsAccount calls POST /v1/aws/accounts/{accountId}/reconnect. It
+// mints a fresh external ID + quick-create URL to re-launch the stack.
+func (c *Client) ReconnectAwsAccount(ctx context.Context, accountID string) (*api.AwsReconnectResponse, error) {
+	resp, err := c.inner.PostV1AwsAccountsAccountIdReconnectWithResponse(ctx, accountID)
+	if err != nil {
+		return nil, fmt.Errorf("API request failed: %w", err)
+	}
+	if err := checkError(resp.StatusCode(), errorsFromReconnectAws(resp), resp.Body); err != nil {
+		return nil, err
+	}
+	if resp.JSON200 == nil {
+		return nil, unexpectedStatus(resp.StatusCode(), resp.Body)
+	}
+	return resp.JSON200, nil
+}
+
+// ResyncAwsAccount calls POST /v1/aws/accounts/{accountId}/resync.
+func (c *Client) ResyncAwsAccount(ctx context.Context, accountID string) error {
+	resp, err := c.inner.PostV1AwsAccountsAccountIdResyncWithResponse(ctx, accountID)
+	if err != nil {
+		return fmt.Errorf("API request failed: %w", err)
+	}
+	if err := checkError(resp.StatusCode(), errorsFromResyncAws(resp), resp.Body); err != nil {
+		return err
+	}
+	if resp.JSON200 == nil {
+		return unexpectedStatus(resp.StatusCode(), resp.Body)
+	}
+	return nil
+}
+
+// DeleteAwsAccount calls DELETE /v1/aws/accounts/{accountId} (soft delete).
+func (c *Client) DeleteAwsAccount(ctx context.Context, accountID string) error {
+	resp, err := c.inner.DeleteV1AwsAccountsAccountIdWithResponse(ctx, accountID)
+	if err != nil {
+		return fmt.Errorf("API request failed: %w", err)
+	}
+	if err := checkError(resp.StatusCode(), errorsFromDeleteAws(resp), resp.Body); err != nil {
+		return err
+	}
+	if resp.JSON200 == nil {
+		return unexpectedStatus(resp.StatusCode(), resp.Body)
+	}
+	return nil
+}
+
+// ---------------------------------------------------------------------------
 // Error handling helpers
 // ---------------------------------------------------------------------------
 
@@ -403,5 +521,33 @@ func errorsFromListRegistries(r *api.GetV1RegistriesResponse) []*api.ErrorRespon
 }
 
 func errorsFromGetRegistry(r *api.GetV1RegistriesRegistryIdResponse) []*api.ErrorResponse {
+	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
+}
+
+func errorsFromConnectAws(r *api.PostV1AwsConnectResponse) []*api.ErrorResponse {
+	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
+}
+
+func errorsFromListAwsAccounts(r *api.GetV1AwsAccountsResponse) []*api.ErrorResponse {
+	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
+}
+
+func errorsFromGetAwsAccount(r *api.GetV1AwsAccountsAccountIdResponse) []*api.ErrorResponse {
+	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
+}
+
+func errorsFromVerifyAws(r *api.PostV1AwsAccountsAccountIdVerifyResponse) []*api.ErrorResponse {
+	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
+}
+
+func errorsFromReconnectAws(r *api.PostV1AwsAccountsAccountIdReconnectResponse) []*api.ErrorResponse {
+	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
+}
+
+func errorsFromResyncAws(r *api.PostV1AwsAccountsAccountIdResyncResponse) []*api.ErrorResponse {
+	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
+}
+
+func errorsFromDeleteAws(r *api.DeleteV1AwsAccountsAccountIdResponse) []*api.ErrorResponse {
 	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
 }

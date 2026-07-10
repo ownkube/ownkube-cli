@@ -44,6 +44,9 @@ okctl login
 # Check who you are
 okctl status
 
+# Connect an AWS account (opens the console to deploy a scoped access role)
+okctl aws connect
+
 # List clusters / environments / deployments
 okctl clusters list
 okctl environments list
@@ -62,11 +65,36 @@ Use `--output json` (or `yaml`) on any read command for machine-readable output:
 okctl deploy get <deployment-id> -o json | jq .
 ```
 
+## Connect an AWS account
+
+`okctl aws connect` onboards an AWS account end to end. Ownkube never receives
+your AWS keys. The CloudFormation stack you deploy grants a scoped cross-account
+role and phones home when it is ready.
+
+```sh
+# Handoff: opens the AWS console to a quick-create form, then waits for access
+okctl aws connect
+
+# Autonomous: deploy the stack with the AWS credentials already in your shell
+# (requires the AWS CLI). Great for headless / agent use.
+okctl aws connect --deploy
+
+# Check status any time
+okctl aws list
+okctl aws get <account-id>
+```
+
+`connect` polls until the account is verified. Add `--no-wait` to return
+immediately, `--no-browser` to print the URL without opening it, and `-o json`
+to get the full payload (external ID + machine-readable stack template) for an
+agent to drive the flow itself.
+
 ## Commands
 
 | Group | What it does |
 |---|---|
 | `okctl login` / `logout` / `status` | Browser-based auth + credential management |
+| `okctl aws connect\|list\|get\|verify\|reconnect\|resync\|delete` | Connect an AWS account and manage its access |
 | `okctl config get\|set\|view` | Manage `~/.config/ownkube/config.yaml` |
 | `okctl clusters list\|get` | Inspect clusters |
 | `okctl environments list\|get` | Inspect environments |

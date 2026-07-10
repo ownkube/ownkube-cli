@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/ownkube/okctl/cmd/auth"
+	awscmd "github.com/ownkube/okctl/cmd/aws"
 	"github.com/ownkube/okctl/cmd/clusters"
 	"github.com/ownkube/okctl/cmd/config"
 	"github.com/ownkube/okctl/cmd/deploy"
@@ -64,6 +65,7 @@ func init() {
 		auth.Status(),
 		config.New(),
 		deploy.New(),
+		awscmd.New(),
 		clusters.New(),
 		environments.New(),
 		organizations.New(),

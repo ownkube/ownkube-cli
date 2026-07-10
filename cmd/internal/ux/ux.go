@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
+	"runtime"
 
 	"github.com/ownkube/okctl/internal/client"
 	"github.com/ownkube/okctl/internal/config"
@@ -83,4 +85,24 @@ func ReadFileOrStdin(path string) ([]byte, error) {
 		return io.ReadAll(os.Stdin)
 	}
 	return os.ReadFile(path)
+}
+
+// OpenBrowser attempts to open url in the user's default browser. It returns an
+// error when the platform is unsupported or the launcher fails to start.
+func OpenBrowser(url string) error {
+	var binary string
+	var args []string
+	switch runtime.GOOS {
+	case "darwin":
+		binary = "open"
+	case "linux":
+		binary = "xdg-open"
+	case "windows":
+		binary = "rundll32"
+		args = []string{"url.dll,FileProtocolHandler"}
+	default:
+		return fmt.Errorf("unsupported platform")
+	}
+	args = append(args, url)
+	return exec.Command(binary, args...).Start()
 }
