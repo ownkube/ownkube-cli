@@ -86,9 +86,9 @@ func platformVersionsCmd() *cobra.Command {
 				fmt.Fprintln(cmd.OutOrStdout(), "No platform versions found.")
 				return nil
 			}
-			rows := [][]string{{"VERSION", "APP VERSION", "DESCRIPTION"}}
+			rows := [][]string{{"VERSION", "APP VERSION"}}
 			for _, v := range versions {
-				rows = append(rows, []string{v.Version, ux.Deref(v.AppVersion), ux.Deref(v.Description)})
+				rows = append(rows, []string{v.Version, ux.Deref(v.AppVersion)})
 			}
 			return ux.Print(cmd.OutOrStdout(), rows)
 		},

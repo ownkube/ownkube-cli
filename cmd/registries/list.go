@@ -30,10 +30,10 @@ func listCmd() *cobra.Command {
 				return nil
 			}
 
-			rows := [][]string{{"ID", "NAME", "PROVIDER", "REGION", "STATUS"}}
+			rows := [][]string{{"ID", "PROVIDER", "ACCOUNT", "STATUS"}}
 			for _, r := range regs {
 				rows = append(rows, []string{
-					r.Id, r.Name, r.Provider, ux.Deref(r.Region), ux.Deref(r.Status),
+					r.Id, r.Provider, r.Account, ux.Deref(r.Status),
 				})
 			}
 			return ux.Print(cmd.OutOrStdout(), rows)

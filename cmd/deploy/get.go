@@ -34,7 +34,7 @@ func getCmd() *cobra.Command {
 				{"Cluster", ux.Deref(d.ClusterId)},
 				{"Environment", ux.Deref(d.EnvironmentId)},
 				{"Public Hostname", ux.Deref(d.PublicHostname)},
-				{"Chart Version", ux.Deref(d.ChartVersion)},
+				{"Platform Version", ux.Deref(d.ChartVersion)},
 			})
 		},
 	}

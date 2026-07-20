@@ -27,12 +27,10 @@ func getCmd() *cobra.Command {
 			return ux.Print(cmd.OutOrStdout(), [][]string{
 				{"FIELD", "VALUE"},
 				{"ID", r.Id},
-				{"Name", r.Name},
 				{"Provider", r.Provider},
-				{"Region", ux.Deref(r.Region)},
-				{"Registry URL", ux.Deref(r.RegistryUrl)},
+				{"Account", r.Account},
+				{"Account Type", ux.Deref(r.AccountType)},
 				{"Status", ux.Deref(r.Status)},
-				{"Account ID", ux.Deref(r.AccountId)},
 			})
 		},
 	}
