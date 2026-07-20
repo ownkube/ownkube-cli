@@ -42,11 +42,17 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
     subpackages via `rootCmd.AddCommand(auth.Login(), ..., deploy.New(), ...)`.
   - `cmd/auth/`: `login`, `logout`, `status`.
   - `cmd/config/`: `config get|set|view`.
-  - `cmd/deploy/`: `deploy list|get|create|update|delete|status|logs|revisions|rollback|auto-deploy|connection`.
-  - `cmd/aws/`: `aws connect|list|get|verify|reconnect|resync|delete` — the only
-    write command tree. `connect` handles browser handoff (default), autonomous
-    `--deploy` (shells out to the `aws` CLI), and polls the account until
-    `verified`/`failed`.
+  - `cmd/deploy/`: read verbs (`list|get|status|logs|revisions|connection`) plus
+    the full write surface (`create|update|delete|copy|promote|rollback|
+    reset-password|upgrade|platform-versions|job-runs`). `create`/`update` take a
+    manifest via `-f` (`-` = stdin); `create` also has web convenience flags
+    (`--name/--image/--tag/--port/--env/--public`). `delete` and `reset-password`
+    confirm unless `--yes`. `upgrade` moves the platform version (`--function` for
+    functions). Client wrappers live in `internal/client/deployment_write.go`
+    (reads stay in `client.go`); table/JSON render helpers in `cmd/deploy/render.go`.
+  - `cmd/aws/`: `aws connect|list|get|verify|reconnect|resync|delete`. `connect`
+    handles browser handoff (default), autonomous `--deploy` (shells out to the
+    `aws` CLI), and polls the account until `verified`/`failed`.
   - `cmd/internal/ux/`: shared helpers — `RequireClient`, `Print`, `Deref`,
     `ReadFileOrStdin`, `IsStructured`, `APIURL`, `Config`, `OpenBrowser`. Set
     once per invocation by `cmd/root.go`'s `PersistentPreRunE` via `ux.Set(...)`.
@@ -127,7 +133,16 @@ flat files in `cmd/` are the root wiring, completion, and version.
 1. Add the endpoint in `ownkube-app/src/services/cli/` (route file + register
    on `cliApp`).
 2. Regenerate: see "Rebuild from updated spec" above.
-3. Add a method to `internal/client/client.go` wrapping the generated call
-   and reusing `checkError(...)` for error handling.
+3. Add a method to `internal/client/client.go` (or a topic file like
+   `deployment_write.go`) wrapping the generated call and reusing
+   `checkError(...)` + a per-endpoint `errorsFromXxx` adapter.
 4. Wire a cobra command in the relevant `cmd/<resource>/` subpackage (see
    "Organising new code").
+
+**Gotcha — `oneOf` request bodies.** oapi-codegen renders an OpenAPI `oneOf`
+body (e.g. the deployment `create` union) as a struct with an *unexported*
+`union json.RawMessage` field and no marshal helper, so the typed
+`...WithResponse(ctx, body)` call sends `{}`. For such endpoints send raw bytes
+via the `...WithBodyWithResponse(ctx, "application/json", bytes.NewReader(b))`
+variant instead (see `CreateDeployment`/`UpdateDeployment`). Manifests are read
+with `ux.ReadFileOrStdin` and normalised through `manifestToJSON` (YAML⊃JSON).

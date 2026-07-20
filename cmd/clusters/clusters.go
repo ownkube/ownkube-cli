@@ -9,6 +9,6 @@ func New() *cobra.Command {
 		Use:   "clusters",
 		Short: "Manage clusters",
 	}
-	root.AddCommand(listCmd(), getCmd())
+	root.AddCommand(listCmd(), getCmd(), createCmd(), deleteCmd(), cancelCmd(), statusCmd())
 	return root
 }

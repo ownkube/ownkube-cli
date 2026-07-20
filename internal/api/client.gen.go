@@ -33,13 +33,222 @@ const (
 	Retry    AwsConnectionFailureKind = "retry"
 )
 
+// Defines values for CreateDeploymentResponseResourceType.
+const (
+	CreateDeploymentResponseResourceTypeDatabase CreateDeploymentResponseResourceType = "database"
+	CreateDeploymentResponseResourceTypeFunction CreateDeploymentResponseResourceType = "function"
+	CreateDeploymentResponseResourceTypeJob      CreateDeploymentResponseResourceType = "job"
+	CreateDeploymentResponseResourceTypeWeb      CreateDeploymentResponseResourceType = "web"
+	CreateDeploymentResponseResourceTypeWorker   CreateDeploymentResponseResourceType = "worker"
+)
+
+// Defines values for CreateEnvironmentBodyColor.
+const (
+	CreateEnvironmentBodyColorAmber  CreateEnvironmentBodyColor = "amber"
+	CreateEnvironmentBodyColorBlue   CreateEnvironmentBodyColor = "blue"
+	CreateEnvironmentBodyColorGreen  CreateEnvironmentBodyColor = "green"
+	CreateEnvironmentBodyColorPurple CreateEnvironmentBodyColor = "purple"
+	CreateEnvironmentBodyColorRed    CreateEnvironmentBodyColor = "red"
+)
+
 // Defines values for DeploymentResourceType.
 const (
-	Database DeploymentResourceType = "database"
-	Function DeploymentResourceType = "function"
-	Job      DeploymentResourceType = "job"
-	Web      DeploymentResourceType = "web"
-	Worker   DeploymentResourceType = "worker"
+	DeploymentResourceTypeDatabase DeploymentResourceType = "database"
+	DeploymentResourceTypeFunction DeploymentResourceType = "function"
+	DeploymentResourceTypeJob      DeploymentResourceType = "job"
+	DeploymentResourceTypeWeb      DeploymentResourceType = "web"
+	DeploymentResourceTypeWorker   DeploymentResourceType = "worker"
+)
+
+// Defines values for DeploymentActionResultResourceType.
+const (
+	DeploymentActionResultResourceTypeDatabase DeploymentActionResultResourceType = "database"
+	DeploymentActionResultResourceTypeFunction DeploymentActionResultResourceType = "function"
+	DeploymentActionResultResourceTypeJob      DeploymentActionResultResourceType = "job"
+	DeploymentActionResultResourceTypeWeb      DeploymentActionResultResourceType = "web"
+	DeploymentActionResultResourceTypeWorker   DeploymentActionResultResourceType = "worker"
+)
+
+// Defines values for UpdateDeploymentBodyAppConfigAuthOauthProvider.
+const (
+	UpdateDeploymentBodyAppConfigAuthOauthProviderGoogle UpdateDeploymentBodyAppConfigAuthOauthProvider = "google"
+)
+
+// Defines values for UpdateDeploymentBodyDatabaseConfigEngine.
+const (
+	UpdateDeploymentBodyDatabaseConfigEnginePostgres UpdateDeploymentBodyDatabaseConfigEngine = "postgres"
+)
+
+// Defines values for UpdateDeploymentBodyDatabaseConfigPoolerMode.
+const (
+	UpdateDeploymentBodyDatabaseConfigPoolerModeSession     UpdateDeploymentBodyDatabaseConfigPoolerMode = "session"
+	UpdateDeploymentBodyDatabaseConfigPoolerModeTransaction UpdateDeploymentBodyDatabaseConfigPoolerMode = "transaction"
+)
+
+// Defines values for UpdateDeploymentBodyDatabaseConfigPoolerType.
+const (
+	UpdateDeploymentBodyDatabaseConfigPoolerTypeRo UpdateDeploymentBodyDatabaseConfigPoolerType = "ro"
+	UpdateDeploymentBodyDatabaseConfigPoolerTypeRw UpdateDeploymentBodyDatabaseConfigPoolerType = "rw"
+)
+
+// Defines values for UpdateDeploymentBodyDatabaseConfigVersion.
+const (
+	UpdateDeploymentBodyDatabaseConfigVersionN17 UpdateDeploymentBodyDatabaseConfigVersion = "17"
+	UpdateDeploymentBodyDatabaseConfigVersionN18 UpdateDeploymentBodyDatabaseConfigVersion = "18"
+)
+
+// Defines values for UpdateDeploymentBodyJobConfigJobRestartPolicy.
+const (
+	UpdateDeploymentBodyJobConfigJobRestartPolicyNever     UpdateDeploymentBodyJobConfigJobRestartPolicy = "Never"
+	UpdateDeploymentBodyJobConfigJobRestartPolicyOnFailure UpdateDeploymentBodyJobConfigJobRestartPolicy = "OnFailure"
+)
+
+// Defines values for UpdateDeploymentBodyJobConfigScheduleConcurrencyPolicy.
+const (
+	UpdateDeploymentBodyJobConfigScheduleConcurrencyPolicyAllow   UpdateDeploymentBodyJobConfigScheduleConcurrencyPolicy = "Allow"
+	UpdateDeploymentBodyJobConfigScheduleConcurrencyPolicyForbid  UpdateDeploymentBodyJobConfigScheduleConcurrencyPolicy = "Forbid"
+	UpdateDeploymentBodyJobConfigScheduleConcurrencyPolicyReplace UpdateDeploymentBodyJobConfigScheduleConcurrencyPolicy = "Replace"
+)
+
+// Defines values for UpdateEnvironmentBodyColor.
+const (
+	UpdateEnvironmentBodyColorAmber  UpdateEnvironmentBodyColor = "amber"
+	UpdateEnvironmentBodyColorBlue   UpdateEnvironmentBodyColor = "blue"
+	UpdateEnvironmentBodyColorGreen  UpdateEnvironmentBodyColor = "green"
+	UpdateEnvironmentBodyColorPurple UpdateEnvironmentBodyColor = "purple"
+	UpdateEnvironmentBodyColorRed    UpdateEnvironmentBodyColor = "red"
+)
+
+// Defines values for UpdateFunctionBodyConfigArchitecture.
+const (
+	UpdateFunctionBodyConfigArchitectureArm64 UpdateFunctionBodyConfigArchitecture = "arm64"
+	UpdateFunctionBodyConfigArchitectureX8664 UpdateFunctionBodyConfigArchitecture = "x86_64"
+)
+
+// Defines values for UpdateFunctionBodyConfigTriggersHttpAuthType.
+const (
+	UpdateFunctionBodyConfigTriggersHttpAuthTypeIam  UpdateFunctionBodyConfigTriggersHttpAuthType = "iam"
+	UpdateFunctionBodyConfigTriggersHttpAuthTypeNone UpdateFunctionBodyConfigTriggersHttpAuthType = "none"
+)
+
+// Defines values for PostV1ClustersJSONBodyClusterType.
+const (
+	PostV1ClustersJSONBodyClusterTypeAks PostV1ClustersJSONBodyClusterType = "aks"
+	PostV1ClustersJSONBodyClusterTypeEks PostV1ClustersJSONBodyClusterType = "eks"
+	PostV1ClustersJSONBodyClusterTypeGke PostV1ClustersJSONBodyClusterType = "gke"
+	PostV1ClustersJSONBodyClusterTypeK3s PostV1ClustersJSONBodyClusterType = "k3s"
+)
+
+// Defines values for PostV1ClustersJSONBodyProvider.
+const (
+	Aws   PostV1ClustersJSONBodyProvider = "aws"
+	Azure PostV1ClustersJSONBodyProvider = "azure"
+	Gcp   PostV1ClustersJSONBodyProvider = "gcp"
+)
+
+// Defines values for DeleteV1ClustersClusterIdParamsForce.
+const (
+	False DeleteV1ClustersClusterIdParamsForce = "false"
+	True  DeleteV1ClustersClusterIdParamsForce = "true"
+)
+
+// Defines values for PostV1DeploymentsJSONBody0ConfigAuthOauthProvider.
+const (
+	PostV1DeploymentsJSONBody0ConfigAuthOauthProviderGoogle PostV1DeploymentsJSONBody0ConfigAuthOauthProvider = "google"
+)
+
+// Defines values for PostV1DeploymentsJSONBody0ResourceType.
+const (
+	PostV1DeploymentsJSONBody0ResourceTypeWeb PostV1DeploymentsJSONBody0ResourceType = "web"
+)
+
+// Defines values for PostV1DeploymentsJSONBody1ConfigAuthOauthProvider.
+const (
+	Google PostV1DeploymentsJSONBody1ConfigAuthOauthProvider = "google"
+)
+
+// Defines values for PostV1DeploymentsJSONBody1ResourceType.
+const (
+	PostV1DeploymentsJSONBody1ResourceTypeWorker PostV1DeploymentsJSONBody1ResourceType = "worker"
+)
+
+// Defines values for PostV1DeploymentsJSONBody2ConfigJobRestartPolicy.
+const (
+	PostV1DeploymentsJSONBody2ConfigJobRestartPolicyNever     PostV1DeploymentsJSONBody2ConfigJobRestartPolicy = "Never"
+	PostV1DeploymentsJSONBody2ConfigJobRestartPolicyOnFailure PostV1DeploymentsJSONBody2ConfigJobRestartPolicy = "OnFailure"
+)
+
+// Defines values for PostV1DeploymentsJSONBody2ConfigScheduleConcurrencyPolicy.
+const (
+	PostV1DeploymentsJSONBody2ConfigScheduleConcurrencyPolicyAllow   PostV1DeploymentsJSONBody2ConfigScheduleConcurrencyPolicy = "Allow"
+	PostV1DeploymentsJSONBody2ConfigScheduleConcurrencyPolicyForbid  PostV1DeploymentsJSONBody2ConfigScheduleConcurrencyPolicy = "Forbid"
+	PostV1DeploymentsJSONBody2ConfigScheduleConcurrencyPolicyReplace PostV1DeploymentsJSONBody2ConfigScheduleConcurrencyPolicy = "Replace"
+)
+
+// Defines values for PostV1DeploymentsJSONBody2ResourceType.
+const (
+	Job PostV1DeploymentsJSONBody2ResourceType = "job"
+)
+
+// Defines values for PostV1DeploymentsJSONBody3ConfigEngine.
+const (
+	PostV1DeploymentsJSONBody3ConfigEnginePostgres PostV1DeploymentsJSONBody3ConfigEngine = "postgres"
+)
+
+// Defines values for PostV1DeploymentsJSONBody3ConfigPoolerMode.
+const (
+	PostV1DeploymentsJSONBody3ConfigPoolerModeSession     PostV1DeploymentsJSONBody3ConfigPoolerMode = "session"
+	PostV1DeploymentsJSONBody3ConfigPoolerModeTransaction PostV1DeploymentsJSONBody3ConfigPoolerMode = "transaction"
+)
+
+// Defines values for PostV1DeploymentsJSONBody3ConfigPoolerType.
+const (
+	PostV1DeploymentsJSONBody3ConfigPoolerTypeRo PostV1DeploymentsJSONBody3ConfigPoolerType = "ro"
+	PostV1DeploymentsJSONBody3ConfigPoolerTypeRw PostV1DeploymentsJSONBody3ConfigPoolerType = "rw"
+)
+
+// Defines values for PostV1DeploymentsJSONBody3ConfigVersion.
+const (
+	PostV1DeploymentsJSONBody3ConfigVersionN17 PostV1DeploymentsJSONBody3ConfigVersion = "17"
+	PostV1DeploymentsJSONBody3ConfigVersionN18 PostV1DeploymentsJSONBody3ConfigVersion = "18"
+)
+
+// Defines values for PostV1DeploymentsJSONBody3ResourceType.
+const (
+	Database PostV1DeploymentsJSONBody3ResourceType = "database"
+)
+
+// Defines values for PostV1DeploymentsJSONBody4ConfigArchitecture.
+const (
+	PostV1DeploymentsJSONBody4ConfigArchitectureArm64 PostV1DeploymentsJSONBody4ConfigArchitecture = "arm64"
+	PostV1DeploymentsJSONBody4ConfigArchitectureX8664 PostV1DeploymentsJSONBody4ConfigArchitecture = "x86_64"
+)
+
+// Defines values for PostV1DeploymentsJSONBody4ConfigTriggersHttpAuthType.
+const (
+	PostV1DeploymentsJSONBody4ConfigTriggersHttpAuthTypeIam  PostV1DeploymentsJSONBody4ConfigTriggersHttpAuthType = "iam"
+	PostV1DeploymentsJSONBody4ConfigTriggersHttpAuthTypeNone PostV1DeploymentsJSONBody4ConfigTriggersHttpAuthType = "none"
+)
+
+// Defines values for PostV1DeploymentsJSONBody4ResourceType.
+const (
+	Function PostV1DeploymentsJSONBody4ResourceType = "function"
+)
+
+// Defines values for GetV1PlatformVersionsParamsClusterType.
+const (
+	GetV1PlatformVersionsParamsClusterTypeAks GetV1PlatformVersionsParamsClusterType = "aks"
+	GetV1PlatformVersionsParamsClusterTypeEks GetV1PlatformVersionsParamsClusterType = "eks"
+	GetV1PlatformVersionsParamsClusterTypeGke GetV1PlatformVersionsParamsClusterType = "gke"
+	GetV1PlatformVersionsParamsClusterTypeK3s GetV1PlatformVersionsParamsClusterType = "k3s"
+)
+
+// Defines values for GetV1PlatformVersionsParamsResourceType.
+const (
+	GetV1PlatformVersionsParamsResourceTypeDatabase GetV1PlatformVersionsParamsResourceType = "database"
+	GetV1PlatformVersionsParamsResourceTypeJob      GetV1PlatformVersionsParamsResourceType = "job"
+	GetV1PlatformVersionsParamsResourceTypeWeb      GetV1PlatformVersionsParamsResourceType = "web"
+	GetV1PlatformVersionsParamsResourceTypeWorker   GetV1PlatformVersionsParamsResourceType = "worker"
 )
 
 // AwsAccount defines model for AwsAccount.
@@ -174,6 +383,17 @@ type AwsVerifyResponse struct {
 	Success bool    `json:"success"`
 }
 
+// CancelClusterResponse defines model for CancelClusterResponse.
+type CancelClusterResponse struct {
+	ClusterId string `json:"clusterId"`
+	Status    string `json:"status"`
+}
+
+// CancelJobRunResult defines model for CancelJobRunResult.
+type CancelJobRunResult struct {
+	Canceled bool `json:"canceled"`
+}
+
 // Cluster defines model for Cluster.
 type Cluster struct {
 	ActiveDeploymentCount          *float32           `json:"activeDeploymentCount,omitempty"`
@@ -222,12 +442,106 @@ type ClusterListResponse struct {
 	Clusters []Cluster `json:"clusters"`
 }
 
+// ClusterStatusResponse defines model for ClusterStatusResponse.
+type ClusterStatusResponse struct {
+	Id                   string       `json:"id"`
+	ProviderOutputs      *interface{} `json:"providerOutputs"`
+	ProvisioningProgress *interface{} `json:"provisioningProgress"`
+	Status               string       `json:"status"`
+	StatusMessage        *string      `json:"statusMessage"`
+}
+
 // ConnectionDetailsResponse defines model for ConnectionDetailsResponse.
 type ConnectionDetailsResponse struct {
 	Details     *map[string]*interface{} `json:"details"`
 	Namespace   string                   `json:"namespace"`
 	SecretName  string                   `json:"secretName"`
 	ServiceName string                   `json:"serviceName"`
+}
+
+// CopyDeploymentBody defines model for CopyDeploymentBody.
+type CopyDeploymentBody struct {
+	Note                *string `json:"note,omitempty"`
+	TargetClusterId     string  `json:"targetClusterId"`
+	TargetEnvironmentId string  `json:"targetEnvironmentId"`
+}
+
+// CreateClusterResponse defines model for CreateClusterResponse.
+type CreateClusterResponse struct {
+	ClusterId     string  `json:"clusterId"`
+	Status        string  `json:"status"`
+	StatusMessage *string `json:"statusMessage,omitempty"`
+	WorkflowId    string  `json:"workflowId"`
+}
+
+// CreateDeploymentResponse defines model for CreateDeploymentResponse.
+type CreateDeploymentResponse struct {
+	AppConfig              *interface{}                         `json:"appConfig"`
+	AutoDeployEnabled      *bool                                `json:"autoDeployEnabled"`
+	AutoDeployTagRegex     *string                              `json:"autoDeployTagRegex"`
+	ChartVersion           *string                              `json:"chartVersion"`
+	ClusterId              *string                              `json:"clusterId"`
+	CreatedAt              *CreateDeploymentResponse_CreatedAt  `json:"createdAt,omitempty"`
+	EnvironmentId          *string                              `json:"environmentId"`
+	GithubRepository       *string                              `json:"githubRepository"`
+	Id                     string                               `json:"id"`
+	Name                   string                               `json:"name"`
+	PublicHostname         *string                              `json:"publicHostname"`
+	RegistryId             *string                              `json:"registryId"`
+	ResourceType           CreateDeploymentResponseResourceType `json:"resourceType"`
+	Status                 string                               `json:"status"`
+	StatusMessage          *string                              `json:"statusMessage"`
+	UpdatedAt              *CreateDeploymentResponse_UpdatedAt  `json:"updatedAt,omitempty"`
+	WorkflowPullRequestUrl *string                              `json:"workflowPullRequestUrl"`
+}
+
+// CreateDeploymentResponseCreatedAt0 defines model for .
+type CreateDeploymentResponseCreatedAt0 = string
+
+// CreateDeploymentResponseCreatedAt1 defines model for .
+type CreateDeploymentResponseCreatedAt1 = time.Time
+
+// CreateDeploymentResponse_CreatedAt defines model for CreateDeploymentResponse.CreatedAt.
+type CreateDeploymentResponse_CreatedAt struct {
+	union json.RawMessage
+}
+
+// CreateDeploymentResponseResourceType defines model for CreateDeploymentResponse.ResourceType.
+type CreateDeploymentResponseResourceType string
+
+// CreateDeploymentResponseUpdatedAt0 defines model for .
+type CreateDeploymentResponseUpdatedAt0 = string
+
+// CreateDeploymentResponseUpdatedAt1 defines model for .
+type CreateDeploymentResponseUpdatedAt1 = time.Time
+
+// CreateDeploymentResponse_UpdatedAt defines model for CreateDeploymentResponse.UpdatedAt.
+type CreateDeploymentResponse_UpdatedAt struct {
+	union json.RawMessage
+}
+
+// CreateEnvironmentBody defines model for CreateEnvironmentBody.
+type CreateEnvironmentBody struct {
+	// Color Accent color. Defaults to `blue`.
+	Color       *CreateEnvironmentBodyColor `json:"color,omitempty"`
+	Description *string                     `json:"description,omitempty"`
+	Name        string                      `json:"name"`
+
+	// Slug Lowercase, starts with a letter; letters, numbers, hyphens only.
+	Slug string `json:"slug"`
+}
+
+// CreateEnvironmentBodyColor Accent color. Defaults to `blue`.
+type CreateEnvironmentBodyColor string
+
+// DeleteDeploymentResponse defines model for DeleteDeploymentResponse.
+type DeleteDeploymentResponse struct {
+	Success bool `json:"success"`
+}
+
+// DeleteEnvironmentResponse defines model for DeleteEnvironmentResponse.
+type DeleteEnvironmentResponse struct {
+	Success bool `json:"success"`
 }
 
 // Deployment defines model for Deployment.
@@ -275,6 +589,23 @@ type Deployment_UpdatedAt struct {
 	union json.RawMessage
 }
 
+// DeploymentActionResult defines model for DeploymentActionResult.
+type DeploymentActionResult struct {
+	AppConfig     *interface{}                       `json:"appConfig"`
+	ChartVersion  *string                            `json:"chartVersion"`
+	ClusterId     *string                            `json:"clusterId"`
+	EnvironmentId *string                            `json:"environmentId"`
+	Id            string                             `json:"id"`
+	Name          string                             `json:"name"`
+	RegistryId    *string                            `json:"registryId"`
+	ResourceType  DeploymentActionResultResourceType `json:"resourceType"`
+	Status        string                             `json:"status"`
+	StatusMessage *string                            `json:"statusMessage"`
+}
+
+// DeploymentActionResultResourceType defines model for DeploymentActionResult.ResourceType.
+type DeploymentActionResultResourceType string
+
 // DeploymentListResponse defines model for DeploymentListResponse.
 type DeploymentListResponse struct {
 	Deployments []Deployment `json:"deployments"`
@@ -293,6 +624,22 @@ type DeploymentStatusResponse struct {
 	Sync           string  `json:"sync"`
 }
 
+// DestroyClusterResponse defines model for DestroyClusterResponse.
+type DestroyClusterResponse struct {
+	ClusterId  string  `json:"clusterId"`
+	Status     string  `json:"status"`
+	WorkflowId *string `json:"workflowId"`
+}
+
+// EnvVarInput defines model for EnvVarInput.
+type EnvVarInput struct {
+	Name string `json:"name"`
+
+	// Secret Mark as secret so the value is never returned on reads. Echo a saved secret back with an empty `value` to keep the previous value.
+	Secret *bool  `json:"secret,omitempty"`
+	Value  string `json:"value"`
+}
+
 // Environment defines model for Environment.
 type Environment struct {
 	Color           *string                `json:"color"`
@@ -300,6 +647,7 @@ type Environment struct {
 	DeploymentCount *float32               `json:"deploymentCount,omitempty"`
 	Description     *string                `json:"description"`
 	Id              string                 `json:"id"`
+	IsDefault       *bool                  `json:"isDefault,omitempty"`
 	Name            string                 `json:"name"`
 	Slug            string                 `json:"slug"`
 	UpdatedAt       *Environment_UpdatedAt `json:"updatedAt,omitempty"`
@@ -341,6 +689,17 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
+// JobRunHistory defines model for JobRunHistory.
+type JobRunHistory struct {
+	Exists             bool                      `json:"exists"`
+	LastScheduleTime   *string                   `json:"lastScheduleTime"`
+	LastSuccessfulTime *string                   `json:"lastSuccessfulTime"`
+	Runs               []map[string]*interface{} `json:"runs"`
+	Schedule           *string                   `json:"schedule"`
+	Suspended          *bool                     `json:"suspended,omitempty"`
+	TimeZone           *string                   `json:"timeZone"`
+}
+
 // LogEntry defines model for LogEntry.
 type LogEntry struct {
 	Message   *string `json:"message,omitempty"`
@@ -371,6 +730,36 @@ type OrganizationSummaryCreatedAt1 = time.Time
 // OrganizationSummary_CreatedAt defines model for OrganizationSummary.CreatedAt.
 type OrganizationSummary_CreatedAt struct {
 	union json.RawMessage
+}
+
+// PlatformVersionBody defines model for PlatformVersionBody.
+type PlatformVersionBody struct {
+	ChartVersion string `json:"chartVersion"`
+}
+
+// PlatformVersionEntry defines model for PlatformVersionEntry.
+type PlatformVersionEntry struct {
+	AppVersion  *string `json:"appVersion"`
+	CreatedAt   *string `json:"createdAt"`
+	Description *string `json:"description"`
+	Version     string  `json:"version"`
+}
+
+// PlatformVersionResult defines model for PlatformVersionResult.
+type PlatformVersionResult struct {
+	ChartVersion string `json:"chartVersion"`
+	Success      bool   `json:"success"`
+}
+
+// PlatformVersionsResponse defines model for PlatformVersionsResponse.
+type PlatformVersionsResponse struct {
+	Versions []PlatformVersionEntry `json:"versions"`
+}
+
+// PromoteBody defines model for PromoteBody.
+type PromoteBody struct {
+	Note               *string `json:"note,omitempty"`
+	TargetDeploymentId string  `json:"targetDeploymentId"`
 }
 
 // Registry defines model for Registry.
@@ -412,6 +801,11 @@ type Registry_UpdatedAt struct {
 // RegistryListResponse defines model for RegistryListResponse.
 type RegistryListResponse struct {
 	Registries []Registry `json:"registries"`
+}
+
+// ResetPasswordResult defines model for ResetPasswordResult.
+type ResetPasswordResult struct {
+	Password string `json:"password"`
 }
 
 // Revision defines model for Revision.
@@ -492,6 +886,264 @@ type RevisionListResponse struct {
 	Revisions []Revision `json:"revisions"`
 }
 
+// RollbackBody defines model for RollbackBody.
+type RollbackBody struct {
+	Note *string `json:"note,omitempty"`
+}
+
+// SetEnvVarsBody defines model for SetEnvVarsBody.
+type SetEnvVarsBody struct {
+	// Env The full shared env-var set for the environment (replaces the existing set). Every cluster-bound app in the environment is redeployed to apply it.
+	Env []EnvVarInput `json:"env"`
+}
+
+// SetEnvVarsResponse defines model for SetEnvVarsResponse.
+type SetEnvVarsResponse struct {
+	Env        []EnvVarInput `json:"env"`
+	Failed     float32       `json:"failed"`
+	Redeployed float32       `json:"redeployed"`
+}
+
+// TriggerJobRunResult defines model for TriggerJobRunResult.
+type TriggerJobRunResult struct {
+	JobName string `json:"jobName"`
+}
+
+// UpdateDeploymentBody defines model for UpdateDeploymentBody.
+type UpdateDeploymentBody struct {
+	AppConfig *struct {
+		Auth *struct {
+			BasicAuth *struct {
+				Enabled  *bool   `json:"enabled,omitempty"`
+				Password *string `json:"password,omitempty"`
+				Username string  `json:"username"`
+			} `json:"basicAuth,omitempty"`
+			Oauth *struct {
+				AllowedDomains *[]string                                       `json:"allowedDomains,omitempty"`
+				AllowedEmails  *[]openapi_types.Email                          `json:"allowedEmails,omitempty"`
+				Enabled        *bool                                           `json:"enabled,omitempty"`
+				Provider       *UpdateDeploymentBodyAppConfigAuthOauthProvider `json:"provider,omitempty"`
+			} `json:"oauth,omitempty"`
+		} `json:"auth,omitempty"`
+		Autoscaling *struct {
+			Enabled                           *bool `json:"enabled,omitempty"`
+			MaxReplicas                       *int  `json:"maxReplicas,omitempty"`
+			MinReplicas                       *int  `json:"minReplicas,omitempty"`
+			TargetCPUUtilizationPercentage    *int  `json:"targetCPUUtilizationPercentage,omitempty"`
+			TargetMemoryUtilizationPercentage *int  `json:"targetMemoryUtilizationPercentage,omitempty"`
+		} `json:"autoscaling,omitempty"`
+		Env *[]struct {
+			Name   string `json:"name"`
+			Secret *bool  `json:"secret,omitempty"`
+			Value  string `json:"value"`
+		} `json:"env,omitempty"`
+		HealthCheck *struct {
+			Liveness *struct {
+				Enabled             *bool   `json:"enabled,omitempty"`
+				FailureThreshold    *int    `json:"failureThreshold,omitempty"`
+				InitialDelaySeconds *int    `json:"initialDelaySeconds,omitempty"`
+				Path                string  `json:"path"`
+				PeriodSeconds       *int    `json:"periodSeconds,omitempty"`
+				Port                *string `json:"port,omitempty"`
+				TimeoutSeconds      *int    `json:"timeoutSeconds,omitempty"`
+			} `json:"liveness,omitempty"`
+			Readiness *struct {
+				Enabled             *bool   `json:"enabled,omitempty"`
+				FailureThreshold    *int    `json:"failureThreshold,omitempty"`
+				InitialDelaySeconds *int    `json:"initialDelaySeconds,omitempty"`
+				Path                string  `json:"path"`
+				PeriodSeconds       *int    `json:"periodSeconds,omitempty"`
+				Port                *string `json:"port,omitempty"`
+				TimeoutSeconds      *int    `json:"timeoutSeconds,omitempty"`
+			} `json:"readiness,omitempty"`
+			Startup *struct {
+				Enabled             *bool   `json:"enabled,omitempty"`
+				FailureThreshold    *int    `json:"failureThreshold,omitempty"`
+				InitialDelaySeconds *int    `json:"initialDelaySeconds,omitempty"`
+				Path                string  `json:"path"`
+				PeriodSeconds       *int    `json:"periodSeconds,omitempty"`
+				Port                *string `json:"port,omitempty"`
+				TimeoutSeconds      *int    `json:"timeoutSeconds,omitempty"`
+			} `json:"startup,omitempty"`
+		} `json:"healthCheck,omitempty"`
+		Port       int    `json:"port"`
+		Public     *bool  `json:"public,omitempty"`
+		Replicas   *int   `json:"replicas,omitempty"`
+		Repository string `json:"repository"`
+		Resources  *struct {
+			Limits struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"limits"`
+			Requests struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"requests"`
+		} `json:"resources,omitempty"`
+		Tag        string `json:"tag"`
+		WafEnabled *bool  `json:"wafEnabled,omitempty"`
+	} `json:"appConfig,omitempty"`
+	DatabaseConfig *struct {
+		Backup *struct {
+			BarmanObjectStore *map[string]*interface{} `json:"barmanObjectStore,omitempty"`
+			Enabled           bool                     `json:"enabled"`
+			RetentionPolicy   *string                  `json:"retentionPolicy,omitempty"`
+		} `json:"backup,omitempty"`
+		Bootstrap struct {
+			Database    string    `json:"database"`
+			Owner       string    `json:"owner"`
+			PostInitSQL *[]string `json:"postInitSQL,omitempty"`
+		} `json:"bootstrap"`
+		Engine     UpdateDeploymentBodyDatabaseConfigEngine `json:"engine"`
+		Instances  *int                                     `json:"instances,omitempty"`
+		Monitoring *struct {
+			EnablePodMonitor bool `json:"enablePodMonitor"`
+		} `json:"monitoring,omitempty"`
+		Parameters *map[string]string `json:"parameters,omitempty"`
+		PgHba      *[]string          `json:"pgHba,omitempty"`
+		Pooler     *struct {
+			Enabled    *bool                                         `json:"enabled,omitempty"`
+			Instances  *int                                          `json:"instances,omitempty"`
+			Mode       *UpdateDeploymentBodyDatabaseConfigPoolerMode `json:"mode,omitempty"`
+			Parameters *map[string]string                            `json:"parameters,omitempty"`
+			Type       *UpdateDeploymentBodyDatabaseConfigPoolerType `json:"type,omitempty"`
+		} `json:"pooler,omitempty"`
+		Public    *bool `json:"public,omitempty"`
+		Resources *struct {
+			Limits struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"limits"`
+			Requests struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"requests"`
+		} `json:"resources,omitempty"`
+		ScheduledBackup *struct {
+			BackupOwnerReference *string `json:"backupOwnerReference,omitempty"`
+			Enabled              bool    `json:"enabled"`
+			Immediate            *bool   `json:"immediate,omitempty"`
+			Schedule             string  `json:"schedule"`
+		} `json:"scheduledBackup,omitempty"`
+		Storage struct {
+			Size         string  `json:"size"`
+			StorageClass *string `json:"storageClass,omitempty"`
+		} `json:"storage"`
+		Version UpdateDeploymentBodyDatabaseConfigVersion `json:"version"`
+	} `json:"databaseConfig,omitempty"`
+	JobConfig *struct {
+		Args    *[]string `json:"args,omitempty"`
+		Command *[]string `json:"command,omitempty"`
+		Env     *[]struct {
+			Name   string `json:"name"`
+			Secret *bool  `json:"secret,omitempty"`
+			Value  string `json:"value"`
+		} `json:"env,omitempty"`
+		Job *struct {
+			ActiveDeadlineSeconds   *int                                           `json:"activeDeadlineSeconds,omitempty"`
+			BackoffLimit            *int                                           `json:"backoffLimit,omitempty"`
+			Completions             *int                                           `json:"completions,omitempty"`
+			Parallelism             *int                                           `json:"parallelism,omitempty"`
+			RestartPolicy           *UpdateDeploymentBodyJobConfigJobRestartPolicy `json:"restartPolicy,omitempty"`
+			TtlSecondsAfterFinished *int                                           `json:"ttlSecondsAfterFinished,omitempty"`
+		} `json:"job,omitempty"`
+		Repository string `json:"repository"`
+		Resources  *struct {
+			Limits struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"limits"`
+			Requests struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"requests"`
+		} `json:"resources,omitempty"`
+		Schedule struct {
+			ConcurrencyPolicy          *UpdateDeploymentBodyJobConfigScheduleConcurrencyPolicy `json:"concurrencyPolicy,omitempty"`
+			Enabled                    *bool                                                   `json:"enabled,omitempty"`
+			Expression                 string                                                  `json:"expression"`
+			FailedJobsHistoryLimit     *int                                                    `json:"failedJobsHistoryLimit,omitempty"`
+			StartingDeadlineSeconds    *int                                                    `json:"startingDeadlineSeconds,omitempty"`
+			SuccessfulJobsHistoryLimit *int                                                    `json:"successfulJobsHistoryLimit,omitempty"`
+			TimeZone                   *string                                                 `json:"timeZone,omitempty"`
+		} `json:"schedule"`
+		Tag string `json:"tag"`
+	} `json:"jobConfig,omitempty"`
+	Note           *string `json:"note,omitempty"`
+	SendSsoInvites *bool   `json:"sendSsoInvites,omitempty"`
+}
+
+// UpdateDeploymentBodyAppConfigAuthOauthProvider defines model for UpdateDeploymentBody.AppConfig.Auth.Oauth.Provider.
+type UpdateDeploymentBodyAppConfigAuthOauthProvider string
+
+// UpdateDeploymentBodyDatabaseConfigEngine defines model for UpdateDeploymentBody.DatabaseConfig.Engine.
+type UpdateDeploymentBodyDatabaseConfigEngine string
+
+// UpdateDeploymentBodyDatabaseConfigPoolerMode defines model for UpdateDeploymentBody.DatabaseConfig.Pooler.Mode.
+type UpdateDeploymentBodyDatabaseConfigPoolerMode string
+
+// UpdateDeploymentBodyDatabaseConfigPoolerType defines model for UpdateDeploymentBody.DatabaseConfig.Pooler.Type.
+type UpdateDeploymentBodyDatabaseConfigPoolerType string
+
+// UpdateDeploymentBodyDatabaseConfigVersion defines model for UpdateDeploymentBody.DatabaseConfig.Version.
+type UpdateDeploymentBodyDatabaseConfigVersion string
+
+// UpdateDeploymentBodyJobConfigJobRestartPolicy defines model for UpdateDeploymentBody.JobConfig.Job.RestartPolicy.
+type UpdateDeploymentBodyJobConfigJobRestartPolicy string
+
+// UpdateDeploymentBodyJobConfigScheduleConcurrencyPolicy defines model for UpdateDeploymentBody.JobConfig.Schedule.ConcurrencyPolicy.
+type UpdateDeploymentBodyJobConfigScheduleConcurrencyPolicy string
+
+// UpdateEnvironmentBody defines model for UpdateEnvironmentBody.
+type UpdateEnvironmentBody struct {
+	Color       *UpdateEnvironmentBodyColor `json:"color,omitempty"`
+	Description *string                     `json:"description,omitempty"`
+	Name        *string                     `json:"name,omitempty"`
+}
+
+// UpdateEnvironmentBodyColor defines model for UpdateEnvironmentBody.Color.
+type UpdateEnvironmentBodyColor string
+
+// UpdateFunctionBody defines model for UpdateFunctionBody.
+type UpdateFunctionBody struct {
+	Config struct {
+		Architecture *UpdateFunctionBodyConfigArchitecture `json:"architecture,omitempty"`
+		Env          *[]struct {
+			Name   string `json:"name"`
+			Secret *bool  `json:"secret,omitempty"`
+			Value  string `json:"value"`
+		} `json:"env,omitempty"`
+		Handler          string `json:"handler"`
+		LogRetentionDays *int   `json:"logRetentionDays,omitempty"`
+		MemoryMb         *int   `json:"memoryMb,omitempty"`
+		Runtime          string `json:"runtime"`
+		TimeoutSeconds   *int   `json:"timeoutSeconds,omitempty"`
+		Triggers         struct {
+			Cron *struct {
+				Input    *string `json:"input,omitempty"`
+				Schedule string  `json:"schedule"`
+				Timezone *string `json:"timezone,omitempty"`
+			} `json:"cron,omitempty"`
+			Http *struct {
+				AuthType *UpdateFunctionBodyConfigTriggersHttpAuthType `json:"authType,omitempty"`
+				Cors     *struct {
+					AllowHeaders *[]string `json:"allowHeaders,omitempty"`
+					AllowMethods *[]string `json:"allowMethods,omitempty"`
+					AllowOrigins *[]string `json:"allowOrigins,omitempty"`
+					MaxAge       *int      `json:"maxAge,omitempty"`
+				} `json:"cors,omitempty"`
+			} `json:"http,omitempty"`
+		} `json:"triggers"`
+	} `json:"config"`
+	Note *string `json:"note,omitempty"`
+}
+
+// UpdateFunctionBodyConfigArchitecture defines model for UpdateFunctionBody.Config.Architecture.
+type UpdateFunctionBodyConfigArchitecture string
+
+// UpdateFunctionBodyConfigTriggersHttpAuthType defines model for UpdateFunctionBody.Config.Triggers.Http.AuthType.
+type UpdateFunctionBodyConfigTriggersHttpAuthType string
+
 // UserInfoResponse defines model for UserInfoResponse.
 type UserInfoResponse struct {
 	// Organizations Organizations this user belongs to. Pass an `id` as the `x-ownkube-organization` header on subsequent requests when membership is plural.
@@ -525,11 +1177,447 @@ type PostV1AwsAccountsAccountIdVerifyParams struct {
 	AwsAccountId *string `form:"awsAccountId,omitempty" json:"awsAccountId,omitempty"`
 }
 
+// PostV1ClustersJSONBody defines parameters for PostV1Clusters.
+type PostV1ClustersJSONBody struct {
+	CloudAccountId    string                            `json:"cloudAccountId"`
+	ClusterName       string                            `json:"clusterName"`
+	ClusterType       PostV1ClustersJSONBodyClusterType `json:"clusterType"`
+	DesiredMemoryGiB  *int                              `json:"desiredMemoryGiB,omitempty"`
+	DesiredVcpu       *int                              `json:"desiredVcpu,omitempty"`
+	EnableAutoscaling *bool                             `json:"enableAutoscaling,omitempty"`
+	InitialDeployment *struct {
+		Name       string `json:"name"`
+		Port       *int   `json:"port,omitempty"`
+		Public     *bool  `json:"public,omitempty"`
+		Replicas   *int   `json:"replicas,omitempty"`
+		Repository string `json:"repository"`
+		Tag        string `json:"tag"`
+	} `json:"initialDeployment,omitempty"`
+	InitialTemplate *struct {
+		Slug string `json:"slug"`
+	} `json:"initialTemplate,omitempty"`
+	KubernetesVersion      string                         `json:"kubernetesVersion"`
+	NodeInstanceType       *string                        `json:"nodeInstanceType,omitempty"`
+	PodsCidr               *string                        `json:"podsCidr,omitempty"`
+	Provider               PostV1ClustersJSONBodyProvider `json:"provider"`
+	Region                 string                         `json:"region"`
+	ServicesCidr           *string                        `json:"servicesCidr,omitempty"`
+	TelemetryRetentionDays *int                           `json:"telemetryRetentionDays,omitempty"`
+}
+
+// PostV1ClustersJSONBodyClusterType defines parameters for PostV1Clusters.
+type PostV1ClustersJSONBodyClusterType string
+
+// PostV1ClustersJSONBodyProvider defines parameters for PostV1Clusters.
+type PostV1ClustersJSONBodyProvider string
+
+// DeleteV1ClustersClusterIdParams defines parameters for DeleteV1ClustersClusterId.
+type DeleteV1ClustersClusterIdParams struct {
+	// Force Destroy even when the cluster still has active deployments. Defaults to false.
+	Force *DeleteV1ClustersClusterIdParamsForce `form:"force,omitempty" json:"force,omitempty"`
+}
+
+// DeleteV1ClustersClusterIdParamsForce defines parameters for DeleteV1ClustersClusterId.
+type DeleteV1ClustersClusterIdParamsForce string
+
 // GetV1DeploymentsParams defines parameters for GetV1Deployments.
 type GetV1DeploymentsParams struct {
 	EnvironmentId *string `form:"environmentId,omitempty" json:"environmentId,omitempty"`
 	ClusterId     *string `form:"clusterId,omitempty" json:"clusterId,omitempty"`
 }
+
+// PostV1DeploymentsJSONBody defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody struct {
+	union json.RawMessage
+}
+
+// PostV1DeploymentsJSONBody0 defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody0 struct {
+	ClusterId *string `json:"clusterId,omitempty"`
+	Config    struct {
+		Auth *struct {
+			BasicAuth *struct {
+				Enabled  *bool   `json:"enabled,omitempty"`
+				Password *string `json:"password,omitempty"`
+				Username string  `json:"username"`
+			} `json:"basicAuth,omitempty"`
+			Oauth *struct {
+				AllowedDomains *[]string                                          `json:"allowedDomains,omitempty"`
+				AllowedEmails  *[]openapi_types.Email                             `json:"allowedEmails,omitempty"`
+				Enabled        *bool                                              `json:"enabled,omitempty"`
+				Provider       *PostV1DeploymentsJSONBody0ConfigAuthOauthProvider `json:"provider,omitempty"`
+			} `json:"oauth,omitempty"`
+		} `json:"auth,omitempty"`
+		Autoscaling *struct {
+			Enabled                           *bool `json:"enabled,omitempty"`
+			MaxReplicas                       *int  `json:"maxReplicas,omitempty"`
+			MinReplicas                       *int  `json:"minReplicas,omitempty"`
+			TargetCPUUtilizationPercentage    *int  `json:"targetCPUUtilizationPercentage,omitempty"`
+			TargetMemoryUtilizationPercentage *int  `json:"targetMemoryUtilizationPercentage,omitempty"`
+		} `json:"autoscaling,omitempty"`
+		Env *[]struct {
+			Name   string `json:"name"`
+			Secret *bool  `json:"secret,omitempty"`
+			Value  string `json:"value"`
+		} `json:"env,omitempty"`
+		HealthCheck *struct {
+			Liveness *struct {
+				Enabled             *bool   `json:"enabled,omitempty"`
+				FailureThreshold    *int    `json:"failureThreshold,omitempty"`
+				InitialDelaySeconds *int    `json:"initialDelaySeconds,omitempty"`
+				Path                string  `json:"path"`
+				PeriodSeconds       *int    `json:"periodSeconds,omitempty"`
+				Port                *string `json:"port,omitempty"`
+				TimeoutSeconds      *int    `json:"timeoutSeconds,omitempty"`
+			} `json:"liveness,omitempty"`
+			Readiness *struct {
+				Enabled             *bool   `json:"enabled,omitempty"`
+				FailureThreshold    *int    `json:"failureThreshold,omitempty"`
+				InitialDelaySeconds *int    `json:"initialDelaySeconds,omitempty"`
+				Path                string  `json:"path"`
+				PeriodSeconds       *int    `json:"periodSeconds,omitempty"`
+				Port                *string `json:"port,omitempty"`
+				TimeoutSeconds      *int    `json:"timeoutSeconds,omitempty"`
+			} `json:"readiness,omitempty"`
+			Startup *struct {
+				Enabled             *bool   `json:"enabled,omitempty"`
+				FailureThreshold    *int    `json:"failureThreshold,omitempty"`
+				InitialDelaySeconds *int    `json:"initialDelaySeconds,omitempty"`
+				Path                string  `json:"path"`
+				PeriodSeconds       *int    `json:"periodSeconds,omitempty"`
+				Port                *string `json:"port,omitempty"`
+				TimeoutSeconds      *int    `json:"timeoutSeconds,omitempty"`
+			} `json:"startup,omitempty"`
+		} `json:"healthCheck,omitempty"`
+		Port       int    `json:"port"`
+		Public     *bool  `json:"public,omitempty"`
+		Replicas   *int   `json:"replicas,omitempty"`
+		Repository string `json:"repository"`
+		Resources  *struct {
+			Limits struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"limits"`
+			Requests struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"requests"`
+		} `json:"resources,omitempty"`
+		Tag        string `json:"tag"`
+		WafEnabled *bool  `json:"wafEnabled,omitempty"`
+	} `json:"config"`
+	EnvironmentId *string `json:"environmentId,omitempty"`
+	Github        *struct {
+		Branch         string    `json:"branch"`
+		ConnectionId   *string   `json:"connectionId,omitempty"`
+		ContextPath    *string   `json:"contextPath,omitempty"`
+		DockerfilePath *string   `json:"dockerfilePath,omitempty"`
+		Owner          string    `json:"owner"`
+		PathFilters    *[]string `json:"pathFilters,omitempty"`
+		Repo           string    `json:"repo"`
+		ServiceSlug    *string   `json:"serviceSlug,omitempty"`
+	} `json:"github,omitempty"`
+	Name         string                                 `json:"name"`
+	RegistryId   *string                                `json:"registryId,omitempty"`
+	ResourceType PostV1DeploymentsJSONBody0ResourceType `json:"resourceType"`
+}
+
+// PostV1DeploymentsJSONBody0ConfigAuthOauthProvider defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody0ConfigAuthOauthProvider string
+
+// PostV1DeploymentsJSONBody0ResourceType defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody0ResourceType string
+
+// PostV1DeploymentsJSONBody1 defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody1 struct {
+	ClusterId *string `json:"clusterId,omitempty"`
+	Config    struct {
+		Auth *struct {
+			BasicAuth *struct {
+				Enabled  *bool   `json:"enabled,omitempty"`
+				Password *string `json:"password,omitempty"`
+				Username string  `json:"username"`
+			} `json:"basicAuth,omitempty"`
+			Oauth *struct {
+				AllowedDomains *[]string                                          `json:"allowedDomains,omitempty"`
+				AllowedEmails  *[]openapi_types.Email                             `json:"allowedEmails,omitempty"`
+				Enabled        *bool                                              `json:"enabled,omitempty"`
+				Provider       *PostV1DeploymentsJSONBody1ConfigAuthOauthProvider `json:"provider,omitempty"`
+			} `json:"oauth,omitempty"`
+		} `json:"auth,omitempty"`
+		Autoscaling *struct {
+			Enabled                           *bool `json:"enabled,omitempty"`
+			MaxReplicas                       *int  `json:"maxReplicas,omitempty"`
+			MinReplicas                       *int  `json:"minReplicas,omitempty"`
+			TargetCPUUtilizationPercentage    *int  `json:"targetCPUUtilizationPercentage,omitempty"`
+			TargetMemoryUtilizationPercentage *int  `json:"targetMemoryUtilizationPercentage,omitempty"`
+		} `json:"autoscaling,omitempty"`
+		Env *[]struct {
+			Name   string `json:"name"`
+			Secret *bool  `json:"secret,omitempty"`
+			Value  string `json:"value"`
+		} `json:"env,omitempty"`
+		HealthCheck *struct {
+			Liveness *struct {
+				Enabled             *bool   `json:"enabled,omitempty"`
+				FailureThreshold    *int    `json:"failureThreshold,omitempty"`
+				InitialDelaySeconds *int    `json:"initialDelaySeconds,omitempty"`
+				Path                string  `json:"path"`
+				PeriodSeconds       *int    `json:"periodSeconds,omitempty"`
+				Port                *string `json:"port,omitempty"`
+				TimeoutSeconds      *int    `json:"timeoutSeconds,omitempty"`
+			} `json:"liveness,omitempty"`
+			Readiness *struct {
+				Enabled             *bool   `json:"enabled,omitempty"`
+				FailureThreshold    *int    `json:"failureThreshold,omitempty"`
+				InitialDelaySeconds *int    `json:"initialDelaySeconds,omitempty"`
+				Path                string  `json:"path"`
+				PeriodSeconds       *int    `json:"periodSeconds,omitempty"`
+				Port                *string `json:"port,omitempty"`
+				TimeoutSeconds      *int    `json:"timeoutSeconds,omitempty"`
+			} `json:"readiness,omitempty"`
+			Startup *struct {
+				Enabled             *bool   `json:"enabled,omitempty"`
+				FailureThreshold    *int    `json:"failureThreshold,omitempty"`
+				InitialDelaySeconds *int    `json:"initialDelaySeconds,omitempty"`
+				Path                string  `json:"path"`
+				PeriodSeconds       *int    `json:"periodSeconds,omitempty"`
+				Port                *string `json:"port,omitempty"`
+				TimeoutSeconds      *int    `json:"timeoutSeconds,omitempty"`
+			} `json:"startup,omitempty"`
+		} `json:"healthCheck,omitempty"`
+		Port       int    `json:"port"`
+		Public     *bool  `json:"public,omitempty"`
+		Replicas   *int   `json:"replicas,omitempty"`
+		Repository string `json:"repository"`
+		Resources  *struct {
+			Limits struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"limits"`
+			Requests struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"requests"`
+		} `json:"resources,omitempty"`
+		Tag        string `json:"tag"`
+		WafEnabled *bool  `json:"wafEnabled,omitempty"`
+	} `json:"config"`
+	EnvironmentId *string `json:"environmentId,omitempty"`
+	Github        *struct {
+		Branch         string    `json:"branch"`
+		ConnectionId   *string   `json:"connectionId,omitempty"`
+		ContextPath    *string   `json:"contextPath,omitempty"`
+		DockerfilePath *string   `json:"dockerfilePath,omitempty"`
+		Owner          string    `json:"owner"`
+		PathFilters    *[]string `json:"pathFilters,omitempty"`
+		Repo           string    `json:"repo"`
+		ServiceSlug    *string   `json:"serviceSlug,omitempty"`
+	} `json:"github,omitempty"`
+	Name         string                                 `json:"name"`
+	RegistryId   *string                                `json:"registryId,omitempty"`
+	ResourceType PostV1DeploymentsJSONBody1ResourceType `json:"resourceType"`
+}
+
+// PostV1DeploymentsJSONBody1ConfigAuthOauthProvider defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody1ConfigAuthOauthProvider string
+
+// PostV1DeploymentsJSONBody1ResourceType defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody1ResourceType string
+
+// PostV1DeploymentsJSONBody2 defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody2 struct {
+	ClusterId *string `json:"clusterId,omitempty"`
+	Config    struct {
+		Args    *[]string `json:"args,omitempty"`
+		Command *[]string `json:"command,omitempty"`
+		Env     *[]struct {
+			Name   string `json:"name"`
+			Secret *bool  `json:"secret,omitempty"`
+			Value  string `json:"value"`
+		} `json:"env,omitempty"`
+		Job *struct {
+			ActiveDeadlineSeconds   *int                                              `json:"activeDeadlineSeconds,omitempty"`
+			BackoffLimit            *int                                              `json:"backoffLimit,omitempty"`
+			Completions             *int                                              `json:"completions,omitempty"`
+			Parallelism             *int                                              `json:"parallelism,omitempty"`
+			RestartPolicy           *PostV1DeploymentsJSONBody2ConfigJobRestartPolicy `json:"restartPolicy,omitempty"`
+			TtlSecondsAfterFinished *int                                              `json:"ttlSecondsAfterFinished,omitempty"`
+		} `json:"job,omitempty"`
+		Repository string `json:"repository"`
+		Resources  *struct {
+			Limits struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"limits"`
+			Requests struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"requests"`
+		} `json:"resources,omitempty"`
+		Schedule struct {
+			ConcurrencyPolicy          *PostV1DeploymentsJSONBody2ConfigScheduleConcurrencyPolicy `json:"concurrencyPolicy,omitempty"`
+			Enabled                    *bool                                                      `json:"enabled,omitempty"`
+			Expression                 string                                                     `json:"expression"`
+			FailedJobsHistoryLimit     *int                                                       `json:"failedJobsHistoryLimit,omitempty"`
+			StartingDeadlineSeconds    *int                                                       `json:"startingDeadlineSeconds,omitempty"`
+			SuccessfulJobsHistoryLimit *int                                                       `json:"successfulJobsHistoryLimit,omitempty"`
+			TimeZone                   *string                                                    `json:"timeZone,omitempty"`
+		} `json:"schedule"`
+		Tag string `json:"tag"`
+	} `json:"config"`
+	EnvironmentId *string `json:"environmentId,omitempty"`
+	Github        *struct {
+		Branch         string    `json:"branch"`
+		ConnectionId   *string   `json:"connectionId,omitempty"`
+		ContextPath    *string   `json:"contextPath,omitempty"`
+		DockerfilePath *string   `json:"dockerfilePath,omitempty"`
+		Owner          string    `json:"owner"`
+		PathFilters    *[]string `json:"pathFilters,omitempty"`
+		Repo           string    `json:"repo"`
+		ServiceSlug    *string   `json:"serviceSlug,omitempty"`
+	} `json:"github,omitempty"`
+	Name         string                                 `json:"name"`
+	RegistryId   *string                                `json:"registryId,omitempty"`
+	ResourceType PostV1DeploymentsJSONBody2ResourceType `json:"resourceType"`
+}
+
+// PostV1DeploymentsJSONBody2ConfigJobRestartPolicy defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody2ConfigJobRestartPolicy string
+
+// PostV1DeploymentsJSONBody2ConfigScheduleConcurrencyPolicy defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody2ConfigScheduleConcurrencyPolicy string
+
+// PostV1DeploymentsJSONBody2ResourceType defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody2ResourceType string
+
+// PostV1DeploymentsJSONBody3 defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody3 struct {
+	ClusterId *string `json:"clusterId,omitempty"`
+	Config    struct {
+		Backup *struct {
+			BarmanObjectStore *map[string]*interface{} `json:"barmanObjectStore,omitempty"`
+			Enabled           bool                     `json:"enabled"`
+			RetentionPolicy   *string                  `json:"retentionPolicy,omitempty"`
+		} `json:"backup,omitempty"`
+		Bootstrap struct {
+			Database    string    `json:"database"`
+			Owner       string    `json:"owner"`
+			PostInitSQL *[]string `json:"postInitSQL,omitempty"`
+		} `json:"bootstrap"`
+		Engine     PostV1DeploymentsJSONBody3ConfigEngine `json:"engine"`
+		Instances  *int                                   `json:"instances,omitempty"`
+		Monitoring *struct {
+			EnablePodMonitor bool `json:"enablePodMonitor"`
+		} `json:"monitoring,omitempty"`
+		Parameters *map[string]string `json:"parameters,omitempty"`
+		PgHba      *[]string          `json:"pgHba,omitempty"`
+		Pooler     *struct {
+			Enabled    *bool                                       `json:"enabled,omitempty"`
+			Instances  *int                                        `json:"instances,omitempty"`
+			Mode       *PostV1DeploymentsJSONBody3ConfigPoolerMode `json:"mode,omitempty"`
+			Parameters *map[string]string                          `json:"parameters,omitempty"`
+			Type       *PostV1DeploymentsJSONBody3ConfigPoolerType `json:"type,omitempty"`
+		} `json:"pooler,omitempty"`
+		Public    *bool `json:"public,omitempty"`
+		Resources *struct {
+			Limits struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"limits"`
+			Requests struct {
+				Cpu    string `json:"cpu"`
+				Memory string `json:"memory"`
+			} `json:"requests"`
+		} `json:"resources,omitempty"`
+		ScheduledBackup *struct {
+			BackupOwnerReference *string `json:"backupOwnerReference,omitempty"`
+			Enabled              bool    `json:"enabled"`
+			Immediate            *bool   `json:"immediate,omitempty"`
+			Schedule             string  `json:"schedule"`
+		} `json:"scheduledBackup,omitempty"`
+		Storage struct {
+			Size         string  `json:"size"`
+			StorageClass *string `json:"storageClass,omitempty"`
+		} `json:"storage"`
+		Version PostV1DeploymentsJSONBody3ConfigVersion `json:"version"`
+	} `json:"config"`
+	EnvironmentId *string                                `json:"environmentId,omitempty"`
+	Name          string                                 `json:"name"`
+	ResourceType  PostV1DeploymentsJSONBody3ResourceType `json:"resourceType"`
+}
+
+// PostV1DeploymentsJSONBody3ConfigEngine defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody3ConfigEngine string
+
+// PostV1DeploymentsJSONBody3ConfigPoolerMode defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody3ConfigPoolerMode string
+
+// PostV1DeploymentsJSONBody3ConfigPoolerType defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody3ConfigPoolerType string
+
+// PostV1DeploymentsJSONBody3ConfigVersion defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody3ConfigVersion string
+
+// PostV1DeploymentsJSONBody3ResourceType defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody3ResourceType string
+
+// PostV1DeploymentsJSONBody4 defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody4 struct {
+	CloudAccountId string `json:"cloudAccountId"`
+	Config         struct {
+		Architecture *PostV1DeploymentsJSONBody4ConfigArchitecture `json:"architecture,omitempty"`
+		Env          *[]struct {
+			Name   string `json:"name"`
+			Secret *bool  `json:"secret,omitempty"`
+			Value  string `json:"value"`
+		} `json:"env,omitempty"`
+		Handler          string `json:"handler"`
+		LogRetentionDays *int   `json:"logRetentionDays,omitempty"`
+		MemoryMb         *int   `json:"memoryMb,omitempty"`
+		Runtime          string `json:"runtime"`
+		TimeoutSeconds   *int   `json:"timeoutSeconds,omitempty"`
+		Triggers         struct {
+			Cron *struct {
+				Input    *string `json:"input,omitempty"`
+				Schedule string  `json:"schedule"`
+				Timezone *string `json:"timezone,omitempty"`
+			} `json:"cron,omitempty"`
+			Http *struct {
+				AuthType *PostV1DeploymentsJSONBody4ConfigTriggersHttpAuthType `json:"authType,omitempty"`
+				Cors     *struct {
+					AllowHeaders *[]string `json:"allowHeaders,omitempty"`
+					AllowMethods *[]string `json:"allowMethods,omitempty"`
+					AllowOrigins *[]string `json:"allowOrigins,omitempty"`
+					MaxAge       *int      `json:"maxAge,omitempty"`
+				} `json:"cors,omitempty"`
+			} `json:"http,omitempty"`
+		} `json:"triggers"`
+	} `json:"config"`
+	EnvironmentId *string `json:"environmentId,omitempty"`
+	Github        struct {
+		Branch         string    `json:"branch"`
+		ConnectionId   *string   `json:"connectionId,omitempty"`
+		ContextPath    *string   `json:"contextPath,omitempty"`
+		DockerfilePath *string   `json:"dockerfilePath,omitempty"`
+		Owner          string    `json:"owner"`
+		PathFilters    *[]string `json:"pathFilters,omitempty"`
+		Repo           string    `json:"repo"`
+		ServiceSlug    *string   `json:"serviceSlug,omitempty"`
+	} `json:"github"`
+	Name         string                                 `json:"name"`
+	Region       string                                 `json:"region"`
+	ResourceType PostV1DeploymentsJSONBody4ResourceType `json:"resourceType"`
+}
+
+// PostV1DeploymentsJSONBody4ConfigArchitecture defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody4ConfigArchitecture string
+
+// PostV1DeploymentsJSONBody4ConfigTriggersHttpAuthType defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody4ConfigTriggersHttpAuthType string
+
+// PostV1DeploymentsJSONBody4ResourceType defines parameters for PostV1Deployments.
+type PostV1DeploymentsJSONBody4ResourceType string
 
 // GetV1DeploymentsDeploymentIdLogsParams defines parameters for GetV1DeploymentsDeploymentIdLogs.
 type GetV1DeploymentsDeploymentIdLogsParams struct {
@@ -537,6 +1625,54 @@ type GetV1DeploymentsDeploymentIdLogsParams struct {
 	Limit        *int    `form:"limit,omitempty" json:"limit,omitempty"`
 	Filter       *string `form:"filter,omitempty" json:"filter,omitempty"`
 }
+
+// GetV1PlatformVersionsParams defines parameters for GetV1PlatformVersions.
+type GetV1PlatformVersionsParams struct {
+	ClusterType  GetV1PlatformVersionsParamsClusterType  `form:"clusterType" json:"clusterType"`
+	ResourceType GetV1PlatformVersionsParamsResourceType `form:"resourceType" json:"resourceType"`
+}
+
+// GetV1PlatformVersionsParamsClusterType defines parameters for GetV1PlatformVersions.
+type GetV1PlatformVersionsParamsClusterType string
+
+// GetV1PlatformVersionsParamsResourceType defines parameters for GetV1PlatformVersions.
+type GetV1PlatformVersionsParamsResourceType string
+
+// PostV1ClustersJSONRequestBody defines body for PostV1Clusters for application/json ContentType.
+type PostV1ClustersJSONRequestBody PostV1ClustersJSONBody
+
+// PostV1DeploymentsJSONRequestBody defines body for PostV1Deployments for application/json ContentType.
+type PostV1DeploymentsJSONRequestBody PostV1DeploymentsJSONBody
+
+// PatchV1DeploymentsDeploymentIdJSONRequestBody defines body for PatchV1DeploymentsDeploymentId for application/json ContentType.
+type PatchV1DeploymentsDeploymentIdJSONRequestBody = UpdateDeploymentBody
+
+// PostV1DeploymentsDeploymentIdCopyJSONRequestBody defines body for PostV1DeploymentsDeploymentIdCopy for application/json ContentType.
+type PostV1DeploymentsDeploymentIdCopyJSONRequestBody = CopyDeploymentBody
+
+// PatchV1DeploymentsDeploymentIdFunctionJSONRequestBody defines body for PatchV1DeploymentsDeploymentIdFunction for application/json ContentType.
+type PatchV1DeploymentsDeploymentIdFunctionJSONRequestBody = UpdateFunctionBody
+
+// PostV1DeploymentsDeploymentIdFunctionPlatformVersionJSONRequestBody defines body for PostV1DeploymentsDeploymentIdFunctionPlatformVersion for application/json ContentType.
+type PostV1DeploymentsDeploymentIdFunctionPlatformVersionJSONRequestBody = PlatformVersionBody
+
+// PostV1DeploymentsDeploymentIdPlatformVersionJSONRequestBody defines body for PostV1DeploymentsDeploymentIdPlatformVersion for application/json ContentType.
+type PostV1DeploymentsDeploymentIdPlatformVersionJSONRequestBody = PlatformVersionBody
+
+// PostV1DeploymentsDeploymentIdPromoteJSONRequestBody defines body for PostV1DeploymentsDeploymentIdPromote for application/json ContentType.
+type PostV1DeploymentsDeploymentIdPromoteJSONRequestBody = PromoteBody
+
+// PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody defines body for PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback for application/json ContentType.
+type PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody = RollbackBody
+
+// PostV1EnvironmentsJSONRequestBody defines body for PostV1Environments for application/json ContentType.
+type PostV1EnvironmentsJSONRequestBody = CreateEnvironmentBody
+
+// PatchV1EnvironmentsEnvironmentIdJSONRequestBody defines body for PatchV1EnvironmentsEnvironmentId for application/json ContentType.
+type PatchV1EnvironmentsEnvironmentIdJSONRequestBody = UpdateEnvironmentBody
+
+// PutV1EnvironmentsEnvironmentIdEnvJSONRequestBody defines body for PutV1EnvironmentsEnvironmentIdEnv for application/json ContentType.
+type PutV1EnvironmentsEnvironmentIdEnvJSONRequestBody = SetEnvVarsBody
 
 // AsAwsAccountCreatedAt0 returns the union data inside the AwsAccount_CreatedAt as a AwsAccountCreatedAt0
 func (t AwsAccount_CreatedAt) AsAwsAccountCreatedAt0() (AwsAccountCreatedAt0, error) {
@@ -870,6 +2006,130 @@ func (t Cluster_UpdatedAt) MarshalJSON() ([]byte, error) {
 }
 
 func (t *Cluster_UpdatedAt) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsCreateDeploymentResponseCreatedAt0 returns the union data inside the CreateDeploymentResponse_CreatedAt as a CreateDeploymentResponseCreatedAt0
+func (t CreateDeploymentResponse_CreatedAt) AsCreateDeploymentResponseCreatedAt0() (CreateDeploymentResponseCreatedAt0, error) {
+	var body CreateDeploymentResponseCreatedAt0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromCreateDeploymentResponseCreatedAt0 overwrites any union data inside the CreateDeploymentResponse_CreatedAt as the provided CreateDeploymentResponseCreatedAt0
+func (t *CreateDeploymentResponse_CreatedAt) FromCreateDeploymentResponseCreatedAt0(v CreateDeploymentResponseCreatedAt0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeCreateDeploymentResponseCreatedAt0 performs a merge with any union data inside the CreateDeploymentResponse_CreatedAt, using the provided CreateDeploymentResponseCreatedAt0
+func (t *CreateDeploymentResponse_CreatedAt) MergeCreateDeploymentResponseCreatedAt0(v CreateDeploymentResponseCreatedAt0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsCreateDeploymentResponseCreatedAt1 returns the union data inside the CreateDeploymentResponse_CreatedAt as a CreateDeploymentResponseCreatedAt1
+func (t CreateDeploymentResponse_CreatedAt) AsCreateDeploymentResponseCreatedAt1() (CreateDeploymentResponseCreatedAt1, error) {
+	var body CreateDeploymentResponseCreatedAt1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromCreateDeploymentResponseCreatedAt1 overwrites any union data inside the CreateDeploymentResponse_CreatedAt as the provided CreateDeploymentResponseCreatedAt1
+func (t *CreateDeploymentResponse_CreatedAt) FromCreateDeploymentResponseCreatedAt1(v CreateDeploymentResponseCreatedAt1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeCreateDeploymentResponseCreatedAt1 performs a merge with any union data inside the CreateDeploymentResponse_CreatedAt, using the provided CreateDeploymentResponseCreatedAt1
+func (t *CreateDeploymentResponse_CreatedAt) MergeCreateDeploymentResponseCreatedAt1(v CreateDeploymentResponseCreatedAt1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t CreateDeploymentResponse_CreatedAt) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *CreateDeploymentResponse_CreatedAt) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
+// AsCreateDeploymentResponseUpdatedAt0 returns the union data inside the CreateDeploymentResponse_UpdatedAt as a CreateDeploymentResponseUpdatedAt0
+func (t CreateDeploymentResponse_UpdatedAt) AsCreateDeploymentResponseUpdatedAt0() (CreateDeploymentResponseUpdatedAt0, error) {
+	var body CreateDeploymentResponseUpdatedAt0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromCreateDeploymentResponseUpdatedAt0 overwrites any union data inside the CreateDeploymentResponse_UpdatedAt as the provided CreateDeploymentResponseUpdatedAt0
+func (t *CreateDeploymentResponse_UpdatedAt) FromCreateDeploymentResponseUpdatedAt0(v CreateDeploymentResponseUpdatedAt0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeCreateDeploymentResponseUpdatedAt0 performs a merge with any union data inside the CreateDeploymentResponse_UpdatedAt, using the provided CreateDeploymentResponseUpdatedAt0
+func (t *CreateDeploymentResponse_UpdatedAt) MergeCreateDeploymentResponseUpdatedAt0(v CreateDeploymentResponseUpdatedAt0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsCreateDeploymentResponseUpdatedAt1 returns the union data inside the CreateDeploymentResponse_UpdatedAt as a CreateDeploymentResponseUpdatedAt1
+func (t CreateDeploymentResponse_UpdatedAt) AsCreateDeploymentResponseUpdatedAt1() (CreateDeploymentResponseUpdatedAt1, error) {
+	var body CreateDeploymentResponseUpdatedAt1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromCreateDeploymentResponseUpdatedAt1 overwrites any union data inside the CreateDeploymentResponse_UpdatedAt as the provided CreateDeploymentResponseUpdatedAt1
+func (t *CreateDeploymentResponse_UpdatedAt) FromCreateDeploymentResponseUpdatedAt1(v CreateDeploymentResponseUpdatedAt1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeCreateDeploymentResponseUpdatedAt1 performs a merge with any union data inside the CreateDeploymentResponse_UpdatedAt, using the provided CreateDeploymentResponseUpdatedAt1
+func (t *CreateDeploymentResponse_UpdatedAt) MergeCreateDeploymentResponseUpdatedAt1(v CreateDeploymentResponseUpdatedAt1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t CreateDeploymentResponse_UpdatedAt) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *CreateDeploymentResponse_UpdatedAt) UnmarshalJSON(b []byte) error {
 	err := t.union.UnmarshalJSON(b)
 	return err
 }
@@ -1731,23 +2991,92 @@ type ClientInterface interface {
 	// GetV1Clusters request
 	GetV1Clusters(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// PostV1ClustersWithBody request with any body
+	PostV1ClustersWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostV1Clusters(ctx context.Context, body PostV1ClustersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteV1ClustersClusterId request
+	DeleteV1ClustersClusterId(ctx context.Context, clusterId string, params *DeleteV1ClustersClusterIdParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetV1ClustersClusterId request
 	GetV1ClustersClusterId(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1ClustersClusterIdCancel request
+	PostV1ClustersClusterIdCancel(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetV1ClustersClusterIdStatus request
+	GetV1ClustersClusterIdStatus(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1Deployments request
 	GetV1Deployments(ctx context.Context, params *GetV1DeploymentsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// PostV1DeploymentsWithBody request with any body
+	PostV1DeploymentsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostV1Deployments(ctx context.Context, body PostV1DeploymentsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteV1DeploymentsDeploymentId request
+	DeleteV1DeploymentsDeploymentId(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetV1DeploymentsDeploymentId request
 	GetV1DeploymentsDeploymentId(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PatchV1DeploymentsDeploymentIdWithBody request with any body
+	PatchV1DeploymentsDeploymentIdWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PatchV1DeploymentsDeploymentId(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1DeploymentsDeploymentIdConnection request
 	GetV1DeploymentsDeploymentIdConnection(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// PostV1DeploymentsDeploymentIdCopyWithBody request with any body
+	PostV1DeploymentsDeploymentIdCopyWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostV1DeploymentsDeploymentIdCopy(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdCopyJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PatchV1DeploymentsDeploymentIdFunctionWithBody request with any body
+	PatchV1DeploymentsDeploymentIdFunctionWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PatchV1DeploymentsDeploymentIdFunction(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdFunctionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithBody request with any body
+	PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostV1DeploymentsDeploymentIdFunctionPlatformVersion(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdFunctionPlatformVersionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetV1DeploymentsDeploymentIdJobRuns request
+	GetV1DeploymentsDeploymentIdJobRuns(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1DeploymentsDeploymentIdJobRuns request
+	PostV1DeploymentsDeploymentIdJobRuns(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteV1DeploymentsDeploymentIdJobRunsJobName request
+	DeleteV1DeploymentsDeploymentIdJobRunsJobName(ctx context.Context, deploymentId string, jobName string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetV1DeploymentsDeploymentIdLogs request
 	GetV1DeploymentsDeploymentIdLogs(ctx context.Context, deploymentId string, params *GetV1DeploymentsDeploymentIdLogsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// PostV1DeploymentsDeploymentIdPlatformVersionWithBody request with any body
+	PostV1DeploymentsDeploymentIdPlatformVersionWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostV1DeploymentsDeploymentIdPlatformVersion(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdPlatformVersionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1DeploymentsDeploymentIdPromoteWithBody request with any body
+	PostV1DeploymentsDeploymentIdPromoteWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostV1DeploymentsDeploymentIdPromote(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdPromoteJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1DeploymentsDeploymentIdResetPassword request
+	PostV1DeploymentsDeploymentIdResetPassword(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetV1DeploymentsDeploymentIdRevisions request
 	GetV1DeploymentsDeploymentIdRevisions(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithBody request with any body
+	PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithBody(ctx context.Context, deploymentId string, revisionId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback(ctx context.Context, deploymentId string, revisionId string, body PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1DeploymentsDeploymentIdStatus request
 	GetV1DeploymentsDeploymentIdStatus(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1755,14 +3084,38 @@ type ClientInterface interface {
 	// GetV1Environments request
 	GetV1Environments(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// PostV1EnvironmentsWithBody request with any body
+	PostV1EnvironmentsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostV1Environments(ctx context.Context, body PostV1EnvironmentsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteV1EnvironmentsEnvironmentId request
+	DeleteV1EnvironmentsEnvironmentId(ctx context.Context, environmentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetV1EnvironmentsEnvironmentId request
 	GetV1EnvironmentsEnvironmentId(ctx context.Context, environmentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PatchV1EnvironmentsEnvironmentIdWithBody request with any body
+	PatchV1EnvironmentsEnvironmentIdWithBody(ctx context.Context, environmentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PatchV1EnvironmentsEnvironmentId(ctx context.Context, environmentId string, body PatchV1EnvironmentsEnvironmentIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PutV1EnvironmentsEnvironmentIdEnvWithBody request with any body
+	PutV1EnvironmentsEnvironmentIdEnvWithBody(ctx context.Context, environmentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PutV1EnvironmentsEnvironmentIdEnv(ctx context.Context, environmentId string, body PutV1EnvironmentsEnvironmentIdEnvJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetV1FunctionPlatformVersions request
+	GetV1FunctionPlatformVersions(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1Info request
 	GetV1Info(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1Organizations request
 	GetV1Organizations(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetV1PlatformVersions request
+	GetV1PlatformVersions(ctx context.Context, params *GetV1PlatformVersionsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1Registries request
 	GetV1Registries(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1867,8 +3220,68 @@ func (c *Client) GetV1Clusters(ctx context.Context, reqEditors ...RequestEditorF
 	return c.Client.Do(req)
 }
 
+func (c *Client) PostV1ClustersWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1ClustersRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1Clusters(ctx context.Context, body PostV1ClustersJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1ClustersRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteV1ClustersClusterId(ctx context.Context, clusterId string, params *DeleteV1ClustersClusterIdParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteV1ClustersClusterIdRequest(c.Server, clusterId, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) GetV1ClustersClusterId(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetV1ClustersClusterIdRequest(c.Server, clusterId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1ClustersClusterIdCancel(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1ClustersClusterIdCancelRequest(c.Server, clusterId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetV1ClustersClusterIdStatus(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetV1ClustersClusterIdStatusRequest(c.Server, clusterId)
 	if err != nil {
 		return nil, err
 	}
@@ -1891,8 +3304,68 @@ func (c *Client) GetV1Deployments(ctx context.Context, params *GetV1DeploymentsP
 	return c.Client.Do(req)
 }
 
+func (c *Client) PostV1DeploymentsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1Deployments(ctx context.Context, body PostV1DeploymentsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteV1DeploymentsDeploymentId(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteV1DeploymentsDeploymentIdRequest(c.Server, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) GetV1DeploymentsDeploymentId(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetV1DeploymentsDeploymentIdRequest(c.Server, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PatchV1DeploymentsDeploymentIdWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchV1DeploymentsDeploymentIdRequestWithBody(c.Server, deploymentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PatchV1DeploymentsDeploymentId(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchV1DeploymentsDeploymentIdRequest(c.Server, deploymentId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1915,6 +3388,114 @@ func (c *Client) GetV1DeploymentsDeploymentIdConnection(ctx context.Context, dep
 	return c.Client.Do(req)
 }
 
+func (c *Client) PostV1DeploymentsDeploymentIdCopyWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdCopyRequestWithBody(c.Server, deploymentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1DeploymentsDeploymentIdCopy(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdCopyJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdCopyRequest(c.Server, deploymentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PatchV1DeploymentsDeploymentIdFunctionWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchV1DeploymentsDeploymentIdFunctionRequestWithBody(c.Server, deploymentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PatchV1DeploymentsDeploymentIdFunction(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdFunctionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchV1DeploymentsDeploymentIdFunctionRequest(c.Server, deploymentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdFunctionPlatformVersionRequestWithBody(c.Server, deploymentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1DeploymentsDeploymentIdFunctionPlatformVersion(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdFunctionPlatformVersionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdFunctionPlatformVersionRequest(c.Server, deploymentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetV1DeploymentsDeploymentIdJobRuns(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetV1DeploymentsDeploymentIdJobRunsRequest(c.Server, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1DeploymentsDeploymentIdJobRuns(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdJobRunsRequest(c.Server, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteV1DeploymentsDeploymentIdJobRunsJobName(ctx context.Context, deploymentId string, jobName string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteV1DeploymentsDeploymentIdJobRunsJobNameRequest(c.Server, deploymentId, jobName)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) GetV1DeploymentsDeploymentIdLogs(ctx context.Context, deploymentId string, params *GetV1DeploymentsDeploymentIdLogsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetV1DeploymentsDeploymentIdLogsRequest(c.Server, deploymentId, params)
 	if err != nil {
@@ -1927,8 +3508,92 @@ func (c *Client) GetV1DeploymentsDeploymentIdLogs(ctx context.Context, deploymen
 	return c.Client.Do(req)
 }
 
+func (c *Client) PostV1DeploymentsDeploymentIdPlatformVersionWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdPlatformVersionRequestWithBody(c.Server, deploymentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1DeploymentsDeploymentIdPlatformVersion(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdPlatformVersionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdPlatformVersionRequest(c.Server, deploymentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1DeploymentsDeploymentIdPromoteWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdPromoteRequestWithBody(c.Server, deploymentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1DeploymentsDeploymentIdPromote(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdPromoteJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdPromoteRequest(c.Server, deploymentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1DeploymentsDeploymentIdResetPassword(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdResetPasswordRequest(c.Server, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) GetV1DeploymentsDeploymentIdRevisions(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetV1DeploymentsDeploymentIdRevisionsRequest(c.Server, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithBody(ctx context.Context, deploymentId string, revisionId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackRequestWithBody(c.Server, deploymentId, revisionId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback(ctx context.Context, deploymentId string, revisionId string, body PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackRequest(c.Server, deploymentId, revisionId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1963,8 +3628,104 @@ func (c *Client) GetV1Environments(ctx context.Context, reqEditors ...RequestEdi
 	return c.Client.Do(req)
 }
 
+func (c *Client) PostV1EnvironmentsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1EnvironmentsRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostV1Environments(ctx context.Context, body PostV1EnvironmentsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1EnvironmentsRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteV1EnvironmentsEnvironmentId(ctx context.Context, environmentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteV1EnvironmentsEnvironmentIdRequest(c.Server, environmentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) GetV1EnvironmentsEnvironmentId(ctx context.Context, environmentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetV1EnvironmentsEnvironmentIdRequest(c.Server, environmentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PatchV1EnvironmentsEnvironmentIdWithBody(ctx context.Context, environmentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchV1EnvironmentsEnvironmentIdRequestWithBody(c.Server, environmentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PatchV1EnvironmentsEnvironmentId(ctx context.Context, environmentId string, body PatchV1EnvironmentsEnvironmentIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchV1EnvironmentsEnvironmentIdRequest(c.Server, environmentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutV1EnvironmentsEnvironmentIdEnvWithBody(ctx context.Context, environmentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutV1EnvironmentsEnvironmentIdEnvRequestWithBody(c.Server, environmentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PutV1EnvironmentsEnvironmentIdEnv(ctx context.Context, environmentId string, body PutV1EnvironmentsEnvironmentIdEnvJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutV1EnvironmentsEnvironmentIdEnvRequest(c.Server, environmentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetV1FunctionPlatformVersions(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetV1FunctionPlatformVersionsRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -1989,6 +3750,18 @@ func (c *Client) GetV1Info(ctx context.Context, reqEditors ...RequestEditorFn) (
 
 func (c *Client) GetV1Organizations(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetV1OrganizationsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) GetV1PlatformVersions(ctx context.Context, params *GetV1PlatformVersionsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetV1PlatformVersionsRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -2296,6 +4069,102 @@ func NewGetV1ClustersRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
+// NewPostV1ClustersRequest calls the generic PostV1Clusters builder with application/json body
+func NewPostV1ClustersRequest(server string, body PostV1ClustersJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1ClustersRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostV1ClustersRequestWithBody generates requests for PostV1Clusters with any type of body
+func NewPostV1ClustersRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/clusters")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteV1ClustersClusterIdRequest generates requests for DeleteV1ClustersClusterId
+func NewDeleteV1ClustersClusterIdRequest(server string, clusterId string, params *DeleteV1ClustersClusterIdParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "clusterId", runtime.ParamLocationPath, clusterId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/clusters/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if params.Force != nil {
+
+			if queryFrag, err := runtime.StyleParamWithLocation("form", true, "force", runtime.ParamLocationQuery, *params.Force); err != nil {
+				return nil, err
+			} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+				return nil, err
+			} else {
+				for k, v := range parsed {
+					for _, v2 := range v {
+						queryValues.Add(k, v2)
+					}
+				}
+			}
+
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetV1ClustersClusterIdRequest generates requests for GetV1ClustersClusterId
 func NewGetV1ClustersClusterIdRequest(server string, clusterId string) (*http.Request, error) {
 	var err error
@@ -2313,6 +4182,74 @@ func NewGetV1ClustersClusterIdRequest(server string, clusterId string) (*http.Re
 	}
 
 	operationPath := fmt.Sprintf("/v1/clusters/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostV1ClustersClusterIdCancelRequest generates requests for PostV1ClustersClusterIdCancel
+func NewPostV1ClustersClusterIdCancelRequest(server string, clusterId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "clusterId", runtime.ParamLocationPath, clusterId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/clusters/%s/cancel", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetV1ClustersClusterIdStatusRequest generates requests for GetV1ClustersClusterIdStatus
+func NewGetV1ClustersClusterIdStatusRequest(server string, clusterId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "clusterId", runtime.ParamLocationPath, clusterId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/clusters/%s/status", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2395,6 +4332,80 @@ func NewGetV1DeploymentsRequest(server string, params *GetV1DeploymentsParams) (
 	return req, nil
 }
 
+// NewPostV1DeploymentsRequest calls the generic PostV1Deployments builder with application/json body
+func NewPostV1DeploymentsRequest(server string, body PostV1DeploymentsJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1DeploymentsRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostV1DeploymentsRequestWithBody generates requests for PostV1Deployments with any type of body
+func NewPostV1DeploymentsRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteV1DeploymentsDeploymentIdRequest generates requests for DeleteV1DeploymentsDeploymentId
+func NewDeleteV1DeploymentsDeploymentIdRequest(server string, deploymentId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetV1DeploymentsDeploymentIdRequest generates requests for GetV1DeploymentsDeploymentId
 func NewGetV1DeploymentsDeploymentIdRequest(server string, deploymentId string) (*http.Request, error) {
 	var err error
@@ -2429,6 +4440,53 @@ func NewGetV1DeploymentsDeploymentIdRequest(server string, deploymentId string) 
 	return req, nil
 }
 
+// NewPatchV1DeploymentsDeploymentIdRequest calls the generic PatchV1DeploymentsDeploymentId builder with application/json body
+func NewPatchV1DeploymentsDeploymentIdRequest(server string, deploymentId string, body PatchV1DeploymentsDeploymentIdJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPatchV1DeploymentsDeploymentIdRequestWithBody(server, deploymentId, "application/json", bodyReader)
+}
+
+// NewPatchV1DeploymentsDeploymentIdRequestWithBody generates requests for PatchV1DeploymentsDeploymentId with any type of body
+func NewPatchV1DeploymentsDeploymentIdRequestWithBody(server string, deploymentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewGetV1DeploymentsDeploymentIdConnectionRequest generates requests for GetV1DeploymentsDeploymentIdConnection
 func NewGetV1DeploymentsDeploymentIdConnectionRequest(server string, deploymentId string) (*http.Request, error) {
 	var err error
@@ -2456,6 +4514,256 @@ func NewGetV1DeploymentsDeploymentIdConnectionRequest(server string, deploymentI
 	}
 
 	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostV1DeploymentsDeploymentIdCopyRequest calls the generic PostV1DeploymentsDeploymentIdCopy builder with application/json body
+func NewPostV1DeploymentsDeploymentIdCopyRequest(server string, deploymentId string, body PostV1DeploymentsDeploymentIdCopyJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1DeploymentsDeploymentIdCopyRequestWithBody(server, deploymentId, "application/json", bodyReader)
+}
+
+// NewPostV1DeploymentsDeploymentIdCopyRequestWithBody generates requests for PostV1DeploymentsDeploymentIdCopy with any type of body
+func NewPostV1DeploymentsDeploymentIdCopyRequestWithBody(server string, deploymentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/copy", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewPatchV1DeploymentsDeploymentIdFunctionRequest calls the generic PatchV1DeploymentsDeploymentIdFunction builder with application/json body
+func NewPatchV1DeploymentsDeploymentIdFunctionRequest(server string, deploymentId string, body PatchV1DeploymentsDeploymentIdFunctionJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPatchV1DeploymentsDeploymentIdFunctionRequestWithBody(server, deploymentId, "application/json", bodyReader)
+}
+
+// NewPatchV1DeploymentsDeploymentIdFunctionRequestWithBody generates requests for PatchV1DeploymentsDeploymentIdFunction with any type of body
+func NewPatchV1DeploymentsDeploymentIdFunctionRequestWithBody(server string, deploymentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/function", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewPostV1DeploymentsDeploymentIdFunctionPlatformVersionRequest calls the generic PostV1DeploymentsDeploymentIdFunctionPlatformVersion builder with application/json body
+func NewPostV1DeploymentsDeploymentIdFunctionPlatformVersionRequest(server string, deploymentId string, body PostV1DeploymentsDeploymentIdFunctionPlatformVersionJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1DeploymentsDeploymentIdFunctionPlatformVersionRequestWithBody(server, deploymentId, "application/json", bodyReader)
+}
+
+// NewPostV1DeploymentsDeploymentIdFunctionPlatformVersionRequestWithBody generates requests for PostV1DeploymentsDeploymentIdFunctionPlatformVersion with any type of body
+func NewPostV1DeploymentsDeploymentIdFunctionPlatformVersionRequestWithBody(server string, deploymentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/function/platform-version", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetV1DeploymentsDeploymentIdJobRunsRequest generates requests for GetV1DeploymentsDeploymentIdJobRuns
+func NewGetV1DeploymentsDeploymentIdJobRunsRequest(server string, deploymentId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/job-runs", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostV1DeploymentsDeploymentIdJobRunsRequest generates requests for PostV1DeploymentsDeploymentIdJobRuns
+func NewPostV1DeploymentsDeploymentIdJobRunsRequest(server string, deploymentId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/job-runs", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewDeleteV1DeploymentsDeploymentIdJobRunsJobNameRequest generates requests for DeleteV1DeploymentsDeploymentIdJobRunsJobName
+func NewDeleteV1DeploymentsDeploymentIdJobRunsJobNameRequest(server string, deploymentId string, jobName string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "jobName", runtime.ParamLocationPath, jobName)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/job-runs/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -2551,6 +4859,134 @@ func NewGetV1DeploymentsDeploymentIdLogsRequest(server string, deploymentId stri
 	return req, nil
 }
 
+// NewPostV1DeploymentsDeploymentIdPlatformVersionRequest calls the generic PostV1DeploymentsDeploymentIdPlatformVersion builder with application/json body
+func NewPostV1DeploymentsDeploymentIdPlatformVersionRequest(server string, deploymentId string, body PostV1DeploymentsDeploymentIdPlatformVersionJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1DeploymentsDeploymentIdPlatformVersionRequestWithBody(server, deploymentId, "application/json", bodyReader)
+}
+
+// NewPostV1DeploymentsDeploymentIdPlatformVersionRequestWithBody generates requests for PostV1DeploymentsDeploymentIdPlatformVersion with any type of body
+func NewPostV1DeploymentsDeploymentIdPlatformVersionRequestWithBody(server string, deploymentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/platform-version", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewPostV1DeploymentsDeploymentIdPromoteRequest calls the generic PostV1DeploymentsDeploymentIdPromote builder with application/json body
+func NewPostV1DeploymentsDeploymentIdPromoteRequest(server string, deploymentId string, body PostV1DeploymentsDeploymentIdPromoteJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1DeploymentsDeploymentIdPromoteRequestWithBody(server, deploymentId, "application/json", bodyReader)
+}
+
+// NewPostV1DeploymentsDeploymentIdPromoteRequestWithBody generates requests for PostV1DeploymentsDeploymentIdPromote with any type of body
+func NewPostV1DeploymentsDeploymentIdPromoteRequestWithBody(server string, deploymentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/promote", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewPostV1DeploymentsDeploymentIdResetPasswordRequest generates requests for PostV1DeploymentsDeploymentIdResetPassword
+func NewPostV1DeploymentsDeploymentIdResetPasswordRequest(server string, deploymentId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/reset-password", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetV1DeploymentsDeploymentIdRevisionsRequest generates requests for GetV1DeploymentsDeploymentIdRevisions
 func NewGetV1DeploymentsDeploymentIdRevisionsRequest(server string, deploymentId string) (*http.Request, error) {
 	var err error
@@ -2581,6 +5017,60 @@ func NewGetV1DeploymentsDeploymentIdRevisionsRequest(server string, deploymentId
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewPostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackRequest calls the generic PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback builder with application/json body
+func NewPostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackRequest(server string, deploymentId string, revisionId string, body PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackRequestWithBody(server, deploymentId, revisionId, "application/json", bodyReader)
+}
+
+// NewPostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackRequestWithBody generates requests for PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback with any type of body
+func NewPostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackRequestWithBody(server string, deploymentId string, revisionId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "deploymentId", runtime.ParamLocationPath, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithLocation("simple", false, "revisionId", runtime.ParamLocationPath, revisionId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/revisions/%s/rollback", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -2646,6 +5136,80 @@ func NewGetV1EnvironmentsRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
+// NewPostV1EnvironmentsRequest calls the generic PostV1Environments builder with application/json body
+func NewPostV1EnvironmentsRequest(server string, body PostV1EnvironmentsJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1EnvironmentsRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostV1EnvironmentsRequestWithBody generates requests for PostV1Environments with any type of body
+func NewPostV1EnvironmentsRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/environments")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteV1EnvironmentsEnvironmentIdRequest generates requests for DeleteV1EnvironmentsEnvironmentId
+func NewDeleteV1EnvironmentsEnvironmentIdRequest(server string, environmentId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "environmentId", runtime.ParamLocationPath, environmentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/environments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("DELETE", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetV1EnvironmentsEnvironmentIdRequest generates requests for GetV1EnvironmentsEnvironmentId
 func NewGetV1EnvironmentsEnvironmentIdRequest(server string, environmentId string) (*http.Request, error) {
 	var err error
@@ -2663,6 +5227,127 @@ func NewGetV1EnvironmentsEnvironmentIdRequest(server string, environmentId strin
 	}
 
 	operationPath := fmt.Sprintf("/v1/environments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPatchV1EnvironmentsEnvironmentIdRequest calls the generic PatchV1EnvironmentsEnvironmentId builder with application/json body
+func NewPatchV1EnvironmentsEnvironmentIdRequest(server string, environmentId string, body PatchV1EnvironmentsEnvironmentIdJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPatchV1EnvironmentsEnvironmentIdRequestWithBody(server, environmentId, "application/json", bodyReader)
+}
+
+// NewPatchV1EnvironmentsEnvironmentIdRequestWithBody generates requests for PatchV1EnvironmentsEnvironmentId with any type of body
+func NewPatchV1EnvironmentsEnvironmentIdRequestWithBody(server string, environmentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "environmentId", runtime.ParamLocationPath, environmentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/environments/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PATCH", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewPutV1EnvironmentsEnvironmentIdEnvRequest calls the generic PutV1EnvironmentsEnvironmentIdEnv builder with application/json body
+func NewPutV1EnvironmentsEnvironmentIdEnvRequest(server string, environmentId string, body PutV1EnvironmentsEnvironmentIdEnvJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPutV1EnvironmentsEnvironmentIdEnvRequestWithBody(server, environmentId, "application/json", bodyReader)
+}
+
+// NewPutV1EnvironmentsEnvironmentIdEnvRequestWithBody generates requests for PutV1EnvironmentsEnvironmentIdEnv with any type of body
+func NewPutV1EnvironmentsEnvironmentIdEnvRequestWithBody(server string, environmentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithLocation("simple", false, "environmentId", runtime.ParamLocationPath, environmentId)
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/environments/%s/env", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("PUT", queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetV1FunctionPlatformVersionsRequest generates requests for GetV1FunctionPlatformVersions
+func NewGetV1FunctionPlatformVersionsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/function-platform-versions")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2724,6 +5409,63 @@ func NewGetV1OrganizationsRequest(server string) (*http.Request, error) {
 	queryURL, err := serverURL.Parse(operationPath)
 	if err != nil {
 		return nil, err
+	}
+
+	req, err := http.NewRequest("GET", queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetV1PlatformVersionsRequest generates requests for GetV1PlatformVersions
+func NewGetV1PlatformVersionsRequest(server string, params *GetV1PlatformVersionsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/platform-versions")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		queryValues := queryURL.Query()
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "clusterType", runtime.ParamLocationQuery, params.ClusterType); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithLocation("form", true, "resourceType", runtime.ParamLocationQuery, params.ResourceType); err != nil {
+			return nil, err
+		} else if parsed, err := url.ParseQuery(queryFrag); err != nil {
+			return nil, err
+		} else {
+			for k, v := range parsed {
+				for _, v2 := range v {
+					queryValues.Add(k, v2)
+				}
+			}
+		}
+
+		queryURL.RawQuery = queryValues.Encode()
 	}
 
 	req, err := http.NewRequest("GET", queryURL.String(), nil)
@@ -2862,23 +5604,92 @@ type ClientWithResponsesInterface interface {
 	// GetV1ClustersWithResponse request
 	GetV1ClustersWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1ClustersResponse, error)
 
+	// PostV1ClustersWithBodyWithResponse request with any body
+	PostV1ClustersWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1ClustersResponse, error)
+
+	PostV1ClustersWithResponse(ctx context.Context, body PostV1ClustersJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1ClustersResponse, error)
+
+	// DeleteV1ClustersClusterIdWithResponse request
+	DeleteV1ClustersClusterIdWithResponse(ctx context.Context, clusterId string, params *DeleteV1ClustersClusterIdParams, reqEditors ...RequestEditorFn) (*DeleteV1ClustersClusterIdResponse, error)
+
 	// GetV1ClustersClusterIdWithResponse request
 	GetV1ClustersClusterIdWithResponse(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*GetV1ClustersClusterIdResponse, error)
+
+	// PostV1ClustersClusterIdCancelWithResponse request
+	PostV1ClustersClusterIdCancelWithResponse(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*PostV1ClustersClusterIdCancelResponse, error)
+
+	// GetV1ClustersClusterIdStatusWithResponse request
+	GetV1ClustersClusterIdStatusWithResponse(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*GetV1ClustersClusterIdStatusResponse, error)
 
 	// GetV1DeploymentsWithResponse request
 	GetV1DeploymentsWithResponse(ctx context.Context, params *GetV1DeploymentsParams, reqEditors ...RequestEditorFn) (*GetV1DeploymentsResponse, error)
 
+	// PostV1DeploymentsWithBodyWithResponse request with any body
+	PostV1DeploymentsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsResponse, error)
+
+	PostV1DeploymentsWithResponse(ctx context.Context, body PostV1DeploymentsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsResponse, error)
+
+	// DeleteV1DeploymentsDeploymentIdWithResponse request
+	DeleteV1DeploymentsDeploymentIdWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*DeleteV1DeploymentsDeploymentIdResponse, error)
+
 	// GetV1DeploymentsDeploymentIdWithResponse request
 	GetV1DeploymentsDeploymentIdWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdResponse, error)
+
+	// PatchV1DeploymentsDeploymentIdWithBodyWithResponse request with any body
+	PatchV1DeploymentsDeploymentIdWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdResponse, error)
+
+	PatchV1DeploymentsDeploymentIdWithResponse(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdResponse, error)
 
 	// GetV1DeploymentsDeploymentIdConnectionWithResponse request
 	GetV1DeploymentsDeploymentIdConnectionWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdConnectionResponse, error)
 
+	// PostV1DeploymentsDeploymentIdCopyWithBodyWithResponse request with any body
+	PostV1DeploymentsDeploymentIdCopyWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdCopyResponse, error)
+
+	PostV1DeploymentsDeploymentIdCopyWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdCopyJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdCopyResponse, error)
+
+	// PatchV1DeploymentsDeploymentIdFunctionWithBodyWithResponse request with any body
+	PatchV1DeploymentsDeploymentIdFunctionWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdFunctionResponse, error)
+
+	PatchV1DeploymentsDeploymentIdFunctionWithResponse(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdFunctionJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdFunctionResponse, error)
+
+	// PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithBodyWithResponse request with any body
+	PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse, error)
+
+	PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdFunctionPlatformVersionJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse, error)
+
+	// GetV1DeploymentsDeploymentIdJobRunsWithResponse request
+	GetV1DeploymentsDeploymentIdJobRunsWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdJobRunsResponse, error)
+
+	// PostV1DeploymentsDeploymentIdJobRunsWithResponse request
+	PostV1DeploymentsDeploymentIdJobRunsWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdJobRunsResponse, error)
+
+	// DeleteV1DeploymentsDeploymentIdJobRunsJobNameWithResponse request
+	DeleteV1DeploymentsDeploymentIdJobRunsJobNameWithResponse(ctx context.Context, deploymentId string, jobName string, reqEditors ...RequestEditorFn) (*DeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse, error)
+
 	// GetV1DeploymentsDeploymentIdLogsWithResponse request
 	GetV1DeploymentsDeploymentIdLogsWithResponse(ctx context.Context, deploymentId string, params *GetV1DeploymentsDeploymentIdLogsParams, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdLogsResponse, error)
 
+	// PostV1DeploymentsDeploymentIdPlatformVersionWithBodyWithResponse request with any body
+	PostV1DeploymentsDeploymentIdPlatformVersionWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdPlatformVersionResponse, error)
+
+	PostV1DeploymentsDeploymentIdPlatformVersionWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdPlatformVersionJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdPlatformVersionResponse, error)
+
+	// PostV1DeploymentsDeploymentIdPromoteWithBodyWithResponse request with any body
+	PostV1DeploymentsDeploymentIdPromoteWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdPromoteResponse, error)
+
+	PostV1DeploymentsDeploymentIdPromoteWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdPromoteJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdPromoteResponse, error)
+
+	// PostV1DeploymentsDeploymentIdResetPasswordWithResponse request
+	PostV1DeploymentsDeploymentIdResetPasswordWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdResetPasswordResponse, error)
+
 	// GetV1DeploymentsDeploymentIdRevisionsWithResponse request
 	GetV1DeploymentsDeploymentIdRevisionsWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdRevisionsResponse, error)
+
+	// PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithBodyWithResponse request with any body
+	PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithBodyWithResponse(ctx context.Context, deploymentId string, revisionId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse, error)
+
+	PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithResponse(ctx context.Context, deploymentId string, revisionId string, body PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse, error)
 
 	// GetV1DeploymentsDeploymentIdStatusWithResponse request
 	GetV1DeploymentsDeploymentIdStatusWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdStatusResponse, error)
@@ -2886,14 +5697,38 @@ type ClientWithResponsesInterface interface {
 	// GetV1EnvironmentsWithResponse request
 	GetV1EnvironmentsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1EnvironmentsResponse, error)
 
+	// PostV1EnvironmentsWithBodyWithResponse request with any body
+	PostV1EnvironmentsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1EnvironmentsResponse, error)
+
+	PostV1EnvironmentsWithResponse(ctx context.Context, body PostV1EnvironmentsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1EnvironmentsResponse, error)
+
+	// DeleteV1EnvironmentsEnvironmentIdWithResponse request
+	DeleteV1EnvironmentsEnvironmentIdWithResponse(ctx context.Context, environmentId string, reqEditors ...RequestEditorFn) (*DeleteV1EnvironmentsEnvironmentIdResponse, error)
+
 	// GetV1EnvironmentsEnvironmentIdWithResponse request
 	GetV1EnvironmentsEnvironmentIdWithResponse(ctx context.Context, environmentId string, reqEditors ...RequestEditorFn) (*GetV1EnvironmentsEnvironmentIdResponse, error)
+
+	// PatchV1EnvironmentsEnvironmentIdWithBodyWithResponse request with any body
+	PatchV1EnvironmentsEnvironmentIdWithBodyWithResponse(ctx context.Context, environmentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchV1EnvironmentsEnvironmentIdResponse, error)
+
+	PatchV1EnvironmentsEnvironmentIdWithResponse(ctx context.Context, environmentId string, body PatchV1EnvironmentsEnvironmentIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchV1EnvironmentsEnvironmentIdResponse, error)
+
+	// PutV1EnvironmentsEnvironmentIdEnvWithBodyWithResponse request with any body
+	PutV1EnvironmentsEnvironmentIdEnvWithBodyWithResponse(ctx context.Context, environmentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutV1EnvironmentsEnvironmentIdEnvResponse, error)
+
+	PutV1EnvironmentsEnvironmentIdEnvWithResponse(ctx context.Context, environmentId string, body PutV1EnvironmentsEnvironmentIdEnvJSONRequestBody, reqEditors ...RequestEditorFn) (*PutV1EnvironmentsEnvironmentIdEnvResponse, error)
+
+	// GetV1FunctionPlatformVersionsWithResponse request
+	GetV1FunctionPlatformVersionsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1FunctionPlatformVersionsResponse, error)
 
 	// GetV1InfoWithResponse request
 	GetV1InfoWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1InfoResponse, error)
 
 	// GetV1OrganizationsWithResponse request
 	GetV1OrganizationsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1OrganizationsResponse, error)
+
+	// GetV1PlatformVersionsWithResponse request
+	GetV1PlatformVersionsWithResponse(ctx context.Context, params *GetV1PlatformVersionsParams, reqEditors ...RequestEditorFn) (*GetV1PlatformVersionsResponse, error)
 
 	// GetV1RegistriesWithResponse request
 	GetV1RegistriesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1RegistriesResponse, error)
@@ -3134,6 +5969,64 @@ func (r GetV1ClustersResponse) StatusCode() int {
 	return 0
 }
 
+type PostV1ClustersResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *CreateClusterResponse
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1ClustersResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1ClustersResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteV1ClustersClusterIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *DestroyClusterResponse
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteV1ClustersClusterIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteV1ClustersClusterIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type GetV1ClustersClusterIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -3157,6 +6050,64 @@ func (r GetV1ClustersClusterIdResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r GetV1ClustersClusterIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PostV1ClustersClusterIdCancelResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *CancelClusterResponse
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1ClustersClusterIdCancelResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1ClustersClusterIdCancelResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetV1ClustersClusterIdStatusResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ClusterStatusResponse
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetV1ClustersClusterIdStatusResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetV1ClustersClusterIdStatusResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -3192,6 +6143,64 @@ func (r GetV1DeploymentsResponse) StatusCode() int {
 	return 0
 }
 
+type PostV1DeploymentsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *CreateDeploymentResponse
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteV1DeploymentsDeploymentIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *DeleteDeploymentResponse
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteV1DeploymentsDeploymentIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteV1DeploymentsDeploymentIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type GetV1DeploymentsDeploymentIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -3215,6 +6224,35 @@ func (r GetV1DeploymentsDeploymentIdResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r GetV1DeploymentsDeploymentIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PatchV1DeploymentsDeploymentIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *DeploymentActionResult
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PatchV1DeploymentsDeploymentIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PatchV1DeploymentsDeploymentIdResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -3250,6 +6288,180 @@ func (r GetV1DeploymentsDeploymentIdConnectionResponse) StatusCode() int {
 	return 0
 }
 
+type PostV1DeploymentsDeploymentIdCopyResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *DeploymentActionResult
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsDeploymentIdCopyResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsDeploymentIdCopyResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PatchV1DeploymentsDeploymentIdFunctionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *DeploymentActionResult
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PatchV1DeploymentsDeploymentIdFunctionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PatchV1DeploymentsDeploymentIdFunctionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *PlatformVersionResult
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetV1DeploymentsDeploymentIdJobRunsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *JobRunHistory
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetV1DeploymentsDeploymentIdJobRunsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetV1DeploymentsDeploymentIdJobRunsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PostV1DeploymentsDeploymentIdJobRunsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *TriggerJobRunResult
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsDeploymentIdJobRunsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsDeploymentIdJobRunsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *CancelJobRunResult
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type GetV1DeploymentsDeploymentIdLogsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -3279,6 +6491,93 @@ func (r GetV1DeploymentsDeploymentIdLogsResponse) StatusCode() int {
 	return 0
 }
 
+type PostV1DeploymentsDeploymentIdPlatformVersionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *PlatformVersionResult
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsDeploymentIdPlatformVersionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsDeploymentIdPlatformVersionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PostV1DeploymentsDeploymentIdPromoteResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Revision
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsDeploymentIdPromoteResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsDeploymentIdPromoteResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PostV1DeploymentsDeploymentIdResetPasswordResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *ResetPasswordResult
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsDeploymentIdResetPasswordResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsDeploymentIdResetPasswordResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type GetV1DeploymentsDeploymentIdRevisionsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -3302,6 +6601,35 @@ func (r GetV1DeploymentsDeploymentIdRevisionsResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r GetV1DeploymentsDeploymentIdRevisionsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Revision
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -3366,6 +6694,64 @@ func (r GetV1EnvironmentsResponse) StatusCode() int {
 	return 0
 }
 
+type PostV1EnvironmentsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Environment
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1EnvironmentsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1EnvironmentsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type DeleteV1EnvironmentsEnvironmentIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *DeleteEnvironmentResponse
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteV1EnvironmentsEnvironmentIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteV1EnvironmentsEnvironmentIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
 type GetV1EnvironmentsEnvironmentIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -3389,6 +6775,93 @@ func (r GetV1EnvironmentsEnvironmentIdResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r GetV1EnvironmentsEnvironmentIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PatchV1EnvironmentsEnvironmentIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Environment
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PatchV1EnvironmentsEnvironmentIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PatchV1EnvironmentsEnvironmentIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type PutV1EnvironmentsEnvironmentIdEnvResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *SetEnvVarsResponse
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PutV1EnvironmentsEnvironmentIdEnvResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PutV1EnvironmentsEnvironmentIdEnvResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetV1FunctionPlatformVersionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *PlatformVersionsResponse
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetV1FunctionPlatformVersionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetV1FunctionPlatformVersionsResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -3441,6 +6914,35 @@ func (r GetV1OrganizationsResponse) Status() string {
 
 // StatusCode returns HTTPResponse.StatusCode
 func (r GetV1OrganizationsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+type GetV1PlatformVersionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *PlatformVersionsResponse
+	JSON400      *ErrorResponse
+	JSON401      *ErrorResponse
+	JSON403      *ErrorResponse
+	JSON404      *ErrorResponse
+	JSON409      *ErrorResponse
+	JSON412      *ErrorResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r GetV1PlatformVersionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetV1PlatformVersionsResponse) StatusCode() int {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.StatusCode
 	}
@@ -3577,6 +7079,32 @@ func (c *ClientWithResponses) GetV1ClustersWithResponse(ctx context.Context, req
 	return ParseGetV1ClustersResponse(rsp)
 }
 
+// PostV1ClustersWithBodyWithResponse request with arbitrary body returning *PostV1ClustersResponse
+func (c *ClientWithResponses) PostV1ClustersWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1ClustersResponse, error) {
+	rsp, err := c.PostV1ClustersWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1ClustersResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostV1ClustersWithResponse(ctx context.Context, body PostV1ClustersJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1ClustersResponse, error) {
+	rsp, err := c.PostV1Clusters(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1ClustersResponse(rsp)
+}
+
+// DeleteV1ClustersClusterIdWithResponse request returning *DeleteV1ClustersClusterIdResponse
+func (c *ClientWithResponses) DeleteV1ClustersClusterIdWithResponse(ctx context.Context, clusterId string, params *DeleteV1ClustersClusterIdParams, reqEditors ...RequestEditorFn) (*DeleteV1ClustersClusterIdResponse, error) {
+	rsp, err := c.DeleteV1ClustersClusterId(ctx, clusterId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteV1ClustersClusterIdResponse(rsp)
+}
+
 // GetV1ClustersClusterIdWithResponse request returning *GetV1ClustersClusterIdResponse
 func (c *ClientWithResponses) GetV1ClustersClusterIdWithResponse(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*GetV1ClustersClusterIdResponse, error) {
 	rsp, err := c.GetV1ClustersClusterId(ctx, clusterId, reqEditors...)
@@ -3584,6 +7112,24 @@ func (c *ClientWithResponses) GetV1ClustersClusterIdWithResponse(ctx context.Con
 		return nil, err
 	}
 	return ParseGetV1ClustersClusterIdResponse(rsp)
+}
+
+// PostV1ClustersClusterIdCancelWithResponse request returning *PostV1ClustersClusterIdCancelResponse
+func (c *ClientWithResponses) PostV1ClustersClusterIdCancelWithResponse(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*PostV1ClustersClusterIdCancelResponse, error) {
+	rsp, err := c.PostV1ClustersClusterIdCancel(ctx, clusterId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1ClustersClusterIdCancelResponse(rsp)
+}
+
+// GetV1ClustersClusterIdStatusWithResponse request returning *GetV1ClustersClusterIdStatusResponse
+func (c *ClientWithResponses) GetV1ClustersClusterIdStatusWithResponse(ctx context.Context, clusterId string, reqEditors ...RequestEditorFn) (*GetV1ClustersClusterIdStatusResponse, error) {
+	rsp, err := c.GetV1ClustersClusterIdStatus(ctx, clusterId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetV1ClustersClusterIdStatusResponse(rsp)
 }
 
 // GetV1DeploymentsWithResponse request returning *GetV1DeploymentsResponse
@@ -3595,6 +7141,32 @@ func (c *ClientWithResponses) GetV1DeploymentsWithResponse(ctx context.Context, 
 	return ParseGetV1DeploymentsResponse(rsp)
 }
 
+// PostV1DeploymentsWithBodyWithResponse request with arbitrary body returning *PostV1DeploymentsResponse
+func (c *ClientWithResponses) PostV1DeploymentsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsResponse, error) {
+	rsp, err := c.PostV1DeploymentsWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostV1DeploymentsWithResponse(ctx context.Context, body PostV1DeploymentsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsResponse, error) {
+	rsp, err := c.PostV1Deployments(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsResponse(rsp)
+}
+
+// DeleteV1DeploymentsDeploymentIdWithResponse request returning *DeleteV1DeploymentsDeploymentIdResponse
+func (c *ClientWithResponses) DeleteV1DeploymentsDeploymentIdWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*DeleteV1DeploymentsDeploymentIdResponse, error) {
+	rsp, err := c.DeleteV1DeploymentsDeploymentId(ctx, deploymentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteV1DeploymentsDeploymentIdResponse(rsp)
+}
+
 // GetV1DeploymentsDeploymentIdWithResponse request returning *GetV1DeploymentsDeploymentIdResponse
 func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdResponse, error) {
 	rsp, err := c.GetV1DeploymentsDeploymentId(ctx, deploymentId, reqEditors...)
@@ -3602,6 +7174,23 @@ func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdWithResponse(ctx conte
 		return nil, err
 	}
 	return ParseGetV1DeploymentsDeploymentIdResponse(rsp)
+}
+
+// PatchV1DeploymentsDeploymentIdWithBodyWithResponse request with arbitrary body returning *PatchV1DeploymentsDeploymentIdResponse
+func (c *ClientWithResponses) PatchV1DeploymentsDeploymentIdWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdResponse, error) {
+	rsp, err := c.PatchV1DeploymentsDeploymentIdWithBody(ctx, deploymentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchV1DeploymentsDeploymentIdResponse(rsp)
+}
+
+func (c *ClientWithResponses) PatchV1DeploymentsDeploymentIdWithResponse(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdResponse, error) {
+	rsp, err := c.PatchV1DeploymentsDeploymentId(ctx, deploymentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchV1DeploymentsDeploymentIdResponse(rsp)
 }
 
 // GetV1DeploymentsDeploymentIdConnectionWithResponse request returning *GetV1DeploymentsDeploymentIdConnectionResponse
@@ -3613,6 +7202,84 @@ func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdConnectionWithResponse
 	return ParseGetV1DeploymentsDeploymentIdConnectionResponse(rsp)
 }
 
+// PostV1DeploymentsDeploymentIdCopyWithBodyWithResponse request with arbitrary body returning *PostV1DeploymentsDeploymentIdCopyResponse
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdCopyWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdCopyResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdCopyWithBody(ctx, deploymentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdCopyResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdCopyWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdCopyJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdCopyResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdCopy(ctx, deploymentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdCopyResponse(rsp)
+}
+
+// PatchV1DeploymentsDeploymentIdFunctionWithBodyWithResponse request with arbitrary body returning *PatchV1DeploymentsDeploymentIdFunctionResponse
+func (c *ClientWithResponses) PatchV1DeploymentsDeploymentIdFunctionWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdFunctionResponse, error) {
+	rsp, err := c.PatchV1DeploymentsDeploymentIdFunctionWithBody(ctx, deploymentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchV1DeploymentsDeploymentIdFunctionResponse(rsp)
+}
+
+func (c *ClientWithResponses) PatchV1DeploymentsDeploymentIdFunctionWithResponse(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdFunctionJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdFunctionResponse, error) {
+	rsp, err := c.PatchV1DeploymentsDeploymentIdFunction(ctx, deploymentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchV1DeploymentsDeploymentIdFunctionResponse(rsp)
+}
+
+// PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithBodyWithResponse request with arbitrary body returning *PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithBody(ctx, deploymentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdFunctionPlatformVersionJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdFunctionPlatformVersion(ctx, deploymentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse(rsp)
+}
+
+// GetV1DeploymentsDeploymentIdJobRunsWithResponse request returning *GetV1DeploymentsDeploymentIdJobRunsResponse
+func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdJobRunsWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdJobRunsResponse, error) {
+	rsp, err := c.GetV1DeploymentsDeploymentIdJobRuns(ctx, deploymentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetV1DeploymentsDeploymentIdJobRunsResponse(rsp)
+}
+
+// PostV1DeploymentsDeploymentIdJobRunsWithResponse request returning *PostV1DeploymentsDeploymentIdJobRunsResponse
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdJobRunsWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdJobRunsResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdJobRuns(ctx, deploymentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdJobRunsResponse(rsp)
+}
+
+// DeleteV1DeploymentsDeploymentIdJobRunsJobNameWithResponse request returning *DeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse
+func (c *ClientWithResponses) DeleteV1DeploymentsDeploymentIdJobRunsJobNameWithResponse(ctx context.Context, deploymentId string, jobName string, reqEditors ...RequestEditorFn) (*DeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse, error) {
+	rsp, err := c.DeleteV1DeploymentsDeploymentIdJobRunsJobName(ctx, deploymentId, jobName, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse(rsp)
+}
+
 // GetV1DeploymentsDeploymentIdLogsWithResponse request returning *GetV1DeploymentsDeploymentIdLogsResponse
 func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdLogsWithResponse(ctx context.Context, deploymentId string, params *GetV1DeploymentsDeploymentIdLogsParams, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdLogsResponse, error) {
 	rsp, err := c.GetV1DeploymentsDeploymentIdLogs(ctx, deploymentId, params, reqEditors...)
@@ -3622,6 +7289,49 @@ func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdLogsWithResponse(ctx c
 	return ParseGetV1DeploymentsDeploymentIdLogsResponse(rsp)
 }
 
+// PostV1DeploymentsDeploymentIdPlatformVersionWithBodyWithResponse request with arbitrary body returning *PostV1DeploymentsDeploymentIdPlatformVersionResponse
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdPlatformVersionWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdPlatformVersionResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdPlatformVersionWithBody(ctx, deploymentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdPlatformVersionResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdPlatformVersionWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdPlatformVersionJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdPlatformVersionResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdPlatformVersion(ctx, deploymentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdPlatformVersionResponse(rsp)
+}
+
+// PostV1DeploymentsDeploymentIdPromoteWithBodyWithResponse request with arbitrary body returning *PostV1DeploymentsDeploymentIdPromoteResponse
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdPromoteWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdPromoteResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdPromoteWithBody(ctx, deploymentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdPromoteResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdPromoteWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdPromoteJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdPromoteResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdPromote(ctx, deploymentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdPromoteResponse(rsp)
+}
+
+// PostV1DeploymentsDeploymentIdResetPasswordWithResponse request returning *PostV1DeploymentsDeploymentIdResetPasswordResponse
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdResetPasswordWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdResetPasswordResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdResetPassword(ctx, deploymentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdResetPasswordResponse(rsp)
+}
+
 // GetV1DeploymentsDeploymentIdRevisionsWithResponse request returning *GetV1DeploymentsDeploymentIdRevisionsResponse
 func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdRevisionsWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdRevisionsResponse, error) {
 	rsp, err := c.GetV1DeploymentsDeploymentIdRevisions(ctx, deploymentId, reqEditors...)
@@ -3629,6 +7339,23 @@ func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdRevisionsWithResponse(
 		return nil, err
 	}
 	return ParseGetV1DeploymentsDeploymentIdRevisionsResponse(rsp)
+}
+
+// PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithBodyWithResponse request with arbitrary body returning *PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithBodyWithResponse(ctx context.Context, deploymentId string, revisionId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithBody(ctx, deploymentId, revisionId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithResponse(ctx context.Context, deploymentId string, revisionId string, body PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback(ctx, deploymentId, revisionId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse(rsp)
 }
 
 // GetV1DeploymentsDeploymentIdStatusWithResponse request returning *GetV1DeploymentsDeploymentIdStatusResponse
@@ -3649,6 +7376,32 @@ func (c *ClientWithResponses) GetV1EnvironmentsWithResponse(ctx context.Context,
 	return ParseGetV1EnvironmentsResponse(rsp)
 }
 
+// PostV1EnvironmentsWithBodyWithResponse request with arbitrary body returning *PostV1EnvironmentsResponse
+func (c *ClientWithResponses) PostV1EnvironmentsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1EnvironmentsResponse, error) {
+	rsp, err := c.PostV1EnvironmentsWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1EnvironmentsResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostV1EnvironmentsWithResponse(ctx context.Context, body PostV1EnvironmentsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1EnvironmentsResponse, error) {
+	rsp, err := c.PostV1Environments(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1EnvironmentsResponse(rsp)
+}
+
+// DeleteV1EnvironmentsEnvironmentIdWithResponse request returning *DeleteV1EnvironmentsEnvironmentIdResponse
+func (c *ClientWithResponses) DeleteV1EnvironmentsEnvironmentIdWithResponse(ctx context.Context, environmentId string, reqEditors ...RequestEditorFn) (*DeleteV1EnvironmentsEnvironmentIdResponse, error) {
+	rsp, err := c.DeleteV1EnvironmentsEnvironmentId(ctx, environmentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteV1EnvironmentsEnvironmentIdResponse(rsp)
+}
+
 // GetV1EnvironmentsEnvironmentIdWithResponse request returning *GetV1EnvironmentsEnvironmentIdResponse
 func (c *ClientWithResponses) GetV1EnvironmentsEnvironmentIdWithResponse(ctx context.Context, environmentId string, reqEditors ...RequestEditorFn) (*GetV1EnvironmentsEnvironmentIdResponse, error) {
 	rsp, err := c.GetV1EnvironmentsEnvironmentId(ctx, environmentId, reqEditors...)
@@ -3656,6 +7409,49 @@ func (c *ClientWithResponses) GetV1EnvironmentsEnvironmentIdWithResponse(ctx con
 		return nil, err
 	}
 	return ParseGetV1EnvironmentsEnvironmentIdResponse(rsp)
+}
+
+// PatchV1EnvironmentsEnvironmentIdWithBodyWithResponse request with arbitrary body returning *PatchV1EnvironmentsEnvironmentIdResponse
+func (c *ClientWithResponses) PatchV1EnvironmentsEnvironmentIdWithBodyWithResponse(ctx context.Context, environmentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchV1EnvironmentsEnvironmentIdResponse, error) {
+	rsp, err := c.PatchV1EnvironmentsEnvironmentIdWithBody(ctx, environmentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchV1EnvironmentsEnvironmentIdResponse(rsp)
+}
+
+func (c *ClientWithResponses) PatchV1EnvironmentsEnvironmentIdWithResponse(ctx context.Context, environmentId string, body PatchV1EnvironmentsEnvironmentIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchV1EnvironmentsEnvironmentIdResponse, error) {
+	rsp, err := c.PatchV1EnvironmentsEnvironmentId(ctx, environmentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchV1EnvironmentsEnvironmentIdResponse(rsp)
+}
+
+// PutV1EnvironmentsEnvironmentIdEnvWithBodyWithResponse request with arbitrary body returning *PutV1EnvironmentsEnvironmentIdEnvResponse
+func (c *ClientWithResponses) PutV1EnvironmentsEnvironmentIdEnvWithBodyWithResponse(ctx context.Context, environmentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutV1EnvironmentsEnvironmentIdEnvResponse, error) {
+	rsp, err := c.PutV1EnvironmentsEnvironmentIdEnvWithBody(ctx, environmentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutV1EnvironmentsEnvironmentIdEnvResponse(rsp)
+}
+
+func (c *ClientWithResponses) PutV1EnvironmentsEnvironmentIdEnvWithResponse(ctx context.Context, environmentId string, body PutV1EnvironmentsEnvironmentIdEnvJSONRequestBody, reqEditors ...RequestEditorFn) (*PutV1EnvironmentsEnvironmentIdEnvResponse, error) {
+	rsp, err := c.PutV1EnvironmentsEnvironmentIdEnv(ctx, environmentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutV1EnvironmentsEnvironmentIdEnvResponse(rsp)
+}
+
+// GetV1FunctionPlatformVersionsWithResponse request returning *GetV1FunctionPlatformVersionsResponse
+func (c *ClientWithResponses) GetV1FunctionPlatformVersionsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1FunctionPlatformVersionsResponse, error) {
+	rsp, err := c.GetV1FunctionPlatformVersions(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetV1FunctionPlatformVersionsResponse(rsp)
 }
 
 // GetV1InfoWithResponse request returning *GetV1InfoResponse
@@ -3674,6 +7470,15 @@ func (c *ClientWithResponses) GetV1OrganizationsWithResponse(ctx context.Context
 		return nil, err
 	}
 	return ParseGetV1OrganizationsResponse(rsp)
+}
+
+// GetV1PlatformVersionsWithResponse request returning *GetV1PlatformVersionsResponse
+func (c *ClientWithResponses) GetV1PlatformVersionsWithResponse(ctx context.Context, params *GetV1PlatformVersionsParams, reqEditors ...RequestEditorFn) (*GetV1PlatformVersionsResponse, error) {
+	rsp, err := c.GetV1PlatformVersions(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetV1PlatformVersionsResponse(rsp)
 }
 
 // GetV1RegistriesWithResponse request returning *GetV1RegistriesResponse
@@ -4294,6 +8099,156 @@ func ParseGetV1ClustersResponse(rsp *http.Response) (*GetV1ClustersResponse, err
 	return response, nil
 }
 
+// ParsePostV1ClustersResponse parses an HTTP response from a PostV1ClustersWithResponse call
+func ParsePostV1ClustersResponse(rsp *http.Response) (*PostV1ClustersResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1ClustersResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CreateClusterResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteV1ClustersClusterIdResponse parses an HTTP response from a DeleteV1ClustersClusterIdWithResponse call
+func ParseDeleteV1ClustersClusterIdResponse(rsp *http.Response) (*DeleteV1ClustersClusterIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteV1ClustersClusterIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DestroyClusterResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetV1ClustersClusterIdResponse parses an HTTP response from a GetV1ClustersClusterIdWithResponse call
 func ParseGetV1ClustersClusterIdResponse(rsp *http.Response) (*GetV1ClustersClusterIdResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -4310,6 +8265,156 @@ func ParseGetV1ClustersClusterIdResponse(rsp *http.Response) (*GetV1ClustersClus
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest Cluster
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostV1ClustersClusterIdCancelResponse parses an HTTP response from a PostV1ClustersClusterIdCancelWithResponse call
+func ParsePostV1ClustersClusterIdCancelResponse(rsp *http.Response) (*PostV1ClustersClusterIdCancelResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1ClustersClusterIdCancelResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CancelClusterResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetV1ClustersClusterIdStatusResponse parses an HTTP response from a GetV1ClustersClusterIdStatusWithResponse call
+func ParseGetV1ClustersClusterIdStatusResponse(rsp *http.Response) (*GetV1ClustersClusterIdStatusResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetV1ClustersClusterIdStatusResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ClusterStatusResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4444,6 +8549,156 @@ func ParseGetV1DeploymentsResponse(rsp *http.Response) (*GetV1DeploymentsRespons
 	return response, nil
 }
 
+// ParsePostV1DeploymentsResponse parses an HTTP response from a PostV1DeploymentsWithResponse call
+func ParsePostV1DeploymentsResponse(rsp *http.Response) (*PostV1DeploymentsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CreateDeploymentResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteV1DeploymentsDeploymentIdResponse parses an HTTP response from a DeleteV1DeploymentsDeploymentIdWithResponse call
+func ParseDeleteV1DeploymentsDeploymentIdResponse(rsp *http.Response) (*DeleteV1DeploymentsDeploymentIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteV1DeploymentsDeploymentIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeleteDeploymentResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetV1DeploymentsDeploymentIdResponse parses an HTTP response from a GetV1DeploymentsDeploymentIdWithResponse call
 func ParseGetV1DeploymentsDeploymentIdResponse(rsp *http.Response) (*GetV1DeploymentsDeploymentIdResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -4460,6 +8715,81 @@ func ParseGetV1DeploymentsDeploymentIdResponse(rsp *http.Response) (*GetV1Deploy
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest Deployment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePatchV1DeploymentsDeploymentIdResponse parses an HTTP response from a PatchV1DeploymentsDeploymentIdWithResponse call
+func ParsePatchV1DeploymentsDeploymentIdResponse(rsp *http.Response) (*PatchV1DeploymentsDeploymentIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PatchV1DeploymentsDeploymentIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeploymentActionResult
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4594,6 +8924,456 @@ func ParseGetV1DeploymentsDeploymentIdConnectionResponse(rsp *http.Response) (*G
 	return response, nil
 }
 
+// ParsePostV1DeploymentsDeploymentIdCopyResponse parses an HTTP response from a PostV1DeploymentsDeploymentIdCopyWithResponse call
+func ParsePostV1DeploymentsDeploymentIdCopyResponse(rsp *http.Response) (*PostV1DeploymentsDeploymentIdCopyResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsDeploymentIdCopyResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeploymentActionResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePatchV1DeploymentsDeploymentIdFunctionResponse parses an HTTP response from a PatchV1DeploymentsDeploymentIdFunctionWithResponse call
+func ParsePatchV1DeploymentsDeploymentIdFunctionResponse(rsp *http.Response) (*PatchV1DeploymentsDeploymentIdFunctionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PatchV1DeploymentsDeploymentIdFunctionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeploymentActionResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse parses an HTTP response from a PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithResponse call
+func ParsePostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse(rsp *http.Response) (*PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PlatformVersionResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetV1DeploymentsDeploymentIdJobRunsResponse parses an HTTP response from a GetV1DeploymentsDeploymentIdJobRunsWithResponse call
+func ParseGetV1DeploymentsDeploymentIdJobRunsResponse(rsp *http.Response) (*GetV1DeploymentsDeploymentIdJobRunsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetV1DeploymentsDeploymentIdJobRunsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest JobRunHistory
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostV1DeploymentsDeploymentIdJobRunsResponse parses an HTTP response from a PostV1DeploymentsDeploymentIdJobRunsWithResponse call
+func ParsePostV1DeploymentsDeploymentIdJobRunsResponse(rsp *http.Response) (*PostV1DeploymentsDeploymentIdJobRunsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsDeploymentIdJobRunsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest TriggerJobRunResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse parses an HTTP response from a DeleteV1DeploymentsDeploymentIdJobRunsJobNameWithResponse call
+func ParseDeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse(rsp *http.Response) (*DeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteV1DeploymentsDeploymentIdJobRunsJobNameResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CancelJobRunResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetV1DeploymentsDeploymentIdLogsResponse parses an HTTP response from a GetV1DeploymentsDeploymentIdLogsWithResponse call
 func ParseGetV1DeploymentsDeploymentIdLogsResponse(rsp *http.Response) (*GetV1DeploymentsDeploymentIdLogsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -4669,6 +9449,231 @@ func ParseGetV1DeploymentsDeploymentIdLogsResponse(rsp *http.Response) (*GetV1De
 	return response, nil
 }
 
+// ParsePostV1DeploymentsDeploymentIdPlatformVersionResponse parses an HTTP response from a PostV1DeploymentsDeploymentIdPlatformVersionWithResponse call
+func ParsePostV1DeploymentsDeploymentIdPlatformVersionResponse(rsp *http.Response) (*PostV1DeploymentsDeploymentIdPlatformVersionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsDeploymentIdPlatformVersionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PlatformVersionResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostV1DeploymentsDeploymentIdPromoteResponse parses an HTTP response from a PostV1DeploymentsDeploymentIdPromoteWithResponse call
+func ParsePostV1DeploymentsDeploymentIdPromoteResponse(rsp *http.Response) (*PostV1DeploymentsDeploymentIdPromoteResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsDeploymentIdPromoteResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Revision
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostV1DeploymentsDeploymentIdResetPasswordResponse parses an HTTP response from a PostV1DeploymentsDeploymentIdResetPasswordWithResponse call
+func ParsePostV1DeploymentsDeploymentIdResetPasswordResponse(rsp *http.Response) (*PostV1DeploymentsDeploymentIdResetPasswordResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsDeploymentIdResetPasswordResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ResetPasswordResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetV1DeploymentsDeploymentIdRevisionsResponse parses an HTTP response from a GetV1DeploymentsDeploymentIdRevisionsWithResponse call
 func ParseGetV1DeploymentsDeploymentIdRevisionsResponse(rsp *http.Response) (*GetV1DeploymentsDeploymentIdRevisionsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -4685,6 +9690,81 @@ func ParseGetV1DeploymentsDeploymentIdRevisionsResponse(rsp *http.Response) (*Ge
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest RevisionListResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse parses an HTTP response from a PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithResponse call
+func ParsePostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse(rsp *http.Response) (*PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Revision
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -4894,6 +9974,156 @@ func ParseGetV1EnvironmentsResponse(rsp *http.Response) (*GetV1EnvironmentsRespo
 	return response, nil
 }
 
+// ParsePostV1EnvironmentsResponse parses an HTTP response from a PostV1EnvironmentsWithResponse call
+func ParsePostV1EnvironmentsResponse(rsp *http.Response) (*PostV1EnvironmentsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1EnvironmentsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Environment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteV1EnvironmentsEnvironmentIdResponse parses an HTTP response from a DeleteV1EnvironmentsEnvironmentIdWithResponse call
+func ParseDeleteV1EnvironmentsEnvironmentIdResponse(rsp *http.Response) (*DeleteV1EnvironmentsEnvironmentIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteV1EnvironmentsEnvironmentIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeleteEnvironmentResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetV1EnvironmentsEnvironmentIdResponse parses an HTTP response from a GetV1EnvironmentsEnvironmentIdWithResponse call
 func ParseGetV1EnvironmentsEnvironmentIdResponse(rsp *http.Response) (*GetV1EnvironmentsEnvironmentIdResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -4910,6 +10140,231 @@ func ParseGetV1EnvironmentsEnvironmentIdResponse(rsp *http.Response) (*GetV1Envi
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest Environment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePatchV1EnvironmentsEnvironmentIdResponse parses an HTTP response from a PatchV1EnvironmentsEnvironmentIdWithResponse call
+func ParsePatchV1EnvironmentsEnvironmentIdResponse(rsp *http.Response) (*PatchV1EnvironmentsEnvironmentIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PatchV1EnvironmentsEnvironmentIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Environment
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePutV1EnvironmentsEnvironmentIdEnvResponse parses an HTTP response from a PutV1EnvironmentsEnvironmentIdEnvWithResponse call
+func ParsePutV1EnvironmentsEnvironmentIdEnvResponse(rsp *http.Response) (*PutV1EnvironmentsEnvironmentIdEnvResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PutV1EnvironmentsEnvironmentIdEnvResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SetEnvVarsResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetV1FunctionPlatformVersionsResponse parses an HTTP response from a GetV1FunctionPlatformVersionsWithResponse call
+func ParseGetV1FunctionPlatformVersionsResponse(rsp *http.Response) (*GetV1FunctionPlatformVersionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetV1FunctionPlatformVersionsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PlatformVersionsResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -5018,6 +10473,81 @@ func ParseGetV1OrganizationsResponse(rsp *http.Response) (*GetV1OrganizationsRes
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest OrganizationListResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetV1PlatformVersionsResponse parses an HTTP response from a GetV1PlatformVersionsWithResponse call
+func ParseGetV1PlatformVersionsResponse(rsp *http.Response) (*GetV1PlatformVersionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetV1PlatformVersionsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PlatformVersionsResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -5230,82 +10760,180 @@ func ParseGetV1RegistriesRegistryIdResponse(rsp *http.Response) (*GetV1Registrie
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
-	"Ricxo9H9p/t/BgAA///pt1xRSJsAAA==",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

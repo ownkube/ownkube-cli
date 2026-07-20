@@ -17,6 +17,16 @@ func New() *cobra.Command {
 		logsCmd(),
 		revisionsCmd(),
 		connectionCmd(),
+		createCmd(),
+		updateCmd(),
+		deleteCmd(),
+		copyCmd(),
+		promoteCmd(),
+		rollbackCmd(),
+		resetPasswordCmd(),
+		upgradeCmd(),
+		platformVersionsCmd(),
+		jobRunsCmd(),
 	)
 	return root
 }

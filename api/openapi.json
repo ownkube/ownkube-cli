@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Ownkube CLI API",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "description": "API for the Ownkube CLI tool. Authenticate via browser-based flow, then use x-api-key header for subsequent requests."
   },
   "servers": [
@@ -463,6 +463,74 @@
         },
         "required": ["id", "name", "provider", "clusterType", "status"]
       },
+      "ClusterStatusResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "providerOutputs": {
+            "nullable": true
+          },
+          "provisioningProgress": {
+            "nullable": true
+          }
+        },
+        "required": ["id", "status"]
+      },
+      "CreateClusterResponse": {
+        "type": "object",
+        "properties": {
+          "clusterId": {
+            "type": "string"
+          },
+          "workflowId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusMessage": {
+            "type": "string"
+          }
+        },
+        "required": ["clusterId", "workflowId", "status"]
+      },
+      "DestroyClusterResponse": {
+        "type": "object",
+        "properties": {
+          "clusterId": {
+            "type": "string"
+          },
+          "workflowId": {
+            "type": "string",
+            "nullable": true
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["clusterId", "workflowId", "status"]
+      },
+      "CancelClusterResponse": {
+        "type": "object",
+        "properties": {
+          "clusterId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": ["clusterId", "status"]
+      },
       "EnvironmentListResponse": {
         "type": "object",
         "properties": {
@@ -495,6 +563,9 @@
             "type": "string",
             "nullable": true
           },
+          "isDefault": {
+            "type": "boolean"
+          },
           "deploymentCount": {
             "type": "number"
           },
@@ -522,6 +593,111 @@
           }
         },
         "required": ["id", "name", "slug"]
+      },
+      "CreateEnvironmentBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "example": "Staging"
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30,
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Lowercase, starts with a letter; letters, numbers, hyphens only.",
+            "example": "staging"
+          },
+          "color": {
+            "type": "string",
+            "enum": ["amber", "green", "blue", "purple", "red"],
+            "description": "Accent color. Defaults to `blue`."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": ["name", "slug"]
+      },
+      "UpdateEnvironmentBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "color": {
+            "type": "string",
+            "enum": ["amber", "green", "blue", "purple", "red"]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 200
+          }
+        }
+      },
+      "SetEnvVarsResponse": {
+        "type": "object",
+        "properties": {
+          "env": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EnvVarInput"
+            }
+          },
+          "redeployed": {
+            "type": "number"
+          },
+          "failed": {
+            "type": "number"
+          }
+        },
+        "required": ["env", "redeployed", "failed"]
+      },
+      "EnvVarInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "DATABASE_URL"
+          },
+          "secret": {
+            "type": "boolean",
+            "description": "Mark as secret so the value is never returned on reads. Echo a saved secret back with an empty `value` to keep the previous value."
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "value"]
+      },
+      "SetEnvVarsBody": {
+        "type": "object",
+        "properties": {
+          "env": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EnvVarInput"
+            },
+            "description": "The full shared env-var set for the environment (replaces the existing set). Every cluster-bound app in the environment is redeployed to apply it."
+          }
+        },
+        "required": ["env"]
+      },
+      "DeleteEnvironmentResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": ["success"]
       },
       "RegistryListResponse": {
         "type": "object",
@@ -695,6 +871,31 @@
           "chartVersion"
         ]
       },
+      "CreateDeploymentResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Deployment"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "workflowPullRequestUrl": {
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "DeleteDeploymentResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": ["success"]
+      },
       "DeploymentStatusResponse": {
         "type": "object",
         "properties": {
@@ -758,6 +959,957 @@
           }
         },
         "required": ["details", "secretName", "namespace", "serviceName"]
+      },
+      "DeploymentActionResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "clusterId": {
+            "type": "string",
+            "nullable": true
+          },
+          "environmentId": {
+            "type": "string",
+            "nullable": true
+          },
+          "registryId": {
+            "type": "string",
+            "nullable": true
+          },
+          "resourceType": {
+            "type": "string",
+            "enum": ["web", "worker", "job", "database", "function"]
+          },
+          "status": {
+            "type": "string"
+          },
+          "statusMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "chartVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "appConfig": {
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "clusterId",
+          "environmentId",
+          "registryId",
+          "resourceType",
+          "status",
+          "statusMessage",
+          "chartVersion"
+        ]
+      },
+      "UpdateDeploymentBody": {
+        "type": "object",
+        "properties": {
+          "appConfig": {
+            "type": "object",
+            "properties": {
+              "repository": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tag": {
+                "type": "string",
+                "minLength": 1
+              },
+              "port": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 65535
+              },
+              "replicas": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 20,
+                "default": 1
+              },
+              "env": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "secret": {
+                      "type": "boolean"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["name", "value"]
+                }
+              },
+              "public": {
+                "type": "boolean",
+                "default": false
+              },
+              "wafEnabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "auth": {
+                "type": "object",
+                "properties": {
+                  "basicAuth": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "username": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "pattern": "^[^:\\s]+$"
+                      },
+                      "password": {
+                        "type": "string",
+                        "maxLength": 255
+                      }
+                    },
+                    "required": ["username"]
+                  },
+                  "oauth": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "provider": {
+                        "type": "string",
+                        "enum": ["google"],
+                        "default": "google"
+                      },
+                      "allowedDomains": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "maxLength": 253
+                        },
+                        "maxItems": 50
+                      },
+                      "allowedEmails": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "maxLength": 320,
+                          "format": "email"
+                        },
+                        "maxItems": 200
+                      }
+                    }
+                  }
+                }
+              },
+              "healthCheck": {
+                "type": "object",
+                "properties": {
+                  "startup": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "path": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "port": {
+                        "type": "string"
+                      },
+                      "periodSeconds": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 300
+                      },
+                      "timeoutSeconds": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 60
+                      },
+                      "failureThreshold": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 30
+                      },
+                      "initialDelaySeconds": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 300
+                      }
+                    },
+                    "required": ["path"]
+                  },
+                  "liveness": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "path": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "port": {
+                        "type": "string"
+                      },
+                      "periodSeconds": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 300
+                      },
+                      "timeoutSeconds": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 60
+                      },
+                      "failureThreshold": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 30
+                      },
+                      "initialDelaySeconds": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 300
+                      }
+                    },
+                    "required": ["path"]
+                  },
+                  "readiness": {
+                    "type": "object",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean",
+                        "default": false
+                      },
+                      "path": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "port": {
+                        "type": "string"
+                      },
+                      "periodSeconds": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 300
+                      },
+                      "timeoutSeconds": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 60
+                      },
+                      "failureThreshold": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 30
+                      },
+                      "initialDelaySeconds": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 300
+                      }
+                    },
+                    "required": ["path"]
+                  }
+                }
+              },
+              "resources": {
+                "type": "object",
+                "properties": {
+                  "requests": {
+                    "type": "object",
+                    "properties": {
+                      "cpu": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "memory": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": ["cpu", "memory"]
+                  },
+                  "limits": {
+                    "type": "object",
+                    "properties": {
+                      "cpu": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "memory": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": ["cpu", "memory"]
+                  }
+                },
+                "required": ["requests", "limits"]
+              },
+              "autoscaling": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "minReplicas": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "default": 1
+                  },
+                  "maxReplicas": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "default": 3
+                  },
+                  "targetCPUUtilizationPercentage": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                  },
+                  "targetMemoryUtilizationPercentage": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100
+                  }
+                }
+              }
+            },
+            "required": ["repository", "tag", "port"]
+          },
+          "databaseConfig": {
+            "type": "object",
+            "properties": {
+              "engine": {
+                "type": "string",
+                "enum": ["postgres"]
+              },
+              "version": {
+                "type": "string",
+                "enum": ["17", "18"]
+              },
+              "instances": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10,
+                "default": 2
+              },
+              "bootstrap": {
+                "type": "object",
+                "properties": {
+                  "database": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 63
+                  },
+                  "owner": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 63
+                  },
+                  "postInitSQL": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": ["database", "owner"]
+              },
+              "storage": {
+                "type": "object",
+                "properties": {
+                  "size": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "storageClass": {
+                    "type": "string",
+                    "minLength": 1,
+                    "default": "gp3"
+                  }
+                },
+                "required": ["size"]
+              },
+              "public": {
+                "type": "boolean"
+              },
+              "resources": {
+                "type": "object",
+                "properties": {
+                  "requests": {
+                    "type": "object",
+                    "properties": {
+                      "cpu": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "memory": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": ["cpu", "memory"]
+                  },
+                  "limits": {
+                    "type": "object",
+                    "properties": {
+                      "cpu": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "memory": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": ["cpu", "memory"]
+                  }
+                },
+                "required": ["requests", "limits"]
+              },
+              "pooler": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "instances": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": ["rw", "ro"]
+                  },
+                  "mode": {
+                    "type": "string",
+                    "enum": ["session", "transaction"]
+                  },
+                  "parameters": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "parameters": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "pgHba": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "monitoring": {
+                "type": "object",
+                "properties": {
+                  "enablePodMonitor": {
+                    "type": "boolean"
+                  }
+                },
+                "required": ["enablePodMonitor"]
+              },
+              "backup": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "barmanObjectStore": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "nullable": true
+                    }
+                  },
+                  "retentionPolicy": {
+                    "type": "string"
+                  }
+                },
+                "required": ["enabled"]
+              },
+              "scheduledBackup": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "schedule": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "backupOwnerReference": {
+                    "type": "string"
+                  },
+                  "immediate": {
+                    "type": "boolean"
+                  }
+                },
+                "required": ["enabled", "schedule"]
+              }
+            },
+            "required": ["engine", "version", "bootstrap", "storage"]
+          },
+          "jobConfig": {
+            "type": "object",
+            "properties": {
+              "repository": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tag": {
+                "type": "string",
+                "minLength": 1
+              },
+              "command": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 64
+              },
+              "args": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "maxItems": 64
+              },
+              "env": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "secret": {
+                      "type": "boolean"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["name", "value"]
+                }
+              },
+              "resources": {
+                "type": "object",
+                "properties": {
+                  "requests": {
+                    "type": "object",
+                    "properties": {
+                      "cpu": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "memory": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": ["cpu", "memory"]
+                  },
+                  "limits": {
+                    "type": "object",
+                    "properties": {
+                      "cpu": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "memory": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": ["cpu", "memory"]
+                  }
+                },
+                "required": ["requests", "limits"]
+              },
+              "schedule": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean",
+                    "default": true
+                  },
+                  "expression": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "concurrencyPolicy": {
+                    "type": "string",
+                    "enum": ["Allow", "Forbid", "Replace"],
+                    "default": "Forbid"
+                  },
+                  "timeZone": {
+                    "type": "string",
+                    "maxLength": 64
+                  },
+                  "startingDeadlineSeconds": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 86400
+                  },
+                  "successfulJobsHistoryLimit": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                  },
+                  "failedJobsHistoryLimit": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                  }
+                },
+                "required": ["expression"]
+              },
+              "job": {
+                "type": "object",
+                "properties": {
+                  "backoffLimit": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 20
+                  },
+                  "activeDeadlineSeconds": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 86400
+                  },
+                  "ttlSecondsAfterFinished": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 604800
+                  },
+                  "parallelism": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 20
+                  },
+                  "completions": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 20
+                  },
+                  "restartPolicy": {
+                    "type": "string",
+                    "enum": ["Never", "OnFailure"],
+                    "default": "Never"
+                  }
+                }
+              }
+            },
+            "required": ["repository", "tag", "schedule"]
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "sendSsoInvites": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UpdateFunctionBody": {
+        "type": "object",
+        "properties": {
+          "config": {
+            "type": "object",
+            "properties": {
+              "runtime": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "handler": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "architecture": {
+                "type": "string",
+                "enum": ["x86_64", "arm64"],
+                "default": "arm64"
+              },
+              "memoryMb": {
+                "type": "integer",
+                "minimum": 128,
+                "maximum": 10240,
+                "default": 256
+              },
+              "timeoutSeconds": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 900,
+                "default": 30
+              },
+              "logRetentionDays": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3653,
+                "default": 14
+              },
+              "env": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "secret": {
+                      "type": "boolean"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["name", "value"]
+                }
+              },
+              "triggers": {
+                "type": "object",
+                "properties": {
+                  "cron": {
+                    "type": "object",
+                    "properties": {
+                      "input": {
+                        "type": "string"
+                      },
+                      "schedule": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "timezone": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["schedule"]
+                  },
+                  "http": {
+                    "type": "object",
+                    "properties": {
+                      "authType": {
+                        "type": "string",
+                        "enum": ["none", "iam"],
+                        "default": "none"
+                      },
+                      "cors": {
+                        "type": "object",
+                        "properties": {
+                          "allowHeaders": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "allowMethods": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "allowOrigins": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "maxAge": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 86400
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "required": ["runtime", "handler", "triggers"]
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": ["config"]
+      },
+      "PlatformVersionResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "chartVersion": {
+            "type": "string"
+          }
+        },
+        "required": ["success", "chartVersion"]
+      },
+      "PlatformVersionBody": {
+        "type": "object",
+        "properties": {
+          "chartVersion": {
+            "type": "string",
+            "minLength": 1,
+            "example": "0.5.1"
+          }
+        },
+        "required": ["chartVersion"]
+      },
+      "CopyDeploymentBody": {
+        "type": "object",
+        "properties": {
+          "targetEnvironmentId": {
+            "type": "string"
+          },
+          "targetClusterId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": ["targetEnvironmentId", "targetClusterId"]
+      },
+      "ResetPasswordResult": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": ["password"]
+      },
+      "JobRunHistory": {
+        "type": "object",
+        "properties": {
+          "exists": {
+            "type": "boolean"
+          },
+          "schedule": {
+            "type": "string",
+            "nullable": true
+          },
+          "suspended": {
+            "type": "boolean"
+          },
+          "timeZone": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastScheduleTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "lastSuccessfulTime": {
+            "type": "string",
+            "nullable": true
+          },
+          "runs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": {
+                "nullable": true
+              }
+            }
+          }
+        },
+        "required": ["exists", "schedule", "runs"]
+      },
+      "TriggerJobRunResult": {
+        "type": "object",
+        "properties": {
+          "jobName": {
+            "type": "string"
+          }
+        },
+        "required": ["jobName"]
+      },
+      "CancelJobRunResult": {
+        "type": "object",
+        "properties": {
+          "canceled": {
+            "type": "boolean"
+          }
+        },
+        "required": ["canceled"]
+      },
+      "PlatformVersionsResponse": {
+        "type": "object",
+        "properties": {
+          "versions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PlatformVersionEntry"
+            }
+          }
+        },
+        "required": ["versions"]
+      },
+      "PlatformVersionEntry": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "appVersion": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": ["version", "appVersion", "createdAt", "description"]
       },
       "RevisionListResponse": {
         "type": "object",
@@ -873,6 +2025,28 @@
           }
         },
         "required": ["id", "deploymentId", "image", "tag", "status"]
+      },
+      "RollbackBody": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string",
+            "maxLength": 200
+          }
+        }
+      },
+      "PromoteBody": {
+        "type": "object",
+        "properties": {
+          "targetDeploymentId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": ["targetDeploymentId"]
       }
     },
     "parameters": {},
@@ -1820,6 +2994,219 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": ["Clusters"],
+        "summary": "Create a cluster",
+        "description": "Provisions a cluster (`clusterType` `eks` = Production, `k3s` = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cloudAccountId": {
+                    "type": "string"
+                  },
+                  "provider": {
+                    "type": "string",
+                    "enum": ["aws", "gcp", "azure"]
+                  },
+                  "clusterType": {
+                    "type": "string",
+                    "enum": ["eks", "gke", "aks", "k3s"]
+                  },
+                  "clusterName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 40,
+                    "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
+                  },
+                  "region": {
+                    "type": "string"
+                  },
+                  "kubernetesVersion": {
+                    "type": "string"
+                  },
+                  "podsCidr": {
+                    "type": "string",
+                    "default": "10.244.0.0/16"
+                  },
+                  "servicesCidr": {
+                    "type": "string",
+                    "default": "10.96.0.0/12"
+                  },
+                  "nodeInstanceType": {
+                    "type": "string",
+                    "default": "t3.medium"
+                  },
+                  "desiredVcpu": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 256,
+                    "default": 8
+                  },
+                  "desiredMemoryGiB": {
+                    "type": "integer",
+                    "minimum": 4,
+                    "maximum": 512,
+                    "default": 16
+                  },
+                  "enableAutoscaling": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "telemetryRetentionDays": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 3650,
+                    "default": 30
+                  },
+                  "initialDeployment": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 63
+                      },
+                      "repository": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "tag": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "port": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 65535,
+                        "default": 80
+                      },
+                      "public": {
+                        "type": "boolean",
+                        "default": true
+                      },
+                      "replicas": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 20
+                      }
+                    },
+                    "required": ["name", "repository", "tag"]
+                  },
+                  "initialTemplate": {
+                    "type": "object",
+                    "properties": {
+                      "slug": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": ["slug"]
+                  }
+                },
+                "required": [
+                  "cloudAccountId",
+                  "provider",
+                  "clusterType",
+                  "clusterName",
+                  "region",
+                  "kubernetesVersion"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cluster creation queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateClusterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/clusters/{clusterId}": {
@@ -1848,6 +3235,327 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Cluster"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Clusters"],
+        "summary": "Destroy a cluster",
+        "description": "Tears the cluster down. Blocked when the cluster still has active deployments unless `force=true` is passed.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "clusterId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": ["true", "false"],
+              "description": "Destroy even when the cluster still has active deployments. Defaults to false."
+            },
+            "required": false,
+            "description": "Destroy even when the cluster still has active deployments. Defaults to false.",
+            "name": "force",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster destruction queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DestroyClusterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/clusters/{clusterId}/status": {
+      "get": {
+        "tags": ["Clusters"],
+        "summary": "Get a cluster's live provisioning status",
+        "description": "Lightweight poll target during create/destroy: status, message, and provisioning progress without the full row.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "clusterId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClusterStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/clusters/{clusterId}/cancel": {
+      "post": {
+        "tags": ["Clusters"],
+        "summary": "Cancel an in-flight cluster creation",
+        "description": "Valid only while the cluster is still `creating`.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "clusterId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cluster creation cancelling",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancelClusterResponse"
                 }
               }
             }
@@ -2017,6 +3725,107 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": ["Environments"],
+        "summary": "Create an environment",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateEnvironmentBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created environment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Environment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/environments/{environmentId}": {
@@ -2045,6 +3854,333 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Environment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Environments"],
+        "summary": "Update an environment's name, color, or description",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "environmentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateEnvironmentBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated environment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Environment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Environments"],
+        "summary": "Delete an environment",
+        "description": "Soft-deletes the environment. Blocked with `412` if any deployments still reference it.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "environmentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteEnvironmentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/environments/{environmentId}/env": {
+      "put": {
+        "tags": ["Environments"],
+        "summary": "Replace an environment's shared env vars",
+        "description": "Replaces the environment's shared env-var set and redeploys every cluster-bound app that inherits them so the change takes effect immediately.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "environmentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetEnvVarsBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Env vars applied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetEnvVarsResponse"
                 }
               }
             }
@@ -2428,6 +4564,1446 @@
             }
           }
         }
+      },
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Create a deployment",
+        "description": "Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "resourceType": {
+                        "type": "string",
+                        "enum": ["web"]
+                      },
+                      "clusterId": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 63
+                      },
+                      "environmentId": {
+                        "type": "string"
+                      },
+                      "registryId": {
+                        "type": "string"
+                      },
+                      "github": {
+                        "type": "object",
+                        "properties": {
+                          "owner": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "repo": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "branch": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "connectionId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "serviceSlug": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 63,
+                            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
+                          },
+                          "dockerfilePath": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "contextPath": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "pathFilters": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "minItems": 1
+                          }
+                        },
+                        "required": ["owner", "repo", "branch"]
+                      },
+                      "config": {
+                        "type": "object",
+                        "properties": {
+                          "repository": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "tag": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "port": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 65535
+                          },
+                          "replicas": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 20,
+                            "default": 1
+                          },
+                          "env": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "secret": {
+                                  "type": "boolean"
+                                },
+                                "value": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["name", "value"]
+                            }
+                          },
+                          "public": {
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "wafEnabled": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "auth": {
+                            "type": "object",
+                            "properties": {
+                              "basicAuth": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                  },
+                                  "username": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 255,
+                                    "pattern": "^[^:\\s]+$"
+                                  },
+                                  "password": {
+                                    "type": "string",
+                                    "maxLength": 255
+                                  }
+                                },
+                                "required": ["username"]
+                              },
+                              "oauth": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                  },
+                                  "provider": {
+                                    "type": "string",
+                                    "enum": ["google"],
+                                    "default": "google"
+                                  },
+                                  "allowedDomains": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 253
+                                    },
+                                    "maxItems": 50
+                                  },
+                                  "allowedEmails": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "maxLength": 320,
+                                      "format": "email"
+                                    },
+                                    "maxItems": 200
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "healthCheck": {
+                            "type": "object",
+                            "properties": {
+                              "startup": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                  },
+                                  "path": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "port": {
+                                    "type": "string"
+                                  },
+                                  "periodSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 300
+                                  },
+                                  "timeoutSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 60
+                                  },
+                                  "failureThreshold": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 30
+                                  },
+                                  "initialDelaySeconds": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 300
+                                  }
+                                },
+                                "required": ["path"]
+                              },
+                              "liveness": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                  },
+                                  "path": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "port": {
+                                    "type": "string"
+                                  },
+                                  "periodSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 300
+                                  },
+                                  "timeoutSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 60
+                                  },
+                                  "failureThreshold": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 30
+                                  },
+                                  "initialDelaySeconds": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 300
+                                  }
+                                },
+                                "required": ["path"]
+                              },
+                              "readiness": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                  },
+                                  "path": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "port": {
+                                    "type": "string"
+                                  },
+                                  "periodSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 300
+                                  },
+                                  "timeoutSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 60
+                                  },
+                                  "failureThreshold": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 30
+                                  },
+                                  "initialDelaySeconds": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 300
+                                  }
+                                },
+                                "required": ["path"]
+                              }
+                            }
+                          },
+                          "resources": {
+                            "type": "object",
+                            "properties": {
+                              "requests": {
+                                "type": "object",
+                                "properties": {
+                                  "cpu": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": ["cpu", "memory"]
+                              },
+                              "limits": {
+                                "type": "object",
+                                "properties": {
+                                  "cpu": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": ["cpu", "memory"]
+                              }
+                            },
+                            "required": ["requests", "limits"]
+                          },
+                          "autoscaling": {
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "type": "boolean",
+                                "default": false
+                              },
+                              "minReplicas": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 100,
+                                "default": 1
+                              },
+                              "maxReplicas": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 100,
+                                "default": 3
+                              },
+                              "targetCPUUtilizationPercentage": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 100
+                              },
+                              "targetMemoryUtilizationPercentage": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 100
+                              }
+                            }
+                          }
+                        },
+                        "required": ["repository", "tag", "port"]
+                      }
+                    },
+                    "required": ["resourceType", "name", "config"]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "resourceType": {
+                        "type": "string",
+                        "enum": ["worker"]
+                      },
+                      "clusterId": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 63
+                      },
+                      "environmentId": {
+                        "type": "string"
+                      },
+                      "registryId": {
+                        "type": "string"
+                      },
+                      "github": {
+                        "type": "object",
+                        "properties": {
+                          "owner": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "repo": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "branch": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "connectionId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "serviceSlug": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 63,
+                            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
+                          },
+                          "dockerfilePath": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "contextPath": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "pathFilters": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "minItems": 1
+                          }
+                        },
+                        "required": ["owner", "repo", "branch"]
+                      },
+                      "config": {
+                        "type": "object",
+                        "properties": {
+                          "repository": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "tag": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "port": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 65535
+                          },
+                          "replicas": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 20,
+                            "default": 1
+                          },
+                          "env": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "secret": {
+                                  "type": "boolean"
+                                },
+                                "value": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["name", "value"]
+                            }
+                          },
+                          "public": {
+                            "type": "boolean",
+                            "default": false
+                          },
+                          "wafEnabled": {
+                            "type": "boolean",
+                            "default": true
+                          },
+                          "auth": {
+                            "type": "object",
+                            "properties": {
+                              "basicAuth": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                  },
+                                  "username": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "maxLength": 255,
+                                    "pattern": "^[^:\\s]+$"
+                                  },
+                                  "password": {
+                                    "type": "string",
+                                    "maxLength": 255
+                                  }
+                                },
+                                "required": ["username"]
+                              },
+                              "oauth": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                  },
+                                  "provider": {
+                                    "type": "string",
+                                    "enum": ["google"],
+                                    "default": "google"
+                                  },
+                                  "allowedDomains": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "maxLength": 253
+                                    },
+                                    "maxItems": 50
+                                  },
+                                  "allowedEmails": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string",
+                                      "maxLength": 320,
+                                      "format": "email"
+                                    },
+                                    "maxItems": 200
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "healthCheck": {
+                            "type": "object",
+                            "properties": {
+                              "startup": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                  },
+                                  "path": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "port": {
+                                    "type": "string"
+                                  },
+                                  "periodSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 300
+                                  },
+                                  "timeoutSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 60
+                                  },
+                                  "failureThreshold": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 30
+                                  },
+                                  "initialDelaySeconds": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 300
+                                  }
+                                },
+                                "required": ["path"]
+                              },
+                              "liveness": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                  },
+                                  "path": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "port": {
+                                    "type": "string"
+                                  },
+                                  "periodSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 300
+                                  },
+                                  "timeoutSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 60
+                                  },
+                                  "failureThreshold": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 30
+                                  },
+                                  "initialDelaySeconds": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 300
+                                  }
+                                },
+                                "required": ["path"]
+                              },
+                              "readiness": {
+                                "type": "object",
+                                "properties": {
+                                  "enabled": {
+                                    "type": "boolean",
+                                    "default": false
+                                  },
+                                  "path": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "port": {
+                                    "type": "string"
+                                  },
+                                  "periodSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 300
+                                  },
+                                  "timeoutSeconds": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 60
+                                  },
+                                  "failureThreshold": {
+                                    "type": "integer",
+                                    "minimum": 1,
+                                    "maximum": 30
+                                  },
+                                  "initialDelaySeconds": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "maximum": 300
+                                  }
+                                },
+                                "required": ["path"]
+                              }
+                            }
+                          },
+                          "resources": {
+                            "type": "object",
+                            "properties": {
+                              "requests": {
+                                "type": "object",
+                                "properties": {
+                                  "cpu": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": ["cpu", "memory"]
+                              },
+                              "limits": {
+                                "type": "object",
+                                "properties": {
+                                  "cpu": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": ["cpu", "memory"]
+                              }
+                            },
+                            "required": ["requests", "limits"]
+                          },
+                          "autoscaling": {
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "type": "boolean",
+                                "default": false
+                              },
+                              "minReplicas": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 100,
+                                "default": 1
+                              },
+                              "maxReplicas": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 100,
+                                "default": 3
+                              },
+                              "targetCPUUtilizationPercentage": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 100
+                              },
+                              "targetMemoryUtilizationPercentage": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 100
+                              }
+                            }
+                          }
+                        },
+                        "required": ["repository", "tag", "port"]
+                      }
+                    },
+                    "required": ["resourceType", "name", "config"]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "resourceType": {
+                        "type": "string",
+                        "enum": ["job"]
+                      },
+                      "clusterId": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 63
+                      },
+                      "environmentId": {
+                        "type": "string"
+                      },
+                      "registryId": {
+                        "type": "string"
+                      },
+                      "github": {
+                        "type": "object",
+                        "properties": {
+                          "owner": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "repo": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "branch": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "connectionId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "serviceSlug": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 63,
+                            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
+                          },
+                          "dockerfilePath": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "contextPath": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "pathFilters": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "minItems": 1
+                          }
+                        },
+                        "required": ["owner", "repo", "branch"]
+                      },
+                      "config": {
+                        "type": "object",
+                        "properties": {
+                          "repository": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "tag": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "command": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "maxItems": 64
+                          },
+                          "args": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "maxItems": 64
+                          },
+                          "env": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "secret": {
+                                  "type": "boolean"
+                                },
+                                "value": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["name", "value"]
+                            }
+                          },
+                          "resources": {
+                            "type": "object",
+                            "properties": {
+                              "requests": {
+                                "type": "object",
+                                "properties": {
+                                  "cpu": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": ["cpu", "memory"]
+                              },
+                              "limits": {
+                                "type": "object",
+                                "properties": {
+                                  "cpu": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": ["cpu", "memory"]
+                              }
+                            },
+                            "required": ["requests", "limits"]
+                          },
+                          "schedule": {
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "type": "boolean",
+                                "default": true
+                              },
+                              "expression": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "concurrencyPolicy": {
+                                "type": "string",
+                                "enum": ["Allow", "Forbid", "Replace"],
+                                "default": "Forbid"
+                              },
+                              "timeZone": {
+                                "type": "string",
+                                "maxLength": 64
+                              },
+                              "startingDeadlineSeconds": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 86400
+                              },
+                              "successfulJobsHistoryLimit": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 100
+                              },
+                              "failedJobsHistoryLimit": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 100
+                              }
+                            },
+                            "required": ["expression"]
+                          },
+                          "job": {
+                            "type": "object",
+                            "properties": {
+                              "backoffLimit": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 20
+                              },
+                              "activeDeadlineSeconds": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 86400
+                              },
+                              "ttlSecondsAfterFinished": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 604800
+                              },
+                              "parallelism": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 20
+                              },
+                              "completions": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 20
+                              },
+                              "restartPolicy": {
+                                "type": "string",
+                                "enum": ["Never", "OnFailure"],
+                                "default": "Never"
+                              }
+                            }
+                          }
+                        },
+                        "required": ["repository", "tag", "schedule"]
+                      }
+                    },
+                    "required": ["resourceType", "name", "config"]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "resourceType": {
+                        "type": "string",
+                        "enum": ["database"]
+                      },
+                      "clusterId": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 63
+                      },
+                      "environmentId": {
+                        "type": "string"
+                      },
+                      "config": {
+                        "type": "object",
+                        "properties": {
+                          "engine": {
+                            "type": "string",
+                            "enum": ["postgres"]
+                          },
+                          "version": {
+                            "type": "string",
+                            "enum": ["17", "18"]
+                          },
+                          "instances": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 10,
+                            "default": 2
+                          },
+                          "bootstrap": {
+                            "type": "object",
+                            "properties": {
+                              "database": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 63
+                              },
+                              "owner": {
+                                "type": "string",
+                                "minLength": 1,
+                                "maxLength": 63
+                              },
+                              "postInitSQL": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": ["database", "owner"]
+                          },
+                          "storage": {
+                            "type": "object",
+                            "properties": {
+                              "size": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "storageClass": {
+                                "type": "string",
+                                "minLength": 1,
+                                "default": "gp3"
+                              }
+                            },
+                            "required": ["size"]
+                          },
+                          "public": {
+                            "type": "boolean"
+                          },
+                          "resources": {
+                            "type": "object",
+                            "properties": {
+                              "requests": {
+                                "type": "object",
+                                "properties": {
+                                  "cpu": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": ["cpu", "memory"]
+                              },
+                              "limits": {
+                                "type": "object",
+                                "properties": {
+                                  "cpu": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "memory": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  }
+                                },
+                                "required": ["cpu", "memory"]
+                              }
+                            },
+                            "required": ["requests", "limits"]
+                          },
+                          "pooler": {
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "type": "boolean",
+                                "default": false
+                              },
+                              "instances": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 10
+                              },
+                              "type": {
+                                "type": "string",
+                                "enum": ["rw", "ro"]
+                              },
+                              "mode": {
+                                "type": "string",
+                                "enum": ["session", "transaction"]
+                              },
+                              "parameters": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          },
+                          "parameters": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "string"
+                            }
+                          },
+                          "pgHba": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "monitoring": {
+                            "type": "object",
+                            "properties": {
+                              "enablePodMonitor": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": ["enablePodMonitor"]
+                          },
+                          "backup": {
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "type": "boolean"
+                              },
+                              "barmanObjectStore": {
+                                "type": "object",
+                                "additionalProperties": {
+                                  "nullable": true
+                                }
+                              },
+                              "retentionPolicy": {
+                                "type": "string"
+                              }
+                            },
+                            "required": ["enabled"]
+                          },
+                          "scheduledBackup": {
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "type": "boolean"
+                              },
+                              "schedule": {
+                                "type": "string",
+                                "minLength": 1
+                              },
+                              "backupOwnerReference": {
+                                "type": "string"
+                              },
+                              "immediate": {
+                                "type": "boolean"
+                              }
+                            },
+                            "required": ["enabled", "schedule"]
+                          }
+                        },
+                        "required": [
+                          "engine",
+                          "version",
+                          "bootstrap",
+                          "storage"
+                        ]
+                      }
+                    },
+                    "required": ["resourceType", "name", "config"]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "resourceType": {
+                        "type": "string",
+                        "enum": ["function"]
+                      },
+                      "cloudAccountId": {
+                        "type": "string"
+                      },
+                      "region": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 63
+                      },
+                      "environmentId": {
+                        "type": "string"
+                      },
+                      "github": {
+                        "type": "object",
+                        "properties": {
+                          "owner": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "repo": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "branch": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "connectionId": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "serviceSlug": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 63,
+                            "pattern": "^[a-z0-9]([a-z0-9-]*[a-z0-9])?$"
+                          },
+                          "dockerfilePath": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "contextPath": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "pathFilters": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "minLength": 1
+                            },
+                            "minItems": 1
+                          }
+                        },
+                        "required": ["owner", "repo", "branch"]
+                      },
+                      "config": {
+                        "type": "object",
+                        "properties": {
+                          "runtime": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 64
+                          },
+                          "handler": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 128
+                          },
+                          "architecture": {
+                            "type": "string",
+                            "enum": ["x86_64", "arm64"],
+                            "default": "arm64"
+                          },
+                          "memoryMb": {
+                            "type": "integer",
+                            "minimum": 128,
+                            "maximum": 10240,
+                            "default": 256
+                          },
+                          "timeoutSeconds": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 900,
+                            "default": 30
+                          },
+                          "logRetentionDays": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 3653,
+                            "default": 14
+                          },
+                          "env": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "secret": {
+                                  "type": "boolean"
+                                },
+                                "value": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": ["name", "value"]
+                            }
+                          },
+                          "triggers": {
+                            "type": "object",
+                            "properties": {
+                              "cron": {
+                                "type": "object",
+                                "properties": {
+                                  "input": {
+                                    "type": "string"
+                                  },
+                                  "schedule": {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  "timezone": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": ["schedule"]
+                              },
+                              "http": {
+                                "type": "object",
+                                "properties": {
+                                  "authType": {
+                                    "type": "string",
+                                    "enum": ["none", "iam"],
+                                    "default": "none"
+                                  },
+                                  "cors": {
+                                    "type": "object",
+                                    "properties": {
+                                      "allowHeaders": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "allowMethods": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "allowOrigins": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "maxAge": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "maximum": 86400
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "required": ["runtime", "handler", "triggers"]
+                      }
+                    },
+                    "required": [
+                      "resourceType",
+                      "cloudAccountId",
+                      "region",
+                      "name",
+                      "github",
+                      "config"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created deployment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateDeploymentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/deployments/{deploymentId}": {
@@ -2457,6 +6033,222 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Deployment"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Deployments"],
+        "summary": "Delete a deployment",
+        "description": "Soft-deletes the deployment and tears down its cluster resources. Functions hand off to an async teardown and report `deleting` until it finalizes.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteDeploymentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Deployments"],
+        "summary": "Update a deployment's configuration",
+        "description": "Updates a cluster-bound deployment (web/worker/job/database) and records a revision. Send the config block matching the deployment's type: `appConfig` for web/worker, `jobConfig` for job, `databaseConfig` for database. Use the function update endpoint for functions.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDeploymentBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated deployment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeploymentActionResult"
                 }
               }
             }
@@ -2880,6 +6672,1099 @@
         }
       }
     },
+    "/v1/deployments/{deploymentId}/function": {
+      "patch": {
+        "tags": ["Deployments"],
+        "summary": "Update a function's configuration",
+        "description": "Updates a `function`-type deployment's config (handler, runtime, env, triggers) and records a revision.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFunctionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated function",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeploymentActionResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/platform-version": {
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Upgrade a deployment's platform version",
+        "description": "Upgrades a cluster-bound deployment to a newer platform version and resyncs. Downgrades are rejected. Use the function platform-version endpoint for functions.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlatformVersionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Upgrade accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlatformVersionResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/function/platform-version": {
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Upgrade a function's platform version",
+        "description": "Upgrades a `function`-type deployment to a newer platform version and resyncs.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlatformVersionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Upgrade accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlatformVersionResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/copy": {
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Copy a deployment to another environment",
+        "description": "Clones this deployment's current config into `targetEnvironmentId` on `targetClusterId`, creating a new deployment. Not valid for functions.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CopyDeploymentBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created deployment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeploymentActionResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/reset-password": {
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Reset a database deployment's password",
+        "description": "Rotates the owner-role password of a `database`-type deployment and returns the new password. The response intentionally contains the live credential.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "New password",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/job-runs": {
+      "get": {
+        "tags": ["Deployments"],
+        "summary": "List a scheduled job's recent runs",
+        "description": "Reads the CronJob and its spawned runs live from the cluster. Non-job deployments return an empty, non-existent history rather than erroring.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Job run history",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobRunHistory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Trigger a scheduled job now",
+        "description": "Spawns a one-off run of a `job`-type deployment off-schedule and returns the created Job name.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Triggered run",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TriggerJobRunResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/job-runs/{jobName}": {
+      "delete": {
+        "tags": ["Deployments"],
+        "summary": "Cancel an in-flight job run",
+        "description": "Deletes the named run's Job (terminating its Pods). The named Job must belong to this deployment's CronJob.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "jobName",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Canceled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CancelJobRunResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/platform-versions": {
+      "get": {
+        "tags": ["Deployments"],
+        "summary": "List available platform versions",
+        "description": "Lists the platform versions published for a `clusterType` + `resourceType` pair, newest first. Use these values with the platform-version upgrade endpoint.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": ["eks", "gke", "aks", "k3s"]
+            },
+            "required": true,
+            "name": "clusterType",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": ["web", "worker", "job", "database"]
+            },
+            "required": true,
+            "name": "resourceType",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Platform versions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlatformVersionsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/function-platform-versions": {
+      "get": {
+        "tags": ["Deployments"],
+        "summary": "List available function platform versions",
+        "description": "Lists the platform versions published for functions, newest first.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Platform versions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlatformVersionsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/deployments/{deploymentId}/revisions": {
       "get": {
         "tags": ["Revisions"],
@@ -2906,6 +7791,242 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RevisionListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/revisions/{revisionId}/rollback": {
+      "post": {
+        "tags": ["Revisions"],
+        "summary": "Roll a deployment back to a prior revision",
+        "description": "Restores the config snapshot from `revisionId` onto the deployment and records a new revision. Returns the new revision.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "revisionId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RollbackBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New revision",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Revision"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/promote": {
+      "post": {
+        "tags": ["Revisions"],
+        "summary": "Promote a deployment's config to another deployment",
+        "description": "Copies this deployment's current config into `targetDeploymentId`, records a revision there, and links it back to this deployment's latest revision. Returns the new revision on the target.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PromoteBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New revision",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Revision"
                 }
               }
             }
