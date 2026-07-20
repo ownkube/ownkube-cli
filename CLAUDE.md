@@ -50,6 +50,12 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
     confirm unless `--yes`. `upgrade` moves the platform version (`--function` for
     functions). Client wrappers live in `internal/client/deployment_write.go`
     (reads stay in `client.go`); table/JSON render helpers in `cmd/deploy/render.go`.
+  - `cmd/environments/`: read verbs (`list|get`) plus the write surface
+    (`create|update|set-env|delete`). `set-env` REPLACES the full shared env-var
+    set (`--env`/`--secret KEY=VALUE`, repeatable, or `-f` JSON array) and
+    redeploys the environment's apps; `delete` confirms unless `--yes`. Client
+    wrappers live in `internal/client/environment_write.go` (reads in `client.go`);
+    color validation + render helpers in `cmd/environments/helpers.go`.
   - `cmd/aws/`: `aws connect|list|get|verify|reconnect|resync|delete`. `connect`
     handles browser handoff (default), autonomous `--deploy` (shells out to the
     `aws` CLI), and polls the account until `verified`/`failed`.

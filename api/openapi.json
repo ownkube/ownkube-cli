@@ -46,13 +46,7 @@
                 "description": "Whether email is verified"
               }
             },
-            "required": [
-              "id",
-              "name",
-              "email",
-              "image",
-              "emailVerified"
-            ]
+            "required": ["id", "name", "email", "image", "emailVerified"]
           },
           "organizations": {
             "type": "array",
@@ -73,20 +67,12 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "id",
-                "name",
-                "slug",
-                "role"
-              ]
+              "required": ["id", "name", "slug", "role"]
             },
             "description": "Organizations this user belongs to. Pass an `id` as the `x-ownkube-organization` header on subsequent requests when membership is plural."
           }
         },
-        "required": [
-          "user",
-          "organizations"
-        ]
+        "required": ["user", "organizations"]
       },
       "ErrorResponse": {
         "type": "object",
@@ -100,10 +86,7 @@
             "description": "Machine-readable error code"
           }
         },
-        "required": [
-          "error",
-          "code"
-        ]
+        "required": ["error", "code"]
       },
       "OrganizationListResponse": {
         "type": "object",
@@ -115,9 +98,7 @@
             }
           }
         },
-        "required": [
-          "organizations"
-        ]
+        "required": ["organizations"]
       },
       "OrganizationSummary": {
         "type": "object",
@@ -151,13 +132,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "name",
-          "slug",
-          "logo",
-          "role"
-        ]
+        "required": ["id", "name", "slug", "logo", "role"]
       },
       "AwsConnectResponse": {
         "type": "object",
@@ -221,11 +196,7 @@
             ]
           }
         },
-        "required": [
-          "stackName",
-          "templateUrl",
-          "parameters"
-        ],
+        "required": ["stackName", "templateUrl", "parameters"],
         "description": "Deploy this stack yourself with AWS creds already in your environment (autonomous mode). Parameter keys match the template exactly."
       },
       "AwsAccountListResponse": {
@@ -238,9 +209,7 @@
             }
           }
         },
-        "required": [
-          "accounts"
-        ]
+        "required": ["accounts"]
       },
       "AwsAccount": {
         "type": "object",
@@ -284,10 +253,7 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "id",
-                "clusterName"
-              ]
+              "required": ["id", "clusterName"]
             }
           },
           "lastVerifiedAt": {
@@ -352,11 +318,7 @@
           },
           "kind": {
             "type": "string",
-            "enum": [
-              "retry",
-              "quota",
-              "conflict"
-            ],
+            "enum": ["retry", "quota", "conflict"],
             "description": "How to recover: `retry` (transient/propagation, re-verify or re-launch the same stack), `quota` (fix an AWS limit then re-verify), `conflict` (account claimed elsewhere, use a different account)."
           },
           "title": {
@@ -373,13 +335,7 @@
             "description": "External help link, when relevant"
           }
         },
-        "required": [
-          "code",
-          "kind",
-          "title",
-          "description",
-          "docsUrl"
-        ],
+        "required": ["code", "kind", "title", "description", "docsUrl"],
         "description": "Structured failure + remediation when status is `failed`"
       },
       "AwsVerifyResponse": {
@@ -393,9 +349,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "success"
-        ]
+        "required": ["success"]
       },
       "AwsReconnectResponse": {
         "type": "object",
@@ -407,10 +361,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "externalId",
-          "quickCreateUrl"
-        ]
+        "required": ["externalId", "quickCreateUrl"]
       },
       "AwsSuccessResponse": {
         "type": "object",
@@ -419,9 +370,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "success"
-        ]
+        "required": ["success"]
       },
       "ClusterListResponse": {
         "type": "object",
@@ -433,9 +382,7 @@
             }
           }
         },
-        "required": [
-          "clusters"
-        ]
+        "required": ["clusters"]
       },
       "Cluster": {
         "type": "object",
@@ -514,13 +461,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "name",
-          "provider",
-          "clusterType",
-          "status"
-        ]
+        "required": ["id", "name", "provider", "clusterType", "status"]
       },
       "ClusterStatusResponse": {
         "type": "object",
@@ -539,10 +480,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "id",
-          "status"
-        ]
+        "required": ["id", "status"]
       },
       "CreateClusterResponse": {
         "type": "object",
@@ -560,11 +498,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "clusterId",
-          "workflowId",
-          "status"
-        ]
+        "required": ["clusterId", "workflowId", "status"]
       },
       "DestroyClusterResponse": {
         "type": "object",
@@ -580,11 +514,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "clusterId",
-          "workflowId",
-          "status"
-        ]
+        "required": ["clusterId", "workflowId", "status"]
       },
       "CancelClusterResponse": {
         "type": "object",
@@ -596,10 +526,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "clusterId",
-          "status"
-        ]
+        "required": ["clusterId", "status"]
       },
       "EnvironmentListResponse": {
         "type": "object",
@@ -611,9 +538,7 @@
             }
           }
         },
-        "required": [
-          "environments"
-        ]
+        "required": ["environments"]
       },
       "Environment": {
         "type": "object",
@@ -664,11 +589,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "name",
-          "slug"
-        ]
+        "required": ["id", "name", "slug"]
       },
       "CreateEnvironmentBody": {
         "type": "object",
@@ -689,13 +610,7 @@
           },
           "color": {
             "type": "string",
-            "enum": [
-              "amber",
-              "green",
-              "blue",
-              "purple",
-              "red"
-            ],
+            "enum": ["amber", "green", "blue", "purple", "red"],
             "description": "Accent color. Defaults to `blue`."
           },
           "description": {
@@ -703,10 +618,7 @@
             "maxLength": 200
           }
         },
-        "required": [
-          "name",
-          "slug"
-        ]
+        "required": ["name", "slug"]
       },
       "UpdateEnvironmentBody": {
         "type": "object",
@@ -718,13 +630,7 @@
           },
           "color": {
             "type": "string",
-            "enum": [
-              "amber",
-              "green",
-              "blue",
-              "purple",
-              "red"
-            ]
+            "enum": ["amber", "green", "blue", "purple", "red"]
           },
           "description": {
             "type": "string",
@@ -748,11 +654,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "env",
-          "redeployed",
-          "failed"
-        ]
+        "required": ["env", "redeployed", "failed"]
       },
       "EnvVarInput": {
         "type": "object",
@@ -770,10 +672,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "name",
-          "value"
-        ]
+        "required": ["name", "value"]
       },
       "SetEnvVarsBody": {
         "type": "object",
@@ -786,9 +685,7 @@
             "description": "The full shared env-var set for the environment (replaces the existing set). Every cluster-bound app in the environment is redeployed to apply it."
           }
         },
-        "required": [
-          "env"
-        ]
+        "required": ["env"]
       },
       "DeleteEnvironmentResponse": {
         "type": "object",
@@ -797,9 +694,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "success"
-        ]
+        "required": ["success"]
       },
       "RegistryListResponse": {
         "type": "object",
@@ -811,9 +706,7 @@
             }
           }
         },
-        "required": [
-          "registries"
-        ]
+        "required": ["registries"]
       },
       "Registry": {
         "type": "object",
@@ -872,11 +765,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "provider",
-          "account"
-        ]
+        "required": ["id", "provider", "account"]
       },
       "DeploymentListResponse": {
         "type": "object",
@@ -888,9 +777,7 @@
             }
           }
         },
-        "required": [
-          "deployments"
-        ]
+        "required": ["deployments"]
       },
       "Deployment": {
         "type": "object",
@@ -915,13 +802,7 @@
           },
           "resourceType": {
             "type": "string",
-            "enum": [
-              "web",
-              "worker",
-              "job",
-              "database",
-              "function"
-            ]
+            "enum": ["web", "worker", "job", "database", "function"]
           },
           "status": {
             "type": "string"
@@ -1012,9 +893,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "success"
-        ]
+        "required": ["success"]
       },
       "DeploymentStatusResponse": {
         "type": "object",
@@ -1033,12 +912,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "health",
-          "sync",
-          "status",
-          "gatewayAddress"
-        ]
+        "required": ["health", "sync", "status", "gatewayAddress"]
       },
       "DeploymentLogsResponse": {
         "type": "object",
@@ -1050,9 +924,7 @@
             }
           }
         },
-        "required": [
-          "entries"
-        ]
+        "required": ["entries"]
       },
       "LogEntry": {
         "type": "object",
@@ -1085,12 +957,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "details",
-          "secretName",
-          "namespace",
-          "serviceName"
-        ]
+        "required": ["details", "secretName", "namespace", "serviceName"]
       },
       "DeploymentActionResult": {
         "type": "object",
@@ -1115,13 +982,7 @@
           },
           "resourceType": {
             "type": "string",
-            "enum": [
-              "web",
-              "worker",
-              "job",
-              "database",
-              "function"
-            ]
+            "enum": ["web", "worker", "job", "database", "function"]
           },
           "status": {
             "type": "string"
@@ -1191,10 +1052,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "name",
-                    "value"
-                  ]
+                  "required": ["name", "value"]
                 }
               },
               "public": {
@@ -1226,9 +1084,7 @@
                         "maxLength": 255
                       }
                     },
-                    "required": [
-                      "username"
-                    ]
+                    "required": ["username"]
                   },
                   "oauth": {
                     "type": "object",
@@ -1239,9 +1095,7 @@
                       },
                       "provider": {
                         "type": "string",
-                        "enum": [
-                          "google"
-                        ],
+                        "enum": ["google"],
                         "default": "google"
                       },
                       "allowedDomains": {
@@ -1304,9 +1158,7 @@
                         "maximum": 300
                       }
                     },
-                    "required": [
-                      "path"
-                    ]
+                    "required": ["path"]
                   },
                   "liveness": {
                     "type": "object",
@@ -1343,9 +1195,7 @@
                         "maximum": 300
                       }
                     },
-                    "required": [
-                      "path"
-                    ]
+                    "required": ["path"]
                   },
                   "readiness": {
                     "type": "object",
@@ -1382,9 +1232,7 @@
                         "maximum": 300
                       }
                     },
-                    "required": [
-                      "path"
-                    ]
+                    "required": ["path"]
                   }
                 }
               },
@@ -1403,10 +1251,7 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   },
                   "limits": {
                     "type": "object",
@@ -1420,16 +1265,10 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   }
                 },
-                "required": [
-                  "requests",
-                  "limits"
-                ]
+                "required": ["requests", "limits"]
               },
               "autoscaling": {
                 "type": "object",
@@ -1463,27 +1302,18 @@
                 }
               }
             },
-            "required": [
-              "repository",
-              "tag",
-              "port"
-            ]
+            "required": ["repository", "tag", "port"]
           },
           "databaseConfig": {
             "type": "object",
             "properties": {
               "engine": {
                 "type": "string",
-                "enum": [
-                  "postgres"
-                ]
+                "enum": ["postgres"]
               },
               "version": {
                 "type": "string",
-                "enum": [
-                  "17",
-                  "18"
-                ]
+                "enum": ["17", "18"]
               },
               "instances": {
                 "type": "integer",
@@ -1511,10 +1341,7 @@
                     }
                   }
                 },
-                "required": [
-                  "database",
-                  "owner"
-                ]
+                "required": ["database", "owner"]
               },
               "storage": {
                 "type": "object",
@@ -1529,9 +1356,7 @@
                     "default": "gp3"
                   }
                 },
-                "required": [
-                  "size"
-                ]
+                "required": ["size"]
               },
               "public": {
                 "type": "boolean"
@@ -1551,10 +1376,7 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   },
                   "limits": {
                     "type": "object",
@@ -1568,16 +1390,10 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   }
                 },
-                "required": [
-                  "requests",
-                  "limits"
-                ]
+                "required": ["requests", "limits"]
               },
               "pooler": {
                 "type": "object",
@@ -1593,17 +1409,11 @@
                   },
                   "type": {
                     "type": "string",
-                    "enum": [
-                      "rw",
-                      "ro"
-                    ]
+                    "enum": ["rw", "ro"]
                   },
                   "mode": {
                     "type": "string",
-                    "enum": [
-                      "session",
-                      "transaction"
-                    ]
+                    "enum": ["session", "transaction"]
                   },
                   "parameters": {
                     "type": "object",
@@ -1632,9 +1442,7 @@
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "enablePodMonitor"
-                ]
+                "required": ["enablePodMonitor"]
               },
               "backup": {
                 "type": "object",
@@ -1652,9 +1460,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "enabled"
-                ]
+                "required": ["enabled"]
               },
               "scheduledBackup": {
                 "type": "object",
@@ -1673,18 +1479,10 @@
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "enabled",
-                  "schedule"
-                ]
+                "required": ["enabled", "schedule"]
               }
             },
-            "required": [
-              "engine",
-              "version",
-              "bootstrap",
-              "storage"
-            ]
+            "required": ["engine", "version", "bootstrap", "storage"]
           },
           "jobConfig": {
             "type": "object",
@@ -1727,10 +1525,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "name",
-                    "value"
-                  ]
+                  "required": ["name", "value"]
                 }
               },
               "resources": {
@@ -1748,10 +1543,7 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   },
                   "limits": {
                     "type": "object",
@@ -1765,16 +1557,10 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   }
                 },
-                "required": [
-                  "requests",
-                  "limits"
-                ]
+                "required": ["requests", "limits"]
               },
               "schedule": {
                 "type": "object",
@@ -1789,11 +1575,7 @@
                   },
                   "concurrencyPolicy": {
                     "type": "string",
-                    "enum": [
-                      "Allow",
-                      "Forbid",
-                      "Replace"
-                    ],
+                    "enum": ["Allow", "Forbid", "Replace"],
                     "default": "Forbid"
                   },
                   "timeZone": {
@@ -1816,9 +1598,7 @@
                     "maximum": 100
                   }
                 },
-                "required": [
-                  "expression"
-                ]
+                "required": ["expression"]
               },
               "job": {
                 "type": "object",
@@ -1850,20 +1630,13 @@
                   },
                   "restartPolicy": {
                     "type": "string",
-                    "enum": [
-                      "Never",
-                      "OnFailure"
-                    ],
+                    "enum": ["Never", "OnFailure"],
                     "default": "Never"
                   }
                 }
               }
             },
-            "required": [
-              "repository",
-              "tag",
-              "schedule"
-            ]
+            "required": ["repository", "tag", "schedule"]
           },
           "note": {
             "type": "string",
@@ -1892,10 +1665,7 @@
               },
               "architecture": {
                 "type": "string",
-                "enum": [
-                  "x86_64",
-                  "arm64"
-                ],
+                "enum": ["x86_64", "arm64"],
                 "default": "arm64"
               },
               "memoryMb": {
@@ -1932,10 +1702,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "name",
-                    "value"
-                  ]
+                  "required": ["name", "value"]
                 }
               },
               "triggers": {
@@ -1955,19 +1722,14 @@
                         "type": "string"
                       }
                     },
-                    "required": [
-                      "schedule"
-                    ]
+                    "required": ["schedule"]
                   },
                   "http": {
                     "type": "object",
                     "properties": {
                       "authType": {
                         "type": "string",
-                        "enum": [
-                          "none",
-                          "iam"
-                        ],
+                        "enum": ["none", "iam"],
                         "default": "none"
                       },
                       "cors": {
@@ -2003,20 +1765,14 @@
                 }
               }
             },
-            "required": [
-              "runtime",
-              "handler",
-              "triggers"
-            ]
+            "required": ["runtime", "handler", "triggers"]
           },
           "note": {
             "type": "string",
             "maxLength": 200
           }
         },
-        "required": [
-          "config"
-        ]
+        "required": ["config"]
       },
       "PlatformVersionResult": {
         "type": "object",
@@ -2028,10 +1784,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "success",
-          "chartVersion"
-        ]
+        "required": ["success", "chartVersion"]
       },
       "PlatformVersionBody": {
         "type": "object",
@@ -2042,9 +1795,7 @@
             "example": "0.5.1"
           }
         },
-        "required": [
-          "chartVersion"
-        ]
+        "required": ["chartVersion"]
       },
       "CopyDeploymentBody": {
         "type": "object",
@@ -2060,10 +1811,7 @@
             "maxLength": 200
           }
         },
-        "required": [
-          "targetEnvironmentId",
-          "targetClusterId"
-        ]
+        "required": ["targetEnvironmentId", "targetClusterId"]
       },
       "ResetPasswordResult": {
         "type": "object",
@@ -2072,9 +1820,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "password"
-        ]
+        "required": ["password"]
       },
       "JobRunHistory": {
         "type": "object",
@@ -2111,11 +1857,7 @@
             }
           }
         },
-        "required": [
-          "exists",
-          "schedule",
-          "runs"
-        ]
+        "required": ["exists", "schedule", "runs"]
       },
       "TriggerJobRunResult": {
         "type": "object",
@@ -2124,9 +1866,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "jobName"
-        ]
+        "required": ["jobName"]
       },
       "CancelJobRunResult": {
         "type": "object",
@@ -2135,9 +1875,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "canceled"
-        ]
+        "required": ["canceled"]
       },
       "PlatformVersionsResponse": {
         "type": "object",
@@ -2149,9 +1887,7 @@
             }
           }
         },
-        "required": [
-          "versions"
-        ]
+        "required": ["versions"]
       },
       "PlatformVersionEntry": {
         "type": "object",
@@ -2168,11 +1904,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "version",
-          "appVersion",
-          "createdAt"
-        ]
+        "required": ["version", "appVersion", "createdAt"]
       },
       "RevisionListResponse": {
         "type": "object",
@@ -2184,9 +1916,7 @@
             }
           }
         },
-        "required": [
-          "revisions"
-        ]
+        "required": ["revisions"]
       },
       "Revision": {
         "type": "object",
@@ -2289,13 +2019,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "id",
-          "deploymentId",
-          "image",
-          "tag",
-          "status"
-        ]
+        "required": ["id", "deploymentId", "image", "tag", "status"]
       },
       "RollbackBody": {
         "type": "object",
@@ -2317,9 +2041,7 @@
             "maxLength": 200
           }
         },
-        "required": [
-          "targetDeploymentId"
-        ]
+        "required": ["targetDeploymentId"]
       }
     },
     "parameters": {},
@@ -2335,9 +2057,7 @@
   "paths": {
     "/v1/info": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Get authenticated user info",
         "description": "Returns the profile of the user associated with the provided API key.",
         "security": [
@@ -2371,9 +2091,7 @@
     },
     "/v1/organizations": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "summary": "List organizations the API key's user belongs to",
         "description": "Use the returned `id` as the `x-ownkube-organization` header on subsequent requests when your account belongs to more than one org.",
         "security": [
@@ -2467,9 +2185,7 @@
     },
     "/v1/aws/connect": {
       "post": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Start connecting an AWS account",
         "description": "Mints a cross-account access request and returns the CloudFormation artifacts. Reuses this org's in-flight (unproven) row, so repeated calls do not pile up records. Poll GET /v1/aws/accounts/{accountId} until status is `verified` or `failed`.",
         "security": [
@@ -2563,9 +2279,7 @@
     },
     "/v1/aws/accounts": {
       "get": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "List connected AWS accounts",
         "security": [
           {
@@ -2658,9 +2372,7 @@
     },
     "/v1/aws/accounts/{accountId}": {
       "get": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Get one AWS account's status",
         "security": [
           {
@@ -2761,9 +2473,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Remove an AWS account",
         "description": "Blocked while any cluster still references the account (the cross-account role is required to tear infra down). Destroy those clusters first.",
         "security": [
@@ -2867,9 +2577,7 @@
     },
     "/v1/aws/accounts/{accountId}/verify": {
       "post": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Verify an AWS connection",
         "description": "Normally the stack's phone-home finalizes the connection automatically. Call this to force a verify, optionally passing `awsAccountId` to assume the role directly before the callback arrives.",
         "security": [
@@ -2984,9 +2692,7 @@
     },
     "/v1/aws/accounts/{accountId}/reconnect": {
       "post": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Re-arm an account whose access stack was removed",
         "description": "Re-arms the existing row in place (same external ID and account ID) and returns a fresh CloudFormation link. Re-running the stack recreates the role and re-verifies the same account — no duplicate is created.",
         "security": [
@@ -3090,9 +2796,7 @@
     },
     "/v1/aws/accounts/{accountId}/resync": {
       "post": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Re-run account setup on a verified account",
         "description": "Re-applies the shared roles and policies for an already-verified account. Safe to call to pick up an available upgrade (`needsUpgrade: true`).",
         "security": [
@@ -3196,9 +2900,7 @@
     },
     "/v1/clusters": {
       "get": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "List clusters in the current organization",
         "security": [
           {
@@ -3289,9 +2991,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "Create a cluster",
         "description": "Provisions a cluster (`clusterType` `eks` = Production, `k3s` = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.",
         "security": [
@@ -3311,20 +3011,11 @@
                   },
                   "provider": {
                     "type": "string",
-                    "enum": [
-                      "aws",
-                      "gcp",
-                      "azure"
-                    ]
+                    "enum": ["aws", "gcp", "azure"]
                   },
                   "clusterType": {
                     "type": "string",
-                    "enum": [
-                      "eks",
-                      "gke",
-                      "aks",
-                      "k3s"
-                    ]
+                    "enum": ["eks", "gke", "aks", "k3s"]
                   },
                   "clusterName": {
                     "type": "string",
@@ -3404,11 +3095,7 @@
                         "maximum": 20
                       }
                     },
-                    "required": [
-                      "name",
-                      "repository",
-                      "tag"
-                    ]
+                    "required": ["name", "repository", "tag"]
                   },
                   "initialTemplate": {
                     "type": "object",
@@ -3418,9 +3105,7 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "slug"
-                    ]
+                    "required": ["slug"]
                   }
                 },
                 "required": [
@@ -3521,9 +3206,7 @@
     },
     "/v1/clusters/{clusterId}": {
       "get": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "Get a cluster by ID",
         "security": [
           {
@@ -3624,9 +3307,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "Destroy a cluster",
         "description": "Tears the cluster down. Blocked when the cluster still has active deployments unless `force=true` is passed.",
         "security": [
@@ -3646,10 +3327,7 @@
           {
             "schema": {
               "type": "string",
-              "enum": [
-                "true",
-                "false"
-              ],
+              "enum": ["true", "false"],
               "description": "Destroy even when the cluster still has active deployments. Defaults to false."
             },
             "required": false,
@@ -3744,9 +3422,7 @@
     },
     "/v1/clusters/{clusterId}/status": {
       "get": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "Get a cluster's live provisioning status",
         "description": "Lightweight poll target during create/destroy: status, message, and provisioning progress without the full row.",
         "security": [
@@ -3850,9 +3526,7 @@
     },
     "/v1/clusters/{clusterId}/cancel": {
       "post": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "Cancel an in-flight cluster creation",
         "description": "Valid only while the cluster is still `creating`.",
         "security": [
@@ -3956,9 +3630,7 @@
     },
     "/v1/environments": {
       "get": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "List environments in the current organization",
         "description": "Default `Development` and `Production` environments are auto-seeded for orgs that have none yet, so this endpoint always returns at least two rows.",
         "security": [
@@ -4050,9 +3722,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "Create an environment",
         "security": [
           {
@@ -4155,9 +3825,7 @@
     },
     "/v1/environments/{environmentId}": {
       "get": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "Get an environment by ID",
         "security": [
           {
@@ -4258,9 +3926,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "Update an environment's name, color, or description",
         "security": [
           {
@@ -4371,9 +4037,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "Delete an environment",
         "description": "Soft-deletes the environment. Blocked with `412` if any deployments still reference it.",
         "security": [
@@ -4477,9 +4141,7 @@
     },
     "/v1/environments/{environmentId}/env": {
       "put": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "Replace an environment's shared env vars",
         "description": "Replaces the environment's shared env-var set and redeploys every cluster-bound app that inherits them so the change takes effect immediately.",
         "security": [
@@ -4593,9 +4255,7 @@
     },
     "/v1/registries": {
       "get": {
-        "tags": [
-          "Registries"
-        ],
+        "tags": ["Registries"],
         "summary": "List container registry connections",
         "security": [
           {
@@ -4688,9 +4348,7 @@
     },
     "/v1/registries/{registryId}": {
       "get": {
-        "tags": [
-          "Registries"
-        ],
+        "tags": ["Registries"],
         "summary": "Get a registry by ID",
         "security": [
           {
@@ -4793,9 +4451,7 @@
     },
     "/v1/deployments": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "List deployments by environment or cluster",
         "description": "Pass `environmentId` to scope to one environment, or `clusterId` to scope to one cluster. Exactly one is required.",
         "security": [
@@ -4905,9 +4561,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Create a deployment",
         "description": "Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster.",
         "security": [
@@ -4926,9 +4580,7 @@
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "web"
-                        ]
+                        "enum": ["web"]
                       },
                       "clusterId": {
                         "type": "string"
@@ -4986,11 +4638,7 @@
                             "minItems": 1
                           }
                         },
-                        "required": [
-                          "owner",
-                          "repo",
-                          "branch"
-                        ]
+                        "required": ["owner", "repo", "branch"]
                       },
                       "config": {
                         "type": "object",
@@ -5030,10 +4678,7 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name",
-                                "value"
-                              ]
+                              "required": ["name", "value"]
                             }
                           },
                           "public": {
@@ -5065,9 +4710,7 @@
                                     "maxLength": 255
                                   }
                                 },
-                                "required": [
-                                  "username"
-                                ]
+                                "required": ["username"]
                               },
                               "oauth": {
                                 "type": "object",
@@ -5078,9 +4721,7 @@
                                   },
                                   "provider": {
                                     "type": "string",
-                                    "enum": [
-                                      "google"
-                                    ],
+                                    "enum": ["google"],
                                     "default": "google"
                                   },
                                   "allowedDomains": {
@@ -5143,9 +4784,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               },
                               "liveness": {
                                 "type": "object",
@@ -5182,9 +4821,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               },
                               "readiness": {
                                 "type": "object",
@@ -5221,9 +4858,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               }
                             }
                           },
@@ -5242,10 +4877,7 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               },
                               "limits": {
                                 "type": "object",
@@ -5259,16 +4891,10 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               }
                             },
-                            "required": [
-                              "requests",
-                              "limits"
-                            ]
+                            "required": ["requests", "limits"]
                           },
                           "autoscaling": {
                             "type": "object",
@@ -5302,27 +4928,17 @@
                             }
                           }
                         },
-                        "required": [
-                          "repository",
-                          "tag",
-                          "port"
-                        ]
+                        "required": ["repository", "tag", "port"]
                       }
                     },
-                    "required": [
-                      "resourceType",
-                      "name",
-                      "config"
-                    ]
+                    "required": ["resourceType", "name", "config"]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "worker"
-                        ]
+                        "enum": ["worker"]
                       },
                       "clusterId": {
                         "type": "string"
@@ -5380,11 +4996,7 @@
                             "minItems": 1
                           }
                         },
-                        "required": [
-                          "owner",
-                          "repo",
-                          "branch"
-                        ]
+                        "required": ["owner", "repo", "branch"]
                       },
                       "config": {
                         "type": "object",
@@ -5424,10 +5036,7 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name",
-                                "value"
-                              ]
+                              "required": ["name", "value"]
                             }
                           },
                           "public": {
@@ -5459,9 +5068,7 @@
                                     "maxLength": 255
                                   }
                                 },
-                                "required": [
-                                  "username"
-                                ]
+                                "required": ["username"]
                               },
                               "oauth": {
                                 "type": "object",
@@ -5472,9 +5079,7 @@
                                   },
                                   "provider": {
                                     "type": "string",
-                                    "enum": [
-                                      "google"
-                                    ],
+                                    "enum": ["google"],
                                     "default": "google"
                                   },
                                   "allowedDomains": {
@@ -5537,9 +5142,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               },
                               "liveness": {
                                 "type": "object",
@@ -5576,9 +5179,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               },
                               "readiness": {
                                 "type": "object",
@@ -5615,9 +5216,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               }
                             }
                           },
@@ -5636,10 +5235,7 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               },
                               "limits": {
                                 "type": "object",
@@ -5653,16 +5249,10 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               }
                             },
-                            "required": [
-                              "requests",
-                              "limits"
-                            ]
+                            "required": ["requests", "limits"]
                           },
                           "autoscaling": {
                             "type": "object",
@@ -5696,27 +5286,17 @@
                             }
                           }
                         },
-                        "required": [
-                          "repository",
-                          "tag",
-                          "port"
-                        ]
+                        "required": ["repository", "tag", "port"]
                       }
                     },
-                    "required": [
-                      "resourceType",
-                      "name",
-                      "config"
-                    ]
+                    "required": ["resourceType", "name", "config"]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "job"
-                        ]
+                        "enum": ["job"]
                       },
                       "clusterId": {
                         "type": "string"
@@ -5774,11 +5354,7 @@
                             "minItems": 1
                           }
                         },
-                        "required": [
-                          "owner",
-                          "repo",
-                          "branch"
-                        ]
+                        "required": ["owner", "repo", "branch"]
                       },
                       "config": {
                         "type": "object",
@@ -5821,10 +5397,7 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name",
-                                "value"
-                              ]
+                              "required": ["name", "value"]
                             }
                           },
                           "resources": {
@@ -5842,10 +5415,7 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               },
                               "limits": {
                                 "type": "object",
@@ -5859,16 +5429,10 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               }
                             },
-                            "required": [
-                              "requests",
-                              "limits"
-                            ]
+                            "required": ["requests", "limits"]
                           },
                           "schedule": {
                             "type": "object",
@@ -5883,11 +5447,7 @@
                               },
                               "concurrencyPolicy": {
                                 "type": "string",
-                                "enum": [
-                                  "Allow",
-                                  "Forbid",
-                                  "Replace"
-                                ],
+                                "enum": ["Allow", "Forbid", "Replace"],
                                 "default": "Forbid"
                               },
                               "timeZone": {
@@ -5910,9 +5470,7 @@
                                 "maximum": 100
                               }
                             },
-                            "required": [
-                              "expression"
-                            ]
+                            "required": ["expression"]
                           },
                           "job": {
                             "type": "object",
@@ -5944,36 +5502,23 @@
                               },
                               "restartPolicy": {
                                 "type": "string",
-                                "enum": [
-                                  "Never",
-                                  "OnFailure"
-                                ],
+                                "enum": ["Never", "OnFailure"],
                                 "default": "Never"
                               }
                             }
                           }
                         },
-                        "required": [
-                          "repository",
-                          "tag",
-                          "schedule"
-                        ]
+                        "required": ["repository", "tag", "schedule"]
                       }
                     },
-                    "required": [
-                      "resourceType",
-                      "name",
-                      "config"
-                    ]
+                    "required": ["resourceType", "name", "config"]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "database"
-                        ]
+                        "enum": ["database"]
                       },
                       "clusterId": {
                         "type": "string"
@@ -5991,16 +5536,11 @@
                         "properties": {
                           "engine": {
                             "type": "string",
-                            "enum": [
-                              "postgres"
-                            ]
+                            "enum": ["postgres"]
                           },
                           "version": {
                             "type": "string",
-                            "enum": [
-                              "17",
-                              "18"
-                            ]
+                            "enum": ["17", "18"]
                           },
                           "instances": {
                             "type": "integer",
@@ -6028,10 +5568,7 @@
                                 }
                               }
                             },
-                            "required": [
-                              "database",
-                              "owner"
-                            ]
+                            "required": ["database", "owner"]
                           },
                           "storage": {
                             "type": "object",
@@ -6046,9 +5583,7 @@
                                 "default": "gp3"
                               }
                             },
-                            "required": [
-                              "size"
-                            ]
+                            "required": ["size"]
                           },
                           "public": {
                             "type": "boolean"
@@ -6068,10 +5603,7 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               },
                               "limits": {
                                 "type": "object",
@@ -6085,16 +5617,10 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               }
                             },
-                            "required": [
-                              "requests",
-                              "limits"
-                            ]
+                            "required": ["requests", "limits"]
                           },
                           "pooler": {
                             "type": "object",
@@ -6110,17 +5636,11 @@
                               },
                               "type": {
                                 "type": "string",
-                                "enum": [
-                                  "rw",
-                                  "ro"
-                                ]
+                                "enum": ["rw", "ro"]
                               },
                               "mode": {
                                 "type": "string",
-                                "enum": [
-                                  "session",
-                                  "transaction"
-                                ]
+                                "enum": ["session", "transaction"]
                               },
                               "parameters": {
                                 "type": "object",
@@ -6149,9 +5669,7 @@
                                 "type": "boolean"
                               }
                             },
-                            "required": [
-                              "enablePodMonitor"
-                            ]
+                            "required": ["enablePodMonitor"]
                           },
                           "backup": {
                             "type": "object",
@@ -6169,9 +5687,7 @@
                                 "type": "string"
                               }
                             },
-                            "required": [
-                              "enabled"
-                            ]
+                            "required": ["enabled"]
                           },
                           "scheduledBackup": {
                             "type": "object",
@@ -6190,10 +5706,7 @@
                                 "type": "boolean"
                               }
                             },
-                            "required": [
-                              "enabled",
-                              "schedule"
-                            ]
+                            "required": ["enabled", "schedule"]
                           }
                         },
                         "required": [
@@ -6204,20 +5717,14 @@
                         ]
                       }
                     },
-                    "required": [
-                      "resourceType",
-                      "name",
-                      "config"
-                    ]
+                    "required": ["resourceType", "name", "config"]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "function"
-                        ]
+                        "enum": ["function"]
                       },
                       "cloudAccountId": {
                         "type": "string"
@@ -6276,11 +5783,7 @@
                             "minItems": 1
                           }
                         },
-                        "required": [
-                          "owner",
-                          "repo",
-                          "branch"
-                        ]
+                        "required": ["owner", "repo", "branch"]
                       },
                       "config": {
                         "type": "object",
@@ -6297,10 +5800,7 @@
                           },
                           "architecture": {
                             "type": "string",
-                            "enum": [
-                              "x86_64",
-                              "arm64"
-                            ],
+                            "enum": ["x86_64", "arm64"],
                             "default": "arm64"
                           },
                           "memoryMb": {
@@ -6337,10 +5837,7 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name",
-                                "value"
-                              ]
+                              "required": ["name", "value"]
                             }
                           },
                           "triggers": {
@@ -6360,19 +5857,14 @@
                                     "type": "string"
                                   }
                                 },
-                                "required": [
-                                  "schedule"
-                                ]
+                                "required": ["schedule"]
                               },
                               "http": {
                                 "type": "object",
                                 "properties": {
                                   "authType": {
                                     "type": "string",
-                                    "enum": [
-                                      "none",
-                                      "iam"
-                                    ],
+                                    "enum": ["none", "iam"],
                                     "default": "none"
                                   },
                                   "cors": {
@@ -6408,11 +5900,7 @@
                             }
                           }
                         },
-                        "required": [
-                          "runtime",
-                          "handler",
-                          "triggers"
-                        ]
+                        "required": ["runtime", "handler", "triggers"]
                       }
                     },
                     "required": [
@@ -6515,9 +6003,7 @@
     },
     "/v1/deployments/{deploymentId}": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Get a deployment by ID",
         "security": [
           {
@@ -6619,9 +6105,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Delete a deployment",
         "description": "Soft-deletes the deployment and tears down its cluster resources. Functions hand off to an async teardown and report `deleting` until it finalizes.",
         "security": [
@@ -6724,9 +6208,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Update a deployment's configuration",
         "description": "Updates a cluster-bound deployment (web/worker/job/database) and records a revision. Send the config block matching the deployment's type: `appConfig` for web/worker, `jobConfig` for job, `databaseConfig` for database. Use the function update endpoint for functions.",
         "security": [
@@ -6841,9 +6323,7 @@
     },
     "/v1/deployments/{deploymentId}/status": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Get live rollout status",
         "security": [
           {
@@ -6947,9 +6427,7 @@
     },
     "/v1/deployments/{deploymentId}/logs": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Tail recent log lines",
         "description": "Reads log lines from the in-cluster logs backend over the requested window. `filter` accepts a LogsQL regex matched against the message body.",
         "security": [
@@ -7086,9 +6564,7 @@
     },
     "/v1/deployments/{deploymentId}/connection": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Get database connection details",
         "description": "Returns the host, port, credentials, and connection URI for a database deployment. Only valid for `resourceType: database`.",
         "security": [
@@ -7193,9 +6669,7 @@
     },
     "/v1/deployments/{deploymentId}/function": {
       "patch": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Update a function's configuration",
         "description": "Updates a `function`-type deployment's config (handler, runtime, env, triggers) and records a revision.",
         "security": [
@@ -7310,9 +6784,7 @@
     },
     "/v1/deployments/{deploymentId}/platform-version": {
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Upgrade a deployment's platform version",
         "description": "Upgrades a cluster-bound deployment to a newer platform version and resyncs. Downgrades are rejected. Use the function platform-version endpoint for functions.",
         "security": [
@@ -7427,9 +6899,7 @@
     },
     "/v1/deployments/{deploymentId}/function/platform-version": {
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Upgrade a function's platform version",
         "description": "Upgrades a `function`-type deployment to a newer platform version and resyncs.",
         "security": [
@@ -7544,9 +7014,7 @@
     },
     "/v1/deployments/{deploymentId}/copy": {
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Copy a deployment to another environment",
         "description": "Clones this deployment's current config into `targetEnvironmentId` on `targetClusterId`, creating a new deployment. Not valid for functions.",
         "security": [
@@ -7661,9 +7129,7 @@
     },
     "/v1/deployments/{deploymentId}/reset-password": {
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Reset a database deployment's password",
         "description": "Rotates the owner-role password of a `database`-type deployment and returns the new password. The response intentionally contains the live credential.",
         "security": [
@@ -7768,9 +7234,7 @@
     },
     "/v1/deployments/{deploymentId}/job-runs": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "List a scheduled job's recent runs",
         "description": "Reads the CronJob and its spawned runs live from the cluster. Non-job deployments return an empty, non-existent history rather than erroring.",
         "security": [
@@ -7873,9 +7337,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Trigger a scheduled job now",
         "description": "Spawns a one-off run of a `job`-type deployment off-schedule and returns the created Job name.",
         "security": [
@@ -7980,9 +7442,7 @@
     },
     "/v1/deployments/{deploymentId}/job-runs/{jobName}": {
       "delete": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Cancel an in-flight job run",
         "description": "Deletes the named run's Job (terminating its Pods). The named Job must belong to this deployment's CronJob.",
         "security": [
@@ -8094,9 +7554,7 @@
     },
     "/v1/platform-versions": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "List available platform versions",
         "description": "Lists the platform versions published for a `clusterType` + `resourceType` pair, newest first. Use these values with the platform-version upgrade endpoint.",
         "security": [
@@ -8108,12 +7566,7 @@
           {
             "schema": {
               "type": "string",
-              "enum": [
-                "eks",
-                "gke",
-                "aks",
-                "k3s"
-              ]
+              "enum": ["eks", "gke", "aks", "k3s"]
             },
             "required": true,
             "name": "clusterType",
@@ -8122,12 +7575,7 @@
           {
             "schema": {
               "type": "string",
-              "enum": [
-                "web",
-                "worker",
-                "job",
-                "database"
-              ]
+              "enum": ["web", "worker", "job", "database"]
             },
             "required": true,
             "name": "resourceType",
@@ -8220,9 +7668,7 @@
     },
     "/v1/function-platform-versions": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "List available function platform versions",
         "description": "Lists the platform versions published for functions, newest first.",
         "security": [
@@ -8316,9 +7762,7 @@
     },
     "/v1/deployments/{deploymentId}/revisions": {
       "get": {
-        "tags": [
-          "Revisions"
-        ],
+        "tags": ["Revisions"],
         "summary": "List revisions for a deployment (newest first)",
         "security": [
           {
@@ -8421,9 +7865,7 @@
     },
     "/v1/deployments/{deploymentId}/revisions/{revisionId}/rollback": {
       "post": {
-        "tags": [
-          "Revisions"
-        ],
+        "tags": ["Revisions"],
         "summary": "Roll a deployment back to a prior revision",
         "description": "Restores the config snapshot from `revisionId` onto the deployment and records a new revision. Returns the new revision.",
         "security": [
@@ -8545,9 +7987,7 @@
     },
     "/v1/deployments/{deploymentId}/promote": {
       "post": {
-        "tags": [
-          "Revisions"
-        ],
+        "tags": ["Revisions"],
         "summary": "Promote a deployment's config to another deployment",
         "description": "Copies this deployment's current config into `targetDeploymentId`, records a revision there, and links it back to this deployment's latest revision. Returns the new revision on the target.",
         "security": [

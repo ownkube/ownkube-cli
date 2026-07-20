@@ -10,6 +10,6 @@ func New() *cobra.Command {
 		Aliases: []string{"envs", "env"},
 		Short:   "Manage environments",
 	}
-	root.AddCommand(listCmd(), getCmd())
+	root.AddCommand(listCmd(), getCmd(), createCmd(), updateCmd(), setEnvCmd(), deleteCmd())
 	return root
 }
