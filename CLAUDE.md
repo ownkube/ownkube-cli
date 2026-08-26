@@ -9,6 +9,24 @@
 - **Lint**: `make lint` (requires golangci-lint)
 - **Regenerate API client**: `make generate` (requires oapi-codegen)
 
+## Subagent model selection (core instruction)
+
+When spawning subagents via the Agent/Task tool for work in this repo, **always pass `model` explicitly.** `sonnet` is the default; `opus` is the exception you have to justify; `haiku` is the floor for mechanical, check-guarded fan-out. Judge the task, not the tool it happens to use. "The agent writes Go" is not on its own a reason to reach for opus.
+
+Spend `opus` when at least one of these is true:
+- **The shape isn't decided yet.** Designing a new command tree, a client abstraction, an auth/token flow, or a config format, anything where a plausible-looking wrong answer costs more than the model does.
+- **Diagnosis is the work.** Debugging a flaky test, a codegen mismatch after `make generate`, or a failure that only reproduces against a live API.
+- **The blast radius is wide.** Auth and credential handling, the API client contract, release/build tooling, anything destructive or hard to reverse.
+- **It needs taste.** User-facing CLI help text, command names, and output formatting where "correct" and "actually good" come apart.
+
+Use `sonnet` for everything else, including plenty of work that writes files: exploration and search ("where is command X wired"), mechanical edits against a decided spec (adding a wrapper for a new endpoint, wiring a cobra command that follows an existing `cmd/<resource>/` pattern, applying a rename across call sites), and fan-out where every worker gets the same solved example.
+
+Drop to `haiku` for the mechanical floor of that fan-out — a decided edit applied verbatim where a machine check (`go build`/`go vet`/`go test`) catches any slip and the worker never decides *how*, only transcribes: a rename across call sites, a version bump across files, wiring the Nth endpoint wrapper from an already-solved example. The test: if you could nearly write a codemod for it, it's haiku work. Step up to `sonnet` the moment the worker must read surrounding code to decide how to apply the change, preserve non-obvious behavior, or exercise any taste.
+
+Rule of thumb: ask what the agent has to *decide*. If the decisions are made and it is executing them, sonnet, and give it the worked example (an existing command or wrapper) that makes that true; drop to haiku when the edit is purely mechanical and a check will catch any slip. If it makes a call you would want to review, opus. For a mixed batch, solve the hard instance yourself first, then fan out on sonnet (or haiku).
+
+This mirrors the ecosystem rule in `../CLAUDE.md` and is repeated here as a core instruction.
+
 ## Rebuild from updated spec
 
 Whenever the CLI API changes in `ownkube-app`, refresh the Go client and rebuild:
