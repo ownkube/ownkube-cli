@@ -61,13 +61,18 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
   - `cmd/auth/`: `login`, `logout`, `status`.
   - `cmd/config/`: `config get|set|view`.
   - `cmd/deploy/`: read verbs (`list|get|status|logs|revisions|connection`) plus
-    the full write surface (`create|update|delete|copy|promote|rollback|
-    reset-password|upgrade|platform-versions|job-runs`). `create`/`update` take a
-    manifest via `-f` (`-` = stdin); `create` also has web convenience flags
+    the write/lifecycle surface (`create|update|delete|copy|promote|rollback|
+    reset-password|job-runs|restart|rebuild|restore|maintenance|rename|
+    auto-deploy|build-args|build-context|builder-size|subdomain`) and the
+    read-only analytics reads (`observability|telemetry|cache-connection|
+    build-logs`). `create`/`update` take a manifest via `-f` (`-` = stdin);
+    `create` also has web convenience flags
     (`--name/--image/--tag/--port/--env/--public`). `delete` and `reset-password`
-    confirm unless `--yes`. `upgrade` moves the platform version (`--function` for
-    functions). Client wrappers live in `internal/client/deployment_write.go`
-    (reads stay in `client.go`); table/JSON render helpers in `cmd/deploy/render.go`.
+    confirm unless `--yes`. `subdomain` is a group (`set|check|suggest`).
+    `observability`/`telemetry` return nested metric blobs — they render as JSON
+    even in table mode (`printBlob`). Client wrappers: write/lifecycle in
+    `internal/client/deployment_write.go` + `deployment_actions.go` (reads stay in
+    `client.go`); table/JSON render helpers in `cmd/deploy/render.go`.
   - `cmd/environments/`: read verbs (`list|get`) plus the write surface
     (`create|update|set-env|delete`). `set-env` REPLACES the full shared env-var
     set (`--env`/`--secret KEY=VALUE`, repeatable, or `-f` JSON array) and
@@ -77,6 +82,20 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
   - `cmd/aws/`: `aws connect|list|get|verify|reconnect|resync|delete`. `connect`
     handles browser handoff (default), autonomous `--deploy` (shells out to the
     `aws` CLI), and polls the account until `verified`/`failed`.
+  - `cmd/regions/`: `regions list` — Ownkube Compute regions you can deploy to.
+    Wrappers in `internal/client/regions.go`.
+  - `cmd/usage/`: `usage current|month-to-date (mtd)|projected|history` — Compute
+    usage and cost. Wrappers in `internal/client/usage.go`.
+  - `cmd/billing/`: `billing wallet|credit (credit claim)|spend-controls (get|set)|
+    subscribe|top-up|portal` — the prepaid wallet, credit, spend controls, and
+    Polar checkout handoff (`--no-browser` to print the URL only). Wrappers in
+    `internal/client/billing.go`.
+  - `cmd/alerts/`: `alerts list|create|update|delete|firings` — per-deployment
+    workload alert rules and firing history. Wrappers in
+    `internal/client/alerts.go`.
+  - `cmd/domains/` (alias `custom-domains`): `domains list|add|verify|delete
+    (unlink)` — link custom hostnames to a deployment. Wrappers in
+    `internal/client/domains.go`.
   - `cmd/internal/ux/`: shared helpers — `RequireClient`, `Print`, `Deref`,
     `ReadFileOrStdin`, `IsStructured`, `APIURL`, `Config`, `OpenBrowser`. Set
     once per invocation by `cmd/root.go`'s `PersistentPreRunE` via `ux.Set(...)`.
@@ -162,6 +181,17 @@ flat files in `cmd/` are the root wiring, completion, and version.
    `checkError(...)` + a per-endpoint `errorsFromXxx` adapter.
 4. Wire a cobra command in the relevant `cmd/<resource>/` subpackage (see
    "Organising new code").
+
+**Gotcha — required+nullable fields are VALUE types (oapi-codegen v2.8.0 /
+OpenAPI 3.1).** A field that is both required and nullable renders as a value
+type (`string`, a value struct, `map[string]interface{}`) — NOT a pointer.
+Only *optional* fields (with `omitempty`) render as `*T`. So call `ux.Deref`
+and `!= nil` guards on optional pointer fields only; read required-nullable
+fields directly (null/absent JSON unmarshals to the zero value, which prints
+the same as `Deref` did). When in doubt, grep the generated struct in
+`internal/api/client.gen.go` — the `json:"...,omitempty"` tag marks the
+pointers. (v2.4.1 rendered required-nullable as `*T`; the v2.8.0 upgrade
+flipped this and broke every deref call site.)
 
 **Gotcha — `oneOf` request bodies.** oapi-codegen renders an OpenAPI `oneOf`
 body (e.g. the deployment `create` union) as a struct with an *unexported*

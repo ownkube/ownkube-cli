@@ -39,7 +39,7 @@ func jobRunsListCmd() *cobra.Command {
 			rows := [][]string{
 				{"FIELD", "VALUE"},
 				{"Exists", fmt.Sprintf("%t", history.Exists)},
-				{"Schedule", ux.Deref(history.Schedule)},
+				{"Schedule", history.Schedule},
 				{"Time Zone", ux.Deref(history.TimeZone)},
 				{"Last Scheduled", ux.Deref(history.LastScheduleTime)},
 				{"Last Successful", ux.Deref(history.LastSuccessfulTime)},

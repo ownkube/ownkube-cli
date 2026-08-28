@@ -1,6 +1,8 @@
 package deploy
 
 import (
+	"fmt"
+
 	"github.com/ownkube/okctl/cmd/internal/ux"
 	"github.com/spf13/cobra"
 )
@@ -8,7 +10,7 @@ import (
 func statusCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "status <deployment-id>",
-		Short: "Show live status (sync, health, gateway address) for a deployment",
+		Short: "Show live status (sync, health, URL readiness) for a deployment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			api, err := ux.RequireClient()
@@ -29,7 +31,7 @@ func statusCmd() *cobra.Command {
 				{"Status", s.Status},
 				{"Sync", s.Sync},
 				{"Health", s.Health},
-				{"Gateway Address", ux.Deref(s.GatewayAddress)},
+				{"URL Ready", fmt.Sprintf("%t", s.UrlReady)},
 			})
 		},
 	}

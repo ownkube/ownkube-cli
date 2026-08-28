@@ -32,7 +32,7 @@ func listCmd() *cobra.Command {
 
 			rows := [][]string{{"ID", "NAME", "SLUG", "ROLE"}}
 			for _, o := range orgs {
-				rows = append(rows, []string{o.Id, o.Name, ux.Deref(o.Slug), o.Role})
+				rows = append(rows, []string{o.Id, o.Name, o.Slug, o.Role})
 			}
 			return ux.Print(cmd.OutOrStdout(), rows)
 		},

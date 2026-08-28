@@ -24,9 +24,21 @@ func New() *cobra.Command {
 		promoteCmd(),
 		rollbackCmd(),
 		resetPasswordCmd(),
-		upgradeCmd(),
-		platformVersionsCmd(),
 		jobRunsCmd(),
+		restartCmd(),
+		rebuildCmd(),
+		restoreCmd(),
+		maintenanceCmd(),
+		renameCmd(),
+		autoDeployCmd(),
+		buildArgsCmd(),
+		buildContextCmd(),
+		builderSizeCmd(),
+		subdomainCmd(),
+		observabilityCmd(),
+		telemetryCmd(),
+		cacheConnectionCmd(),
+		buildLogsCmd(),
 	)
 	return root
 }

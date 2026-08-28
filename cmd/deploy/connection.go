@@ -35,24 +35,16 @@ func connectionCmd() *cobra.Command {
 				{"Secret", conn.SecretName},
 			}
 			if conn.Details != nil {
-				keys := make([]string, 0, len(*conn.Details))
-				for k := range *conn.Details {
+				keys := make([]string, 0, len(conn.Details))
+				for k := range conn.Details {
 					keys = append(keys, k)
 				}
 				sort.Strings(keys)
 				for _, k := range keys {
-					v := (*conn.Details)[k]
-					rows = append(rows, []string{"details." + k, fmt.Sprintf("%v", deref(v))})
+					rows = append(rows, []string{"details." + k, fmt.Sprintf("%v", conn.Details[k])})
 				}
 			}
 			return ux.Print(cmd.OutOrStdout(), rows)
 		},
 	}
-}
-
-func deref(v *interface{}) interface{} {
-	if v == nil {
-		return ""
-	}
-	return *v
 }

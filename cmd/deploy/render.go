@@ -34,10 +34,10 @@ func renderActionResult(cmd *cobra.Command, r *api.DeploymentActionResult) error
 		{"Name", r.Name},
 		{"Type", string(r.ResourceType)},
 		{"Status", r.Status},
-		{"Status Message", ux.Deref(r.StatusMessage)},
-		{"Cluster", ux.Deref(r.ClusterId)},
-		{"Environment", ux.Deref(r.EnvironmentId)},
-		{"Platform Version", ux.Deref(r.ChartVersion)},
+		{"Status Message", r.StatusMessage},
+		{"Cluster", r.ClusterId},
+		{"Environment", r.EnvironmentId},
+		{"Platform Version", r.ChartVersion},
 	})
 }
 
@@ -52,11 +52,11 @@ func renderCreated(cmd *cobra.Command, r *api.CreateDeploymentResponse) error {
 		{"Name", r.Name},
 		{"Type", string(r.ResourceType)},
 		{"Status", r.Status},
-		{"Status Message", ux.Deref(r.StatusMessage)},
-		{"Cluster", ux.Deref(r.ClusterId)},
-		{"Environment", ux.Deref(r.EnvironmentId)},
-		{"Public Hostname", ux.Deref(r.PublicHostname)},
-		{"Platform Version", ux.Deref(r.ChartVersion)},
+		{"Status Message", r.StatusMessage},
+		{"Cluster", r.ClusterId},
+		{"Environment", r.EnvironmentId},
+		{"Public Hostname", r.PublicHostname},
+		{"Platform Version", r.ChartVersion},
 	})
 }
 

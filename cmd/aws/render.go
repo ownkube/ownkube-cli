@@ -16,19 +16,18 @@ func printAccount(w io.Writer, a *api.AwsAccount) error {
 		{"ID", a.Id},
 		{"Status", a.Status},
 		{"Region", a.Region},
-		{"AWS Account", ux.Deref(a.AwsAccountId)},
-		{"Role ARN", ux.Deref(a.RoleArn)},
-		{"Stack Status", ux.Deref(a.CloudFormationStackStatus)},
+		{"AWS Account", a.AwsAccountId},
+		{"Stack Status", a.CloudFormationStackStatus},
 		{"Active Clusters", fmt.Sprintf("%d", len(a.ActiveClusters))},
 	}
-	if a.Failure != nil {
+	if a.Failure.Kind != "" {
 		rows = append(rows,
 			[]string{"Failure", a.Failure.Title},
 			[]string{"Remediation", string(a.Failure.Kind)},
 			[]string{"Detail", a.Failure.Description},
 		)
-		if a.Failure.DocsUrl != nil {
-			rows = append(rows, []string{"Docs", *a.Failure.DocsUrl})
+		if a.Failure.DocsUrl != "" {
+			rows = append(rows, []string{"Docs", a.Failure.DocsUrl})
 		}
 	}
 	return ux.Print(w, rows)
@@ -40,7 +39,7 @@ func printAccounts(w io.Writer, accounts []api.AwsAccount) error {
 	for i := range accounts {
 		a := &accounts[i]
 		rows = append(rows, []string{
-			a.Id, a.Status, a.Region, ux.Deref(a.AwsAccountId),
+			a.Id, a.Status, a.Region, a.AwsAccountId,
 			fmt.Sprintf("%d", len(a.ActiveClusters)),
 		})
 	}

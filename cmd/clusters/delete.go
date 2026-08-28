@@ -54,7 +54,6 @@ func deleteCmd() *cobra.Command {
 				{"FIELD", "VALUE"},
 				{"Cluster ID", res.ClusterId},
 				{"Status", res.Status},
-				{"Workflow ID", ux.Deref(res.WorkflowId)},
 			})
 		},
 	}

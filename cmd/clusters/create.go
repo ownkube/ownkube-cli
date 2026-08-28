@@ -123,6 +123,5 @@ func renderCreated(cmd *cobra.Command, r *apiPkg.CreateClusterResponse) error {
 		{"Cluster ID", r.ClusterId},
 		{"Status", r.Status},
 		{"Status Message", ux.Deref(r.StatusMessage)},
-		{"Workflow ID", r.WorkflowId},
 	})
 }

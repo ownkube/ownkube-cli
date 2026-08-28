@@ -2,11 +2,23 @@ package deploy
 
 import (
 	"fmt"
+	"strconv"
+	"time"
 
 	"github.com/ownkube/okctl/cmd/internal/ux"
 	"github.com/ownkube/okctl/internal/client"
 	"github.com/spf13/cobra"
 )
+
+// formatLogTimestamp turns a Unix-nanoseconds string into an RFC3339 stamp,
+// falling back to the raw value if it can't be parsed.
+func formatLogTimestamp(ns string) string {
+	n, err := strconv.ParseInt(ns, 10, 64)
+	if err != nil {
+		return ns
+	}
+	return time.Unix(0, n).UTC().Format(time.RFC3339)
+}
 
 func logsCmd() *cobra.Command {
 	c := &cobra.Command{
@@ -40,7 +52,7 @@ func logsCmd() *cobra.Command {
 				return nil
 			}
 			for _, e := range entries {
-				fmt.Fprintf(cmd.OutOrStdout(), "%s  %s\n", ux.Deref(e.Timestamp), ux.Deref(e.Message))
+				fmt.Fprintf(cmd.OutOrStdout(), "%s  %s\n", formatLogTimestamp(e.TimestampNs), e.Message)
 			}
 			return nil
 		},

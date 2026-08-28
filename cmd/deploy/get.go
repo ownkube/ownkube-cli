@@ -30,11 +30,11 @@ func getCmd() *cobra.Command {
 				{"Name", d.Name},
 				{"Type", string(d.ResourceType)},
 				{"Status", d.Status},
-				{"Status Message", ux.Deref(d.StatusMessage)},
-				{"Cluster", ux.Deref(d.ClusterId)},
-				{"Environment", ux.Deref(d.EnvironmentId)},
-				{"Public Hostname", ux.Deref(d.PublicHostname)},
-				{"Platform Version", ux.Deref(d.ChartVersion)},
+				{"Status Message", d.StatusMessage},
+				{"Cluster", d.ClusterId},
+				{"Environment", d.EnvironmentId},
+				{"Public Hostname", d.PublicHostname},
+				{"Platform Version", d.ChartVersion},
 			})
 		},
 	}

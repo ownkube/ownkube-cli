@@ -144,7 +144,7 @@ func pollUntilVerified(ctx context.Context, out io.Writer, api *client.Client, a
 		case "failed":
 			fmt.Fprintln(out)
 			_ = printAccount(out, a)
-			if a.Failure != nil {
+			if a.Failure.Kind != "" {
 				return fmt.Errorf("connection failed: %s", a.Failure.Title)
 			}
 			return fmt.Errorf("connection failed")

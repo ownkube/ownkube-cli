@@ -67,7 +67,7 @@ type UserInfo struct {
 	ID            string
 	Name          string
 	Email         string
-	Image         *string
+	Image         string
 	EmailVerified bool
 }
 

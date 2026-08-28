@@ -95,36 +95,6 @@ func (c *Client) CopyDeployment(ctx context.Context, id string, body api.CopyDep
 	return resp.JSON200, nil
 }
 
-// UpgradePlatformVersion calls POST /v1/deployments/{id}/platform-version.
-func (c *Client) UpgradePlatformVersion(ctx context.Context, id, version string) (*api.PlatformVersionResult, error) {
-	resp, err := c.inner.PostV1DeploymentsDeploymentIdPlatformVersionWithResponse(ctx, id, api.PlatformVersionBody{ChartVersion: version})
-	if err != nil {
-		return nil, fmt.Errorf("API request failed: %w", err)
-	}
-	if err := checkError(resp.StatusCode(), errorsFromPlatformVersion(resp), resp.Body); err != nil {
-		return nil, err
-	}
-	if resp.JSON200 == nil {
-		return nil, unexpectedStatus(resp.StatusCode(), resp.Body)
-	}
-	return resp.JSON200, nil
-}
-
-// UpgradeFunctionPlatformVersion calls POST /v1/deployments/{id}/function/platform-version.
-func (c *Client) UpgradeFunctionPlatformVersion(ctx context.Context, id, version string) (*api.PlatformVersionResult, error) {
-	resp, err := c.inner.PostV1DeploymentsDeploymentIdFunctionPlatformVersionWithResponse(ctx, id, api.PlatformVersionBody{ChartVersion: version})
-	if err != nil {
-		return nil, fmt.Errorf("API request failed: %w", err)
-	}
-	if err := checkError(resp.StatusCode(), errorsFromFunctionPlatformVersion(resp), resp.Body); err != nil {
-		return nil, err
-	}
-	if resp.JSON200 == nil {
-		return nil, unexpectedStatus(resp.StatusCode(), resp.Body)
-	}
-	return resp.JSON200, nil
-}
-
 // ResetDatabasePassword calls POST /v1/deployments/{id}/reset-password. The
 // returned password is a live credential — callers must not log it.
 func (c *Client) ResetDatabasePassword(ctx context.Context, id string) (*api.ResetPasswordResult, error) {
@@ -220,41 +190,6 @@ func (c *Client) Promote(ctx context.Context, id, targetID string, note *string)
 	return resp.JSON200, nil
 }
 
-// ListPlatformVersions calls GET /v1/platform-versions for the given cluster
-// type + resource type.
-func (c *Client) ListPlatformVersions(ctx context.Context, clusterType, resourceType string) ([]api.PlatformVersionEntry, error) {
-	params := &api.GetV1PlatformVersionsParams{
-		ClusterType:  api.GetV1PlatformVersionsParamsClusterType(clusterType),
-		ResourceType: api.GetV1PlatformVersionsParamsResourceType(resourceType),
-	}
-	resp, err := c.inner.GetV1PlatformVersionsWithResponse(ctx, params)
-	if err != nil {
-		return nil, fmt.Errorf("API request failed: %w", err)
-	}
-	if err := checkError(resp.StatusCode(), errorsFromListPlatformVersions(resp), resp.Body); err != nil {
-		return nil, err
-	}
-	if resp.JSON200 == nil {
-		return nil, unexpectedStatus(resp.StatusCode(), resp.Body)
-	}
-	return resp.JSON200.Versions, nil
-}
-
-// ListFunctionPlatformVersions calls GET /v1/function-platform-versions.
-func (c *Client) ListFunctionPlatformVersions(ctx context.Context) ([]api.PlatformVersionEntry, error) {
-	resp, err := c.inner.GetV1FunctionPlatformVersionsWithResponse(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("API request failed: %w", err)
-	}
-	if err := checkError(resp.StatusCode(), errorsFromListFunctionPlatformVersions(resp), resp.Body); err != nil {
-		return nil, err
-	}
-	if resp.JSON200 == nil {
-		return nil, unexpectedStatus(resp.StatusCode(), resp.Body)
-	}
-	return resp.JSON200.Versions, nil
-}
-
 // ---------------------------------------------------------------------------
 // Error adapters (see client.go for the shared checkError contract)
 // ---------------------------------------------------------------------------
@@ -279,14 +214,6 @@ func errorsFromCopyDeployment(r *api.PostV1DeploymentsDeploymentIdCopyResponse) 
 	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
 }
 
-func errorsFromPlatformVersion(r *api.PostV1DeploymentsDeploymentIdPlatformVersionResponse) []*api.ErrorResponse {
-	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
-}
-
-func errorsFromFunctionPlatformVersion(r *api.PostV1DeploymentsDeploymentIdFunctionPlatformVersionResponse) []*api.ErrorResponse {
-	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
-}
-
 func errorsFromResetPassword(r *api.PostV1DeploymentsDeploymentIdResetPasswordResponse) []*api.ErrorResponse {
 	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
 }
@@ -308,13 +235,5 @@ func errorsFromRollback(r *api.PostV1DeploymentsDeploymentIdRevisionsRevisionIdR
 }
 
 func errorsFromPromote(r *api.PostV1DeploymentsDeploymentIdPromoteResponse) []*api.ErrorResponse {
-	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
-}
-
-func errorsFromListPlatformVersions(r *api.GetV1PlatformVersionsResponse) []*api.ErrorResponse {
-	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
-}
-
-func errorsFromListFunctionPlatformVersions(r *api.GetV1FunctionPlatformVersionsResponse) []*api.ErrorResponse {
 	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
 }

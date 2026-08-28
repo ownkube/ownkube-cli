@@ -7,15 +7,20 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ownkube/okctl/cmd/alerts"
 	"github.com/ownkube/okctl/cmd/auth"
 	awscmd "github.com/ownkube/okctl/cmd/aws"
+	"github.com/ownkube/okctl/cmd/billing"
 	"github.com/ownkube/okctl/cmd/clusters"
 	"github.com/ownkube/okctl/cmd/config"
 	"github.com/ownkube/okctl/cmd/deploy"
+	"github.com/ownkube/okctl/cmd/domains"
 	"github.com/ownkube/okctl/cmd/environments"
 	"github.com/ownkube/okctl/cmd/internal/ux"
 	"github.com/ownkube/okctl/cmd/organizations"
+	"github.com/ownkube/okctl/cmd/regions"
 	"github.com/ownkube/okctl/cmd/registries"
+	"github.com/ownkube/okctl/cmd/usage"
 	cfgpkg "github.com/ownkube/okctl/internal/config"
 	"github.com/spf13/cobra"
 )
@@ -77,6 +82,11 @@ func init() {
 		environments.New(),
 		organizations.New(),
 		registries.New(),
+		regions.New(),
+		usage.New(),
+		billing.New(),
+		alerts.New(),
+		domains.New(),
 	)
 }
 
