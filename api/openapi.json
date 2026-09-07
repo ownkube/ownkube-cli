@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Ownkube CLI API",
-    "version": "1.5.0",
+    "version": "1.7.0",
     "description": "API for the Ownkube CLI tool. Authenticate via browser-based flow, then use x-api-key header for subsequent requests."
   },
   "servers": [
@@ -1071,6 +1071,140 @@
           "costUsd"
         ]
       },
+      "ProjectListResponse": {
+        "type": "object",
+        "properties": {
+          "projects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Project"
+            }
+          }
+        },
+        "required": [
+          "projects"
+        ]
+      },
+      "Project": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "color": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "isDefault": {
+            "type": "boolean"
+          },
+          "deploymentCount": {
+            "type": "number"
+          },
+          "environmentCount": {
+            "type": "number"
+          },
+          "createdAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug"
+        ]
+      },
+      "CreateProjectBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "example": "Payments"
+          },
+          "slug": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 30,
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Lowercase, starts with a letter; letters, numbers, hyphens only.",
+            "example": "payments"
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "amber",
+              "green",
+              "blue",
+              "purple",
+              "red"
+            ],
+            "description": "Accent color. Defaults to `blue`."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "name",
+          "slug"
+        ]
+      },
+      "UpdateProjectBody": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "amber",
+              "green",
+              "blue",
+              "purple",
+              "red"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 200
+          }
+        }
+      },
+      "DeleteProjectResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "success"
+        ]
+      },
       "EnvironmentListResponse": {
         "type": "object",
         "properties": {
@@ -1143,6 +1277,10 @@
       "CreateEnvironmentBody": {
         "type": "object",
         "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "Owning project. Omit to use the organization's default project."
+          },
           "name": {
             "type": "string",
             "minLength": 1,
@@ -1617,6 +1755,41 @@
         "additionalProperties": {
           "nullable": true
         }
+      },
+      "ConnectSessionResult": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "description": "Opaque connect session id."
+          },
+          "ticket": {
+            "type": "string",
+            "description": "Single-use, short-lived ticket. Present it to the relay to open the tunnel; it cannot be reused."
+          },
+          "relayUrl": {
+            "type": "string",
+            "description": "The relay endpoint the CLI dials."
+          },
+          "expiresAt": {
+            "type": "number",
+            "description": "Epoch seconds after which the ticket is no longer valid."
+          },
+          "protocol": {
+            "type": "string",
+            "enum": [
+              "postgres"
+            ],
+            "description": "Wire protocol of the target (databases only)."
+          }
+        },
+        "required": [
+          "sessionId",
+          "ticket",
+          "relayUrl",
+          "expiresAt",
+          "protocol"
+        ]
       },
       "DeploymentActionResult": {
         "type": "object",
@@ -3233,6 +3406,61 @@
           "branch"
         ]
       },
+      "SourceUploadResponse": {
+        "type": "object",
+        "properties": {
+          "uploadId": {
+            "type": "string",
+            "description": "Opaque id echoed back to the deploy call to identify this upload."
+          },
+          "uploadUrl": {
+            "type": "string",
+            "description": "Pre-signed URL to PUT the gzipped source tarball to."
+          },
+          "contentType": {
+            "type": "string",
+            "description": "Content-Type the upload PUT must set (matches the presign)."
+          },
+          "expiresAt": {
+            "type": "string",
+            "description": "ISO expiry of the upload URL."
+          }
+        },
+        "required": [
+          "uploadId",
+          "uploadUrl",
+          "contentType",
+          "expiresAt"
+        ]
+      },
+      "UpResult": {
+        "type": "object",
+        "properties": {
+          "revisionId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "revisionId"
+        ]
+      },
+      "UpBody": {
+        "type": "object",
+        "properties": {
+          "uploadId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The `uploadId` returned by POST /v1/source-uploads."
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "uploadId"
+        ]
+      },
       "DeploymentTelemetry": {
         "type": "object",
         "nullable": true,
@@ -4693,7 +4921,7 @@
           "Clusters"
         ],
         "summary": "Create a cluster",
-        "description": "Provisions a cluster (`clusterType` selects the shape: `eks` = Production, the self-hosted shape = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.",
+        "description": "Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.",
         "security": [
           {
             "apiKey": []
@@ -6639,6 +6867,527 @@
         }
       }
     },
+    "/v1/projects": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "List projects in the current organization",
+        "description": "A `Default` project is auto-seeded for orgs that have none yet, so this endpoint always returns at least one row.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Projects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Create a project",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProjectBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/projects/{projectId}": {
+      "get": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Get a project by ID",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "projectId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Update a project's name, color, or description",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "projectId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProjectBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Delete a project",
+        "description": "Soft-deletes the project. The Default project can't be deleted (`412`), and a project with live environments or deployments is blocked (`412`) until they're removed.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "projectId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteProjectResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/environments": {
       "get": {
         "tags": [
@@ -7629,6 +8378,9 @@
                       "environmentId": {
                         "type": "string"
                       },
+                      "projectId": {
+                        "type": "string"
+                      },
                       "registryId": {
                         "type": "string"
                       },
@@ -8123,6 +8875,9 @@
                         "maxLength": 63
                       },
                       "environmentId": {
+                        "type": "string"
+                      },
+                      "projectId": {
                         "type": "string"
                       },
                       "registryId": {
@@ -8621,6 +9376,9 @@
                       "environmentId": {
                         "type": "string"
                       },
+                      "projectId": {
+                        "type": "string"
+                      },
                       "registryId": {
                         "type": "string"
                       },
@@ -8893,6 +9651,9 @@
                         "maxLength": 63
                       },
                       "environmentId": {
+                        "type": "string"
+                      },
+                      "projectId": {
                         "type": "string"
                       },
                       "config": {
@@ -9172,6 +9933,9 @@
                       "environmentId": {
                         "type": "string"
                       },
+                      "projectId": {
+                        "type": "string"
+                      },
                       "config": {
                         "type": "object",
                         "properties": {
@@ -9311,6 +10075,9 @@
                         "maxLength": 63
                       },
                       "environmentId": {
+                        "type": "string"
+                      },
+                      "projectId": {
                         "type": "string"
                       },
                       "github": {
@@ -10314,6 +11081,112 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CacheConnectionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/connect-session": {
+      "post": {
+        "tags": [
+          "Deployments"
+        ],
+        "summary": "Open a direct connection session to a database",
+        "description": "Mints a single-use, short-lived ticket for a direct tunnel to a managed database deployment. Databases only. Present the ticket to the returned relay URL to establish the connection.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Connection session created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectSessionResult"
                 }
               }
             }
@@ -12720,6 +13593,218 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RebuildResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/source-uploads": {
+      "post": {
+        "tags": [
+          "Revisions"
+        ],
+        "summary": "Presign an upload slot for local source",
+        "description": "Mints a short-lived upload slot for `okctl up`: returns an `uploadId` plus a pre-signed URL to PUT a gzipped tarball of the working tree to. Pass the `uploadId` to POST /v1/deployments/{deploymentId}/up to build and deploy it.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Upload slot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/up": {
+      "post": {
+        "tags": [
+          "Revisions"
+        ],
+        "summary": "Build and deploy previously uploaded local source",
+        "description": "Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Queued build",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpResult"
                 }
               }
             }

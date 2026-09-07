@@ -96,6 +96,23 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
   - `cmd/domains/` (alias `custom-domains`): `domains list|add|verify|delete
     (unlink)` — link custom hostnames to a deployment. Wrappers in
     `internal/client/domains.go`.
+  - `cmd/link/`: top-level `link` / `unlink` (NOT a `New()` group — exports
+    `Link()` + `Unlink()`, registered directly). Binds the current directory to
+    an org/cluster/environment/deployment for later commands to infer their
+    target; `--init` scaffolds an `ownkube.yaml`. Interactive pickers via
+    `prompt.Select`, or `--organization/--cluster/--environment/--service` for
+    CI. Structured mode errors instead of prompting. No client wrapper — reuses
+    existing list/get reads. Imports `internal/link` aliased as `linkstore`.
+  - `cmd/up/`: top-level `up` (exports `New()`). Builds + deploys the current
+    directory's LOCAL working tree (uncommitted edits included), not a committed
+    git revision. Flow: presign an upload slot → tar+gzip the tree (`archive.go`;
+    honours `.gitignore` via `git ls-files -co --exclude-standard`, else walks
+    minus `.git`) → PUT to the pre-signed URL → trigger build → `follow()` streams
+    build logs + revision status to a terminal state. Target deployment from
+    `--service` or this directory's link; `--note`, `--path`, `--no-follow`.
+    Wrappers in `internal/client/source_upload.go` (`PresignSourceUpload`,
+    `UploadSource` — bare `net/http` PUT, the URL self-authenticates —
+    `DeployFromUpload`).
   - `cmd/internal/ux/`: shared helpers — `RequireClient`, `Print`, `Deref`,
     `ReadFileOrStdin`, `IsStructured`, `APIURL`, `Config`, `OpenBrowser`. Set
     once per invocation by `cmd/root.go`'s `PersistentPreRunE` via `ux.Set(...)`.
@@ -106,8 +123,15 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
   error handling). One method per endpoint.
 - **internal/config/**: Config + credentials YAML file management
   (`~/.config/ownkube/`).
+- **internal/link/**: Per-directory resource binding store — `links.yaml` in the
+  config dir, keyed by git-root abs path (via `ResolveKey`), ids only, 0600,
+  never committed. `Manager` with `Get/Set/Remove`.
+- **internal/manifest/**: `ownkube.yaml` read/write — the committed, hand-editable
+  deploy spec (`Load/Write/Exists/JSON`). No ids, no secret values. Feeds `deploy
+  create -f` in later phases.
 - **internal/output/**: Table/JSON/YAML output formatter.
-- **internal/prompt/**: Terminal input helpers (secret input, confirmations).
+- **internal/prompt/**: Terminal input helpers (secret input, confirmations,
+  `Select` numbered picker). Prompts go to stderr so stdout stays clean.
 - **internal/version/**: Build version info (set via ldflags).
 - **api/openapi.json**: OpenAPI spec copied from ownkube-app (source of truth).
 

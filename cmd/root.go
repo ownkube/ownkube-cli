@@ -17,9 +17,11 @@ import (
 	"github.com/ownkube/okctl/cmd/domains"
 	"github.com/ownkube/okctl/cmd/environments"
 	"github.com/ownkube/okctl/cmd/internal/ux"
+	"github.com/ownkube/okctl/cmd/link"
 	"github.com/ownkube/okctl/cmd/organizations"
 	"github.com/ownkube/okctl/cmd/regions"
 	"github.com/ownkube/okctl/cmd/registries"
+	"github.com/ownkube/okctl/cmd/up"
 	"github.com/ownkube/okctl/cmd/usage"
 	cfgpkg "github.com/ownkube/okctl/internal/config"
 	"github.com/spf13/cobra"
@@ -80,6 +82,9 @@ func init() {
 		awscmd.New(),
 		clusters.New(),
 		environments.New(),
+		link.Link(),
+		link.Unlink(),
+		up.New(),
 		organizations.New(),
 		registries.New(),
 		regions.New(),

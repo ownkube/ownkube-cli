@@ -137,8 +137,10 @@ func runLogin(cmd *cobra.Command, args []string) error {
 			return
 		}
 
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, htmlPage("Authorization Successful", "You can close this window and return to the terminal."))
+		// Land the browser on the dashboard once the key is captured, instead of a
+		// dead-end "you can close this window" page. The key handoff still happens
+		// via this request's query params; the redirect is only the response body.
+		http.Redirect(w, r, ux.APIURL()+"/dashboard", http.StatusFound)
 		resultCh <- callbackResult{apiKey: apiKey}
 	})
 

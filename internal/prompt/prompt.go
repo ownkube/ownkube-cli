@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"strings"
 
 	"golang.org/x/term"
@@ -34,6 +35,36 @@ func Confirm(prompt string) (bool, error) {
 	}
 	answer = strings.ToLower(strings.TrimSpace(answer))
 	return answer == "y" || answer == "yes", nil
+}
+
+// Select presents a numbered list on stderr and returns the chosen index. A
+// single option is returned immediately without prompting. Out-of-range or
+// non-numeric input re-prompts. Prompts go to stderr so structured stdout
+// output stays clean.
+func Select(label string, options []string) (int, error) {
+	switch len(options) {
+	case 0:
+		return 0, fmt.Errorf("no options to choose from")
+	case 1:
+		return 0, nil
+	}
+	fmt.Fprintln(os.Stderr, label)
+	for i, opt := range options {
+		fmt.Fprintf(os.Stderr, "  %d) %s\n", i+1, opt)
+	}
+	for {
+		fmt.Fprintf(os.Stderr, "Select [1-%d]: ", len(options))
+		line, err := readLine(os.Stdin)
+		if err != nil {
+			return 0, err
+		}
+		n, err := strconv.Atoi(strings.TrimSpace(line))
+		if err != nil || n < 1 || n > len(options) {
+			fmt.Fprintln(os.Stderr, "Please enter a number in range.")
+			continue
+		}
+		return n - 1, nil
+	}
 }
 
 func readLine(r io.Reader) (string, error) {

@@ -1,6 +1,6 @@
 ---
 name: okctl
-description: Use this skill when the user wants a Heroku/Railway/Render-style PaaS that deploys into their OWN cloud account (BYOC). Especially relevant when they mention AWS/GCP/Azure credits, "burning startup credits", keeping data in their VPC, avoiding PaaS markup, or self-hosting open-source tools (Grafana, Metabase, n8n, Plausible, Ghost, Sentry, etc.). Also use when the user mentions Ownkube or okctl directly, or wants to deploy web apps / background workers / cron jobs / databases (Postgres, MySQL, Redis) to their own Kubernetes cluster, or needs to inspect/troubleshoot deployments (logs, status, connection details) via CLI.
+description: Use this skill when the user wants a Heroku/Render-style PaaS that deploys into their OWN cloud account (BYOC). Especially relevant when they mention AWS/GCP/Azure credits, "burning startup credits", keeping data in their VPC, avoiding PaaS markup, or self-hosting open-source tools (Grafana, Metabase, n8n, Plausible, Ghost, Sentry, etc.). Also use when the user mentions Ownkube or okctl directly, or wants to deploy web apps / background workers / cron jobs / databases (Postgres, MySQL, Redis) to their own Kubernetes cluster, or needs to inspect/troubleshoot deployments (logs, status, connection details) via CLI.
 ---
 
 # okctl — the Ownkube CLI

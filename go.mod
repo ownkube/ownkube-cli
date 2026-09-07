@@ -4,6 +4,7 @@ go 1.26.0
 
 require (
 	github.com/getkin/kin-openapi v0.138.0
+	github.com/google/uuid v1.6.0
 	github.com/oapi-codegen/runtime v1.4.1
 	github.com/spf13/cobra v1.10.2
 	golang.org/x/term v0.43.0
@@ -14,7 +15,6 @@ require (
 	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/go-openapi/jsonpointer v0.23.1 // indirect
 	github.com/go-openapi/swag/jsonname v0.26.0 // indirect
-	github.com/google/uuid v1.6.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/mailru/easyjson v0.9.2 // indirect

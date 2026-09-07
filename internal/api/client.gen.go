@@ -199,6 +199,21 @@ func (e BuilderSizeResultBuilderSize) Valid() bool {
 	}
 }
 
+// Defines values for ConnectSessionResultProtocol.
+const (
+	ConnectSessionResultProtocolPostgres ConnectSessionResultProtocol = "postgres"
+)
+
+// Valid indicates whether the value is a known member of the ConnectSessionResultProtocol enum.
+func (e ConnectSessionResultProtocol) Valid() bool {
+	switch e {
+	case ConnectSessionResultProtocolPostgres:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for CreateDeploymentResponseResourceType.
 const (
 	CreateDeploymentResponseResourceTypeCache    CreateDeploymentResponseResourceType = "cache"
@@ -250,6 +265,33 @@ func (e CreateEnvironmentBodyColor) Valid() bool {
 	case CreateEnvironmentBodyColorPurple:
 		return true
 	case CreateEnvironmentBodyColorRed:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateProjectBodyColor.
+const (
+	CreateProjectBodyColorAmber  CreateProjectBodyColor = "amber"
+	CreateProjectBodyColorBlue   CreateProjectBodyColor = "blue"
+	CreateProjectBodyColorGreen  CreateProjectBodyColor = "green"
+	CreateProjectBodyColorPurple CreateProjectBodyColor = "purple"
+	CreateProjectBodyColorRed    CreateProjectBodyColor = "red"
+)
+
+// Valid indicates whether the value is a known member of the CreateProjectBodyColor enum.
+func (e CreateProjectBodyColor) Valid() bool {
+	switch e {
+	case CreateProjectBodyColorAmber:
+		return true
+	case CreateProjectBodyColorBlue:
+		return true
+	case CreateProjectBodyColorGreen:
+		return true
+	case CreateProjectBodyColorPurple:
+		return true
+	case CreateProjectBodyColorRed:
 		return true
 	default:
 		return false
@@ -658,6 +700,33 @@ func (e UpdateFunctionBodyConfigTriggersHttpAuthType) Valid() bool {
 	case UpdateFunctionBodyConfigTriggersHttpAuthTypeIam:
 		return true
 	case UpdateFunctionBodyConfigTriggersHttpAuthTypeNone:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for UpdateProjectBodyColor.
+const (
+	UpdateProjectBodyColorAmber  UpdateProjectBodyColor = "amber"
+	UpdateProjectBodyColorBlue   UpdateProjectBodyColor = "blue"
+	UpdateProjectBodyColorGreen  UpdateProjectBodyColor = "green"
+	UpdateProjectBodyColorPurple UpdateProjectBodyColor = "purple"
+	UpdateProjectBodyColorRed    UpdateProjectBodyColor = "red"
+)
+
+// Valid indicates whether the value is a known member of the UpdateProjectBodyColor enum.
+func (e UpdateProjectBodyColor) Valid() bool {
+	switch e {
+	case UpdateProjectBodyColorAmber:
+		return true
+	case UpdateProjectBodyColorBlue:
+		return true
+	case UpdateProjectBodyColorGreen:
+		return true
+	case UpdateProjectBodyColorPurple:
+		return true
+	case UpdateProjectBodyColorRed:
 		return true
 	default:
 		return false
@@ -1766,6 +1835,27 @@ type ClusterStatusResponse struct {
 	StatusMessage        *string     `json:"statusMessage,omitempty"`
 }
 
+// ConnectSessionResult defines model for ConnectSessionResult.
+type ConnectSessionResult struct {
+	// ExpiresAt Epoch seconds after which the ticket is no longer valid.
+	ExpiresAt float32 `json:"expiresAt"`
+
+	// Protocol Wire protocol of the target (databases only).
+	Protocol ConnectSessionResultProtocol `json:"protocol"`
+
+	// RelayUrl The relay endpoint the CLI dials.
+	RelayUrl string `json:"relayUrl"`
+
+	// SessionId Opaque connect session id.
+	SessionId string `json:"sessionId"`
+
+	// Ticket Single-use, short-lived ticket. Present it to the relay to open the tunnel; it cannot be reused.
+	Ticket string `json:"ticket"`
+}
+
+// ConnectSessionResultProtocol Wire protocol of the target (databases only).
+type ConnectSessionResultProtocol string
+
 // ConnectionDetailsResponse defines model for ConnectionDetailsResponse.
 type ConnectionDetailsResponse struct {
 	Details              map[string]interface{} `json:"details"`
@@ -1842,12 +1932,29 @@ type CreateEnvironmentBody struct {
 	Description *string                     `json:"description,omitempty"`
 	Name        string                      `json:"name"`
 
+	// ProjectId Owning project. Omit to use the organization's default project.
+	ProjectId *string `json:"projectId,omitempty"`
+
 	// Slug Lowercase, starts with a letter; letters, numbers, hyphens only.
 	Slug string `json:"slug"`
 }
 
 // CreateEnvironmentBodyColor Accent color. Defaults to `blue`.
 type CreateEnvironmentBodyColor string
+
+// CreateProjectBody defines model for CreateProjectBody.
+type CreateProjectBody struct {
+	// Color Accent color. Defaults to `blue`.
+	Color       *CreateProjectBodyColor `json:"color,omitempty"`
+	Description *string                 `json:"description,omitempty"`
+	Name        string                  `json:"name"`
+
+	// Slug Lowercase, starts with a letter; letters, numbers, hyphens only.
+	Slug string `json:"slug"`
+}
+
+// CreateProjectBodyColor Accent color. Defaults to `blue`.
+type CreateProjectBodyColor string
 
 // CreditBalance Live wallet balance, or null if the org has none yet.
 type CreditBalance struct {
@@ -1928,6 +2035,11 @@ type DeleteDeploymentResponse struct {
 
 // DeleteEnvironmentResponse defines model for DeleteEnvironmentResponse.
 type DeleteEnvironmentResponse struct {
+	Success bool `json:"success"`
+}
+
+// DeleteProjectResponse defines model for DeleteProjectResponse.
+type DeleteProjectResponse struct {
 	Success bool `json:"success"`
 }
 
@@ -2247,6 +2359,35 @@ type OrganizationSummary_CreatedAt struct {
 	union json.RawMessage
 }
 
+// Project defines model for Project.
+type Project struct {
+	Color            *string            `json:"color,omitempty"`
+	CreatedAt        *Project_CreatedAt `json:"createdAt,omitempty"`
+	DeploymentCount  *float32           `json:"deploymentCount,omitempty"`
+	Description      *string            `json:"description,omitempty"`
+	EnvironmentCount *float32           `json:"environmentCount,omitempty"`
+	Id               string             `json:"id"`
+	IsDefault        *bool              `json:"isDefault,omitempty"`
+	Name             string             `json:"name"`
+	Slug             string             `json:"slug"`
+}
+
+// ProjectCreatedAt0 defines model for Project.CreatedAt.0.
+type ProjectCreatedAt0 = string
+
+// ProjectCreatedAt1 defines model for Project.CreatedAt.1.
+type ProjectCreatedAt1 = time.Time
+
+// Project_CreatedAt defines model for Project.CreatedAt.
+type Project_CreatedAt struct {
+	union json.RawMessage
+}
+
+// ProjectListResponse defines model for ProjectListResponse.
+type ProjectListResponse struct {
+	Projects []Project `json:"projects"`
+}
+
 // ProjectedMonthCostResponse defines model for ProjectedMonthCostResponse.
 type ProjectedMonthCostResponse struct {
 	MtdCostUsd  float32                                `json:"mtdCostUsd"`
@@ -2500,6 +2641,21 @@ type SetMaintenanceBody struct {
 	Message *string `json:"message,omitempty"`
 }
 
+// SourceUploadResponse defines model for SourceUploadResponse.
+type SourceUploadResponse struct {
+	// ContentType Content-Type the upload PUT must set (matches the presign).
+	ContentType string `json:"contentType"`
+
+	// ExpiresAt ISO expiry of the upload URL.
+	ExpiresAt string `json:"expiresAt"`
+
+	// UploadId Opaque id echoed back to the deploy call to identify this upload.
+	UploadId string `json:"uploadId"`
+
+	// UploadUrl Pre-signed URL to PUT the gzipped source tarball to.
+	UploadUrl string `json:"uploadUrl"`
+}
+
 // SpendControls The org's spend controls, or null when compute is off.
 type SpendControls struct {
 	// AlertThresholdsPct Percent-of-budget thresholds that fire a spend alert.
@@ -2557,6 +2713,19 @@ type TriggerJobRunResult struct {
 // UnlinkCustomDomainResponse defines model for UnlinkCustomDomainResponse.
 type UnlinkCustomDomainResponse struct {
 	Removed bool `json:"removed"`
+}
+
+// UpBody defines model for UpBody.
+type UpBody struct {
+	Note *string `json:"note,omitempty"`
+
+	// UploadId The `uploadId` returned by POST /v1/source-uploads.
+	UploadId openapi_types.UUID `json:"uploadId"`
+}
+
+// UpResult defines model for UpResult.
+type UpResult struct {
+	RevisionId string `json:"revisionId"`
 }
 
 // UpdateDeploymentBody defines model for UpdateDeploymentBody.
@@ -2829,6 +2998,16 @@ type UpdateFunctionBodyConfigArchitecture string
 
 // UpdateFunctionBodyConfigTriggersHttpAuthType defines model for UpdateFunctionBody.Config.Triggers.Http.AuthType.
 type UpdateFunctionBodyConfigTriggersHttpAuthType string
+
+// UpdateProjectBody defines model for UpdateProjectBody.
+type UpdateProjectBody struct {
+	Color       *UpdateProjectBodyColor `json:"color,omitempty"`
+	Description *string                 `json:"description,omitempty"`
+	Name        *string                 `json:"name,omitempty"`
+}
+
+// UpdateProjectBodyColor defines model for UpdateProjectBody.Color.
+type UpdateProjectBodyColor string
 
 // UpdateSpendControlsBody defines model for UpdateSpendControlsBody.
 type UpdateSpendControlsBody struct {
@@ -3135,6 +3314,7 @@ type PostV1DeploymentsJSONBody0 struct {
 		ServiceSlug    *string                                      `json:"serviceSlug,omitempty"`
 	} `json:"github,omitempty"`
 	Name         string                                 `json:"name"`
+	ProjectId    *string                                `json:"projectId,omitempty"`
 	Region       *string                                `json:"region,omitempty"`
 	RegistryId   *string                                `json:"registryId,omitempty"`
 	ResourceType PostV1DeploymentsJSONBody0ResourceType `json:"resourceType"`
@@ -3263,6 +3443,7 @@ type PostV1DeploymentsJSONBody1 struct {
 		ServiceSlug    *string                                      `json:"serviceSlug,omitempty"`
 	} `json:"github,omitempty"`
 	Name         string                                 `json:"name"`
+	ProjectId    *string                                `json:"projectId,omitempty"`
 	Region       *string                                `json:"region,omitempty"`
 	RegistryId   *string                                `json:"registryId,omitempty"`
 	ResourceType PostV1DeploymentsJSONBody1ResourceType `json:"resourceType"`
@@ -3338,6 +3519,7 @@ type PostV1DeploymentsJSONBody2 struct {
 		ServiceSlug    *string                                      `json:"serviceSlug,omitempty"`
 	} `json:"github,omitempty"`
 	Name         string                                 `json:"name"`
+	ProjectId    *string                                `json:"projectId,omitempty"`
 	Region       *string                                `json:"region,omitempty"`
 	RegistryId   *string                                `json:"registryId,omitempty"`
 	ResourceType PostV1DeploymentsJSONBody2ResourceType `json:"resourceType"`
@@ -3416,6 +3598,7 @@ type PostV1DeploymentsJSONBody3 struct {
 	} `json:"config"`
 	EnvironmentId *string                                `json:"environmentId,omitempty"`
 	Name          string                                 `json:"name"`
+	ProjectId     *string                                `json:"projectId,omitempty"`
 	Region        *string                                `json:"region,omitempty"`
 	ResourceType  PostV1DeploymentsJSONBody3ResourceType `json:"resourceType"`
 }
@@ -3466,6 +3649,7 @@ type PostV1DeploymentsJSONBody4 struct {
 	} `json:"config"`
 	EnvironmentId *string                                `json:"environmentId,omitempty"`
 	Name          string                                 `json:"name"`
+	ProjectId     *string                                `json:"projectId,omitempty"`
 	Region        *string                                `json:"region,omitempty"`
 	ResourceType  PostV1DeploymentsJSONBody4ResourceType `json:"resourceType"`
 }
@@ -3531,6 +3715,7 @@ type PostV1DeploymentsJSONBody5 struct {
 		ServiceSlug    *string                                      `json:"serviceSlug,omitempty"`
 	} `json:"github"`
 	Name         string                                 `json:"name"`
+	ProjectId    *string                                `json:"projectId,omitempty"`
 	Region       string                                 `json:"region"`
 	ResourceType PostV1DeploymentsJSONBody5ResourceType `json:"resourceType"`
 }
@@ -3691,6 +3876,9 @@ type PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody = R
 // PutV1DeploymentsDeploymentIdSubdomainJSONRequestBody defines body for PutV1DeploymentsDeploymentIdSubdomain for application/json ContentType.
 type PutV1DeploymentsDeploymentIdSubdomainJSONRequestBody = ChangeSubdomainBody
 
+// PostV1DeploymentsDeploymentIdUpJSONRequestBody defines body for PostV1DeploymentsDeploymentIdUp for application/json ContentType.
+type PostV1DeploymentsDeploymentIdUpJSONRequestBody = UpBody
+
 // PostV1EnvironmentsJSONRequestBody defines body for PostV1Environments for application/json ContentType.
 type PostV1EnvironmentsJSONRequestBody = CreateEnvironmentBody
 
@@ -3699,6 +3887,12 @@ type PatchV1EnvironmentsEnvironmentIdJSONRequestBody = UpdateEnvironmentBody
 
 // PutV1EnvironmentsEnvironmentIdEnvJSONRequestBody defines body for PutV1EnvironmentsEnvironmentIdEnv for application/json ContentType.
 type PutV1EnvironmentsEnvironmentIdEnvJSONRequestBody = SetEnvVarsBody
+
+// PostV1ProjectsJSONRequestBody defines body for PostV1Projects for application/json ContentType.
+type PostV1ProjectsJSONRequestBody = CreateProjectBody
+
+// PatchV1ProjectsProjectIdJSONRequestBody defines body for PatchV1ProjectsProjectId for application/json ContentType.
+type PatchV1ProjectsProjectIdJSONRequestBody = UpdateProjectBody
 
 // PutV1SpendControlsJSONRequestBody defines body for PutV1SpendControls for application/json ContentType.
 type PutV1SpendControlsJSONRequestBody = UpdateSpendControlsBody
@@ -5973,6 +6167,68 @@ func (t *OrganizationSummary_CreatedAt) UnmarshalJSON(b []byte) error {
 	return err
 }
 
+// AsProjectCreatedAt0 returns the union data inside the Project_CreatedAt as a ProjectCreatedAt0
+func (t Project_CreatedAt) AsProjectCreatedAt0() (ProjectCreatedAt0, error) {
+	var body ProjectCreatedAt0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromProjectCreatedAt0 overwrites any union data inside the Project_CreatedAt as the provided ProjectCreatedAt0
+func (t *Project_CreatedAt) FromProjectCreatedAt0(v ProjectCreatedAt0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeProjectCreatedAt0 performs a merge with any union data inside the Project_CreatedAt, using the provided ProjectCreatedAt0
+func (t *Project_CreatedAt) MergeProjectCreatedAt0(v ProjectCreatedAt0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsProjectCreatedAt1 returns the union data inside the Project_CreatedAt as a ProjectCreatedAt1
+func (t Project_CreatedAt) AsProjectCreatedAt1() (ProjectCreatedAt1, error) {
+	var body ProjectCreatedAt1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromProjectCreatedAt1 overwrites any union data inside the Project_CreatedAt as the provided ProjectCreatedAt1
+func (t *Project_CreatedAt) FromProjectCreatedAt1(v ProjectCreatedAt1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeProjectCreatedAt1 performs a merge with any union data inside the Project_CreatedAt, using the provided ProjectCreatedAt1
+func (t *Project_CreatedAt) MergeProjectCreatedAt1(v ProjectCreatedAt1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t Project_CreatedAt) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *Project_CreatedAt) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
 // AsProjectedMonthCostResponsePeriodEnd0 returns the union data inside the ProjectedMonthCostResponse_PeriodEnd as a ProjectedMonthCostResponsePeriodEnd0
 func (t ProjectedMonthCostResponse_PeriodEnd) AsProjectedMonthCostResponsePeriodEnd0() (ProjectedMonthCostResponsePeriodEnd0, error) {
 	var body ProjectedMonthCostResponsePeriodEnd0
@@ -7179,7 +7435,7 @@ type ClientInterface interface {
 
 	// PostV1ClustersWithBody Create a cluster
 	//
-	// Provisions a cluster (`clusterType` selects the shape: `eks` = Production, the self-hosted shape = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.
+	// Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.
 	//
 	// Takes any type of body and a specified content type.
 	//
@@ -7188,7 +7444,7 @@ type ClientInterface interface {
 
 	// PostV1Clusters Create a cluster
 	//
-	// Provisions a cluster (`clusterType` selects the shape: `eks` = Production, the self-hosted shape = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.
+	// Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.
 	//
 	// Takes a body of the `application/json` content type.
 	//
@@ -7405,6 +7661,13 @@ type ClientInterface interface {
 	//
 	// Corresponds with GET /v1/deployments/{deploymentId}/cache-connection (the `GetV1DeploymentsDeploymentIdCacheConnection` operationId).
 	GetV1DeploymentsDeploymentIdCacheConnection(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1DeploymentsDeploymentIdConnectSession Open a direct connection session to a database
+	//
+	// Mints a single-use, short-lived ticket for a direct tunnel to a managed database deployment. Databases only. Present the ticket to the returned relay URL to establish the connection.
+	//
+	// Corresponds with POST /v1/deployments/{deploymentId}/connect-session (the `PostV1DeploymentsDeploymentIdConnectSession` operationId).
+	PostV1DeploymentsDeploymentIdConnectSession(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1DeploymentsDeploymentIdConnection Get database connection details
 	//
@@ -7686,6 +7949,24 @@ type ClientInterface interface {
 	// Corresponds with GET /v1/deployments/{deploymentId}/telemetry/function (the `GetV1DeploymentsDeploymentIdTelemetryFunction` operationId).
 	GetV1DeploymentsDeploymentIdTelemetryFunction(ctx context.Context, deploymentId string, params *GetV1DeploymentsDeploymentIdTelemetryFunctionParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// PostV1DeploymentsDeploymentIdUpWithBody Build and deploy previously uploaded local source
+	//
+	// Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.
+	//
+	// Takes any type of body and a specified content type.
+	//
+	// Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
+	PostV1DeploymentsDeploymentIdUpWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1DeploymentsDeploymentIdUp Build and deploy previously uploaded local source
+	//
+	// Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.
+	//
+	// Takes a body of the `application/json` content type.
+	//
+	// Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
+	PostV1DeploymentsDeploymentIdUp(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdUpJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetV1Environments List environments in the current organization
 	//
 	// Default `Development` and `Production` environments are auto-seeded for orgs that have none yet, so this endpoint always returns at least two rows.
@@ -7772,6 +8053,53 @@ type ClientInterface interface {
 	// Corresponds with POST /v1/portal (the `PostV1Portal` operationId).
 	PostV1Portal(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetV1Projects List projects in the current organization
+	//
+	// A `Default` project is auto-seeded for orgs that have none yet, so this endpoint always returns at least one row.
+	//
+	// Corresponds with GET /v1/projects (the `GetV1Projects` operationId).
+	GetV1Projects(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1ProjectsWithBody Create a project
+	//
+	// Takes any type of body and a specified content type.
+	//
+	// Corresponds with POST /v1/projects (the `PostV1Projects` operationId).
+	PostV1ProjectsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1Projects Create a project
+	//
+	// Takes a body of the `application/json` content type.
+	//
+	// Corresponds with POST /v1/projects (the `PostV1Projects` operationId).
+	PostV1Projects(ctx context.Context, body PostV1ProjectsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteV1ProjectsProjectId Delete a project
+	//
+	// Soft-deletes the project. The Default project can't be deleted (`412`), and a project with live environments or deployments is blocked (`412`) until they're removed.
+	//
+	// Corresponds with DELETE /v1/projects/{projectId} (the `DeleteV1ProjectsProjectId` operationId).
+	DeleteV1ProjectsProjectId(ctx context.Context, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetV1ProjectsProjectId Get a project by ID
+	//
+	// Corresponds with GET /v1/projects/{projectId} (the `GetV1ProjectsProjectId` operationId).
+	GetV1ProjectsProjectId(ctx context.Context, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PatchV1ProjectsProjectIdWithBody Update a project's name, color, or description
+	//
+	// Takes any type of body and a specified content type.
+	//
+	// Corresponds with PATCH /v1/projects/{projectId} (the `PatchV1ProjectsProjectId` operationId).
+	PatchV1ProjectsProjectIdWithBody(ctx context.Context, projectId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PatchV1ProjectsProjectId Update a project's name, color, or description
+	//
+	// Takes a body of the `application/json` content type.
+	//
+	// Corresponds with PATCH /v1/projects/{projectId} (the `PatchV1ProjectsProjectId` operationId).
+	PatchV1ProjectsProjectId(ctx context.Context, projectId string, body PatchV1ProjectsProjectIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetV1Regions List Ownkube Compute regions
 	//
 	// Lists the regions available for deploying on Ownkube Compute (the shared, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
@@ -7788,6 +8116,13 @@ type ClientInterface interface {
 	//
 	// Corresponds with GET /v1/registries/{registryId} (the `GetV1RegistriesRegistryId` operationId).
 	GetV1RegistriesRegistryId(ctx context.Context, registryId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1SourceUploads Presign an upload slot for local source
+	//
+	// Mints a short-lived upload slot for `okctl up`: returns an `uploadId` plus a pre-signed URL to PUT a gzipped tarball of the working tree to. Pass the `uploadId` to POST /v1/deployments/{deploymentId}/up to build and deploy it.
+	//
+	// Corresponds with POST /v1/source-uploads (the `PostV1SourceUploads` operationId).
+	PostV1SourceUploads(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1SpendControls Get spend controls (budget cap + alerts)
 	//
@@ -8128,7 +8463,7 @@ func (c *Client) GetV1Clusters(ctx context.Context, reqEditors ...RequestEditorF
 
 // PostV1ClustersWithBody Create a cluster
 //
-// Provisions a cluster (`clusterType` selects the shape: `eks` = Production, the self-hosted shape = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.
+// Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.
 //
 // Takes any type of body and a specified content type.
 //
@@ -8147,7 +8482,7 @@ func (c *Client) PostV1ClustersWithBody(ctx context.Context, contentType string,
 
 // PostV1Clusters Create a cluster
 //
-// Provisions a cluster (`clusterType` selects the shape: `eks` = Production, the self-hosted shape = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.
+// Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.
 //
 // Takes a body of the `application/json` content type.
 //
@@ -8635,6 +8970,23 @@ func (c *Client) PutV1DeploymentsDeploymentIdBuilderSize(ctx context.Context, de
 // Corresponds with GET /v1/deployments/{deploymentId}/cache-connection (the `GetV1DeploymentsDeploymentIdCacheConnection` operationId).
 func (c *Client) GetV1DeploymentsDeploymentIdCacheConnection(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetV1DeploymentsDeploymentIdCacheConnectionRequest(c.Server, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostV1DeploymentsDeploymentIdConnectSession Open a direct connection session to a database
+//
+// Mints a single-use, short-lived ticket for a direct tunnel to a managed database deployment. Databases only. Present the ticket to the returned relay URL to establish the connection.
+//
+// Corresponds with POST /v1/deployments/{deploymentId}/connect-session (the `PostV1DeploymentsDeploymentIdConnectSession` operationId).
+func (c *Client) PostV1DeploymentsDeploymentIdConnectSession(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdConnectSessionRequest(c.Server, deploymentId)
 	if err != nil {
 		return nil, err
 	}
@@ -9285,6 +9637,44 @@ func (c *Client) GetV1DeploymentsDeploymentIdTelemetryFunction(ctx context.Conte
 	return c.Client.Do(req)
 }
 
+// PostV1DeploymentsDeploymentIdUpWithBody Build and deploy previously uploaded local source
+//
+// Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.
+//
+// Takes any type of body and a specified content type.
+//
+// Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
+func (c *Client) PostV1DeploymentsDeploymentIdUpWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdUpRequestWithBody(c.Server, deploymentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostV1DeploymentsDeploymentIdUp Build and deploy previously uploaded local source
+//
+// Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.
+//
+// Takes a body of the `application/json` content type.
+//
+// Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
+func (c *Client) PostV1DeploymentsDeploymentIdUp(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdUpJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdUpRequest(c.Server, deploymentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GetV1Environments List environments in the current organization
 //
 // Default `Development` and `Production` environments are auto-seeded for orgs that have none yet, so this endpoint always returns at least two rows.
@@ -9491,6 +9881,123 @@ func (c *Client) PostV1Portal(ctx context.Context, reqEditors ...RequestEditorFn
 	return c.Client.Do(req)
 }
 
+// GetV1Projects List projects in the current organization
+//
+// A `Default` project is auto-seeded for orgs that have none yet, so this endpoint always returns at least one row.
+//
+// Corresponds with GET /v1/projects (the `GetV1Projects` operationId).
+func (c *Client) GetV1Projects(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetV1ProjectsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostV1ProjectsWithBody Create a project
+//
+// Takes any type of body and a specified content type.
+//
+// Corresponds with POST /v1/projects (the `PostV1Projects` operationId).
+func (c *Client) PostV1ProjectsWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1ProjectsRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostV1Projects Create a project
+//
+// Takes a body of the `application/json` content type.
+//
+// Corresponds with POST /v1/projects (the `PostV1Projects` operationId).
+func (c *Client) PostV1Projects(ctx context.Context, body PostV1ProjectsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1ProjectsRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteV1ProjectsProjectId Delete a project
+//
+// Soft-deletes the project. The Default project can't be deleted (`412`), and a project with live environments or deployments is blocked (`412`) until they're removed.
+//
+// Corresponds with DELETE /v1/projects/{projectId} (the `DeleteV1ProjectsProjectId` operationId).
+func (c *Client) DeleteV1ProjectsProjectId(ctx context.Context, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteV1ProjectsProjectIdRequest(c.Server, projectId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetV1ProjectsProjectId Get a project by ID
+//
+// Corresponds with GET /v1/projects/{projectId} (the `GetV1ProjectsProjectId` operationId).
+func (c *Client) GetV1ProjectsProjectId(ctx context.Context, projectId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetV1ProjectsProjectIdRequest(c.Server, projectId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PatchV1ProjectsProjectIdWithBody Update a project's name, color, or description
+//
+// Takes any type of body and a specified content type.
+//
+// Corresponds with PATCH /v1/projects/{projectId} (the `PatchV1ProjectsProjectId` operationId).
+func (c *Client) PatchV1ProjectsProjectIdWithBody(ctx context.Context, projectId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchV1ProjectsProjectIdRequestWithBody(c.Server, projectId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PatchV1ProjectsProjectId Update a project's name, color, or description
+//
+// Takes a body of the `application/json` content type.
+//
+// Corresponds with PATCH /v1/projects/{projectId} (the `PatchV1ProjectsProjectId` operationId).
+func (c *Client) PatchV1ProjectsProjectId(ctx context.Context, projectId string, body PatchV1ProjectsProjectIdJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchV1ProjectsProjectIdRequest(c.Server, projectId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GetV1Regions List Ownkube Compute regions
 //
 // Lists the regions available for deploying on Ownkube Compute (the shared, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
@@ -9528,6 +10035,23 @@ func (c *Client) GetV1Registries(ctx context.Context, reqEditors ...RequestEdito
 // Corresponds with GET /v1/registries/{registryId} (the `GetV1RegistriesRegistryId` operationId).
 func (c *Client) GetV1RegistriesRegistryId(ctx context.Context, registryId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetV1RegistriesRegistryIdRequest(c.Server, registryId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostV1SourceUploads Presign an upload slot for local source
+//
+// Mints a short-lived upload slot for `okctl up`: returns an `uploadId` plus a pre-signed URL to PUT a gzipped tarball of the working tree to. Pass the `uploadId` to POST /v1/deployments/{deploymentId}/up to build and deploy it.
+//
+// Corresponds with POST /v1/source-uploads (the `PostV1SourceUploads` operationId).
+func (c *Client) PostV1SourceUploads(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1SourceUploadsRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -11032,6 +11556,40 @@ func NewGetV1DeploymentsDeploymentIdCacheConnectionRequest(server string, deploy
 	return req, nil
 }
 
+// NewPostV1DeploymentsDeploymentIdConnectSessionRequest constructs an http.Request for the PostV1DeploymentsDeploymentIdConnectSession method
+func NewPostV1DeploymentsDeploymentIdConnectSessionRequest(server string, deploymentId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "deploymentId", deploymentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/connect-session", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetV1DeploymentsDeploymentIdConnectionRequest constructs an http.Request for the GetV1DeploymentsDeploymentIdConnection method
 func NewGetV1DeploymentsDeploymentIdConnectionRequest(server string, deploymentId string) (*http.Request, error) {
 	var err error
@@ -12498,6 +13056,53 @@ func NewGetV1DeploymentsDeploymentIdTelemetryFunctionRequest(server string, depl
 	return req, nil
 }
 
+// NewPostV1DeploymentsDeploymentIdUpRequest calls the generic PostV1DeploymentsDeploymentIdUp builder with application/json body
+func NewPostV1DeploymentsDeploymentIdUpRequest(server string, deploymentId string, body PostV1DeploymentsDeploymentIdUpJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1DeploymentsDeploymentIdUpRequestWithBody(server, deploymentId, "application/json", bodyReader)
+}
+
+// NewPostV1DeploymentsDeploymentIdUpRequestWithBody constructs an http.Request for the PostV1DeploymentsDeploymentIdUp method, with any body, and a specified content type
+func NewPostV1DeploymentsDeploymentIdUpRequestWithBody(server string, deploymentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "deploymentId", deploymentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/up", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewGetV1EnvironmentsRequest constructs an http.Request for the GetV1Environments method
 func NewGetV1EnvironmentsRequest(server string) (*http.Request, error) {
 	var err error
@@ -12808,6 +13413,188 @@ func NewPostV1PortalRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
+// NewGetV1ProjectsRequest constructs an http.Request for the GetV1Projects method
+func NewGetV1ProjectsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/projects")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostV1ProjectsRequest calls the generic PostV1Projects builder with application/json body
+func NewPostV1ProjectsRequest(server string, body PostV1ProjectsJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostV1ProjectsRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostV1ProjectsRequestWithBody constructs an http.Request for the PostV1Projects method, with any body, and a specified content type
+func NewPostV1ProjectsRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/projects")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteV1ProjectsProjectIdRequest constructs an http.Request for the DeleteV1ProjectsProjectId method
+func NewDeleteV1ProjectsProjectIdRequest(server string, projectId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "projectId", projectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/projects/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetV1ProjectsProjectIdRequest constructs an http.Request for the GetV1ProjectsProjectId method
+func NewGetV1ProjectsProjectIdRequest(server string, projectId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "projectId", projectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/projects/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPatchV1ProjectsProjectIdRequest calls the generic PatchV1ProjectsProjectId builder with application/json body
+func NewPatchV1ProjectsProjectIdRequest(server string, projectId string, body PatchV1ProjectsProjectIdJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPatchV1ProjectsProjectIdRequestWithBody(server, projectId, "application/json", bodyReader)
+}
+
+// NewPatchV1ProjectsProjectIdRequestWithBody constructs an http.Request for the PatchV1ProjectsProjectId method, with any body, and a specified content type
+func NewPatchV1ProjectsProjectIdRequestWithBody(server string, projectId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "projectId", projectId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/projects/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewGetV1RegionsRequest constructs an http.Request for the GetV1Regions method
 func NewGetV1RegionsRequest(server string) (*http.Request, error) {
 	var err error
@@ -12889,6 +13676,33 @@ func NewGetV1RegistriesRegistryIdRequest(server string, registryId string) (*htt
 	}
 
 	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostV1SourceUploadsRequest constructs an http.Request for the PostV1SourceUploads method
+func NewPostV1SourceUploadsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/source-uploads")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -13280,7 +14094,7 @@ type ClientWithResponsesInterface interface {
 
 	// PostV1ClustersWithBodyWithResponse Create a cluster
 	//
-	// Provisions a cluster (`clusterType` selects the shape: `eks` = Production, the self-hosted shape = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.
+	// Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.
 	//
 	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 	//
@@ -13289,7 +14103,7 @@ type ClientWithResponsesInterface interface {
 
 	// PostV1ClustersWithResponse Create a cluster
 	//
-	// Provisions a cluster (`clusterType` selects the shape: `eks` = Production, the self-hosted shape = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.
+	// Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.
 	//
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
@@ -13532,6 +14346,15 @@ type ClientWithResponsesInterface interface {
 	//
 	// Corresponds with GET /v1/deployments/{deploymentId}/cache-connection (the `GetV1DeploymentsDeploymentIdCacheConnection` operationId).
 	GetV1DeploymentsDeploymentIdCacheConnectionWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdCacheConnectionResponse, error)
+
+	// PostV1DeploymentsDeploymentIdConnectSessionWithResponse Open a direct connection session to a database
+	//
+	// Mints a single-use, short-lived ticket for a direct tunnel to a managed database deployment. Databases only. Present the ticket to the returned relay URL to establish the connection.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/deployments/{deploymentId}/connect-session (the `PostV1DeploymentsDeploymentIdConnectSession` operationId).
+	PostV1DeploymentsDeploymentIdConnectSessionWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdConnectSessionResponse, error)
 
 	// GetV1DeploymentsDeploymentIdConnectionWithResponse Get database connection details
 	//
@@ -13853,6 +14676,24 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with GET /v1/deployments/{deploymentId}/telemetry/function (the `GetV1DeploymentsDeploymentIdTelemetryFunction` operationId).
 	GetV1DeploymentsDeploymentIdTelemetryFunctionWithResponse(ctx context.Context, deploymentId string, params *GetV1DeploymentsDeploymentIdTelemetryFunctionParams, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdTelemetryFunctionResponse, error)
 
+	// PostV1DeploymentsDeploymentIdUpWithBodyWithResponse Build and deploy previously uploaded local source
+	//
+	// Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.
+	//
+	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
+	PostV1DeploymentsDeploymentIdUpWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdUpResponse, error)
+
+	// PostV1DeploymentsDeploymentIdUpWithResponse Build and deploy previously uploaded local source
+	//
+	// Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.
+	//
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
+	PostV1DeploymentsDeploymentIdUpWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdUpJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdUpResponse, error)
+
 	// GetV1EnvironmentsWithResponse List environments in the current organization
 	//
 	// Default `Development` and `Production` environments are auto-seeded for orgs that have none yet, so this endpoint always returns at least two rows.
@@ -13951,6 +14792,59 @@ type ClientWithResponsesInterface interface {
 	// Corresponds with POST /v1/portal (the `PostV1Portal` operationId).
 	PostV1PortalWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostV1PortalResponse, error)
 
+	// GetV1ProjectsWithResponse List projects in the current organization
+	//
+	// A `Default` project is auto-seeded for orgs that have none yet, so this endpoint always returns at least one row.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with GET /v1/projects (the `GetV1Projects` operationId).
+	GetV1ProjectsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1ProjectsResponse, error)
+
+	// PostV1ProjectsWithBodyWithResponse Create a project
+	//
+	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/projects (the `PostV1Projects` operationId).
+	PostV1ProjectsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1ProjectsResponse, error)
+
+	// PostV1ProjectsWithResponse Create a project
+	//
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/projects (the `PostV1Projects` operationId).
+	PostV1ProjectsWithResponse(ctx context.Context, body PostV1ProjectsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1ProjectsResponse, error)
+
+	// DeleteV1ProjectsProjectIdWithResponse Delete a project
+	//
+	// Soft-deletes the project. The Default project can't be deleted (`412`), and a project with live environments or deployments is blocked (`412`) until they're removed.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with DELETE /v1/projects/{projectId} (the `DeleteV1ProjectsProjectId` operationId).
+	DeleteV1ProjectsProjectIdWithResponse(ctx context.Context, projectId string, reqEditors ...RequestEditorFn) (*DeleteV1ProjectsProjectIdResponse, error)
+
+	// GetV1ProjectsProjectIdWithResponse Get a project by ID
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with GET /v1/projects/{projectId} (the `GetV1ProjectsProjectId` operationId).
+	GetV1ProjectsProjectIdWithResponse(ctx context.Context, projectId string, reqEditors ...RequestEditorFn) (*GetV1ProjectsProjectIdResponse, error)
+
+	// PatchV1ProjectsProjectIdWithBodyWithResponse Update a project's name, color, or description
+	//
+	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with PATCH /v1/projects/{projectId} (the `PatchV1ProjectsProjectId` operationId).
+	PatchV1ProjectsProjectIdWithBodyWithResponse(ctx context.Context, projectId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchV1ProjectsProjectIdResponse, error)
+
+	// PatchV1ProjectsProjectIdWithResponse Update a project's name, color, or description
+	//
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with PATCH /v1/projects/{projectId} (the `PatchV1ProjectsProjectId` operationId).
+	PatchV1ProjectsProjectIdWithResponse(ctx context.Context, projectId string, body PatchV1ProjectsProjectIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchV1ProjectsProjectIdResponse, error)
+
 	// GetV1RegionsWithResponse List Ownkube Compute regions
 	//
 	// Lists the regions available for deploying on Ownkube Compute (the shared, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
@@ -13973,6 +14867,15 @@ type ClientWithResponsesInterface interface {
 	//
 	// Corresponds with GET /v1/registries/{registryId} (the `GetV1RegistriesRegistryId` operationId).
 	GetV1RegistriesRegistryIdWithResponse(ctx context.Context, registryId string, reqEditors ...RequestEditorFn) (*GetV1RegistriesRegistryIdResponse, error)
+
+	// PostV1SourceUploadsWithResponse Presign an upload slot for local source
+	//
+	// Mints a short-lived upload slot for `okctl up`: returns an `uploadId` plus a pre-signed URL to PUT a gzipped tarball of the working tree to. Pass the `uploadId` to POST /v1/deployments/{deploymentId}/up to build and deploy it.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/source-uploads (the `PostV1SourceUploads` operationId).
+	PostV1SourceUploadsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostV1SourceUploadsResponse, error)
 
 	// GetV1SpendControlsWithResponse Get spend controls (budget cap + alerts)
 	//
@@ -17107,6 +18010,96 @@ func (r GetV1DeploymentsDeploymentIdCacheConnectionResponse) ContentType() strin
 	return ""
 }
 
+type PostV1DeploymentsDeploymentIdConnectSessionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ConnectSessionResult
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) GetJSON200() *ConnectSessionResult {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostV1DeploymentsDeploymentIdConnectSessionResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetV1DeploymentsDeploymentIdConnectionResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -19627,6 +20620,96 @@ func (r GetV1DeploymentsDeploymentIdTelemetryFunctionResponse) ContentType() str
 	return ""
 }
 
+type PostV1DeploymentsDeploymentIdUpResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *UpResult
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostV1DeploymentsDeploymentIdUpResponse) GetJSON200() *UpResult {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostV1DeploymentsDeploymentIdUpResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r PostV1DeploymentsDeploymentIdUpResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r PostV1DeploymentsDeploymentIdUpResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PostV1DeploymentsDeploymentIdUpResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PostV1DeploymentsDeploymentIdUpResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r PostV1DeploymentsDeploymentIdUpResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostV1DeploymentsDeploymentIdUpResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostV1DeploymentsDeploymentIdUpResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsDeploymentIdUpResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsDeploymentIdUpResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostV1DeploymentsDeploymentIdUpResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetV1EnvironmentsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -20395,6 +21478,456 @@ func (r PostV1PortalResponse) ContentType() string {
 	return ""
 }
 
+type GetV1ProjectsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ProjectListResponse
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetV1ProjectsResponse) GetJSON200() *ProjectListResponse {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetV1ProjectsResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetV1ProjectsResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetV1ProjectsResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetV1ProjectsResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r GetV1ProjectsResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r GetV1ProjectsResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetV1ProjectsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetV1ProjectsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetV1ProjectsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetV1ProjectsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetV1ProjectsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PostV1ProjectsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *Project
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostV1ProjectsResponse) GetJSON200() *Project {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostV1ProjectsResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r PostV1ProjectsResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r PostV1ProjectsResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PostV1ProjectsResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PostV1ProjectsResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r PostV1ProjectsResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostV1ProjectsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostV1ProjectsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1ProjectsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1ProjectsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostV1ProjectsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteV1ProjectsProjectIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *DeleteProjectResponse
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r DeleteV1ProjectsProjectIdResponse) GetJSON200() *DeleteProjectResponse {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r DeleteV1ProjectsProjectIdResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r DeleteV1ProjectsProjectIdResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r DeleteV1ProjectsProjectIdResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteV1ProjectsProjectIdResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r DeleteV1ProjectsProjectIdResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r DeleteV1ProjectsProjectIdResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteV1ProjectsProjectIdResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteV1ProjectsProjectIdResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteV1ProjectsProjectIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteV1ProjectsProjectIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteV1ProjectsProjectIdResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetV1ProjectsProjectIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *Project
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetV1ProjectsProjectIdResponse) GetJSON200() *Project {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetV1ProjectsProjectIdResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetV1ProjectsProjectIdResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetV1ProjectsProjectIdResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetV1ProjectsProjectIdResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r GetV1ProjectsProjectIdResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r GetV1ProjectsProjectIdResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetV1ProjectsProjectIdResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetV1ProjectsProjectIdResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetV1ProjectsProjectIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetV1ProjectsProjectIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetV1ProjectsProjectIdResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PatchV1ProjectsProjectIdResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *Project
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PatchV1ProjectsProjectIdResponse) GetJSON200() *Project {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PatchV1ProjectsProjectIdResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r PatchV1ProjectsProjectIdResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r PatchV1ProjectsProjectIdResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PatchV1ProjectsProjectIdResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PatchV1ProjectsProjectIdResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r PatchV1ProjectsProjectIdResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PatchV1ProjectsProjectIdResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PatchV1ProjectsProjectIdResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PatchV1ProjectsProjectIdResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PatchV1ProjectsProjectIdResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PatchV1ProjectsProjectIdResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetV1RegionsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -20659,6 +22192,96 @@ func (r GetV1RegistriesRegistryIdResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetV1RegistriesRegistryIdResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PostV1SourceUploadsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *SourceUploadResponse
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostV1SourceUploadsResponse) GetJSON200() *SourceUploadResponse {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostV1SourceUploadsResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r PostV1SourceUploadsResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r PostV1SourceUploadsResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PostV1SourceUploadsResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PostV1SourceUploadsResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r PostV1SourceUploadsResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostV1SourceUploadsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostV1SourceUploadsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1SourceUploadsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1SourceUploadsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostV1SourceUploadsResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -21529,7 +23152,7 @@ func (c *ClientWithResponses) GetV1ClustersWithResponse(ctx context.Context, req
 
 // PostV1ClustersWithBodyWithResponse Create a cluster
 //
-// Provisions a cluster (`clusterType` selects the shape: `eks` = Production, the self-hosted shape = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.
+// Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.
 //
 // Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 //
@@ -21544,7 +23167,7 @@ func (c *ClientWithResponses) PostV1ClustersWithBodyWithResponse(ctx context.Con
 
 // PostV1ClustersWithResponse Create a cluster
 //
-// Provisions a cluster (`clusterType` selects the shape: `eks` = Production, the self-hosted shape = Starter) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`.
+// Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.
 //
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
@@ -21954,6 +23577,21 @@ func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdCacheConnectionWithRes
 		return nil, err
 	}
 	return ParseGetV1DeploymentsDeploymentIdCacheConnectionResponse(rsp)
+}
+
+// PostV1DeploymentsDeploymentIdConnectSessionWithResponse Open a direct connection session to a database
+//
+// Mints a single-use, short-lived ticket for a direct tunnel to a managed database deployment. Databases only. Present the ticket to the returned relay URL to establish the connection.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/deployments/{deploymentId}/connect-session (the `PostV1DeploymentsDeploymentIdConnectSession` operationId).
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdConnectSessionWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdConnectSessionResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdConnectSession(ctx, deploymentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdConnectSessionResponse(rsp)
 }
 
 // GetV1DeploymentsDeploymentIdConnectionWithResponse Get database connection details
@@ -22492,6 +24130,36 @@ func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdTelemetryFunctionWithR
 	return ParseGetV1DeploymentsDeploymentIdTelemetryFunctionResponse(rsp)
 }
 
+// PostV1DeploymentsDeploymentIdUpWithBodyWithResponse Build and deploy previously uploaded local source
+//
+// Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.
+//
+// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdUpWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdUpResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdUpWithBody(ctx, deploymentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdUpResponse(rsp)
+}
+
+// PostV1DeploymentsDeploymentIdUpWithResponse Build and deploy previously uploaded local source
+//
+// Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.
+//
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdUpWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdUpJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdUpResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdUp(ctx, deploymentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdUpResponse(rsp)
+}
+
 // GetV1EnvironmentsWithResponse List environments in the current organization
 //
 // Default `Development` and `Production` environments are auto-seeded for orgs that have none yet, so this endpoint always returns at least two rows.
@@ -22662,6 +24330,101 @@ func (c *ClientWithResponses) PostV1PortalWithResponse(ctx context.Context, reqE
 	return ParsePostV1PortalResponse(rsp)
 }
 
+// GetV1ProjectsWithResponse List projects in the current organization
+//
+// A `Default` project is auto-seeded for orgs that have none yet, so this endpoint always returns at least one row.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with GET /v1/projects (the `GetV1Projects` operationId).
+func (c *ClientWithResponses) GetV1ProjectsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1ProjectsResponse, error) {
+	rsp, err := c.GetV1Projects(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetV1ProjectsResponse(rsp)
+}
+
+// PostV1ProjectsWithBodyWithResponse Create a project
+//
+// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/projects (the `PostV1Projects` operationId).
+func (c *ClientWithResponses) PostV1ProjectsWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostV1ProjectsResponse, error) {
+	rsp, err := c.PostV1ProjectsWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1ProjectsResponse(rsp)
+}
+
+// PostV1ProjectsWithResponse Create a project
+//
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/projects (the `PostV1Projects` operationId).
+func (c *ClientWithResponses) PostV1ProjectsWithResponse(ctx context.Context, body PostV1ProjectsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1ProjectsResponse, error) {
+	rsp, err := c.PostV1Projects(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1ProjectsResponse(rsp)
+}
+
+// DeleteV1ProjectsProjectIdWithResponse Delete a project
+//
+// Soft-deletes the project. The Default project can't be deleted (`412`), and a project with live environments or deployments is blocked (`412`) until they're removed.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with DELETE /v1/projects/{projectId} (the `DeleteV1ProjectsProjectId` operationId).
+func (c *ClientWithResponses) DeleteV1ProjectsProjectIdWithResponse(ctx context.Context, projectId string, reqEditors ...RequestEditorFn) (*DeleteV1ProjectsProjectIdResponse, error) {
+	rsp, err := c.DeleteV1ProjectsProjectId(ctx, projectId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteV1ProjectsProjectIdResponse(rsp)
+}
+
+// GetV1ProjectsProjectIdWithResponse Get a project by ID
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with GET /v1/projects/{projectId} (the `GetV1ProjectsProjectId` operationId).
+func (c *ClientWithResponses) GetV1ProjectsProjectIdWithResponse(ctx context.Context, projectId string, reqEditors ...RequestEditorFn) (*GetV1ProjectsProjectIdResponse, error) {
+	rsp, err := c.GetV1ProjectsProjectId(ctx, projectId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetV1ProjectsProjectIdResponse(rsp)
+}
+
+// PatchV1ProjectsProjectIdWithBodyWithResponse Update a project's name, color, or description
+//
+// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with PATCH /v1/projects/{projectId} (the `PatchV1ProjectsProjectId` operationId).
+func (c *ClientWithResponses) PatchV1ProjectsProjectIdWithBodyWithResponse(ctx context.Context, projectId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchV1ProjectsProjectIdResponse, error) {
+	rsp, err := c.PatchV1ProjectsProjectIdWithBody(ctx, projectId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchV1ProjectsProjectIdResponse(rsp)
+}
+
+// PatchV1ProjectsProjectIdWithResponse Update a project's name, color, or description
+//
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with PATCH /v1/projects/{projectId} (the `PatchV1ProjectsProjectId` operationId).
+func (c *ClientWithResponses) PatchV1ProjectsProjectIdWithResponse(ctx context.Context, projectId string, body PatchV1ProjectsProjectIdJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchV1ProjectsProjectIdResponse, error) {
+	rsp, err := c.PatchV1ProjectsProjectId(ctx, projectId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchV1ProjectsProjectIdResponse(rsp)
+}
+
 // GetV1RegionsWithResponse List Ownkube Compute regions
 //
 // Lists the regions available for deploying on Ownkube Compute (the shared, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
@@ -22701,6 +24464,21 @@ func (c *ClientWithResponses) GetV1RegistriesRegistryIdWithResponse(ctx context.
 		return nil, err
 	}
 	return ParseGetV1RegistriesRegistryIdResponse(rsp)
+}
+
+// PostV1SourceUploadsWithResponse Presign an upload slot for local source
+//
+// Mints a short-lived upload slot for `okctl up`: returns an `uploadId` plus a pre-signed URL to PUT a gzipped tarball of the working tree to. Pass the `uploadId` to POST /v1/deployments/{deploymentId}/up to build and deploy it.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/source-uploads (the `PostV1SourceUploads` operationId).
+func (c *ClientWithResponses) PostV1SourceUploadsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostV1SourceUploadsResponse, error) {
+	rsp, err := c.PostV1SourceUploads(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1SourceUploadsResponse(rsp)
 }
 
 // GetV1SpendControlsWithResponse Get spend controls (budget cap + alerts)
@@ -25373,6 +27151,81 @@ func ParseGetV1DeploymentsDeploymentIdCacheConnectionResponse(rsp *http.Response
 	return response, nil
 }
 
+// ParsePostV1DeploymentsDeploymentIdConnectSessionResponse parses an HTTP response from a PostV1DeploymentsDeploymentIdConnectSessionWithResponse call
+func ParsePostV1DeploymentsDeploymentIdConnectSessionResponse(rsp *http.Response) (*PostV1DeploymentsDeploymentIdConnectSessionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsDeploymentIdConnectSessionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ConnectSessionResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetV1DeploymentsDeploymentIdConnectionResponse parses an HTTP response from a GetV1DeploymentsDeploymentIdConnectionWithResponse call
 func ParseGetV1DeploymentsDeploymentIdConnectionResponse(rsp *http.Response) (*GetV1DeploymentsDeploymentIdConnectionResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -27473,6 +29326,81 @@ func ParseGetV1DeploymentsDeploymentIdTelemetryFunctionResponse(rsp *http.Respon
 	return response, nil
 }
 
+// ParsePostV1DeploymentsDeploymentIdUpResponse parses an HTTP response from a PostV1DeploymentsDeploymentIdUpWithResponse call
+func ParsePostV1DeploymentsDeploymentIdUpResponse(rsp *http.Response) (*PostV1DeploymentsDeploymentIdUpResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsDeploymentIdUpResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest UpResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetV1EnvironmentsResponse parses an HTTP response from a GetV1EnvironmentsWithResponse call
 func ParseGetV1EnvironmentsResponse(rsp *http.Response) (*GetV1EnvironmentsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -28106,6 +30034,381 @@ func ParsePostV1PortalResponse(rsp *http.Response) (*PostV1PortalResponse, error
 	return response, nil
 }
 
+// ParseGetV1ProjectsResponse parses an HTTP response from a GetV1ProjectsWithResponse call
+func ParseGetV1ProjectsResponse(rsp *http.Response) (*GetV1ProjectsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetV1ProjectsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ProjectListResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostV1ProjectsResponse parses an HTTP response from a PostV1ProjectsWithResponse call
+func ParsePostV1ProjectsResponse(rsp *http.Response) (*PostV1ProjectsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1ProjectsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Project
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteV1ProjectsProjectIdResponse parses an HTTP response from a DeleteV1ProjectsProjectIdWithResponse call
+func ParseDeleteV1ProjectsProjectIdResponse(rsp *http.Response) (*DeleteV1ProjectsProjectIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteV1ProjectsProjectIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeleteProjectResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetV1ProjectsProjectIdResponse parses an HTTP response from a GetV1ProjectsProjectIdWithResponse call
+func ParseGetV1ProjectsProjectIdResponse(rsp *http.Response) (*GetV1ProjectsProjectIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetV1ProjectsProjectIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Project
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePatchV1ProjectsProjectIdResponse parses an HTTP response from a PatchV1ProjectsProjectIdWithResponse call
+func ParsePatchV1ProjectsProjectIdResponse(rsp *http.Response) (*PatchV1ProjectsProjectIdResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PatchV1ProjectsProjectIdResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Project
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetV1RegionsResponse parses an HTTP response from a GetV1RegionsWithResponse call
 func ParseGetV1RegionsResponse(rsp *http.Response) (*GetV1RegionsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -28272,6 +30575,81 @@ func ParseGetV1RegistriesRegistryIdResponse(rsp *http.Response) (*GetV1Registrie
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest Registry
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostV1SourceUploadsResponse parses an HTTP response from a PostV1SourceUploadsWithResponse call
+func ParsePostV1SourceUploadsResponse(rsp *http.Response) (*PostV1SourceUploadsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1SourceUploadsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SourceUploadResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -28861,332 +31239,352 @@ func ParseGetV1WalletResponse(rsp *http.Response) (*GetV1WalletResponse, error) 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
-	"GD348unL/xsAAP//",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,
