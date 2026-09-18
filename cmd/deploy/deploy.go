@@ -21,6 +21,7 @@ func New() *cobra.Command {
 		updateCmd(),
 		deleteCmd(),
 		copyCmd(),
+		moveCmd(),
 		promoteCmd(),
 		rollbackCmd(),
 		resetPasswordCmd(),

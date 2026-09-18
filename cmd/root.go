@@ -16,9 +16,11 @@ import (
 	"github.com/ownkube/okctl/cmd/deploy"
 	"github.com/ownkube/okctl/cmd/domains"
 	"github.com/ownkube/okctl/cmd/environments"
+	"github.com/ownkube/okctl/cmd/functions"
 	"github.com/ownkube/okctl/cmd/internal/ux"
 	"github.com/ownkube/okctl/cmd/link"
 	"github.com/ownkube/okctl/cmd/organizations"
+	"github.com/ownkube/okctl/cmd/projects"
 	"github.com/ownkube/okctl/cmd/regions"
 	"github.com/ownkube/okctl/cmd/registries"
 	"github.com/ownkube/okctl/cmd/up"
@@ -82,6 +84,8 @@ func init() {
 		awscmd.New(),
 		clusters.New(),
 		environments.New(),
+		projects.New(),
+		functions.New(),
 		link.Link(),
 		link.Unlink(),
 		up.New(),

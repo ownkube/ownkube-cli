@@ -61,7 +61,7 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
   - `cmd/auth/`: `login`, `logout`, `status`.
   - `cmd/config/`: `config get|set|view`.
   - `cmd/deploy/`: read verbs (`list|get|status|logs|revisions|connection`) plus
-    the write/lifecycle surface (`create|update|delete|copy|promote|rollback|
+    the write/lifecycle surface (`create|update|delete|copy|move|promote|rollback|
     reset-password|job-runs|restart|rebuild|restore|maintenance|rename|
     auto-deploy|build-args|build-context|builder-size|subdomain`) and the
     read-only analytics reads (`observability|telemetry|cache-connection|
@@ -72,13 +72,27 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
     `observability`/`telemetry` return nested metric blobs — they render as JSON
     even in table mode (`printBlob`). Client wrappers: write/lifecycle in
     `internal/client/deployment_write.go` + `deployment_actions.go` (reads stay in
-    `client.go`); table/JSON render helpers in `cmd/deploy/render.go`.
+    `client.go`); table/JSON render helpers in `cmd/deploy/render.go`. `move
+    --project <id>` re-files a deployment (and its managed DB/cache group) under
+    another project (control-plane-only; wrapper `MoveToProject` in
+    `internal/client/functions.go`).
   - `cmd/environments/`: read verbs (`list|get`) plus the write surface
     (`create|update|set-env|delete`). `set-env` REPLACES the full shared env-var
     set (`--env`/`--secret KEY=VALUE`, repeatable, or `-f` JSON array) and
     redeploys the environment's apps; `delete` confirms unless `--yes`. Client
     wrappers live in `internal/client/environment_write.go` (reads in `client.go`);
     color validation + render helpers in `cmd/environments/helpers.go`.
+  - `cmd/projects/`: `projects list|get|create|update|delete` — the top-level
+    workspace grouping (Org → Project → Environment → App). Project IDs feed
+    `--project` on `deploy move` and (server-side) the `projectId` deployment/
+    environment filters. `delete` confirms unless `--yes` and is gated server-side
+    (never the Default, never with a live deployment). Wrappers in
+    `internal/client/projects.go`; color validation + render in
+    `cmd/projects/helpers.go`.
+  - `cmd/functions/` (alias `fn`): `functions list|source|deploy` — cluster-less
+    Compute (ember) functions. `source` prints the inline file (`--code-only` for
+    just the code); `deploy` takes a combined code+config manifest via `-f` (`-` =
+    stdin), one revision. Wrappers in `internal/client/functions.go`.
   - `cmd/aws/`: `aws connect|list|get|verify|reconnect|resync|delete`. `connect`
     handles browser handoff (default), autonomous `--deploy` (shells out to the
     `aws` CLI), and polls the account until `verified`/`failed`.

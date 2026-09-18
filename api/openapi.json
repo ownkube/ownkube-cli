@@ -46,13 +46,7 @@
                 "description": "Whether email is verified"
               }
             },
-            "required": [
-              "id",
-              "name",
-              "email",
-              "image",
-              "emailVerified"
-            ]
+            "required": ["id", "name", "email", "image", "emailVerified"]
           },
           "organizations": {
             "type": "array",
@@ -73,20 +67,12 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "id",
-                "name",
-                "slug",
-                "role"
-              ]
+              "required": ["id", "name", "slug", "role"]
             },
             "description": "Organizations this user belongs to. Pass an `id` as the `x-ownkube-organization` header on subsequent requests when membership is plural."
           }
         },
-        "required": [
-          "user",
-          "organizations"
-        ]
+        "required": ["user", "organizations"]
       },
       "ErrorResponse": {
         "type": "object",
@@ -100,10 +86,7 @@
             "description": "Machine-readable error code"
           }
         },
-        "required": [
-          "error",
-          "code"
-        ]
+        "required": ["error", "code"]
       },
       "OrganizationListResponse": {
         "type": "object",
@@ -115,9 +98,7 @@
             }
           }
         },
-        "required": [
-          "organizations"
-        ]
+        "required": ["organizations"]
       },
       "OrganizationSummary": {
         "type": "object",
@@ -151,13 +132,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "name",
-          "slug",
-          "logo",
-          "role"
-        ]
+        "required": ["id", "name", "slug", "logo", "role"]
       },
       "AwsConnectResponse": {
         "type": "object",
@@ -221,11 +196,7 @@
             ]
           }
         },
-        "required": [
-          "stackName",
-          "templateUrl",
-          "parameters"
-        ],
+        "required": ["stackName", "templateUrl", "parameters"],
         "description": "Deploy this stack yourself with AWS creds already in your environment (autonomous mode). Parameter keys match the template exactly."
       },
       "AwsAccountListResponse": {
@@ -238,9 +209,7 @@
             }
           }
         },
-        "required": [
-          "accounts"
-        ]
+        "required": ["accounts"]
       },
       "AwsAccount": {
         "type": "object",
@@ -280,10 +249,7 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "id",
-                "clusterName"
-              ]
+              "required": ["id", "clusterName"]
             }
           },
           "lastVerifiedAt": {
@@ -347,11 +313,7 @@
           },
           "kind": {
             "type": "string",
-            "enum": [
-              "retry",
-              "quota",
-              "conflict"
-            ],
+            "enum": ["retry", "quota", "conflict"],
             "description": "How to recover: `retry` (transient/propagation, re-verify or re-launch the same stack), `quota` (fix an AWS limit then re-verify), `conflict` (account claimed elsewhere, use a different account)."
           },
           "title": {
@@ -368,13 +330,7 @@
             "description": "External help link, when relevant"
           }
         },
-        "required": [
-          "code",
-          "kind",
-          "title",
-          "description",
-          "docsUrl"
-        ],
+        "required": ["code", "kind", "title", "description", "docsUrl"],
         "description": "Structured failure + remediation when status is `failed`"
       },
       "AwsVerifyResponse": {
@@ -388,9 +344,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "success"
-        ]
+        "required": ["success"]
       },
       "AwsReconnectResponse": {
         "type": "object",
@@ -402,10 +356,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "externalId",
-          "quickCreateUrl"
-        ]
+        "required": ["externalId", "quickCreateUrl"]
       },
       "AwsSuccessResponse": {
         "type": "object",
@@ -414,9 +365,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "success"
-        ]
+        "required": ["success"]
       },
       "ClusterListResponse": {
         "type": "object",
@@ -428,9 +377,7 @@
             }
           }
         },
-        "required": [
-          "clusters"
-        ]
+        "required": ["clusters"]
       },
       "Cluster": {
         "type": "object",
@@ -509,13 +456,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "name",
-          "provider",
-          "clusterType",
-          "status"
-        ]
+        "required": ["id", "name", "provider", "clusterType", "status"]
       },
       "ClusterStatusResponse": {
         "type": "object",
@@ -534,10 +475,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "id",
-          "status"
-        ]
+        "required": ["id", "status"]
       },
       "CreateClusterResponse": {
         "type": "object",
@@ -552,10 +490,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "clusterId",
-          "status"
-        ]
+        "required": ["clusterId", "status"]
       },
       "DestroyClusterResponse": {
         "type": "object",
@@ -567,10 +502,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "clusterId",
-          "status"
-        ]
+        "required": ["clusterId", "status"]
       },
       "CancelClusterResponse": {
         "type": "object",
@@ -582,10 +514,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "clusterId",
-          "status"
-        ]
+        "required": ["clusterId", "status"]
       },
       "RegionListResponse": {
         "type": "object",
@@ -602,10 +531,7 @@
             "description": "Regions you can deploy to on Ownkube Compute. Pass a region `id` here as the `region` field when creating a deployment with no `clusterId`."
           }
         },
-        "required": [
-          "available",
-          "regions"
-        ]
+        "required": ["available", "regions"]
       },
       "Region": {
         "type": "object",
@@ -619,10 +545,7 @@
             "description": "Human-readable region label."
           }
         },
-        "required": [
-          "id",
-          "name"
-        ]
+        "required": ["id", "name"]
       },
       "WalletSummaryResponse": {
         "type": "object",
@@ -642,11 +565,7 @@
             "description": "Total credit loaded into the wallet, in USD, keyed by inflow reason (e.g. plan load, top-up, signup credit)."
           }
         },
-        "required": [
-          "enabled",
-          "balance",
-          "loadedInByReason"
-        ]
+        "required": ["enabled", "balance", "loadedInByReason"]
       },
       "CreditBalance": {
         "type": "object",
@@ -665,12 +584,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "grantedUsd",
-          "consumedUsd",
-          "remainingUsd",
-          "exhausted"
-        ],
+        "required": ["grantedUsd", "consumedUsd", "remainingUsd", "exhausted"],
         "description": "Live wallet balance, or null if the org has none yet."
       },
       "SpendControlsResponse": {
@@ -684,10 +598,7 @@
             "$ref": "#/components/schemas/SpendControls"
           }
         },
-        "required": [
-          "enabled",
-          "controls"
-        ]
+        "required": ["enabled", "controls"]
       },
       "SpendControls": {
         "type": "object",
@@ -700,10 +611,7 @@
           },
           "budgetAction": {
             "type": "string",
-            "enum": [
-              "notify",
-              "pause"
-            ],
+            "enum": ["notify", "pause"],
             "description": "What happens at the budget cap: `notify` only alerts; `pause` suspends compute (data retained) like wallet exhaustion."
           },
           "alertsEnabled": {
@@ -737,10 +645,7 @@
           },
           "budgetAction": {
             "type": "string",
-            "enum": [
-              "notify",
-              "pause"
-            ]
+            "enum": ["notify", "pause"]
           },
           "alertsEnabled": {
             "type": "boolean"
@@ -801,11 +706,7 @@
             "$ref": "#/components/schemas/CreditBalance"
           }
         },
-        "required": [
-          "alreadyClaimed",
-          "amountUsd",
-          "balance"
-        ]
+        "required": ["alreadyClaimed", "amountUsd", "balance"]
       },
       "CheckoutUrlResponse": {
         "type": "object",
@@ -815,25 +716,18 @@
             "description": "Browser checkout URL. Open it to complete payment; the account updates once the payment settles."
           }
         },
-        "required": [
-          "url"
-        ]
+        "required": ["url"]
       },
       "SubscriptionCheckoutBody": {
         "type": "object",
         "properties": {
           "tier": {
             "type": "string",
-            "enum": [
-              "personal",
-              "team"
-            ],
+            "enum": ["personal", "team"],
             "description": "The plan to subscribe to: `personal` ($5/mo) or `team` ($20/mo). Each loads that much wallet credit every cycle."
           }
         },
-        "required": [
-          "tier"
-        ]
+        "required": ["tier"]
       },
       "TopUpCheckoutBody": {
         "type": "object",
@@ -845,9 +739,7 @@
             "description": "Amount to add to the wallet, in USD. Must be at least the top-up minimum (see `topUpMinUsd` on GET /v1/credit)."
           }
         },
-        "required": [
-          "amountUsd"
-        ]
+        "required": ["amountUsd"]
       },
       "CurrentUsageResponse": {
         "type": "object",
@@ -1022,11 +914,7 @@
             ]
           }
         },
-        "required": [
-          "points",
-          "periodStart",
-          "periodEnd"
-        ]
+        "required": ["points", "periodStart", "periodEnd"]
       },
       "UsageHistoryPoint": {
         "type": "object",
@@ -1081,9 +969,7 @@
             }
           }
         },
-        "required": [
-          "projects"
-        ]
+        "required": ["projects"]
       },
       "Project": {
         "type": "object",
@@ -1126,11 +1012,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "name",
-          "slug"
-        ]
+        "required": ["id", "name", "slug"]
       },
       "CreateProjectBody": {
         "type": "object",
@@ -1151,13 +1033,7 @@
           },
           "color": {
             "type": "string",
-            "enum": [
-              "amber",
-              "green",
-              "blue",
-              "purple",
-              "red"
-            ],
+            "enum": ["amber", "green", "blue", "purple", "red"],
             "description": "Accent color. Defaults to `blue`."
           },
           "description": {
@@ -1165,10 +1041,7 @@
             "maxLength": 200
           }
         },
-        "required": [
-          "name",
-          "slug"
-        ]
+        "required": ["name", "slug"]
       },
       "UpdateProjectBody": {
         "type": "object",
@@ -1180,13 +1053,7 @@
           },
           "color": {
             "type": "string",
-            "enum": [
-              "amber",
-              "green",
-              "blue",
-              "purple",
-              "red"
-            ]
+            "enum": ["amber", "green", "blue", "purple", "red"]
           },
           "description": {
             "type": "string",
@@ -1201,9 +1068,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "success"
-        ]
+        "required": ["success"]
       },
       "EnvironmentListResponse": {
         "type": "object",
@@ -1215,9 +1080,7 @@
             }
           }
         },
-        "required": [
-          "environments"
-        ]
+        "required": ["environments"]
       },
       "Environment": {
         "type": "object",
@@ -1268,11 +1131,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "name",
-          "slug"
-        ]
+        "required": ["id", "name", "slug"]
       },
       "CreateEnvironmentBody": {
         "type": "object",
@@ -1297,13 +1156,7 @@
           },
           "color": {
             "type": "string",
-            "enum": [
-              "amber",
-              "green",
-              "blue",
-              "purple",
-              "red"
-            ],
+            "enum": ["amber", "green", "blue", "purple", "red"],
             "description": "Accent color. Defaults to `blue`."
           },
           "description": {
@@ -1311,10 +1164,7 @@
             "maxLength": 200
           }
         },
-        "required": [
-          "name",
-          "slug"
-        ]
+        "required": ["name", "slug"]
       },
       "UpdateEnvironmentBody": {
         "type": "object",
@@ -1326,13 +1176,7 @@
           },
           "color": {
             "type": "string",
-            "enum": [
-              "amber",
-              "green",
-              "blue",
-              "purple",
-              "red"
-            ]
+            "enum": ["amber", "green", "blue", "purple", "red"]
           },
           "description": {
             "type": "string",
@@ -1356,11 +1200,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "env",
-          "redeployed",
-          "failed"
-        ]
+        "required": ["env", "redeployed", "failed"]
       },
       "EnvVarInput": {
         "type": "object",
@@ -1378,10 +1218,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "name",
-          "value"
-        ]
+        "required": ["name", "value"]
       },
       "SetEnvVarsBody": {
         "type": "object",
@@ -1394,9 +1231,7 @@
             "description": "The full shared env-var set for the environment (replaces the existing set). Every cluster-bound app in the environment is redeployed to apply it."
           }
         },
-        "required": [
-          "env"
-        ]
+        "required": ["env"]
       },
       "DeleteEnvironmentResponse": {
         "type": "object",
@@ -1405,9 +1240,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "success"
-        ]
+        "required": ["success"]
       },
       "RegistryListResponse": {
         "type": "object",
@@ -1419,9 +1252,7 @@
             }
           }
         },
-        "required": [
-          "registries"
-        ]
+        "required": ["registries"]
       },
       "Registry": {
         "type": "object",
@@ -1480,11 +1311,7 @@
             ]
           }
         },
-        "required": [
-          "id",
-          "provider",
-          "account"
-        ]
+        "required": ["id", "provider", "account"]
       },
       "DeploymentListResponse": {
         "type": "object",
@@ -1496,9 +1323,7 @@
             }
           }
         },
-        "required": [
-          "deployments"
-        ]
+        "required": ["deployments"]
       },
       "Deployment": {
         "type": "object",
@@ -1523,14 +1348,7 @@
           },
           "resourceType": {
             "type": "string",
-            "enum": [
-              "web",
-              "worker",
-              "job",
-              "database",
-              "cache",
-              "function"
-            ]
+            "enum": ["web", "worker", "job", "database", "cache", "function"]
           },
           "status": {
             "type": "string"
@@ -1621,9 +1439,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "success"
-        ]
+        "required": ["success"]
       },
       "DeploymentStatusResponse": {
         "type": "object",
@@ -1642,12 +1458,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "health",
-          "sync",
-          "status",
-          "urlReady"
-        ]
+        "required": ["health", "sync", "status", "urlReady"]
       },
       "DeploymentLogsResponse": {
         "type": "object",
@@ -1659,9 +1470,7 @@
             }
           }
         },
-        "required": [
-          "entries"
-        ]
+        "required": ["entries"]
       },
       "LogEntry": {
         "type": "object",
@@ -1675,11 +1484,7 @@
           },
           "level": {
             "type": "string",
-            "enum": [
-              "error",
-              "info",
-              "warn"
-            ]
+            "enum": ["error", "info", "warn"]
           },
           "fields": {
             "type": "object",
@@ -1689,12 +1494,7 @@
             "description": "Structured fields, keyed by their published label."
           }
         },
-        "required": [
-          "timestampNs",
-          "message",
-          "level",
-          "fields"
-        ]
+        "required": ["timestampNs", "message", "level", "fields"]
       },
       "ConnectionDetailsResponse": {
         "type": "object",
@@ -1716,12 +1516,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "details",
-          "secretName",
-          "namespace",
-          "serviceName"
-        ],
+        "required": ["details", "secretName", "namespace", "serviceName"],
         "additionalProperties": {
           "nullable": true
         }
@@ -1746,15 +1541,46 @@
             "type": "string"
           }
         },
-        "required": [
-          "details",
-          "secretName",
-          "namespace",
-          "serviceName"
-        ],
+        "required": ["details", "secretName", "namespace", "serviceName"],
         "additionalProperties": {
           "nullable": true
         }
+      },
+      "FunctionListResponse": {
+        "type": "object",
+        "properties": {
+          "functions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Deployment"
+            }
+          }
+        },
+        "required": ["functions"]
+      },
+      "FunctionSourceResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The function's inline source file contents."
+          },
+          "filename": {
+            "type": "string",
+            "description": "The entrypoint filename."
+          },
+          "language": {
+            "type": "string",
+            "enum": ["javascript"],
+            "description": "Source language (Node/ESM — always `javascript` in v1)."
+          },
+          "sourceHash": {
+            "type": "string",
+            "nullable": true,
+            "description": "Content hash of the stored source, if recorded."
+          }
+        },
+        "required": ["code", "filename", "language", "sourceHash"]
       },
       "ConnectSessionResult": {
         "type": "object",
@@ -1777,19 +1603,11 @@
           },
           "protocol": {
             "type": "string",
-            "enum": [
-              "postgres"
-            ],
+            "enum": ["postgres"],
             "description": "Wire protocol of the target (databases only)."
           }
         },
-        "required": [
-          "sessionId",
-          "ticket",
-          "relayUrl",
-          "expiresAt",
-          "protocol"
-        ]
+        "required": ["sessionId", "ticket", "relayUrl", "expiresAt", "protocol"]
       },
       "DeploymentActionResult": {
         "type": "object",
@@ -1814,14 +1632,7 @@
           },
           "resourceType": {
             "type": "string",
-            "enum": [
-              "web",
-              "worker",
-              "job",
-              "database",
-              "cache",
-              "function"
-            ]
+            "enum": ["web", "worker", "job", "database", "cache", "function"]
           },
           "status": {
             "type": "string"
@@ -1891,10 +1702,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "name",
-                    "value"
-                  ]
+                  "required": ["name", "value"]
                 }
               },
               "startCommand": {
@@ -1927,9 +1735,7 @@
                         "maxLength": 255
                       }
                     },
-                    "required": [
-                      "username"
-                    ]
+                    "required": ["username"]
                   },
                   "oauth": {
                     "type": "object",
@@ -1940,9 +1746,7 @@
                       },
                       "provider": {
                         "type": "string",
-                        "enum": [
-                          "google"
-                        ],
+                        "enum": ["google"],
                         "default": "google"
                       },
                       "allowedDomains": {
@@ -2005,9 +1809,7 @@
                         "maximum": 300
                       }
                     },
-                    "required": [
-                      "path"
-                    ]
+                    "required": ["path"]
                   },
                   "liveness": {
                     "type": "object",
@@ -2044,9 +1846,7 @@
                         "maximum": 300
                       }
                     },
-                    "required": [
-                      "path"
-                    ]
+                    "required": ["path"]
                   },
                   "readiness": {
                     "type": "object",
@@ -2083,9 +1883,7 @@
                         "maximum": 300
                       }
                     },
-                    "required": [
-                      "path"
-                    ]
+                    "required": ["path"]
                   }
                 }
               },
@@ -2104,10 +1902,7 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   },
                   "limits": {
                     "type": "object",
@@ -2121,16 +1916,10 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   }
                 },
-                "required": [
-                  "requests",
-                  "limits"
-                ]
+                "required": ["requests", "limits"]
               },
               "autoscaling": {
                 "type": "object",
@@ -2228,10 +2017,7 @@
                           ]
                         }
                       },
-                      "required": [
-                        "key",
-                        "effect"
-                      ]
+                      "required": ["key", "effect"]
                     },
                     "maxItems": 16
                   }
@@ -2239,36 +2025,24 @@
               },
               "billingMode": {
                 "type": "string",
-                "enum": [
-                  "metered",
-                  "reserved"
-                ]
+                "enum": ["metered", "reserved"]
               },
               "skuId": {
                 "type": "string"
               }
             },
-            "required": [
-              "repository",
-              "tag",
-              "port"
-            ]
+            "required": ["repository", "tag", "port"]
           },
           "databaseConfig": {
             "type": "object",
             "properties": {
               "engine": {
                 "type": "string",
-                "enum": [
-                  "postgres"
-                ]
+                "enum": ["postgres"]
               },
               "version": {
                 "type": "string",
-                "enum": [
-                  "17",
-                  "18"
-                ]
+                "enum": ["17", "18"]
               },
               "instances": {
                 "type": "integer",
@@ -2278,10 +2052,7 @@
               },
               "billingMode": {
                 "type": "string",
-                "enum": [
-                  "metered",
-                  "reserved"
-                ]
+                "enum": ["metered", "reserved"]
               },
               "skuId": {
                 "type": "string"
@@ -2306,10 +2077,7 @@
                     }
                   }
                 },
-                "required": [
-                  "database",
-                  "owner"
-                ]
+                "required": ["database", "owner"]
               },
               "storage": {
                 "type": "object",
@@ -2324,9 +2092,7 @@
                     "default": "gp3"
                   }
                 },
-                "required": [
-                  "size"
-                ]
+                "required": ["size"]
               },
               "public": {
                 "type": "boolean"
@@ -2346,10 +2112,7 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   },
                   "limits": {
                     "type": "object",
@@ -2363,16 +2126,10 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   }
                 },
-                "required": [
-                  "requests",
-                  "limits"
-                ]
+                "required": ["requests", "limits"]
               },
               "pooler": {
                 "type": "object",
@@ -2388,17 +2145,11 @@
                   },
                   "type": {
                     "type": "string",
-                    "enum": [
-                      "rw",
-                      "ro"
-                    ]
+                    "enum": ["rw", "ro"]
                   },
                   "mode": {
                     "type": "string",
-                    "enum": [
-                      "session",
-                      "transaction"
-                    ]
+                    "enum": ["session", "transaction"]
                   },
                   "parameters": {
                     "type": "object",
@@ -2427,9 +2178,7 @@
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "enablePodMonitor"
-                ]
+                "required": ["enablePodMonitor"]
               },
               "backup": {
                 "type": "object",
@@ -2462,14 +2211,10 @@
                         "type": "boolean"
                       }
                     },
-                    "required": [
-                      "enabled"
-                    ]
+                    "required": ["enabled"]
                   }
                 },
-                "required": [
-                  "enabled"
-                ]
+                "required": ["enabled"]
               },
               "scheduledBackup": {
                 "type": "object",
@@ -2488,18 +2233,10 @@
                     "type": "boolean"
                   }
                 },
-                "required": [
-                  "enabled",
-                  "schedule"
-                ]
+                "required": ["enabled", "schedule"]
               }
             },
-            "required": [
-              "engine",
-              "version",
-              "bootstrap",
-              "storage"
-            ]
+            "required": ["engine", "version", "bootstrap", "storage"]
           },
           "jobConfig": {
             "type": "object",
@@ -2542,10 +2279,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "name",
-                    "value"
-                  ]
+                  "required": ["name", "value"]
                 }
               },
               "resources": {
@@ -2563,10 +2297,7 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   },
                   "limits": {
                     "type": "object",
@@ -2580,16 +2311,10 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "cpu",
-                      "memory"
-                    ]
+                    "required": ["cpu", "memory"]
                   }
                 },
-                "required": [
-                  "requests",
-                  "limits"
-                ]
+                "required": ["requests", "limits"]
               },
               "schedule": {
                 "type": "object",
@@ -2604,11 +2329,7 @@
                   },
                   "concurrencyPolicy": {
                     "type": "string",
-                    "enum": [
-                      "Allow",
-                      "Forbid",
-                      "Replace"
-                    ],
+                    "enum": ["Allow", "Forbid", "Replace"],
                     "default": "Forbid"
                   },
                   "timeZone": {
@@ -2631,9 +2352,7 @@
                     "maximum": 100
                   }
                 },
-                "required": [
-                  "expression"
-                ]
+                "required": ["expression"]
               },
               "job": {
                 "type": "object",
@@ -2665,20 +2384,13 @@
                   },
                   "restartPolicy": {
                     "type": "string",
-                    "enum": [
-                      "Never",
-                      "OnFailure"
-                    ],
+                    "enum": ["Never", "OnFailure"],
                     "default": "Never"
                   }
                 }
               }
             },
-            "required": [
-              "repository",
-              "tag",
-              "schedule"
-            ]
+            "required": ["repository", "tag", "schedule"]
           },
           "note": {
             "type": "string",
@@ -2707,10 +2419,7 @@
               },
               "architecture": {
                 "type": "string",
-                "enum": [
-                  "x86_64",
-                  "arm64"
-                ],
+                "enum": ["x86_64", "arm64"],
                 "default": "arm64"
               },
               "memoryMb": {
@@ -2747,10 +2456,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "name",
-                    "value"
-                  ]
+                  "required": ["name", "value"]
                 }
               },
               "triggers": {
@@ -2770,19 +2476,14 @@
                         "type": "string"
                       }
                     },
-                    "required": [
-                      "schedule"
-                    ]
+                    "required": ["schedule"]
                   },
                   "http": {
                     "type": "object",
                     "properties": {
                       "authType": {
                         "type": "string",
-                        "enum": [
-                          "none",
-                          "iam"
-                        ],
+                        "enum": ["none", "iam"],
                         "default": "none"
                       },
                       "cors": {
@@ -2816,22 +2517,161 @@
                     }
                   }
                 }
+              },
+              "substrate": {
+                "type": "string",
+                "enum": ["lambda", "ember"]
               }
             },
-            "required": [
-              "runtime",
-              "handler",
-              "triggers"
-            ]
+            "required": ["runtime", "handler", "triggers"]
           },
           "note": {
             "type": "string",
             "maxLength": 200
           }
         },
-        "required": [
-          "config"
-        ]
+        "required": ["config"]
+      },
+      "DeployFunctionBody": {
+        "type": "object",
+        "properties": {
+          "config": {
+            "type": "object",
+            "properties": {
+              "runtime": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "handler": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "architecture": {
+                "type": "string",
+                "enum": ["x86_64", "arm64"],
+                "default": "arm64"
+              },
+              "memoryMb": {
+                "type": "integer",
+                "minimum": 128,
+                "maximum": 10240,
+                "default": 256
+              },
+              "timeoutSeconds": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 900,
+                "default": 30
+              },
+              "logRetentionDays": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3653,
+                "default": 14
+              },
+              "env": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "secret": {
+                      "type": "boolean"
+                    },
+                    "value": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["name", "value"]
+                }
+              },
+              "triggers": {
+                "type": "object",
+                "properties": {
+                  "cron": {
+                    "type": "object",
+                    "properties": {
+                      "input": {
+                        "type": "string"
+                      },
+                      "schedule": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "timezone": {
+                        "type": "string"
+                      }
+                    },
+                    "required": ["schedule"]
+                  },
+                  "http": {
+                    "type": "object",
+                    "properties": {
+                      "authType": {
+                        "type": "string",
+                        "enum": ["none", "iam"],
+                        "default": "none"
+                      },
+                      "cors": {
+                        "type": "object",
+                        "properties": {
+                          "allowHeaders": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "allowMethods": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "allowOrigins": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "maxAge": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 86400
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "substrate": {
+                "type": "string",
+                "enum": ["lambda", "ember"]
+              }
+            },
+            "required": ["runtime", "handler", "triggers"]
+          },
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256000
+          },
+          "filename": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": ["config"]
       },
       "CopyDeploymentBody": {
         "type": "object",
@@ -2847,10 +2687,7 @@
             "maxLength": 200
           }
         },
-        "required": [
-          "targetEnvironmentId",
-          "targetClusterId"
-        ]
+        "required": ["targetEnvironmentId", "targetClusterId"]
       },
       "ResetPasswordResult": {
         "type": "object",
@@ -2859,9 +2696,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "password"
-        ]
+        "required": ["password"]
       },
       "JobRunHistory": {
         "type": "object",
@@ -2898,11 +2733,7 @@
             }
           }
         },
-        "required": [
-          "exists",
-          "schedule",
-          "runs"
-        ]
+        "required": ["exists", "schedule", "runs"]
       },
       "TriggerJobRunResult": {
         "type": "object",
@@ -2911,9 +2742,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "jobName"
-        ]
+        "required": ["jobName"]
       },
       "CancelJobRunResult": {
         "type": "object",
@@ -2922,9 +2751,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "canceled"
-        ]
+        "required": ["canceled"]
       },
       "RestoreDatabaseResult": {
         "type": "object",
@@ -2933,9 +2760,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "started"
-        ]
+        "required": ["started"]
       },
       "RestartResult": {
         "type": "object",
@@ -2949,10 +2774,7 @@
             "description": "The restart timestamp stamped on the pod template."
           }
         },
-        "required": [
-          "restarted",
-          "restartedAt"
-        ]
+        "required": ["restarted", "restartedAt"]
       },
       "LifecycleDeploymentResult": {
         "type": "object",
@@ -2977,14 +2799,7 @@
           },
           "resourceType": {
             "type": "string",
-            "enum": [
-              "web",
-              "worker",
-              "job",
-              "database",
-              "cache",
-              "function"
-            ]
+            "enum": ["web", "worker", "job", "database", "cache", "function"]
           },
           "status": {
             "type": "string"
@@ -3020,9 +2835,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "enabled"
-        ]
+        "required": ["enabled"]
       },
       "SetMaintenanceBody": {
         "type": "object",
@@ -3036,9 +2849,7 @@
             "description": "Optional line shown on the maintenance page. Ignored when disabling."
           }
         },
-        "required": [
-          "enabled"
-        ]
+        "required": ["enabled"]
       },
       "RenameDeploymentBody": {
         "type": "object",
@@ -3049,9 +2860,34 @@
             "description": "Cosmetic display label. Empty/whitespace clears it (falls back to the immutable name)."
           }
         },
-        "required": [
-          "displayName"
-        ]
+        "required": ["displayName"]
+      },
+      "MoveToProjectResult": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "The project the deployment now belongs to."
+          },
+          "moved": {
+            "type": "number",
+            "description": "How many deployment rows moved (a marketplace app + its managed database/cache move together as one group)."
+          }
+        },
+        "required": ["success", "projectId", "moved"]
+      },
+      "MoveToProjectBody": {
+        "type": "object",
+        "properties": {
+          "targetProjectId": {
+            "type": "string",
+            "description": "The project to re-file this deployment under."
+          }
+        },
+        "required": ["targetProjectId"]
       },
       "BuildArgsResult": {
         "type": "object",
@@ -3067,10 +2903,7 @@
             }
           }
         },
-        "required": [
-          "deploymentId",
-          "buildArgs"
-        ]
+        "required": ["deploymentId", "buildArgs"]
       },
       "BuildArgsBody": {
         "type": "object",
@@ -3083,9 +2916,7 @@
             }
           }
         },
-        "required": [
-          "buildArgs"
-        ]
+        "required": ["buildArgs"]
       },
       "BuildContextResult": {
         "type": "object",
@@ -3098,10 +2929,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "deploymentId",
-          "contextPath"
-        ]
+        "required": ["deploymentId", "contextPath"]
       },
       "BuildContextBody": {
         "type": "object",
@@ -3112,9 +2940,7 @@
             "description": "Root directory for the build, relative to the repo root. Empty string clears it."
           }
         },
-        "required": [
-          "contextPath"
-        ]
+        "required": ["contextPath"]
       },
       "BuilderSizeResult": {
         "type": "object",
@@ -3124,33 +2950,20 @@
           },
           "builderSize": {
             "type": "string",
-            "enum": [
-              "small",
-              "standard",
-              "large"
-            ]
+            "enum": ["small", "standard", "large"]
           }
         },
-        "required": [
-          "deploymentId",
-          "builderSize"
-        ]
+        "required": ["deploymentId", "builderSize"]
       },
       "BuilderSizeBody": {
         "type": "object",
         "properties": {
           "builderSize": {
             "type": "string",
-            "enum": [
-              "small",
-              "standard",
-              "large"
-            ]
+            "enum": ["small", "standard", "large"]
           }
         },
-        "required": [
-          "builderSize"
-        ]
+        "required": ["builderSize"]
       },
       "CheckSubdomainResult": {
         "type": "object",
@@ -3172,13 +2985,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "available",
-          "current",
-          "hostname",
-          "message",
-          "subdomain"
-        ]
+        "required": ["available", "current", "hostname", "message", "subdomain"]
       },
       "SuggestSubdomainsResult": {
         "type": "object",
@@ -3198,17 +3005,11 @@
                   "type": "string"
                 }
               },
-              "required": [
-                "hostname",
-                "subdomain",
-                "kind"
-              ]
+              "required": ["hostname", "subdomain", "kind"]
             }
           }
         },
-        "required": [
-          "suggestions"
-        ]
+        "required": ["suggestions"]
       },
       "ChangeSubdomainResult": {
         "type": "object",
@@ -3223,11 +3024,7 @@
             "$ref": "#/components/schemas/LifecycleDeploymentResult"
           }
         },
-        "required": [
-          "changed",
-          "hostname",
-          "deployment"
-        ]
+        "required": ["changed", "hostname", "deployment"]
       },
       "ChangeSubdomainBody": {
         "type": "object",
@@ -3236,9 +3033,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "subdomain"
-        ]
+        "required": ["subdomain"]
       },
       "RevisionListResponse": {
         "type": "object",
@@ -3250,9 +3045,7 @@
             }
           }
         },
-        "required": [
-          "revisions"
-        ]
+        "required": ["revisions"]
       },
       "Revision": {
         "type": "object",
@@ -3355,13 +3148,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "id",
-          "deploymentId",
-          "image",
-          "tag",
-          "status"
-        ]
+        "required": ["id", "deploymentId", "image", "tag", "status"]
       },
       "RollbackBody": {
         "type": "object",
@@ -3383,9 +3170,7 @@
             "maxLength": 200
           }
         },
-        "required": [
-          "targetDeploymentId"
-        ]
+        "required": ["targetDeploymentId"]
       },
       "RebuildResult": {
         "type": "object",
@@ -3400,11 +3185,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "revisionId",
-          "gitSha",
-          "branch"
-        ]
+        "required": ["revisionId", "gitSha", "branch"]
       },
       "SourceUploadResponse": {
         "type": "object",
@@ -3426,12 +3207,7 @@
             "description": "ISO expiry of the upload URL."
           }
         },
-        "required": [
-          "uploadId",
-          "uploadUrl",
-          "contentType",
-          "expiresAt"
-        ]
+        "required": ["uploadId", "uploadUrl", "contentType", "expiresAt"]
       },
       "UpResult": {
         "type": "object",
@@ -3440,9 +3216,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "revisionId"
-        ]
+        "required": ["revisionId"]
       },
       "UpBody": {
         "type": "object",
@@ -3457,9 +3231,7 @@
             "maxLength": 200
           }
         },
-        "required": [
-          "uploadId"
-        ]
+        "required": ["uploadId"]
       },
       "DeploymentTelemetry": {
         "type": "object",
@@ -3481,9 +3253,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "windowLabel"
-        ],
+        "required": ["windowLabel"],
         "additionalProperties": {
           "nullable": true
         }
@@ -3515,11 +3285,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "windowLabel",
-          "hasRequestData",
-          "requestDataHint"
-        ],
+        "required": ["windowLabel", "hasRequestData", "requestDataHint"],
         "additionalProperties": {
           "nullable": true
         }
@@ -3550,9 +3316,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "windowLabel"
-        ],
+        "required": ["windowLabel"],
         "additionalProperties": {
           "nullable": true
         }
@@ -3583,9 +3347,7 @@
             "nullable": true
           }
         },
-        "required": [
-          "windowLabel"
-        ],
+        "required": ["windowLabel"],
         "additionalProperties": {
           "nullable": true
         }
@@ -3605,9 +3367,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "logs"
-        ]
+        "required": ["logs"]
       },
       "AlertRuleListResponse": {
         "type": "object",
@@ -3619,9 +3379,7 @@
             }
           }
         },
-        "required": [
-          "rules"
-        ]
+        "required": ["rules"]
       },
       "AlertRule": {
         "type": "object",
@@ -3640,18 +3398,11 @@
           },
           "metric": {
             "type": "string",
-            "enum": [
-              "cpu",
-              "memory",
-              "restarts"
-            ]
+            "enum": ["cpu", "memory", "restarts"]
           },
           "comparator": {
             "type": "string",
-            "enum": [
-              "gt",
-              "lt"
-            ]
+            "enum": ["gt", "lt"]
           },
           "threshold": {
             "type": "string",
@@ -3666,10 +3417,7 @@
           },
           "severity": {
             "type": "string",
-            "enum": [
-              "warning",
-              "critical"
-            ]
+            "enum": ["warning", "critical"]
           },
           "enabled": {
             "type": "boolean"
@@ -3696,9 +3444,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "success"
-        ]
+        "required": ["success"]
       },
       "AlertFiringListResponse": {
         "type": "object",
@@ -3710,9 +3456,7 @@
             }
           }
         },
-        "required": [
-          "firings"
-        ]
+        "required": ["firings"]
       },
       "AlertFiring": {
         "type": "object",
@@ -3736,25 +3480,15 @@
           },
           "metric": {
             "type": "string",
-            "enum": [
-              "cpu",
-              "memory",
-              "restarts"
-            ]
+            "enum": ["cpu", "memory", "restarts"]
           },
           "severity": {
             "type": "string",
-            "enum": [
-              "warning",
-              "critical"
-            ]
+            "enum": ["warning", "critical"]
           },
           "status": {
             "type": "string",
-            "enum": [
-              "firing",
-              "resolved"
-            ]
+            "enum": ["firing", "resolved"]
           },
           "summary": {
             "type": "string",
@@ -3794,10 +3528,7 @@
             }
           }
         },
-        "required": [
-          "linked",
-          "availableParents"
-        ]
+        "required": ["linked", "availableParents"]
       },
       "LinkedCustomDomain": {
         "type": "object",
@@ -3863,10 +3594,7 @@
           },
           "routingRecordType": {
             "type": "string",
-            "enum": [
-              "A",
-              "CNAME"
-            ]
+            "enum": ["A", "CNAME"]
           },
           "routingTarget": {
             "type": "string",
@@ -3894,11 +3622,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "certId",
-          "wildcardDomain",
-          "certStatus"
-        ],
+        "required": ["certId", "wildcardDomain", "certStatus"],
         "additionalProperties": {
           "nullable": true
         }
@@ -3910,9 +3634,7 @@
             "$ref": "#/components/schemas/LinkedCustomDomain"
           }
         },
-        "required": [
-          "domain"
-        ]
+        "required": ["domain"]
       },
       "LinkCustomDomainBody": {
         "type": "object",
@@ -3923,9 +3645,7 @@
             "description": "The host to link — a subdomain or the apex of a parent."
           }
         },
-        "required": [
-          "hostname"
-        ]
+        "required": ["hostname"]
       },
       "VerifyCustomDomainResponse": {
         "type": "object",
@@ -3934,9 +3654,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "certStatus"
-        ]
+        "required": ["certStatus"]
       },
       "UnlinkCustomDomainResponse": {
         "type": "object",
@@ -3945,9 +3663,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "removed"
-        ]
+        "required": ["removed"]
       }
     },
     "parameters": {},
@@ -3963,9 +3679,7 @@
   "paths": {
     "/v1/info": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Get authenticated user info",
         "description": "Returns the profile of the user associated with the provided API key.",
         "security": [
@@ -3999,9 +3713,7 @@
     },
     "/v1/organizations": {
       "get": {
-        "tags": [
-          "Organizations"
-        ],
+        "tags": ["Organizations"],
         "summary": "List organizations the API key's user belongs to",
         "description": "Use the returned `id` as the `x-ownkube-organization` header on subsequent requests when your account belongs to more than one org.",
         "security": [
@@ -4095,9 +3807,7 @@
     },
     "/v1/aws/connect": {
       "post": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Start connecting an AWS account",
         "description": "Mints a cross-account access request and returns the CloudFormation artifacts. Reuses this org's in-flight (unproven) row, so repeated calls do not pile up records. Poll GET /v1/aws/accounts/{accountId} until status is `verified` or `failed`.",
         "security": [
@@ -4191,9 +3901,7 @@
     },
     "/v1/aws/accounts": {
       "get": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "List connected AWS accounts",
         "security": [
           {
@@ -4286,9 +3994,7 @@
     },
     "/v1/aws/accounts/{accountId}": {
       "get": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Get one AWS account's status",
         "security": [
           {
@@ -4389,9 +4095,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Remove an AWS account",
         "description": "Blocked while any cluster still references the account (the cross-account role is required to tear infra down). Destroy those clusters first.",
         "security": [
@@ -4495,9 +4199,7 @@
     },
     "/v1/aws/accounts/{accountId}/verify": {
       "post": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Verify an AWS connection",
         "description": "Normally the stack's phone-home finalizes the connection automatically. Call this to force a verify, optionally passing `awsAccountId` to assume the role directly before the callback arrives.",
         "security": [
@@ -4612,9 +4314,7 @@
     },
     "/v1/aws/accounts/{accountId}/reconnect": {
       "post": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Re-arm an account whose access stack was removed",
         "description": "Re-arms the existing row in place (same external ID and account ID) and returns a fresh CloudFormation link. Re-running the stack recreates the role and re-verifies the same account, so no duplicate is created.",
         "security": [
@@ -4718,9 +4418,7 @@
     },
     "/v1/aws/accounts/{accountId}/resync": {
       "post": {
-        "tags": [
-          "AWS Onboarding"
-        ],
+        "tags": ["AWS Onboarding"],
         "summary": "Re-run account setup on a verified account",
         "description": "Re-applies the shared roles and policies for an already-verified account. Safe to call to pick up an available upgrade (`needsUpgrade: true`).",
         "security": [
@@ -4824,9 +4522,7 @@
     },
     "/v1/clusters": {
       "get": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "List clusters in the current organization",
         "security": [
           {
@@ -4917,9 +4613,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "Create a cluster",
         "description": "Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.",
         "security": [
@@ -4939,20 +4633,11 @@
                   },
                   "provider": {
                     "type": "string",
-                    "enum": [
-                      "aws",
-                      "gcp",
-                      "azure"
-                    ]
+                    "enum": ["aws", "gcp", "azure"]
                   },
                   "clusterType": {
                     "type": "string",
-                    "enum": [
-                      "eks",
-                      "gke",
-                      "aks",
-                      "k3s"
-                    ]
+                    "enum": ["eks", "gke", "aks", "k3s"]
                   },
                   "clusterName": {
                     "type": "string",
@@ -4996,11 +4681,7 @@
                   },
                   "workerCapacityType": {
                     "type": "string",
-                    "enum": [
-                      "on-demand",
-                      "spot",
-                      "prefer-spot"
-                    ],
+                    "enum": ["on-demand", "spot", "prefer-spot"],
                     "default": "on-demand"
                   },
                   "telemetryRetentionDays": {
@@ -5041,11 +4722,7 @@
                         "maximum": 20
                       }
                     },
-                    "required": [
-                      "name",
-                      "repository",
-                      "tag"
-                    ]
+                    "required": ["name", "repository", "tag"]
                   },
                   "initialTemplate": {
                     "type": "object",
@@ -5055,9 +4732,7 @@
                         "minLength": 1
                       }
                     },
-                    "required": [
-                      "slug"
-                    ]
+                    "required": ["slug"]
                   }
                 },
                 "required": [
@@ -5158,9 +4833,7 @@
     },
     "/v1/clusters/{clusterId}": {
       "get": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "Get a cluster by ID",
         "security": [
           {
@@ -5261,9 +4934,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "Destroy a cluster",
         "description": "Tears the cluster down. Blocked when the cluster still has active deployments unless `force=true` is passed.",
         "security": [
@@ -5283,10 +4954,7 @@
           {
             "schema": {
               "type": "string",
-              "enum": [
-                "true",
-                "false"
-              ],
+              "enum": ["true", "false"],
               "description": "Destroy even when the cluster still has active deployments. Defaults to false."
             },
             "required": false,
@@ -5381,9 +5049,7 @@
     },
     "/v1/clusters/{clusterId}/status": {
       "get": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "Get a cluster's live provisioning status",
         "description": "Lightweight poll target during create/destroy: status, message, and provisioning progress without the full row.",
         "security": [
@@ -5487,9 +5153,7 @@
     },
     "/v1/clusters/{clusterId}/cancel": {
       "post": {
-        "tags": [
-          "Clusters"
-        ],
+        "tags": ["Clusters"],
         "summary": "Cancel an in-flight cluster creation",
         "description": "Valid only while the cluster is still `creating`.",
         "security": [
@@ -5593,9 +5257,7 @@
     },
     "/v1/regions": {
       "get": {
-        "tags": [
-          "Regions"
-        ],
+        "tags": ["Regions"],
         "summary": "List Ownkube Compute regions",
         "description": "Lists the regions available for deploying on Ownkube Compute (the shared, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.",
         "security": [
@@ -5689,9 +5351,7 @@
     },
     "/v1/wallet": {
       "get": {
-        "tags": [
-          "Billing"
-        ],
+        "tags": ["Billing"],
         "summary": "Get the prepaid wallet balance",
         "description": "Returns the live wallet balance (granted, consumed, remaining) plus how much credit was loaded by inflow reason. Check this before deploying on Ownkube Compute — a deploy needs a positive balance.",
         "security": [
@@ -5785,9 +5445,7 @@
     },
     "/v1/spend-controls": {
       "get": {
-        "tags": [
-          "Billing"
-        ],
+        "tags": ["Billing"],
         "summary": "Get spend controls (budget cap + alerts)",
         "description": "Returns the org's optional monthly budget cap, what happens at the cap, and the spend-alert thresholds.",
         "security": [
@@ -5879,9 +5537,7 @@
         }
       },
       "put": {
-        "tags": [
-          "Billing"
-        ],
+        "tags": ["Billing"],
         "summary": "Set spend controls (budget cap + alerts)",
         "description": "Creates or updates the monthly budget cap and spend alerts. Set `budgetAction: pause` to actually cap the bill (suspends compute, data retained, at the cap); `notify` only alerts. Only the fields you pass are changed.",
         "security": [
@@ -5985,9 +5641,7 @@
     },
     "/v1/credit": {
       "get": {
-        "tags": [
-          "Billing"
-        ],
+        "tags": ["Billing"],
         "summary": "Get account credit and claim status",
         "description": "Returns whether the one-time signup credit is still claimable, the signup grant amount, the live wallet balance, and the wallet top-up minimum.",
         "security": [
@@ -6081,9 +5735,7 @@
     },
     "/v1/credit/claim": {
       "post": {
-        "tags": [
-          "Billing"
-        ],
+        "tags": ["Billing"],
         "summary": "Claim the one-time signup credit",
         "description": "Grants the one-time signup credit to fund a first Ownkube Compute deploy. Idempotent — re-claiming returns the current balance and grants nothing new. Availability is gated per account; a `403` means the signup credit isn't offered to this account yet.",
         "security": [
@@ -6177,9 +5829,7 @@
     },
     "/v1/portal": {
       "post": {
-        "tags": [
-          "Billing"
-        ],
+        "tags": ["Billing"],
         "summary": "Open the billing customer portal",
         "description": "Creates a customer-portal session and returns a browser `url` to manage payment method, invoices, and subscription. A `412` means the org has no billing account yet (start a plan first).",
         "security": [
@@ -6273,9 +5923,7 @@
     },
     "/v1/checkout/subscription": {
       "post": {
-        "tags": [
-          "Billing"
-        ],
+        "tags": ["Billing"],
         "summary": "Start a plan subscription checkout",
         "description": "Creates a checkout for a monthly plan (Personal or Team). Returns a browser `url` to complete payment; the subscription loads wallet credit each cycle once active.",
         "security": [
@@ -6379,9 +6027,7 @@
     },
     "/v1/checkout/top-up": {
       "post": {
-        "tags": [
-          "Billing"
-        ],
+        "tags": ["Billing"],
         "summary": "Top up the prepaid wallet",
         "description": "Creates a checkout to add a custom amount of credit to the organization's prepaid wallet. Returns a browser `url` to complete payment; the balance updates once the payment settles. A `400` means the amount is below the top-up minimum.",
         "security": [
@@ -6485,9 +6131,7 @@
     },
     "/v1/usage/current": {
       "get": {
-        "tags": [
-          "Usage"
-        ],
+        "tags": ["Usage"],
         "summary": "Get the live burn rate",
         "description": "Current metered vCPU + memory in use and the resulting hourly cost across everything the org runs.",
         "security": [
@@ -6581,9 +6225,7 @@
     },
     "/v1/usage/month-to-date": {
       "get": {
-        "tags": [
-          "Usage"
-        ],
+        "tags": ["Usage"],
         "summary": "Get month-to-date usage and cost",
         "description": "Usage totals (vCPU-hours, memory-GiB-hours, egress) and the gross cost drawn from the wallet so far this calendar month.",
         "security": [
@@ -6677,9 +6319,7 @@
     },
     "/v1/usage/projected": {
       "get": {
-        "tags": [
-          "Usage"
-        ],
+        "tags": ["Usage"],
         "summary": "Get the projected month cost",
         "description": "Naive straight-line projection of the month's wallet draw (month-to-date cost scaled to the full month). Volatile early in the month.",
         "security": [
@@ -6773,9 +6413,7 @@
     },
     "/v1/usage/history": {
       "get": {
-        "tags": [
-          "Usage"
-        ],
+        "tags": ["Usage"],
         "summary": "Get the daily usage series",
         "description": "Per-day usage and cost for the current calendar month, zero-filled for a continuous series.",
         "security": [
@@ -6869,9 +6507,7 @@
     },
     "/v1/projects": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "summary": "List projects in the current organization",
         "description": "A `Default` project is auto-seeded for orgs that have none yet, so this endpoint always returns at least one row.",
         "security": [
@@ -6963,9 +6599,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "summary": "Create a project",
         "security": [
           {
@@ -7068,9 +6702,7 @@
     },
     "/v1/projects/{projectId}": {
       "get": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "summary": "Get a project by ID",
         "security": [
           {
@@ -7171,9 +6803,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "summary": "Update a project's name, color, or description",
         "security": [
           {
@@ -7284,11 +6914,9 @@
         }
       },
       "delete": {
-        "tags": [
-          "Projects"
-        ],
+        "tags": ["Projects"],
         "summary": "Delete a project",
-        "description": "Soft-deletes the project. The Default project can't be deleted (`412`), and a project with live environments or deployments is blocked (`412`) until they're removed.",
+        "description": "Soft-deletes the project. The Default project can't be deleted (`412`), and a project with a live deployment is blocked (`412`) until it's removed. A project holding only environments deletes; its environments are removed with it.",
         "security": [
           {
             "apiKey": []
@@ -7390,9 +7018,7 @@
     },
     "/v1/environments": {
       "get": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "List environments in the current organization",
         "description": "Default `Development` and `Production` environments are auto-seeded for orgs that have none yet, so this endpoint always returns at least two rows.",
         "security": [
@@ -7484,9 +7110,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "Create an environment",
         "security": [
           {
@@ -7589,9 +7213,7 @@
     },
     "/v1/environments/{environmentId}": {
       "get": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "Get an environment by ID",
         "security": [
           {
@@ -7692,9 +7314,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "Update an environment's name, color, or description",
         "security": [
           {
@@ -7805,9 +7425,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "Delete an environment",
         "description": "Soft-deletes the environment. Blocked with `412` if any deployments still reference it.",
         "security": [
@@ -7911,9 +7529,7 @@
     },
     "/v1/environments/{environmentId}/env": {
       "put": {
-        "tags": [
-          "Environments"
-        ],
+        "tags": ["Environments"],
         "summary": "Replace an environment's shared env vars",
         "description": "Replaces the environment's shared env-var set and redeploys every cluster-bound app that inherits them so the change takes effect immediately.",
         "security": [
@@ -8027,9 +7643,7 @@
     },
     "/v1/registries": {
       "get": {
-        "tags": [
-          "Registries"
-        ],
+        "tags": ["Registries"],
         "summary": "List container registry connections",
         "security": [
           {
@@ -8122,9 +7736,7 @@
     },
     "/v1/registries/{registryId}": {
       "get": {
-        "tags": [
-          "Registries"
-        ],
+        "tags": ["Registries"],
         "summary": "Get a registry by ID",
         "security": [
           {
@@ -8227,11 +7839,9 @@
     },
     "/v1/deployments": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "List deployments",
-        "description": "Pass `environmentId` to scope to one environment, or `clusterId` to scope to one cluster. Omit both to list the organization's Ownkube Compute deployments (the shared, no-cluster deploy path). Passing both is an error.",
+        "description": "Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the shared, no-cluster deploy path). Passing more than one is an error.",
         "security": [
           {
             "apiKey": []
@@ -8252,6 +7862,14 @@
             },
             "required": false,
             "name": "clusterId",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "projectId",
             "in": "query"
           }
         ],
@@ -8339,9 +7957,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Create a deployment",
         "description": "Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster.",
         "security": [
@@ -8360,9 +7976,7 @@
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "web"
-                        ]
+                        "enum": ["web"]
                       },
                       "clusterId": {
                         "type": "string"
@@ -8411,10 +8025,7 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": [
-                              "dockerfile",
-                              "railpack"
-                            ]
+                            "enum": ["dockerfile", "railpack"]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -8440,11 +8051,7 @@
                             }
                           }
                         },
-                        "required": [
-                          "owner",
-                          "repo",
-                          "branch"
-                        ]
+                        "required": ["owner", "repo", "branch"]
                       },
                       "config": {
                         "type": "object",
@@ -8484,10 +8091,7 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name",
-                                "value"
-                              ]
+                              "required": ["name", "value"]
                             }
                           },
                           "startCommand": {
@@ -8520,9 +8124,7 @@
                                     "maxLength": 255
                                   }
                                 },
-                                "required": [
-                                  "username"
-                                ]
+                                "required": ["username"]
                               },
                               "oauth": {
                                 "type": "object",
@@ -8533,9 +8135,7 @@
                                   },
                                   "provider": {
                                     "type": "string",
-                                    "enum": [
-                                      "google"
-                                    ],
+                                    "enum": ["google"],
                                     "default": "google"
                                   },
                                   "allowedDomains": {
@@ -8598,9 +8198,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               },
                               "liveness": {
                                 "type": "object",
@@ -8637,9 +8235,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               },
                               "readiness": {
                                 "type": "object",
@@ -8676,9 +8272,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               }
                             }
                           },
@@ -8697,10 +8291,7 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               },
                               "limits": {
                                 "type": "object",
@@ -8714,16 +8305,10 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               }
                             },
-                            "required": [
-                              "requests",
-                              "limits"
-                            ]
+                            "required": ["requests", "limits"]
                           },
                           "autoscaling": {
                             "type": "object",
@@ -8821,10 +8406,7 @@
                                       ]
                                     }
                                   },
-                                  "required": [
-                                    "key",
-                                    "effect"
-                                  ]
+                                  "required": ["key", "effect"]
                                 },
                                 "maxItems": 16
                               }
@@ -8832,36 +8414,23 @@
                           },
                           "billingMode": {
                             "type": "string",
-                            "enum": [
-                              "metered",
-                              "reserved"
-                            ]
+                            "enum": ["metered", "reserved"]
                           },
                           "skuId": {
                             "type": "string"
                           }
                         },
-                        "required": [
-                          "repository",
-                          "tag",
-                          "port"
-                        ]
+                        "required": ["repository", "tag", "port"]
                       }
                     },
-                    "required": [
-                      "resourceType",
-                      "name",
-                      "config"
-                    ]
+                    "required": ["resourceType", "name", "config"]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "worker"
-                        ]
+                        "enum": ["worker"]
                       },
                       "clusterId": {
                         "type": "string"
@@ -8910,10 +8479,7 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": [
-                              "dockerfile",
-                              "railpack"
-                            ]
+                            "enum": ["dockerfile", "railpack"]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -8939,11 +8505,7 @@
                             }
                           }
                         },
-                        "required": [
-                          "owner",
-                          "repo",
-                          "branch"
-                        ]
+                        "required": ["owner", "repo", "branch"]
                       },
                       "config": {
                         "type": "object",
@@ -8983,10 +8545,7 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name",
-                                "value"
-                              ]
+                              "required": ["name", "value"]
                             }
                           },
                           "startCommand": {
@@ -9019,9 +8578,7 @@
                                     "maxLength": 255
                                   }
                                 },
-                                "required": [
-                                  "username"
-                                ]
+                                "required": ["username"]
                               },
                               "oauth": {
                                 "type": "object",
@@ -9032,9 +8589,7 @@
                                   },
                                   "provider": {
                                     "type": "string",
-                                    "enum": [
-                                      "google"
-                                    ],
+                                    "enum": ["google"],
                                     "default": "google"
                                   },
                                   "allowedDomains": {
@@ -9097,9 +8652,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               },
                               "liveness": {
                                 "type": "object",
@@ -9136,9 +8689,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               },
                               "readiness": {
                                 "type": "object",
@@ -9175,9 +8726,7 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": [
-                                  "path"
-                                ]
+                                "required": ["path"]
                               }
                             }
                           },
@@ -9196,10 +8745,7 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               },
                               "limits": {
                                 "type": "object",
@@ -9213,16 +8759,10 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               }
                             },
-                            "required": [
-                              "requests",
-                              "limits"
-                            ]
+                            "required": ["requests", "limits"]
                           },
                           "autoscaling": {
                             "type": "object",
@@ -9320,10 +8860,7 @@
                                       ]
                                     }
                                   },
-                                  "required": [
-                                    "key",
-                                    "effect"
-                                  ]
+                                  "required": ["key", "effect"]
                                 },
                                 "maxItems": 16
                               }
@@ -9331,36 +8868,23 @@
                           },
                           "billingMode": {
                             "type": "string",
-                            "enum": [
-                              "metered",
-                              "reserved"
-                            ]
+                            "enum": ["metered", "reserved"]
                           },
                           "skuId": {
                             "type": "string"
                           }
                         },
-                        "required": [
-                          "repository",
-                          "tag",
-                          "port"
-                        ]
+                        "required": ["repository", "tag", "port"]
                       }
                     },
-                    "required": [
-                      "resourceType",
-                      "name",
-                      "config"
-                    ]
+                    "required": ["resourceType", "name", "config"]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "job"
-                        ]
+                        "enum": ["job"]
                       },
                       "clusterId": {
                         "type": "string"
@@ -9409,10 +8933,7 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": [
-                              "dockerfile",
-                              "railpack"
-                            ]
+                            "enum": ["dockerfile", "railpack"]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -9438,11 +8959,7 @@
                             }
                           }
                         },
-                        "required": [
-                          "owner",
-                          "repo",
-                          "branch"
-                        ]
+                        "required": ["owner", "repo", "branch"]
                       },
                       "config": {
                         "type": "object",
@@ -9485,10 +9002,7 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name",
-                                "value"
-                              ]
+                              "required": ["name", "value"]
                             }
                           },
                           "resources": {
@@ -9506,10 +9020,7 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               },
                               "limits": {
                                 "type": "object",
@@ -9523,16 +9034,10 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               }
                             },
-                            "required": [
-                              "requests",
-                              "limits"
-                            ]
+                            "required": ["requests", "limits"]
                           },
                           "schedule": {
                             "type": "object",
@@ -9547,11 +9052,7 @@
                               },
                               "concurrencyPolicy": {
                                 "type": "string",
-                                "enum": [
-                                  "Allow",
-                                  "Forbid",
-                                  "Replace"
-                                ],
+                                "enum": ["Allow", "Forbid", "Replace"],
                                 "default": "Forbid"
                               },
                               "timeZone": {
@@ -9574,9 +9075,7 @@
                                 "maximum": 100
                               }
                             },
-                            "required": [
-                              "expression"
-                            ]
+                            "required": ["expression"]
                           },
                           "job": {
                             "type": "object",
@@ -9608,36 +9107,23 @@
                               },
                               "restartPolicy": {
                                 "type": "string",
-                                "enum": [
-                                  "Never",
-                                  "OnFailure"
-                                ],
+                                "enum": ["Never", "OnFailure"],
                                 "default": "Never"
                               }
                             }
                           }
                         },
-                        "required": [
-                          "repository",
-                          "tag",
-                          "schedule"
-                        ]
+                        "required": ["repository", "tag", "schedule"]
                       }
                     },
-                    "required": [
-                      "resourceType",
-                      "name",
-                      "config"
-                    ]
+                    "required": ["resourceType", "name", "config"]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "database"
-                        ]
+                        "enum": ["database"]
                       },
                       "clusterId": {
                         "type": "string"
@@ -9661,16 +9147,11 @@
                         "properties": {
                           "engine": {
                             "type": "string",
-                            "enum": [
-                              "postgres"
-                            ]
+                            "enum": ["postgres"]
                           },
                           "version": {
                             "type": "string",
-                            "enum": [
-                              "17",
-                              "18"
-                            ]
+                            "enum": ["17", "18"]
                           },
                           "instances": {
                             "type": "integer",
@@ -9680,10 +9161,7 @@
                           },
                           "billingMode": {
                             "type": "string",
-                            "enum": [
-                              "metered",
-                              "reserved"
-                            ]
+                            "enum": ["metered", "reserved"]
                           },
                           "skuId": {
                             "type": "string"
@@ -9708,10 +9186,7 @@
                                 }
                               }
                             },
-                            "required": [
-                              "database",
-                              "owner"
-                            ]
+                            "required": ["database", "owner"]
                           },
                           "storage": {
                             "type": "object",
@@ -9726,9 +9201,7 @@
                                 "default": "gp3"
                               }
                             },
-                            "required": [
-                              "size"
-                            ]
+                            "required": ["size"]
                           },
                           "public": {
                             "type": "boolean"
@@ -9748,10 +9221,7 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               },
                               "limits": {
                                 "type": "object",
@@ -9765,16 +9235,10 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               }
                             },
-                            "required": [
-                              "requests",
-                              "limits"
-                            ]
+                            "required": ["requests", "limits"]
                           },
                           "pooler": {
                             "type": "object",
@@ -9790,17 +9254,11 @@
                               },
                               "type": {
                                 "type": "string",
-                                "enum": [
-                                  "rw",
-                                  "ro"
-                                ]
+                                "enum": ["rw", "ro"]
                               },
                               "mode": {
                                 "type": "string",
-                                "enum": [
-                                  "session",
-                                  "transaction"
-                                ]
+                                "enum": ["session", "transaction"]
                               },
                               "parameters": {
                                 "type": "object",
@@ -9829,9 +9287,7 @@
                                 "type": "boolean"
                               }
                             },
-                            "required": [
-                              "enablePodMonitor"
-                            ]
+                            "required": ["enablePodMonitor"]
                           },
                           "backup": {
                             "type": "object",
@@ -9864,14 +9320,10 @@
                                     "type": "boolean"
                                   }
                                 },
-                                "required": [
-                                  "enabled"
-                                ]
+                                "required": ["enabled"]
                               }
                             },
-                            "required": [
-                              "enabled"
-                            ]
+                            "required": ["enabled"]
                           },
                           "scheduledBackup": {
                             "type": "object",
@@ -9890,10 +9342,7 @@
                                 "type": "boolean"
                               }
                             },
-                            "required": [
-                              "enabled",
-                              "schedule"
-                            ]
+                            "required": ["enabled", "schedule"]
                           }
                         },
                         "required": [
@@ -9904,20 +9353,14 @@
                         ]
                       }
                     },
-                    "required": [
-                      "resourceType",
-                      "name",
-                      "config"
-                    ]
+                    "required": ["resourceType", "name", "config"]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "cache"
-                        ]
+                        "enum": ["cache"]
                       },
                       "clusterId": {
                         "type": "string"
@@ -9941,22 +9384,15 @@
                         "properties": {
                           "engine": {
                             "type": "string",
-                            "enum": [
-                              "valkey"
-                            ]
+                            "enum": ["valkey"]
                           },
                           "version": {
                             "type": "string",
-                            "enum": [
-                              "8.1"
-                            ]
+                            "enum": ["8.1"]
                           },
                           "billingMode": {
                             "type": "string",
-                            "enum": [
-                              "metered",
-                              "reserved"
-                            ]
+                            "enum": ["metered", "reserved"]
                           },
                           "skuId": {
                             "type": "string"
@@ -9989,10 +9425,7 @@
                                 "minLength": 1
                               }
                             },
-                            "required": [
-                              "enabled",
-                              "size"
-                            ]
+                            "required": ["enabled", "size"]
                           },
                           "public": {
                             "type": "boolean"
@@ -10012,10 +9445,7 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               },
                               "limits": {
                                 "type": "object",
@@ -10029,45 +9459,32 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": [
-                                  "cpu",
-                                  "memory"
-                                ]
+                                "required": ["cpu", "memory"]
                               }
                             },
-                            "required": [
-                              "requests",
-                              "limits"
-                            ]
+                            "required": ["requests", "limits"]
                           }
                         },
-                        "required": [
-                          "engine",
-                          "version"
-                        ]
+                        "required": ["engine", "version"]
                       }
                     },
-                    "required": [
-                      "resourceType",
-                      "name",
-                      "config"
-                    ]
+                    "required": ["resourceType", "name", "config"]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": [
-                          "function"
-                        ]
+                        "enum": ["function"]
                       },
                       "cloudAccountId": {
                         "type": "string"
                       },
+                      "clusterId": {
+                        "type": "string"
+                      },
                       "region": {
-                        "type": "string",
-                        "minLength": 1
+                        "type": "string"
                       },
                       "name": {
                         "type": "string",
@@ -10107,10 +9524,7 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": [
-                              "dockerfile",
-                              "railpack"
-                            ]
+                            "enum": ["dockerfile", "railpack"]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -10136,11 +9550,23 @@
                             }
                           }
                         },
-                        "required": [
-                          "owner",
-                          "repo",
-                          "branch"
-                        ]
+                        "required": ["owner", "repo", "branch"]
+                      },
+                      "source": {
+                        "type": "object",
+                        "properties": {
+                          "filename": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 128
+                          },
+                          "code": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 256000
+                          }
+                        },
+                        "required": ["filename", "code"]
                       },
                       "config": {
                         "type": "object",
@@ -10157,10 +9583,7 @@
                           },
                           "architecture": {
                             "type": "string",
-                            "enum": [
-                              "x86_64",
-                              "arm64"
-                            ],
+                            "enum": ["x86_64", "arm64"],
                             "default": "arm64"
                           },
                           "memoryMb": {
@@ -10197,10 +9620,7 @@
                                   "type": "string"
                                 }
                               },
-                              "required": [
-                                "name",
-                                "value"
-                              ]
+                              "required": ["name", "value"]
                             }
                           },
                           "triggers": {
@@ -10220,19 +9640,14 @@
                                     "type": "string"
                                   }
                                 },
-                                "required": [
-                                  "schedule"
-                                ]
+                                "required": ["schedule"]
                               },
                               "http": {
                                 "type": "object",
                                 "properties": {
                                   "authType": {
                                     "type": "string",
-                                    "enum": [
-                                      "none",
-                                      "iam"
-                                    ],
+                                    "enum": ["none", "iam"],
                                     "default": "none"
                                   },
                                   "cors": {
@@ -10266,23 +9681,16 @@
                                 }
                               }
                             }
+                          },
+                          "substrate": {
+                            "type": "string",
+                            "enum": ["lambda", "ember"]
                           }
                         },
-                        "required": [
-                          "runtime",
-                          "handler",
-                          "triggers"
-                        ]
+                        "required": ["runtime", "handler", "triggers"]
                       }
                     },
-                    "required": [
-                      "resourceType",
-                      "cloudAccountId",
-                      "region",
-                      "name",
-                      "github",
-                      "config"
-                    ]
+                    "required": ["resourceType", "name", "config"]
                   }
                 ]
               }
@@ -10375,9 +9783,7 @@
     },
     "/v1/deployments/{deploymentId}": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Get a deployment by ID",
         "security": [
           {
@@ -10479,9 +9885,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Delete a deployment",
         "description": "Soft-deletes the deployment and tears down its cluster resources. Functions hand off to an async teardown and report `deleting` until it finalizes.",
         "security": [
@@ -10584,9 +9988,7 @@
         }
       },
       "patch": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Update a deployment's configuration",
         "description": "Updates a cluster-bound deployment (web/worker/job/database) and records a revision. Send the config block matching the deployment's type: `appConfig` for web/worker, `jobConfig` for job, `databaseConfig` for database. Use the function update endpoint for functions.",
         "security": [
@@ -10701,9 +10103,7 @@
     },
     "/v1/deployments/{deploymentId}/status": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Get live rollout status",
         "security": [
           {
@@ -10807,9 +10207,7 @@
     },
     "/v1/deployments/{deploymentId}/logs": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Tail recent log lines",
         "description": "Reads log lines from the in-cluster logs backend over the requested window. `filter` accepts a LogsQL regex matched against the message body.",
         "security": [
@@ -10946,9 +10344,7 @@
     },
     "/v1/deployments/{deploymentId}/connection": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Get database connection details",
         "description": "Returns the host, port, credentials, and connection URI for a database deployment. Only valid for `resourceType: database`.",
         "security": [
@@ -11053,9 +10449,7 @@
     },
     "/v1/deployments/{deploymentId}/cache-connection": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Get cache connection details",
         "description": "Returns the host, port, password, and connection URI for a cache deployment. Only valid for `resourceType: cache`.",
         "security": [
@@ -11158,11 +10552,208 @@
         }
       }
     },
+    "/v1/functions": {
+      "get": {
+        "tags": ["Deployments"],
+        "summary": "List Ownkube Compute functions",
+        "description": "Lists the organization's `function`-type deployments. Functions are cluster-less (they attach to a cloud account + region, not a cluster) so they never appear under `clusterId`; this is the dedicated function listing.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Functions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/function/source": {
+      "get": {
+        "tags": ["Deployments"],
+        "summary": "Get a Compute function's inline source",
+        "description": "Returns the stored inline source file for an Ownkube Compute function. Only valid for a Compute (`ember`) function; own-cloud functions and non-functions return `404`. A freshly-created function whose upload hasn't landed yet also returns `404`.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Function source",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FunctionSourceResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/deployments/{deploymentId}/connect-session": {
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Open a direct connection session to a database",
         "description": "Mints a single-use, short-lived ticket for a direct tunnel to a managed database deployment. Databases only. Present the ticket to the returned relay URL to establish the connection.",
         "security": [
@@ -11266,9 +10857,7 @@
     },
     "/v1/deployments/{deploymentId}/function": {
       "patch": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Update a function's configuration",
         "description": "Updates a `function`-type deployment's config (handler, runtime, env, triggers) and records a revision.",
         "security": [
@@ -11381,11 +10970,124 @@
         }
       }
     },
+    "/v1/deployments/{deploymentId}/function/deploy": {
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Deploy code and settings to a Compute function",
+        "description": "Ships a new revision of an Ownkube Compute (`ember`) function: applies the `config` knobs (env, timeout, triggers) and — when `code` is given — uploads the new inline source, folding both into ONE revision. Omit `code` to change settings only. Not valid for own-cloud (Lambda) functions; use the function update endpoint for those.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "depl_01h..."
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeployFunctionBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Deployed function",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeploymentActionResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/deployments/{deploymentId}/copy": {
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Copy a deployment to another environment",
         "description": "Clones this deployment's current config into `targetEnvironmentId` on `targetClusterId`, creating a new deployment. Not valid for functions.",
         "security": [
@@ -11500,9 +11202,7 @@
     },
     "/v1/deployments/{deploymentId}/reset-password": {
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Reset a database deployment's password",
         "description": "Rotates the owner-role password of a `database`-type deployment and returns the new password. The response intentionally contains the live credential.",
         "security": [
@@ -11607,9 +11307,7 @@
     },
     "/v1/deployments/{deploymentId}/job-runs": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "List a scheduled job's recent runs",
         "description": "Reads the CronJob and its spawned runs live from the cluster. Non-job deployments return an empty, non-existent history rather than erroring.",
         "security": [
@@ -11712,9 +11410,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Trigger a scheduled job now",
         "description": "Spawns a one-off run of a `job`-type deployment off-schedule and returns the created Job name.",
         "security": [
@@ -11819,9 +11515,7 @@
     },
     "/v1/deployments/{deploymentId}/job-runs/{jobName}": {
       "delete": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Cancel an in-flight job run",
         "description": "Deletes the named run's Job (terminating its Pods). The named Job must belong to this deployment's CronJob.",
         "security": [
@@ -11933,9 +11627,7 @@
     },
     "/v1/deployments/{deploymentId}/restore": {
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Recover a database to an earlier point in time",
         "description": "Destructive, in-place point-in-time recovery of a `database`-type deployment: WIPES the current volume and rebuilds the database from its own automated backups at `targetTime` (omit for the latest point). Requires backups to be enabled. This cannot be undone.",
         "security": [
@@ -12050,9 +11742,7 @@
     },
     "/v1/deployments/{deploymentId}/restart": {
       "post": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Restart a deployment",
         "description": "Rollout-restarts a running web or worker deployment (replaces every pod with the same image). Not a rebuild and not a new revision. Only valid for web/worker deployments that are already live.",
         "security": [
@@ -12156,9 +11846,7 @@
     },
     "/v1/deployments/{deploymentId}/auto-deploy": {
       "put": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Turn auto-deploy on or off",
         "description": "Enables or disables auto-deploy on a source-backed deployment. Reuses the branch captured at create time. Rejected for deployments without a source repository.",
         "security": [
@@ -12272,9 +11960,7 @@
     },
     "/v1/deployments/{deploymentId}/maintenance": {
       "put": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Turn maintenance mode on or off",
         "description": "Diverts a public web deployment's URL to a branded maintenance page (the workload keeps running). Only valid once public access is on and the first build has completed.",
         "security": [
@@ -12388,9 +12074,7 @@
     },
     "/v1/deployments/{deploymentId}/name": {
       "put": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Set a deployment's display name",
         "description": "Sets (or clears) the cosmetic display label. Never touches the immutable name / cluster identity, cuts no revision, and does not re-sync.",
         "security": [
@@ -12502,11 +12186,123 @@
         }
       }
     },
+    "/v1/deployments/{deploymentId}/project": {
+      "put": {
+        "tags": ["Deployments"],
+        "summary": "Move a deployment to another project",
+        "description": "Re-files a deployment under a different project. A project is a purely organizational grouping, so this is a control-plane-only change: it cuts no revision, doesn't re-sync the cluster, and keeps the environment, namespace, address, and running workloads exactly where they are. A marketplace app and its managed database/cache move together as one group.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MoveToProjectBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Move result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MoveToProjectResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/deployments/{deploymentId}/build-args": {
       "put": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Set custom build arguments",
         "description": "Replaces the custom build-time arguments for a deployment that builds on your cluster. Applies on the next build. An empty map clears them.",
         "security": [
@@ -12620,9 +12416,7 @@
     },
     "/v1/deployments/{deploymentId}/build-context": {
       "put": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Set the build root directory",
         "description": "Sets the root directory (build context) for a deployment that builds on your cluster — how a monorepo app in a subdirectory gets built. Applies on the next build. Empty string clears it.",
         "security": [
@@ -12736,9 +12530,7 @@
     },
     "/v1/deployments/{deploymentId}/builder-size": {
       "put": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Set the builder size",
         "description": "Sets the build pod's size (small / standard / large) for a deployment that builds on your cluster. Applies on the next build. On Ownkube Compute, `large` requires the Team plan.",
         "security": [
@@ -12852,9 +12644,7 @@
     },
     "/v1/deployments/{deploymentId}/subdomain/check": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Check if an address label is available",
         "description": "Checks whether an address label is legal and free right now for this deployment. `current: true` means it's the label the deployment already holds.",
         "security": [
@@ -12968,9 +12758,7 @@
     },
     "/v1/deployments/{deploymentId}/subdomain/suggest": {
       "get": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Suggest available address labels",
         "description": "Returns a handful of address labels that are free right now, seeded from the deployment name (or the `desired` seed) and namespaced with the environment and organization when they read well.",
         "security": [
@@ -13094,9 +12882,7 @@
     },
     "/v1/deployments/{deploymentId}/subdomain": {
       "put": {
-        "tags": [
-          "Deployments"
-        ],
+        "tags": ["Deployments"],
         "summary": "Change a deployment's public address",
         "description": "Moves a public web app to a chosen address label and re-syncs its route. The old address stops resolving. Not valid for databases (their certificate is issued for the hostname).",
         "security": [
@@ -13210,9 +12996,7 @@
     },
     "/v1/deployments/{deploymentId}/revisions": {
       "get": {
-        "tags": [
-          "Revisions"
-        ],
+        "tags": ["Revisions"],
         "summary": "List revisions for a deployment (newest first)",
         "security": [
           {
@@ -13315,9 +13099,7 @@
     },
     "/v1/deployments/{deploymentId}/revisions/{revisionId}/rollback": {
       "post": {
-        "tags": [
-          "Revisions"
-        ],
+        "tags": ["Revisions"],
         "summary": "Roll a deployment back to a prior revision",
         "description": "Restores the config snapshot from `revisionId` onto the deployment and records a new revision. Returns the new revision.",
         "security": [
@@ -13439,9 +13221,7 @@
     },
     "/v1/deployments/{deploymentId}/promote": {
       "post": {
-        "tags": [
-          "Revisions"
-        ],
+        "tags": ["Revisions"],
         "summary": "Promote a deployment's config to another deployment",
         "description": "Copies this deployment's current config into `targetDeploymentId`, records a revision there, and links it back to this deployment's latest revision. Returns the new revision on the target.",
         "security": [
@@ -13555,9 +13335,7 @@
     },
     "/v1/deployments/{deploymentId}/rebuild": {
       "post": {
-        "tags": [
-          "Revisions"
-        ],
+        "tags": ["Revisions"],
         "summary": "Rebuild a deployment from source",
         "description": "Rebuilds an in-cluster deployment from the current head of its tracked branch — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.",
         "security": [
@@ -13672,9 +13450,7 @@
     },
     "/v1/source-uploads": {
       "post": {
-        "tags": [
-          "Revisions"
-        ],
+        "tags": ["Revisions"],
         "summary": "Presign an upload slot for local source",
         "description": "Mints a short-lived upload slot for `okctl up`: returns an `uploadId` plus a pre-signed URL to PUT a gzipped tarball of the working tree to. Pass the `uploadId` to POST /v1/deployments/{deploymentId}/up to build and deploy it.",
         "security": [
@@ -13768,9 +13544,7 @@
     },
     "/v1/deployments/{deploymentId}/up": {
       "post": {
-        "tags": [
-          "Revisions"
-        ],
+        "tags": ["Revisions"],
         "summary": "Build and deploy previously uploaded local source",
         "description": "Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.",
         "security": [
@@ -13884,9 +13658,7 @@
     },
     "/v1/deployments/{deploymentId}/telemetry": {
       "get": {
-        "tags": [
-          "Telemetry"
-        ],
+        "tags": ["Telemetry"],
         "summary": "Get overview telemetry (CPU, memory, requests, latency)",
         "description": "Reads the overview telemetry tiles — CPU, memory, request rate, and p95 latency — over the requested window. Returns `null` when the cluster isn't reachable yet.",
         "security": [
@@ -14012,9 +13784,7 @@
     },
     "/v1/deployments/{deploymentId}/observability": {
       "get": {
-        "tags": [
-          "Telemetry"
-        ],
+        "tags": ["Telemetry"],
         "summary": "Get expanded observability series",
         "description": "Reads the expanded observability panel — per-status-class request rate, latency percentiles, and CPU/memory time-series — over the requested window. `hasRequestData` is false for workloads whose gateway doesn't report per-deployment request telemetry. Returns `null` when the cluster isn't reachable yet.",
         "security": [
@@ -14140,9 +13910,7 @@
     },
     "/v1/deployments/{deploymentId}/telemetry/database": {
       "get": {
-        "tags": [
-          "Telemetry"
-        ],
+        "tags": ["Telemetry"],
         "summary": "Get database telemetry",
         "description": "Reads database-shaped telemetry — connections, disk usage, database size, CPU, memory, and transaction rate. Returns `null` for non-database deployments or when the cluster isn't reachable yet.",
         "security": [
@@ -14268,9 +14036,7 @@
     },
     "/v1/deployments/{deploymentId}/telemetry/cache": {
       "get": {
-        "tags": [
-          "Telemetry"
-        ],
+        "tags": ["Telemetry"],
         "summary": "Get cache telemetry",
         "description": "Reads cache-shaped telemetry — connected clients, memory, ops/sec, hit rate, CPU, and disk. Returns `null` for non-cache deployments or when the cluster isn't reachable yet.",
         "security": [
@@ -14396,9 +14162,7 @@
     },
     "/v1/deployments/{deploymentId}/telemetry/function": {
       "get": {
-        "tags": [
-          "Telemetry"
-        ],
+        "tags": ["Telemetry"],
         "summary": "Get function telemetry",
         "description": "Reads invocation-shaped telemetry — invocations, errors, duration, throttles, and concurrency — for a function deployment. Returns `null` for non-function deployments or when the function isn't provisioned yet.",
         "security": [
@@ -14524,9 +14288,7 @@
     },
     "/v1/deployments/{deploymentId}/revisions/{revisionId}/build-logs": {
       "get": {
-        "tags": [
-          "Telemetry"
-        ],
+        "tags": ["Telemetry"],
         "summary": "Get a revision's build log",
         "description": "Reads the build output for one revision — the live build pod while a build is in flight, else the durable log store once the build settles. Best-effort: returns an empty log rather than erroring when no build output is available.",
         "security": [
@@ -14649,9 +14411,7 @@
     },
     "/v1/deployments/{deploymentId}/alerts": {
       "get": {
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "summary": "List alert rules for a deployment (newest first)",
         "security": [
           {
@@ -14752,9 +14512,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "summary": "Create an alert rule",
         "description": "Creates a metric alert rule on an Ownkube Compute deployment. `metric` is `cpu`/`memory` (percent of the app's limit, threshold ≤ 100) or `restarts` (a raw count). Only valid for Ownkube Compute deployments.",
         "security": [
@@ -14786,18 +14544,11 @@
                   },
                   "metric": {
                     "type": "string",
-                    "enum": [
-                      "cpu",
-                      "memory",
-                      "restarts"
-                    ]
+                    "enum": ["cpu", "memory", "restarts"]
                   },
                   "comparator": {
                     "type": "string",
-                    "enum": [
-                      "gt",
-                      "lt"
-                    ],
+                    "enum": ["gt", "lt"],
                     "default": "gt"
                   },
                   "threshold": {
@@ -14819,18 +14570,11 @@
                   },
                   "severity": {
                     "type": "string",
-                    "enum": [
-                      "warning",
-                      "critical"
-                    ],
+                    "enum": ["warning", "critical"],
                     "default": "warning"
                   }
                 },
-                "required": [
-                  "name",
-                  "metric",
-                  "threshold"
-                ]
+                "required": ["name", "metric", "threshold"]
               }
             }
           }
@@ -14921,9 +14665,7 @@
     },
     "/v1/alert-rules/{ruleId}": {
       "patch": {
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "summary": "Update an alert rule",
         "description": "Edits an alert rule's fields or toggles `enabled`. All body fields are optional; percent metrics still cap the threshold at 100.",
         "security": [
@@ -14955,18 +14697,11 @@
                   },
                   "metric": {
                     "type": "string",
-                    "enum": [
-                      "cpu",
-                      "memory",
-                      "restarts"
-                    ]
+                    "enum": ["cpu", "memory", "restarts"]
                   },
                   "comparator": {
                     "type": "string",
-                    "enum": [
-                      "gt",
-                      "lt"
-                    ],
+                    "enum": ["gt", "lt"],
                     "default": "gt"
                   },
                   "threshold": {
@@ -14988,10 +14723,7 @@
                   },
                   "severity": {
                     "type": "string",
-                    "enum": [
-                      "warning",
-                      "critical"
-                    ],
+                    "enum": ["warning", "critical"],
                     "default": "warning"
                   },
                   "enabled": {
@@ -15086,9 +14818,7 @@
         }
       },
       "delete": {
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "summary": "Delete an alert rule",
         "security": [
           {
@@ -15191,9 +14921,7 @@
     },
     "/v1/alert-firings": {
       "get": {
-        "tags": [
-          "Alerts"
-        ],
+        "tags": ["Alerts"],
         "summary": "List recent alert firings (newest first)",
         "description": "Lists recent alert firings for the organization, optionally scoped to one deployment. A firing is recorded when a rule starts breaching and updated to `resolved` when it recovers.",
         "security": [
@@ -15308,9 +15036,7 @@
     },
     "/v1/deployments/{deploymentId}/custom-domains": {
       "get": {
-        "tags": [
-          "Custom Domains"
-        ],
+        "tags": ["Custom Domains"],
         "summary": "List a deployment's linked custom domains",
         "description": "Lists the hosts linked to this web app plus the parent domains registered on its cluster that are available to link. Each linked host carries the DNS record the customer sets to route it.",
         "security": [
@@ -15412,9 +15138,7 @@
         }
       },
       "post": {
-        "tags": [
-          "Custom Domains"
-        ],
+        "tags": ["Custom Domains"],
         "summary": "Link a custom domain to a deployment",
         "description": "Links a host (a subdomain like `app.customer.com`, or the apex `customer.com`) to a public web app. The host's parent domain must already be registered on the app's cluster. Returns the linked host with the DNS record to create.",
         "security": [
@@ -15528,9 +15252,7 @@
     },
     "/v1/custom-domains/{domainId}/verify": {
       "post": {
-        "tags": [
-          "Custom Domains"
-        ],
+        "tags": ["Custom Domains"],
         "summary": "Recheck a linked custom domain",
         "description": "Re-runs the reconcile for a linked host and reports the parent certificate status. The host goes live once its routing record resolves and the certificate is active.",
         "security": [
@@ -15634,9 +15356,7 @@
     },
     "/v1/custom-domains/{domainId}": {
       "delete": {
-        "tags": [
-          "Custom Domains"
-        ],
+        "tags": ["Custom Domains"],
         "summary": "Unlink a custom domain",
         "description": "Detaches a host from its deployment. The parent domain stays registered on the cluster for other apps.",
         "security": [
