@@ -22,8 +22,7 @@ func manifestToJSON(raw []byte) ([]byte, error) {
 }
 
 // renderActionResult prints a DeploymentActionResult as a field table, or the
-// raw object when structured output is requested. Chart-backed versions are
-// surfaced as "Platform Version" per the product vocabulary.
+// raw object when structured output is requested.
 func renderActionResult(cmd *cobra.Command, r *api.DeploymentActionResult) error {
 	if ux.IsStructured() {
 		return ux.Print(cmd.OutOrStdout(), r)
@@ -37,7 +36,6 @@ func renderActionResult(cmd *cobra.Command, r *api.DeploymentActionResult) error
 		{"Status Message", r.StatusMessage},
 		{"Cluster", r.ClusterId},
 		{"Environment", r.EnvironmentId},
-		{"Platform Version", r.ChartVersion},
 	})
 }
 
@@ -56,7 +54,6 @@ func renderCreated(cmd *cobra.Command, r *api.CreateDeploymentResponse) error {
 		{"Cluster", r.ClusterId},
 		{"Environment", r.EnvironmentId},
 		{"Public Hostname", r.PublicHostname},
-		{"Platform Version", r.ChartVersion},
 	})
 }
 

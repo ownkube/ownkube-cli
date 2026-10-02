@@ -36,8 +36,6 @@ func getCmd() *cobra.Command {
 				{"Status", c.Status},
 				{"Status Message", ux.Deref(c.StatusMessage)},
 				{"Kubernetes Version", ux.Deref(c.KubernetesVersion)},
-				{"Platform Version", ux.Deref(c.BootstrapChartVersion)},
-				{"Latest Platform Version", ux.Deref(c.LatestBootstrapChartVersion)},
 				{"Active Deployments", fmt32(c.ActiveDeploymentCount)},
 				{"Upgrade Available", fmtBool(c.UpgradeAvailable)},
 			})

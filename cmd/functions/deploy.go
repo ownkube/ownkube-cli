@@ -61,8 +61,6 @@ func manifestToJSON(raw []byte) ([]byte, error) {
 }
 
 // renderActionResult prints the DeploymentActionResult from a function deploy.
-// Chart-backed versions are surfaced as "Platform Version" per the product
-// vocabulary.
 func renderActionResult(cmd *cobra.Command, r *api.DeploymentActionResult) error {
 	if ux.IsStructured() {
 		return ux.Print(cmd.OutOrStdout(), r)
@@ -75,6 +73,5 @@ func renderActionResult(cmd *cobra.Command, r *api.DeploymentActionResult) error
 		{"Status", r.Status},
 		{"Status Message", r.StatusMessage},
 		{"Environment", r.EnvironmentId},
-		{"Platform Version", r.ChartVersion},
 	})
 }

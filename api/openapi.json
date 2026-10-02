@@ -409,14 +409,6 @@
             "type": "string",
             "nullable": true
           },
-          "bootstrapChartVersion": {
-            "type": "string",
-            "nullable": true
-          },
-          "stackConfigVersion": {
-            "type": "number",
-            "nullable": true
-          },
           "infrastructureUpgradeAvailable": {
             "type": "boolean"
           },
@@ -425,10 +417,6 @@
           },
           "upgradeAvailable": {
             "type": "boolean"
-          },
-          "latestBootstrapChartVersion": {
-            "type": "string",
-            "nullable": true
           },
           "activeDeploymentCount": {
             "type": "number"
@@ -1088,6 +1076,10 @@
           "id": {
             "type": "string"
           },
+          "projectId": {
+            "type": "string",
+            "nullable": true
+          },
           "name": {
             "type": "string"
           },
@@ -1101,6 +1093,24 @@
           "color": {
             "type": "string",
             "nullable": true
+          },
+          "env": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                },
+                "secret": {
+                  "type": "boolean"
+                }
+              },
+              "required": ["name", "value"]
+            }
           },
           "isDefault": {
             "type": "boolean"
@@ -1361,10 +1371,6 @@
             "type": "string",
             "nullable": true
           },
-          "chartVersion": {
-            "type": "string",
-            "nullable": true
-          },
           "autoDeployEnabled": {
             "type": "boolean",
             "nullable": true
@@ -1412,8 +1418,7 @@
           "resourceType",
           "status",
           "statusMessage",
-          "publicHostname",
-          "chartVersion"
+          "publicHostname"
         ]
       },
       "CreateDeploymentResponse": {
@@ -1641,10 +1646,6 @@
             "type": "string",
             "nullable": true
           },
-          "chartVersion": {
-            "type": "string",
-            "nullable": true
-          },
           "appConfig": {
             "nullable": true
           }
@@ -1657,8 +1658,7 @@
           "registryId",
           "resourceType",
           "status",
-          "statusMessage",
-          "chartVersion"
+          "statusMessage"
         ]
       },
       "UpdateDeploymentBody": {
@@ -2097,6 +2097,25 @@
               "public": {
                 "type": "boolean"
               },
+              "scaleToZero": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "maxReplicas": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 20
+                  },
+                  "scaledownPeriod": {
+                    "type": "integer",
+                    "minimum": 30,
+                    "maximum": 3600
+                  }
+                }
+              },
               "resources": {
                 "type": "object",
                 "properties": {
@@ -2237,6 +2256,113 @@
               }
             },
             "required": ["engine", "version", "bootstrap", "storage"]
+          },
+          "cacheConfig": {
+            "type": "object",
+            "properties": {
+              "engine": {
+                "type": "string",
+                "enum": ["valkey"]
+              },
+              "version": {
+                "type": "string",
+                "enum": ["8.1"]
+              },
+              "billingMode": {
+                "type": "string",
+                "enum": ["metered", "reserved"]
+              },
+              "skuId": {
+                "type": "string"
+              },
+              "maxmemory": {
+                "type": "string",
+                "minLength": 1
+              },
+              "maxmemoryPolicy": {
+                "type": "string",
+                "enum": [
+                  "noeviction",
+                  "allkeys-lru",
+                  "allkeys-lfu",
+                  "volatile-lru",
+                  "volatile-lfu",
+                  "allkeys-random",
+                  "volatile-random",
+                  "volatile-ttl"
+                ]
+              },
+              "persistence": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean"
+                  },
+                  "size": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["enabled", "size"]
+              },
+              "public": {
+                "type": "boolean"
+              },
+              "scaleToZero": {
+                "type": "object",
+                "properties": {
+                  "enabled": {
+                    "type": "boolean",
+                    "default": false
+                  },
+                  "maxReplicas": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 20
+                  },
+                  "scaledownPeriod": {
+                    "type": "integer",
+                    "minimum": 30,
+                    "maximum": 3600
+                  }
+                }
+              },
+              "resources": {
+                "type": "object",
+                "properties": {
+                  "requests": {
+                    "type": "object",
+                    "properties": {
+                      "cpu": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "memory": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": ["cpu", "memory"]
+                  },
+                  "limits": {
+                    "type": "object",
+                    "properties": {
+                      "cpu": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "memory": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": ["cpu", "memory"]
+                  }
+                },
+                "required": ["requests", "limits"]
+              }
+            },
+            "required": ["engine", "version"]
           },
           "jobConfig": {
             "type": "object",
@@ -2808,10 +2934,6 @@
             "type": "string",
             "nullable": true
           },
-          "chartVersion": {
-            "type": "string",
-            "nullable": true
-          },
           "appConfig": {
             "nullable": true
           }
@@ -2824,8 +2946,7 @@
           "registryId",
           "resourceType",
           "status",
-          "statusMessage",
-          "chartVersion"
+          "statusMessage"
         ]
       },
       "SetAutoDeployBody": {
@@ -3057,13 +3178,16 @@
             "type": "string"
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "tag": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "note": {
             "type": "string",
@@ -3073,13 +3197,23 @@
             "type": "string",
             "nullable": true
           },
-          "triggeredByUserId": {
-            "type": "string",
-            "nullable": true
-          },
           "promotedFromRevisionId": {
             "type": "string",
             "nullable": true
+          },
+          "triggeredByUser": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "nullable": true
+              }
+            },
+            "required": ["id", "name"]
           },
           "appConfig": {
             "nullable": true
@@ -3090,6 +3224,14 @@
               "nullable": true
             }
           },
+          "failureReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "workflowRunUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "createdAt": {
             "anyOf": [
               {
@@ -3098,6 +3240,48 @@
               {
                 "type": "string",
                 "format": "date-time"
+              }
+            ]
+          },
+          "queuedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "nullable": true
+              }
+            ]
+          },
+          "buildStartedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "nullable": true
+              }
+            ]
+          },
+          "imagePushedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "nullable": true
               }
             ]
           },
@@ -3142,10 +3326,6 @@
                 "nullable": true
               }
             ]
-          },
-          "failureReason": {
-            "type": "string",
-            "nullable": true
           }
         },
         "required": ["id", "deploymentId", "image", "tag", "status"]
@@ -3332,9 +3512,6 @@
             "nullable": true
           },
           "memory": {
-            "nullable": true
-          },
-          "disk": {
             "nullable": true
           },
           "cpu": {
@@ -4633,7 +4810,7 @@
                   },
                   "provider": {
                     "type": "string",
-                    "enum": ["aws", "gcp", "azure"]
+                    "enum": ["aws", "gcp", "azure", "hetzner"]
                   },
                   "clusterType": {
                     "type": "string",
@@ -7990,7 +8167,8 @@
                         "maxLength": 63
                       },
                       "environmentId": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Environment to deploy into (an id from list_environments). If omitted, the deployment goes into the project's default environment."
                       },
                       "projectId": {
                         "type": "string"
@@ -8444,7 +8622,8 @@
                         "maxLength": 63
                       },
                       "environmentId": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Environment to deploy into (an id from list_environments). If omitted, the deployment goes into the project's default environment."
                       },
                       "projectId": {
                         "type": "string"
@@ -8898,7 +9077,8 @@
                         "maxLength": 63
                       },
                       "environmentId": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Environment to deploy into (an id from list_environments). If omitted, the deployment goes into the project's default environment."
                       },
                       "projectId": {
                         "type": "string"
@@ -9137,7 +9317,8 @@
                         "maxLength": 63
                       },
                       "environmentId": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Environment to deploy into (an id from list_environments). If omitted, the deployment goes into the project's default environment."
                       },
                       "projectId": {
                         "type": "string"
@@ -9205,6 +9386,25 @@
                           },
                           "public": {
                             "type": "boolean"
+                          },
+                          "scaleToZero": {
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "type": "boolean",
+                                "default": false
+                              },
+                              "maxReplicas": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 20
+                              },
+                              "scaledownPeriod": {
+                                "type": "integer",
+                                "minimum": 30,
+                                "maximum": 3600
+                              }
+                            }
                           },
                           "resources": {
                             "type": "object",
@@ -9374,7 +9574,8 @@
                         "maxLength": 63
                       },
                       "environmentId": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Environment to deploy into (an id from list_environments). If omitted, the deployment goes into the project's default environment."
                       },
                       "projectId": {
                         "type": "string"
@@ -9429,6 +9630,25 @@
                           },
                           "public": {
                             "type": "boolean"
+                          },
+                          "scaleToZero": {
+                            "type": "object",
+                            "properties": {
+                              "enabled": {
+                                "type": "boolean",
+                                "default": false
+                              },
+                              "maxReplicas": {
+                                "type": "integer",
+                                "minimum": 1,
+                                "maximum": 20
+                              },
+                              "scaledownPeriod": {
+                                "type": "integer",
+                                "minimum": 30,
+                                "maximum": 3600
+                              }
+                            }
                           },
                           "resources": {
                             "type": "object",
@@ -9492,7 +9712,8 @@
                         "maxLength": 63
                       },
                       "environmentId": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "Environment to deploy into (an id from list_environments). If omitted, the deployment goes into the project's default environment."
                       },
                       "projectId": {
                         "type": "string"
@@ -9990,7 +10211,7 @@
       "patch": {
         "tags": ["Deployments"],
         "summary": "Update a deployment's configuration",
-        "description": "Updates a cluster-bound deployment (web/worker/job/database) and records a revision. Send the config block matching the deployment's type: `appConfig` for web/worker, `jobConfig` for job, `databaseConfig` for database. Use the function update endpoint for functions.",
+        "description": "Updates a cluster-bound deployment (web/worker/job/database/cache) and records a revision. Send the config block matching the deployment's type: `appConfig` for web/worker, `jobConfig` for job, `databaseConfig` for database, `cacheConfig` for cache. Use the function update endpoint for functions.",
         "security": [
           {
             "apiKey": []
@@ -14038,7 +14259,7 @@
       "get": {
         "tags": ["Telemetry"],
         "summary": "Get cache telemetry",
-        "description": "Reads cache-shaped telemetry — connected clients, memory, ops/sec, hit rate, CPU, and disk. Returns `null` for non-cache deployments or when the cluster isn't reachable yet.",
+        "description": "Reads cache-shaped telemetry — connected clients, memory, ops/sec, hit rate, and CPU. Returns `null` for non-cache deployments or when the cluster isn't reachable yet.",
         "security": [
           {
             "apiKey": []
