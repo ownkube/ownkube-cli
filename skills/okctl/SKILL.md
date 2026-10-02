@@ -57,19 +57,24 @@ okctl registries list | get <registry-id>
 okctl deploy list --cluster <id>               # EXACTLY ONE of --cluster | --environment required
 okctl deploy list --environment <id>
 okctl deploy get|status|revisions|connection <deployment-id>
+okctl deploy connection-info <database-or-cache-id>   # full credentials + connection strings
+okctl deploy link <app-id> <datastore-id> [--env-var NAME]
+okctl deploy resync <deployment-id>            # re-apply settings to recover a stalled rollout
 okctl deploy logs <deployment-id> [--range-seconds N] [--limit N] [--filter REGEX]
+okctl boxes list [--kind web|database|cache]   # Compute box sizes; id = skuId for a database/cache
 okctl config get|set|view
 okctl completion <bash|zsh|fish|powershell>
 ```
 
-`deploy connection` returns `{namespace, serviceName, secretName, details}` — what another pod in the cluster needs to reach the deployment.
+`deploy connection-info` returns `{host, port, database, username, password, uri, publicUri, publicReady}` for a database or cache: `uri` works from apps in the same environment, `publicUri` from outside when public access is on. It prints live credentials; to wire an app to a datastore without exposing them, use `deploy link`, which writes the connection string into the app as a secret variable (`DATABASE_URL` / `REDIS_URL` by default) and redeploys it.
 
 ## Common workflows
 
 **Diagnose a failing deploy:**
 ```bash
 DEP=d_abc
-okctl deploy status $DEP -o json | jq '{status, syncStatus, healthStatus, message}'
+okctl deploy status $DEP -o json | jq '{status, sync, health, statusMessage}'
+# statusMessage explains a failed rollout; a failed apply can be retried with `okctl deploy resync $DEP`
 okctl deploy logs $DEP --range-seconds 600 --limit 500 --filter "error|fatal|panic"
 okctl deploy revisions $DEP -o json | jq '.[0:3] | .[] | {id, status, failureReason}'
 ```

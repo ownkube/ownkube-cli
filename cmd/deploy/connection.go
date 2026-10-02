@@ -11,7 +11,7 @@ import (
 func connectionCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "connection <deployment-id>",
-		Short: "Show in-cluster connection details (namespace, service, secret) for a deployment",
+		Short: "Show a database's connection secret and details (see connection-info for credentials)",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			api, err := ux.RequireClient()
@@ -30,8 +30,6 @@ func connectionCmd() *cobra.Command {
 
 			rows := [][]string{
 				{"FIELD", "VALUE"},
-				{"Namespace", conn.Namespace},
-				{"Service", conn.ServiceName},
 				{"Secret", conn.SecretName},
 			}
 			if conn.Details != nil {

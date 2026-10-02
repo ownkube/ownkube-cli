@@ -28,6 +28,7 @@ func getCmd() *cobra.Command {
 				{"FIELD", "VALUE"},
 				{"ID", d.Id},
 				{"Name", d.Name},
+				{"Display Name", ux.Deref(d.DisplayName)},
 				{"Type", string(d.ResourceType)},
 				{"Status", d.Status},
 				{"Status Message", d.StatusMessage},

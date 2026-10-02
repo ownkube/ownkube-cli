@@ -49,8 +49,11 @@ in the appropriate `cmd/<resource>/` subpackage.
 Install `oapi-codegen` once if missing:
 
 ```sh
-go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
+go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.8.0
 ```
+
+Or run it without installing (after copying the spec):
+`go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@v2.8.0 -config oapi-codegen.yaml api/openapi.json`.
 
 ## Architecture
 
@@ -75,7 +78,10 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
     `client.go`); table/JSON render helpers in `cmd/deploy/render.go`. `move
     --project <id>` re-files a deployment (and its managed DB/cache group) under
     another project (control-plane-only; wrapper `MoveToProject` in
-    `internal/client/functions.go`).
+    `internal/client/functions.go`). Datastore verbs: `connection-info` (full
+    credentials incl. password/URI), `link <app> <datastore> [--env-var]`
+    (injects the connection string as a secret var + redeploys), and `resync`;
+    wrappers in `internal/client/datastores.go`.
   - `cmd/environments/`: read verbs (`list|get`) plus the write surface
     (`create|update|set-env|delete`). `set-env` REPLACES the full shared env-var
     set (`--env`/`--secret KEY=VALUE`, repeatable, or `-f` JSON array) and
@@ -98,6 +104,9 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
     `aws` CLI), and polls the account until `verified`/`failed`.
   - `cmd/regions/`: `regions list` — Ownkube Compute regions you can deploy to.
     Wrappers in `internal/client/regions.go`.
+  - `cmd/boxes/`: `boxes list [--kind web|database|cache]` — the Compute box
+    catalog; a box id is the `skuId` for a Compute database/cache. Wrapper
+    `ListBoxes` in `internal/client/datastores.go`.
   - `cmd/usage/`: `usage current|month-to-date (mtd)|projected|history` — Compute
     usage and cost. Wrappers in `internal/client/usage.go`.
   - `cmd/billing/`: `billing wallet|credit (credit claim)|spend-controls (get|set)|
@@ -128,6 +137,7 @@ go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
     `UploadSource` — bare `net/http` PUT, the URL self-authenticates —
     `DeployFromUpload`).
   - `cmd/internal/ux/`: shared helpers — `RequireClient`, `Print`, `Deref`,
+    `UnionString` (renders generated `oneOf` scalar unions, e.g. timestamps),
     `ReadFileOrStdin`, `IsStructured`, `APIURL`, `Config`, `OpenBrowser`. Set
     once per invocation by `cmd/root.go`'s `PersistentPreRunE` via `ux.Set(...)`.
   - `completion.go`, `version.go`: small leaf commands kept flat.

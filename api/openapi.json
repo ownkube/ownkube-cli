@@ -504,6 +504,70 @@
         },
         "required": ["clusterId", "status"]
       },
+      "ComputeBoxCatalog": {
+        "type": "object",
+        "properties": {
+          "web": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComputeBox"
+            },
+            "description": "Optional reserved boxes for web/worker deployments. Metered (no box) is the default."
+          },
+          "database": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComputeBox"
+            },
+            "description": "Database boxes. Every database on Ownkube Compute needs one: set `billingMode: \"reserved\"` and `skuId` to a box id."
+          },
+          "cache": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ComputeBox"
+            },
+            "description": "Cache boxes. Every cache on Ownkube Compute needs one: set `billingMode: \"reserved\"` and `skuId` to a box id."
+          },
+          "databaseStorageGibMonthUsd": {
+            "type": "number",
+            "description": "Database storage price per GiB per month, billed on top of the box."
+          }
+        },
+        "required": ["web", "database", "cache", "databaseStorageGibMonthUsd"]
+      },
+      "ComputeBox": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Box id, passed as `skuId`."
+          },
+          "label": {
+            "type": "string"
+          },
+          "vcpu": {
+            "type": "number"
+          },
+          "memoryGiB": {
+            "type": "number"
+          },
+          "monthlyUsd": {
+            "type": "number"
+          },
+          "cpuClass": {
+            "type": "string",
+            "enum": ["shared", "dedicated"]
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "vcpu",
+          "memoryGiB",
+          "monthlyUsd",
+          "cpuClass"
+        ]
+      },
       "RegionListResponse": {
         "type": "object",
         "properties": {
@@ -1344,6 +1408,10 @@
           "name": {
             "type": "string"
           },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
           "clusterId": {
             "type": "string",
             "nullable": true
@@ -1458,12 +1526,17 @@
           "status": {
             "type": "string"
           },
+          "statusMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "Why the rollout failed (for example a failed apply or a crashing pod); null unless `status` is `failed`. A failed apply can be retried with resync."
+          },
           "urlReady": {
             "type": "boolean",
             "nullable": true
           }
         },
-        "required": ["health", "sync", "status", "urlReady"]
+        "required": ["health", "sync", "status", "statusMessage", "urlReady"]
       },
       "DeploymentLogsResponse": {
         "type": "object",
@@ -1513,15 +1586,9 @@
           },
           "secretName": {
             "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "serviceName": {
-            "type": "string"
           }
         },
-        "required": ["details", "secretName", "namespace", "serviceName"],
+        "required": ["details", "secretName"],
         "additionalProperties": {
           "nullable": true
         }
@@ -1538,15 +1605,9 @@
           },
           "secretName": {
             "type": "string"
-          },
-          "namespace": {
-            "type": "string"
-          },
-          "serviceName": {
-            "type": "string"
           }
         },
-        "required": ["details", "secretName", "namespace", "serviceName"],
+        "required": ["details", "secretName"],
         "additionalProperties": {
           "nullable": true
         }
@@ -1613,6 +1674,100 @@
           }
         },
         "required": ["sessionId", "ticket", "relayUrl", "expiresAt", "protocol"]
+      },
+      "ConnectionInfo": {
+        "type": "object",
+        "properties": {
+          "resourceType": {
+            "type": "string",
+            "enum": ["database", "cache"]
+          },
+          "host": {
+            "type": "string",
+            "nullable": true,
+            "description": "Host apps in the same environment use to reach it. Null until it's running."
+          },
+          "port": {
+            "type": "number",
+            "nullable": true
+          },
+          "database": {
+            "type": "string",
+            "nullable": true,
+            "description": "Database name (databases only)."
+          },
+          "username": {
+            "type": "string",
+            "nullable": true,
+            "description": "Username (databases only)."
+          },
+          "password": {
+            "type": "string",
+            "nullable": true
+          },
+          "uri": {
+            "type": "string",
+            "nullable": true,
+            "description": "Connection string for apps in the same environment."
+          },
+          "publicHostname": {
+            "type": "string",
+            "nullable": true,
+            "description": "Internet hostname, when public access is on."
+          },
+          "publicPort": {
+            "type": "number",
+            "nullable": true
+          },
+          "publicUri": {
+            "type": "string",
+            "nullable": true,
+            "description": "Connection string reachable from the internet (TLS), when public access is on."
+          },
+          "publicReady": {
+            "type": "boolean",
+            "description": "Whether the public endpoint is accepting connections yet."
+          }
+        },
+        "required": [
+          "resourceType",
+          "host",
+          "port",
+          "database",
+          "username",
+          "password",
+          "uri",
+          "publicHostname",
+          "publicPort",
+          "publicUri",
+          "publicReady"
+        ]
+      },
+      "LinkDatastoreResult": {
+        "type": "object",
+        "properties": {
+          "linked": {
+            "type": "boolean"
+          },
+          "envVar": {
+            "type": "string"
+          }
+        },
+        "required": ["linked", "envVar"]
+      },
+      "LinkDatastoreBody": {
+        "type": "object",
+        "properties": {
+          "datastoreId": {
+            "type": "string",
+            "description": "The database or cache deployment id to link."
+          },
+          "envVar": {
+            "type": "string",
+            "description": "Environment variable to set. Defaults to DATABASE_URL for a database and REDIS_URL for a cache."
+          }
+        },
+        "required": ["datastoreId"]
       },
       "DeploymentActionResult": {
         "type": "object",
@@ -2902,6 +3057,15 @@
         },
         "required": ["restarted", "restartedAt"]
       },
+      "ResyncResult": {
+        "type": "object",
+        "properties": {
+          "resynced": {
+            "type": "boolean"
+          }
+        },
+        "required": ["resynced"]
+      },
       "LifecycleDeploymentResult": {
         "type": "object",
         "properties": {
@@ -3674,6 +3838,36 @@
           "value": {
             "type": "string",
             "nullable": true
+          },
+          "startsAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "nullable": true
+              }
+            ],
+            "description": "When the alert started firing."
+          },
+          "endsAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "nullable": true
+              }
+            ],
+            "description": "When the alert resolved; null while still firing."
           }
         },
         "required": [
@@ -3686,7 +3880,9 @@
           "severity",
           "status",
           "summary",
-          "value"
+          "value",
+          "startsAt",
+          "endsAt"
         ]
       },
       "ListCustomDomainsResponse": {
@@ -5355,6 +5551,100 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CancelClusterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/boxes": {
+      "get": {
+        "tags": ["Regions"],
+        "summary": "List Ownkube Compute box sizes",
+        "description": "Lists the fixed-size boxes and their monthly prices. Databases and caches on Ownkube Compute must name a box as `skuId` (with `billingMode: \"reserved\"`) on create; boxes can be upgraded later but not downsized.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Box catalog",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputeBoxCatalog"
                 }
               }
             }
@@ -11076,6 +11366,223 @@
         }
       }
     },
+    "/v1/deployments/{deploymentId}/connection-info": {
+      "get": {
+        "tags": ["Deployments"],
+        "summary": "Get database or cache connection info",
+        "description": "Returns the full connection info of a database or cache: host, port, database name, username, password, and connection string for apps in the same environment, plus the public endpoint and its connection string when public access is on. Use `link` to give an app the credential as a secret variable.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Connection info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/link": {
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Link a database or cache to an app",
+        "description": "Writes the database or cache connection string into the app's environment as a secret variable and redeploys the app. The credential is never returned. Both must be in the same environment. An existing variable with the same name is replaced.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkDatastoreBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Linked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkDatastoreResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/deployments/{deploymentId}/function": {
       "patch": {
         "tags": ["Deployments"],
@@ -11988,6 +12495,110 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/RestartResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/resync": {
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Resync a deployment",
+        "description": "Re-applies the deployment's current settings to its cluster with no config change and no new revision. Use it to recover a rollout that stalled on a transient error, including databases and caches. Not valid for functions.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resynced",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResyncResult"
                 }
               }
             }

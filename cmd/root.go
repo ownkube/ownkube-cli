@@ -11,6 +11,7 @@ import (
 	"github.com/ownkube/okctl/cmd/auth"
 	awscmd "github.com/ownkube/okctl/cmd/aws"
 	"github.com/ownkube/okctl/cmd/billing"
+	"github.com/ownkube/okctl/cmd/boxes"
 	"github.com/ownkube/okctl/cmd/clusters"
 	"github.com/ownkube/okctl/cmd/config"
 	"github.com/ownkube/okctl/cmd/deploy"
@@ -92,6 +93,7 @@ func init() {
 		organizations.New(),
 		registries.New(),
 		regions.New(),
+		boxes.New(),
 		usage.New(),
 		billing.New(),
 		alerts.New(),

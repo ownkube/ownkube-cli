@@ -96,11 +96,12 @@ func firingsCmd() *cobra.Command {
 				fmt.Fprintln(cmd.OutOrStdout(), "No firings.")
 				return nil
 			}
-			rows := [][]string{{"ID", "RULE", "METRIC", "SEVERITY", "STATUS", "VALUE"}}
+			rows := [][]string{{"ID", "RULE", "METRIC", "SEVERITY", "STATUS", "VALUE", "STARTED", "RESOLVED"}}
 			for i := range firings {
 				f := &firings[i]
 				rows = append(rows, []string{
 					f.Id, f.RuleName, string(f.Metric), string(f.Severity), string(f.Status), f.Value,
+					ux.UnionString(f.StartsAt), ux.UnionString(f.EndsAt),
 				})
 			}
 			return ux.Print(cmd.OutOrStdout(), rows)

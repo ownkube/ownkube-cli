@@ -82,7 +82,7 @@ func telemetryCmd() *cobra.Command {
 func cacheConnectionCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "cache-connection <deployment-id>",
-		Short: "Show how to connect to a managed cache",
+		Short: "Show a managed cache's connection secret (see connection-info for credentials)",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cl, err := ux.RequireClient()
@@ -98,8 +98,6 @@ func cacheConnectionCmd() *cobra.Command {
 			}
 			rows := [][]string{
 				{"FIELD", "VALUE"},
-				{"Namespace", res.Namespace},
-				{"Service", res.ServiceName},
 				{"Secret", res.SecretName},
 			}
 			if err := ux.Print(cmd.OutOrStdout(), rows); err != nil {

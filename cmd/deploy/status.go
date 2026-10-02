@@ -26,13 +26,17 @@ func statusCmd() *cobra.Command {
 			if ux.IsStructured() {
 				return ux.Print(cmd.OutOrStdout(), s)
 			}
-			return ux.Print(cmd.OutOrStdout(), [][]string{
+			rows := [][]string{
 				{"FIELD", "VALUE"},
 				{"Status", s.Status},
 				{"Sync", s.Sync},
 				{"Health", s.Health},
 				{"URL Ready", fmt.Sprintf("%t", s.UrlReady)},
-			})
+			}
+			if s.StatusMessage != "" {
+				rows = append(rows, []string{"Message", s.StatusMessage})
+			}
+			return ux.Print(cmd.OutOrStdout(), rows)
 		},
 	}
 }

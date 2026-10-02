@@ -5,6 +5,7 @@
 package ux
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -82,6 +83,20 @@ func Deref(s *string) string {
 		return ""
 	}
 	return *s
+}
+
+// UnionString renders a generated string|date-time|null union field (e.g.
+// AlertFiring_StartsAt) as its plain string value, or "" when null.
+func UnionString(v json.Marshaler) string {
+	raw, err := v.MarshalJSON()
+	if err != nil {
+		return ""
+	}
+	var s string
+	if json.Unmarshal(raw, &s) != nil {
+		return ""
+	}
+	return s
 }
 
 // ReadFileOrStdin reads bytes from path, or from stdin when path is "-".
