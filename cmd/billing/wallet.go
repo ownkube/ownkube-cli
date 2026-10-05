@@ -52,7 +52,7 @@ func walletCmd() *cobra.Command {
 func creditCmd() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "credit",
-		Short: "Show signup-credit status",
+		Short: "Show Ownkube Compute credit status",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			api, err := ux.RequireClient()
@@ -72,41 +72,50 @@ func creditCmd() *cobra.Command {
 			}
 			return ux.Print(cmd.OutOrStdout(), [][]string{
 				{"FIELD", "VALUE"},
-				{"Signup Credit", usd(res.AmountUsd)},
-				{"Claimed", fmt.Sprintf("%t", res.Claimed)},
 				{"Wallet Remaining", usd(res.Balance.RemainingUsd)},
 				{"Top-up Minimum", usd(res.TopUpMinUsd)},
 			})
 		},
 	}
-	c.AddCommand(creditClaimCmd())
+	c.AddCommand(creditRedeemCmd())
 	return c
 }
 
-func creditClaimCmd() *cobra.Command {
+func creditRedeemCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "claim",
-		Short: "Claim the one-time signup credit",
-		Args:  cobra.NoArgs,
+		Use:   "redeem <code>",
+		Short: "Redeem a promo code",
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			api, err := ux.RequireClient()
 			if err != nil {
 				return err
 			}
-			res, err := api.ClaimCredit(cmd.Context())
+			res, err := api.RedeemPromo(cmd.Context(), args[0])
 			if err != nil {
 				return err
 			}
 			if ux.IsStructured() {
 				return ux.Print(cmd.OutOrStdout(), res)
 			}
-			out := cmd.OutOrStdout()
-			if res.AlreadyClaimed {
-				fmt.Fprintln(out, "Signup credit was already claimed — nothing new granted.")
-			} else {
-				fmt.Fprintf(out, "Claimed %s in signup credit.\n", usd(res.AmountUsd))
+			if !res.Ok {
+				message := "That promo code could not be redeemed."
+				if res.Message != nil {
+					message = *res.Message
+				}
+				fmt.Fprintln(cmd.ErrOrStderr(), message)
+				return fmt.Errorf("promo code not redeemed")
 			}
-			fmt.Fprintf(out, "Wallet remaining: %s\n", usd(res.Balance.RemainingUsd))
+			out := cmd.OutOrStdout()
+			var amount float32
+			if res.AmountUsd != nil {
+				amount = *res.AmountUsd
+			}
+			var remaining float32
+			if res.Balance != nil {
+				remaining = res.Balance.RemainingUsd
+			}
+			fmt.Fprintf(out, "Added %s in credit. Balance: %s.\n", usd(amount), usd(remaining))
 			return nil
 		},
 	}

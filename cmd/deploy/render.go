@@ -31,11 +31,13 @@ func renderActionResult(cmd *cobra.Command, r *api.DeploymentActionResult) error
 		{"FIELD", "VALUE"},
 		{"ID", r.Id},
 		{"Name", r.Name},
+		{"Display Name", ux.Deref(r.DisplayName)},
 		{"Type", string(r.ResourceType)},
 		{"Status", r.Status},
 		{"Status Message", r.StatusMessage},
 		{"Cluster", r.ClusterId},
 		{"Environment", r.EnvironmentId},
+		{"Public Hostname", ux.Deref(r.PublicHostname)},
 	})
 }
 

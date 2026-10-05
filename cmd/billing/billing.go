@@ -1,6 +1,6 @@
 // Package billing exposes the `okctl billing` command tree — the prepaid
-// wallet, signup credit, spend controls, and browser handoffs for
-// subscriptions, top-ups, and the billing portal.
+// wallet, credit and promo-code redemption, spend controls, and browser
+// handoffs for subscriptions, top-ups, and the billing portal.
 package billing
 
 import (

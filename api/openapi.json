@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Ownkube CLI API",
-    "version": "1.7.0",
+    "version": "1.8.0",
     "description": "API for the Ownkube CLI tool. Authenticate via browser-based flow, then use x-api-key header for subsequent requests."
   },
   "servers": [
@@ -79,7 +79,7 @@
         "properties": {
           "error": {
             "type": "string",
-            "description": "Error message"
+            "description": "Human-readable error message"
           },
           "code": {
             "type": "string",
@@ -398,6 +398,11 @@
             "type": "string",
             "nullable": true
           },
+          "cloudAccountId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The connected cloud account this cluster runs in."
+          },
           "status": {
             "type": "string"
           },
@@ -614,10 +619,14 @@
             "additionalProperties": {
               "type": "number"
             },
-            "description": "Total credit loaded into the wallet, in USD, keyed by inflow reason (e.g. plan load, top-up, signup credit)."
+            "description": "Total credit loaded into the wallet, in USD, keyed by inflow reason (e.g. plan load, top-up, promo credit)."
+          },
+          "topUpMinUsd": {
+            "type": "number",
+            "description": "Minimum custom wallet top-up amount, in USD."
           }
         },
-        "required": ["enabled", "balance", "loadedInByReason"]
+        "required": ["enabled", "balance", "loadedInByReason", "topUpMinUsd"]
       },
       "CreditBalance": {
         "type": "object",
@@ -693,11 +702,13 @@
             "nullable": true,
             "minimum": 0,
             "exclusiveMinimum": true,
-            "maximum": 1000000
+            "maximum": 1000000,
+            "description": "Monthly spend cap in USD, or null to clear it."
           },
           "budgetAction": {
             "type": "string",
-            "enum": ["notify", "pause"]
+            "enum": ["notify", "pause"],
+            "description": "At the cap: 'notify' alerts only; 'pause' suspends compute."
           },
           "alertsEnabled": {
             "type": "boolean"
@@ -709,7 +720,8 @@
               "minimum": 1,
               "maximum": 100
             },
-            "maxItems": 10
+            "maxItems": 10,
+            "description": "Percent-of-budget thresholds that fire a spend alert."
           }
         }
       },
@@ -720,14 +732,6 @@
             "type": "boolean",
             "description": "Whether Ownkube Compute (and its wallet) is available here."
           },
-          "claimed": {
-            "type": "boolean",
-            "description": "Whether the one-time signup credit has already been claimed."
-          },
-          "amountUsd": {
-            "type": "number",
-            "description": "The signup-credit grant amount, in USD."
-          },
           "balance": {
             "$ref": "#/components/schemas/CreditBalance"
           },
@@ -736,29 +740,59 @@
             "description": "Minimum custom wallet top-up amount, in USD."
           }
         },
-        "required": [
-          "enabled",
-          "claimed",
-          "amountUsd",
-          "balance",
-          "topUpMinUsd"
-        ]
+        "required": ["enabled", "balance", "topUpMinUsd"]
       },
-      "ClaimCreditResponse": {
+      "RedeemPromoResponse": {
         "type": "object",
         "properties": {
-          "alreadyClaimed": {
+          "ok": {
             "type": "boolean",
-            "description": "True if the credit was already claimed (nothing new granted)."
+            "description": "True when the credit was added. False is a refusal, not an error: see `reason` and `message`."
           },
           "amountUsd": {
-            "type": "number"
+            "type": "number",
+            "description": "Credit added, in USD (when `ok`)."
           },
           "balance": {
-            "$ref": "#/components/schemas/CreditBalance"
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/CreditBalance"
+              },
+              {
+                "description": "Wallet balance after the credit landed (when `ok`)."
+              }
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "enum": [
+              "not_found",
+              "full",
+              "ended",
+              "not_started",
+              "claimed",
+              "existing_account"
+            ],
+            "description": "Why the code was refused (when not `ok`)."
+          },
+          "message": {
+            "type": "string",
+            "description": "A user-facing sentence for the refusal (when not `ok`)."
           }
         },
-        "required": ["alreadyClaimed", "amountUsd", "balance"]
+        "required": ["ok"]
+      },
+      "RedeemPromoBody": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "The promo code, e.g. from a `/login?ref=<code>` link."
+          }
+        },
+        "required": ["code"]
       },
       "CheckoutUrlResponse": {
         "type": "object",
@@ -964,9 +998,13 @@
                 "format": "date-time"
               }
             ]
+          },
+          "isCurrentMonth": {
+            "type": "boolean",
+            "description": "True while the series covers the live month; false for a completed month."
           }
         },
-        "required": ["points", "periodStart", "periodEnd"]
+        "required": ["points", "periodStart", "periodEnd", "isCurrentMonth"]
       },
       "UsageHistoryPoint": {
         "type": "object",
@@ -1073,15 +1111,16 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 50,
-            "example": "Payments"
+            "example": "Payments",
+            "description": "Display name."
           },
           "slug": {
             "type": "string",
             "minLength": 1,
             "maxLength": 30,
             "pattern": "^[a-z][a-z0-9-]*$",
-            "description": "Lowercase, starts with a letter; letters, numbers, hyphens only.",
-            "example": "payments"
+            "example": "payments",
+            "description": "Lowercase, starts with a letter; letters, numbers, hyphens only."
           },
           "color": {
             "type": "string",
@@ -1090,7 +1129,8 @@
           },
           "description": {
             "type": "string",
-            "maxLength": 200
+            "maxLength": 200,
+            "description": "Optional note."
           }
         },
         "required": ["name", "slug"]
@@ -1101,15 +1141,18 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 50
+            "maxLength": 50,
+            "description": "New display name."
           },
           "color": {
             "type": "string",
-            "enum": ["amber", "green", "blue", "purple", "red"]
+            "enum": ["amber", "green", "blue", "purple", "red"],
+            "description": "New accent color."
           },
           "description": {
             "type": "string",
-            "maxLength": 200
+            "maxLength": 200,
+            "description": "New description."
           }
         }
       },
@@ -1218,15 +1261,16 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 50,
-            "example": "Staging"
+            "example": "Staging",
+            "description": "Display name."
           },
           "slug": {
             "type": "string",
             "minLength": 1,
             "maxLength": 30,
             "pattern": "^[a-z][a-z0-9-]*$",
-            "description": "Lowercase, starts with a letter; letters, numbers, hyphens only.",
-            "example": "staging"
+            "example": "staging",
+            "description": "Lowercase, starts with a letter; letters, numbers, hyphens only."
           },
           "color": {
             "type": "string",
@@ -1235,7 +1279,8 @@
           },
           "description": {
             "type": "string",
-            "maxLength": 200
+            "maxLength": 200,
+            "description": "Optional note."
           }
         },
         "required": ["name", "slug"]
@@ -1246,15 +1291,18 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 50
+            "maxLength": 50,
+            "description": "New display name."
           },
           "color": {
             "type": "string",
-            "enum": ["amber", "green", "blue", "purple", "red"]
+            "enum": ["amber", "green", "blue", "purple", "red"],
+            "description": "New accent color."
           },
           "description": {
             "type": "string",
-            "maxLength": 200
+            "maxLength": 200,
+            "description": "New description."
           }
         }
       },
@@ -1282,14 +1330,16 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "example": "DATABASE_URL"
+            "example": "DATABASE_URL",
+            "description": "The variable name (e.g. DATABASE_URL)."
           },
           "secret": {
             "type": "boolean",
             "description": "Mark as secret so the value is never returned on reads. Echo a saved secret back with an empty `value` to keep the previous value."
           },
           "value": {
-            "type": "string"
+            "type": "string",
+            "description": "The variable value. For secrets: reads blank secret values, so a secret you read back arrives with an empty value. Sending that empty value here KEEPS the previously saved secret (empty is the passthrough sentinel) rather than clearing it. To genuinely clear a secret, drop the variable from the set entirely; to change it, send the new plaintext."
           }
         },
         "required": ["name", "value"]
@@ -1451,6 +1501,10 @@
             "type": "string",
             "nullable": true
           },
+          "workflowPullRequestUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "appConfig": {
             "nullable": true
           },
@@ -1496,12 +1550,7 @@
           },
           {
             "type": "object",
-            "properties": {
-              "workflowPullRequestUrl": {
-                "type": "string",
-                "nullable": true
-              }
-            }
+            "properties": {}
           }
         ]
       },
@@ -1727,6 +1776,10 @@
           "publicReady": {
             "type": "boolean",
             "description": "Whether the public endpoint is accepting connections yet."
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Whether billing has paused the datastore (stopped, data kept). A paused datastore accepts no connections until it resumes."
           }
         },
         "required": [
@@ -1740,7 +1793,8 @@
           "publicHostname",
           "publicPort",
           "publicUri",
-          "publicReady"
+          "publicReady",
+          "paused"
         ]
       },
       "LinkDatastoreResult": {
@@ -1778,6 +1832,10 @@
           "name": {
             "type": "string"
           },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
           "clusterId": {
             "type": "string",
             "nullable": true
@@ -1801,8 +1859,50 @@
             "type": "string",
             "nullable": true
           },
+          "publicHostname": {
+            "type": "string",
+            "nullable": true
+          },
+          "autoDeployEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "autoDeployTagRegex": {
+            "type": "string",
+            "nullable": true
+          },
+          "githubRepository": {
+            "type": "string",
+            "nullable": true
+          },
+          "workflowPullRequestUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "appConfig": {
             "nullable": true
+          },
+          "createdAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
           }
         },
         "required": [
@@ -2186,7 +2286,8 @@
                 "type": "string"
               }
             },
-            "required": ["repository", "tag", "port"]
+            "required": ["repository", "tag", "port"],
+            "description": "New config for a web/worker deployment."
           },
           "databaseConfig": {
             "type": "object",
@@ -2410,7 +2511,8 @@
                 "required": ["enabled", "schedule"]
               }
             },
-            "required": ["engine", "version", "bootstrap", "storage"]
+            "required": ["engine", "version", "bootstrap", "storage"],
+            "description": "New config for a database deployment."
           },
           "cacheConfig": {
             "type": "object",
@@ -2517,7 +2619,8 @@
                 "required": ["requests", "limits"]
               }
             },
-            "required": ["engine", "version"]
+            "required": ["engine", "version"],
+            "description": "New config for a cache deployment."
           },
           "jobConfig": {
             "type": "object",
@@ -2671,14 +2774,17 @@
                 }
               }
             },
-            "required": ["repository", "tag", "schedule"]
+            "required": ["repository", "tag", "schedule"],
+            "description": "New config for a job deployment."
           },
           "note": {
             "type": "string",
-            "maxLength": 200
+            "maxLength": 200,
+            "description": "Optional revision note."
           },
           "sendSsoInvites": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Email a sign-on invite to newly added allow-list addresses."
           }
         }
       },
@@ -2804,11 +2910,13 @@
                 "enum": ["lambda", "ember"]
               }
             },
-            "required": ["runtime", "handler", "triggers"]
+            "required": ["runtime", "handler", "triggers"],
+            "description": "The new function config."
           },
           "note": {
             "type": "string",
-            "maxLength": 200
+            "maxLength": 200,
+            "description": "Optional revision note."
           }
         },
         "required": ["config"]
@@ -2935,21 +3043,25 @@
                 "enum": ["lambda", "ember"]
               }
             },
-            "required": ["runtime", "handler", "triggers"]
+            "required": ["runtime", "handler", "triggers"],
+            "description": "The function config to apply."
           },
           "code": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 256000
+            "maxLength": 256000,
+            "description": "New inline source. Omit to change settings only."
           },
           "filename": {
             "type": "string",
             "minLength": 1,
-            "maxLength": 128
+            "maxLength": 128,
+            "description": "Source filename (defaults to the current entrypoint)."
           },
           "note": {
             "type": "string",
-            "maxLength": 200
+            "maxLength": 200,
+            "description": "Optional revision note."
           }
         },
         "required": ["config"]
@@ -3075,6 +3187,10 @@
           "name": {
             "type": "string"
           },
+          "displayName": {
+            "type": "string",
+            "nullable": true
+          },
           "clusterId": {
             "type": "string",
             "nullable": true
@@ -3098,8 +3214,50 @@
             "type": "string",
             "nullable": true
           },
+          "publicHostname": {
+            "type": "string",
+            "nullable": true
+          },
+          "autoDeployEnabled": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "autoDeployTagRegex": {
+            "type": "string",
+            "nullable": true
+          },
+          "githubRepository": {
+            "type": "string",
+            "nullable": true
+          },
+          "workflowPullRequestUrl": {
+            "type": "string",
+            "nullable": true
+          },
           "appConfig": {
             "nullable": true
+          },
+          "createdAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              }
+            ]
           }
         },
         "required": [
@@ -3117,7 +3275,8 @@
         "type": "object",
         "properties": {
           "enabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether auto-deploy should be on."
           }
         },
         "required": ["enabled"]
@@ -3126,7 +3285,8 @@
         "type": "object",
         "properties": {
           "enabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether maintenance mode should be on."
           },
           "message": {
             "type": "string",
@@ -3198,7 +3358,8 @@
             "additionalProperties": {
               "type": "string",
               "maxLength": 4096
-            }
+            },
+            "description": "Build arguments as a key/value map."
           }
         },
         "required": ["buildArgs"]
@@ -3245,7 +3406,8 @@
         "properties": {
           "builderSize": {
             "type": "string",
-            "enum": ["small", "standard", "large"]
+            "enum": ["small", "standard", "large"],
+            "description": "The builder size preset."
           }
         },
         "required": ["builderSize"]
@@ -3315,7 +3477,8 @@
         "type": "object",
         "properties": {
           "subdomain": {
-            "type": "string"
+            "type": "string",
+            "description": "The new address label to claim."
           }
         },
         "required": ["subdomain"]
@@ -3499,7 +3662,8 @@
         "properties": {
           "note": {
             "type": "string",
-            "maxLength": 200
+            "maxLength": 200,
+            "description": "Optional note recorded on the rollback."
           }
         }
       },
@@ -3507,11 +3671,13 @@
         "type": "object",
         "properties": {
           "targetDeploymentId": {
-            "type": "string"
+            "type": "string",
+            "description": "The deployment to promote to."
           },
           "note": {
             "type": "string",
-            "maxLength": 200
+            "maxLength": 200,
+            "description": "Optional note recorded on the promotion."
           }
         },
         "required": ["targetDeploymentId"]
@@ -3595,6 +3761,9 @@
           },
           "p95LatencyMs": {
             "nullable": true
+          },
+          "network": {
+            "nullable": true
           }
         },
         "required": ["windowLabel"],
@@ -3627,6 +3796,9 @@
           },
           "memory": {
             "nullable": true
+          },
+          "network": {
+            "nullable": true
           }
         },
         "required": ["windowLabel", "hasRequestData", "requestDataHint"],
@@ -3658,6 +3830,9 @@
           },
           "transactionsPerSec": {
             "nullable": true
+          },
+          "network": {
+            "nullable": true
           }
         },
         "required": ["windowLabel"],
@@ -3685,6 +3860,9 @@
             "nullable": true
           },
           "hitRate": {
+            "nullable": true
+          },
+          "network": {
             "nullable": true
           }
         },
@@ -4377,9 +4555,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The Ownkube AWS account row id."
             },
             "required": true,
+            "description": "The Ownkube AWS account row id.",
             "name": "accountId",
             "in": "path"
           }
@@ -4479,9 +4659,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The Ownkube AWS account row id."
             },
             "required": true,
+            "description": "The Ownkube AWS account row id.",
             "name": "accountId",
             "in": "path"
           }
@@ -4583,9 +4765,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The Ownkube AWS account row id."
             },
             "required": true,
+            "description": "The Ownkube AWS account row id.",
             "name": "accountId",
             "in": "path"
           },
@@ -4698,9 +4882,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The Ownkube AWS account row id."
             },
             "required": true,
+            "description": "The Ownkube AWS account row id.",
             "name": "accountId",
             "in": "path"
           }
@@ -4802,9 +4988,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The Ownkube AWS account row id."
             },
             "required": true,
+            "description": "The Ownkube AWS account row id.",
             "name": "accountId",
             "in": "path"
           }
@@ -5216,9 +5404,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The cluster id."
             },
             "required": true,
+            "description": "The cluster id.",
             "name": "clusterId",
             "in": "path"
           }
@@ -5318,9 +5508,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The cluster id."
             },
             "required": true,
+            "description": "The cluster id.",
             "name": "clusterId",
             "in": "path"
           },
@@ -5433,9 +5625,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The cluster id."
             },
             "required": true,
+            "description": "The cluster id.",
             "name": "clusterId",
             "in": "path"
           }
@@ -5537,9 +5731,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The cluster id."
             },
             "required": true,
+            "description": "The cluster id.",
             "name": "clusterId",
             "in": "path"
           }
@@ -6109,8 +6305,8 @@
     "/v1/credit": {
       "get": {
         "tags": ["Billing"],
-        "summary": "Get account credit and claim status",
-        "description": "Returns whether the one-time signup credit is still claimable, the signup grant amount, the live wallet balance, and the wallet top-up minimum.",
+        "summary": "Get account credit status",
+        "description": "Returns whether Ownkube Compute is available, the live wallet balance, and the wallet top-up minimum.",
         "security": [
           {
             "apiKey": []
@@ -6200,23 +6396,33 @@
         }
       }
     },
-    "/v1/credit/claim": {
+    "/v1/promo/redeem": {
       "post": {
         "tags": ["Billing"],
-        "summary": "Claim the one-time signup credit",
-        "description": "Grants the one-time signup credit to fund a first Ownkube Compute deploy. Idempotent — re-claiming returns the current balance and grants nothing new. Availability is gated per account; a `403` means the signup credit isn't offered to this account yet.",
+        "summary": "Redeem a promo code",
+        "description": "Adds a promo campaign's credit to the wallet. Each organization and each user can redeem a campaign once. A refusal (unknown code, offer full or ended, already claimed, existing account) returns `200` with `ok: false`, a `reason`, and a user-facing `message`.",
         "security": [
           {
             "apiKey": []
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RedeemPromoBody"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Signup credit claimed",
+            "description": "Redeem result",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ClaimCreditResponse"
+                  "$ref": "#/components/schemas/RedeemPromoResponse"
                 }
               }
             }
@@ -7179,9 +7385,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The project id."
             },
             "required": true,
+            "description": "The project id.",
             "name": "projectId",
             "in": "path"
           }
@@ -7280,9 +7488,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The project id."
             },
             "required": true,
+            "description": "The project id.",
             "name": "projectId",
             "in": "path"
           }
@@ -7392,9 +7602,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The project id."
             },
             "required": true,
+            "description": "The project id.",
             "name": "projectId",
             "in": "path"
           }
@@ -7690,9 +7902,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The environment id."
             },
             "required": true,
+            "description": "The environment id.",
             "name": "environmentId",
             "in": "path"
           }
@@ -7791,9 +8005,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The environment id."
             },
             "required": true,
+            "description": "The environment id.",
             "name": "environmentId",
             "in": "path"
           }
@@ -7903,9 +8119,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The environment id."
             },
             "required": true,
+            "description": "The environment id.",
             "name": "environmentId",
             "in": "path"
           }
@@ -8007,9 +8225,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The environment id."
             },
             "required": true,
+            "description": "The environment id.",
             "name": "environmentId",
             "in": "path"
           }
@@ -8213,9 +8433,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The registry id."
             },
             "required": true,
+            "description": "The registry id.",
             "name": "registryId",
             "in": "path"
           }
@@ -8317,25 +8539,31 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "List every deployment in this environment."
             },
             "required": false,
+            "description": "List every deployment in this environment.",
             "name": "environmentId",
             "in": "query"
           },
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "List every deployment on this cluster."
             },
             "required": false,
+            "description": "List every deployment on this cluster.",
             "name": "clusterId",
             "in": "query"
           },
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "List every deployment in this project."
             },
             "required": false,
+            "description": "List every deployment in this project.",
             "name": "projectId",
             "in": "query"
           }
@@ -10305,9 +10533,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -10408,9 +10638,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -10511,9 +10743,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -10625,9 +10859,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -10730,9 +10966,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
@@ -10741,9 +10979,11 @@
               "type": "integer",
               "minimum": 60,
               "maximum": 86400,
-              "default": 3600
+              "default": 3600,
+              "description": "How far back to read, in seconds (default 3600)."
             },
             "required": false,
+            "description": "How far back to read, in seconds (default 3600).",
             "name": "rangeSeconds",
             "in": "query"
           },
@@ -10752,9 +10992,11 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 1000,
-              "default": 300
+              "default": 300,
+              "description": "Max number of log lines to return (default 300)."
             },
             "required": false,
+            "description": "Max number of log lines to return (default 300).",
             "name": "limit",
             "in": "query"
           },
@@ -10762,9 +11004,11 @@
             "schema": {
               "type": "string",
               "maxLength": 200,
-              "default": ""
+              "default": "",
+              "description": "Regular expression matched against the log message; empty returns every line."
             },
             "required": false,
+            "description": "Regular expression matched against the log message; empty returns every line.",
             "name": "filter",
             "in": "query"
           }
@@ -10867,9 +11111,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -10972,9 +11218,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -11171,9 +11419,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -11379,9 +11629,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The database or cache id."
             },
             "required": true,
+            "description": "The database or cache id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -11483,14 +11735,17 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The app to link."
             },
             "required": true,
+            "description": "The app to link.",
             "name": "deploymentId",
             "in": "path"
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -11597,9 +11852,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -11712,9 +11969,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -11827,9 +12086,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -11942,9 +12203,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -12047,9 +12310,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -12150,9 +12415,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -12254,17 +12521,21 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The job deployment id."
             },
             "required": true,
+            "description": "The job deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The run's job name (from list_job_runs)."
             },
             "required": true,
+            "description": "The run's job name (from list_job_runs).",
             "name": "jobName",
             "in": "path"
           }
@@ -12367,9 +12638,11 @@
           {
             "schema": {
               "type": "string",
-              "example": "depl_01h..."
+              "example": "depl_01h...",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
@@ -12481,9 +12754,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -12585,9 +12860,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -12689,9 +12966,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -12803,9 +13082,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -12917,9 +13198,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -13031,9 +13314,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -13145,9 +13430,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -13259,9 +13546,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -13373,9 +13662,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -13487,9 +13778,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
@@ -13601,9 +13894,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
@@ -13725,9 +14020,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -13838,9 +14135,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -13942,17 +14241,21 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The revision id to roll back to."
             },
             "required": true,
+            "description": "The revision id to roll back to.",
             "name": "revisionId",
             "in": "path"
           }
@@ -14064,9 +14367,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment to promote from."
             },
             "required": true,
+            "description": "The deployment to promote from.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -14178,9 +14483,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
@@ -14387,9 +14694,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -14491,8 +14800,8 @@
     "/v1/deployments/{deploymentId}/telemetry": {
       "get": {
         "tags": ["Telemetry"],
-        "summary": "Get overview telemetry (CPU, memory, requests, latency)",
-        "description": "Reads the overview telemetry tiles — CPU, memory, request rate, and p95 latency — over the requested window. Returns `null` when the cluster isn't reachable yet.",
+        "summary": "Get overview telemetry (CPU, memory, requests, latency, network)",
+        "description": "Reads the overview telemetry tiles — CPU, memory, request rate, p95 latency, and network in/out — over the requested window. `network` is pod network traffic in and out (bytes/sec rate plus a window total in bytes); it counts all traffic, including traffic between your services, so it reads higher than billed bandwidth. `network` is `null` for Compute functions. Returns `null` when the cluster isn't reachable yet.",
         "security": [
           {
             "apiKey": []
@@ -14501,9 +14810,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
@@ -14512,9 +14823,11 @@
               "type": "integer",
               "minimum": 300,
               "maximum": 86400,
-              "default": 3600
+              "default": 3600,
+              "description": "How far back to read, in seconds (default 3600)."
             },
             "required": false,
+            "description": "How far back to read, in seconds (default 3600).",
             "name": "rangeSeconds",
             "in": "query"
           },
@@ -14523,9 +14836,11 @@
               "type": "integer",
               "minimum": 15,
               "maximum": 3600,
-              "default": 60
+              "default": 60,
+              "description": "Sample step in seconds (default 60)."
             },
             "required": false,
+            "description": "Sample step in seconds (default 60).",
             "name": "step",
             "in": "query"
           }
@@ -14618,7 +14933,7 @@
       "get": {
         "tags": ["Telemetry"],
         "summary": "Get expanded observability series",
-        "description": "Reads the expanded observability panel — per-status-class request rate, latency percentiles, and CPU/memory time-series — over the requested window. `hasRequestData` is false for workloads whose gateway doesn't report per-deployment request telemetry. Returns `null` when the cluster isn't reachable yet.",
+        "description": "Reads the expanded observability panel — per-status-class request rate, latency percentiles, CPU/memory time-series, and network in/out series — over the requested window. `network` is pod network traffic in and out (bytes/sec rate plus a window total in bytes); it counts all traffic, including traffic between your services, so it reads higher than billed bandwidth. `network` is `null` for Compute functions. `hasRequestData` is false for workloads whose gateway doesn't report per-deployment request telemetry. Returns `null` when the cluster isn't reachable yet.",
         "security": [
           {
             "apiKey": []
@@ -14627,9 +14942,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
@@ -14638,9 +14955,11 @@
               "type": "integer",
               "minimum": 300,
               "maximum": 2592000,
-              "default": 3600
+              "default": 3600,
+              "description": "How far back to read, in seconds (default 3600)."
             },
             "required": false,
+            "description": "How far back to read, in seconds (default 3600).",
             "name": "rangeSeconds",
             "in": "query"
           },
@@ -14649,9 +14968,11 @@
               "type": "integer",
               "minimum": 15,
               "maximum": 7200,
-              "default": 60
+              "default": 60,
+              "description": "Sample step in seconds (default 60)."
             },
             "required": false,
+            "description": "Sample step in seconds (default 60).",
             "name": "step",
             "in": "query"
           }
@@ -14744,7 +15065,7 @@
       "get": {
         "tags": ["Telemetry"],
         "summary": "Get database telemetry",
-        "description": "Reads database-shaped telemetry — connections, disk usage, database size, CPU, memory, and transaction rate. Returns `null` for non-database deployments or when the cluster isn't reachable yet.",
+        "description": "Reads database-shaped telemetry — connections, disk usage, database size, CPU, memory, transaction rate, and network in/out. `network` is pod network traffic in and out (bytes/sec rate plus a window total in bytes); it counts all traffic, including traffic between your services, so it reads higher than billed bandwidth. Returns `null` for non-database deployments or when the cluster isn't reachable yet.",
         "security": [
           {
             "apiKey": []
@@ -14753,9 +15074,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
@@ -14764,9 +15087,11 @@
               "type": "integer",
               "minimum": 300,
               "maximum": 86400,
-              "default": 3600
+              "default": 3600,
+              "description": "How far back to read, in seconds (default 3600)."
             },
             "required": false,
+            "description": "How far back to read, in seconds (default 3600).",
             "name": "rangeSeconds",
             "in": "query"
           },
@@ -14775,9 +15100,11 @@
               "type": "integer",
               "minimum": 15,
               "maximum": 3600,
-              "default": 60
+              "default": 60,
+              "description": "Sample step in seconds (default 60)."
             },
             "required": false,
+            "description": "Sample step in seconds (default 60).",
             "name": "step",
             "in": "query"
           }
@@ -14870,7 +15197,7 @@
       "get": {
         "tags": ["Telemetry"],
         "summary": "Get cache telemetry",
-        "description": "Reads cache-shaped telemetry — connected clients, memory, ops/sec, hit rate, and CPU. Returns `null` for non-cache deployments or when the cluster isn't reachable yet.",
+        "description": "Reads cache-shaped telemetry — connected clients, memory, ops/sec, hit rate, CPU, and network in/out. `network` is pod network traffic in and out (bytes/sec rate plus a window total in bytes); it counts all traffic, including traffic between your services, so it reads higher than billed bandwidth. Returns `null` for non-cache deployments or when the cluster isn't reachable yet.",
         "security": [
           {
             "apiKey": []
@@ -14879,9 +15206,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
@@ -14890,9 +15219,11 @@
               "type": "integer",
               "minimum": 300,
               "maximum": 86400,
-              "default": 3600
+              "default": 3600,
+              "description": "How far back to read, in seconds (default 3600)."
             },
             "required": false,
+            "description": "How far back to read, in seconds (default 3600).",
             "name": "rangeSeconds",
             "in": "query"
           },
@@ -14901,9 +15232,11 @@
               "type": "integer",
               "minimum": 15,
               "maximum": 3600,
-              "default": 60
+              "default": 60,
+              "description": "Sample step in seconds (default 60)."
             },
             "required": false,
+            "description": "Sample step in seconds (default 60).",
             "name": "step",
             "in": "query"
           }
@@ -15005,9 +15338,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
@@ -15016,9 +15351,11 @@
               "type": "integer",
               "minimum": 300,
               "maximum": 86400,
-              "default": 3600
+              "default": 3600,
+              "description": "How far back to read, in seconds (default 3600)."
             },
             "required": false,
+            "description": "How far back to read, in seconds (default 3600).",
             "name": "rangeSeconds",
             "in": "query"
           },
@@ -15027,9 +15364,11 @@
               "type": "integer",
               "minimum": 60,
               "maximum": 3600,
-              "default": 60
+              "default": 60,
+              "description": "Aggregation period in seconds (default 60)."
             },
             "required": false,
+            "description": "Aggregation period in seconds (default 60).",
             "name": "periodSeconds",
             "in": "query"
           }
@@ -15131,17 +15470,21 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           },
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The revision id whose build to read."
             },
             "required": true,
+            "description": "The revision id whose build to read.",
             "name": "revisionId",
             "in": "path"
           },
@@ -15150,9 +15493,11 @@
               "type": "integer",
               "minimum": 0,
               "exclusiveMinimum": true,
-              "maximum": 10000
+              "maximum": 10000,
+              "description": "Number of trailing log lines to return (default 2000)."
             },
             "required": false,
+            "description": "Number of trailing log lines to return (default 2000).",
             "name": "tailLines",
             "in": "query"
           }
@@ -15253,9 +15598,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -15355,9 +15702,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -15372,33 +15721,39 @@
                   "name": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 80
+                    "maxLength": 80,
+                    "description": "Short label for the rule."
                   },
                   "metric": {
                     "type": "string",
-                    "enum": ["cpu", "memory", "restarts"]
+                    "enum": ["cpu", "memory", "restarts"],
+                    "description": "cpu/memory compare a percent of the app's limit; restarts is a raw count."
                   },
                   "comparator": {
                     "type": "string",
                     "enum": ["gt", "lt"],
-                    "default": "gt"
+                    "default": "gt",
+                    "description": "Fire when the value is greater-than (gt) or less-than (lt)."
                   },
                   "threshold": {
                     "type": "number",
                     "minimum": 0,
                     "exclusiveMinimum": true,
-                    "maximum": 1000000
+                    "maximum": 1000000,
+                    "description": "Percent (cpu/memory, ≤ 100) or count (restarts)."
                   },
                   "forDurationSeconds": {
                     "type": "integer",
                     "minimum": 0,
                     "maximum": 86400,
-                    "default": 300
+                    "default": 300,
+                    "description": "How long the condition must hold before firing (default 300)."
                   },
                   "windowSeconds": {
                     "type": "integer",
                     "minimum": 60,
-                    "maximum": 86400
+                    "maximum": 86400,
+                    "description": "Lookback window for windowed metrics (restarts)."
                   },
                   "severity": {
                     "type": "string",
@@ -15508,9 +15863,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The alert rule id."
             },
             "required": true,
+            "description": "The alert rule id.",
             "name": "ruleId",
             "in": "path"
           }
@@ -15525,33 +15882,39 @@
                   "name": {
                     "type": "string",
                     "minLength": 1,
-                    "maxLength": 80
+                    "maxLength": 80,
+                    "description": "Short label for the rule."
                   },
                   "metric": {
                     "type": "string",
-                    "enum": ["cpu", "memory", "restarts"]
+                    "enum": ["cpu", "memory", "restarts"],
+                    "description": "cpu/memory compare a percent of the app's limit; restarts is a raw count."
                   },
                   "comparator": {
                     "type": "string",
                     "enum": ["gt", "lt"],
-                    "default": "gt"
+                    "default": "gt",
+                    "description": "Fire when the value is greater-than (gt) or less-than (lt)."
                   },
                   "threshold": {
                     "type": "number",
                     "minimum": 0,
                     "exclusiveMinimum": true,
-                    "maximum": 1000000
+                    "maximum": 1000000,
+                    "description": "Percent (cpu/memory, ≤ 100) or count (restarts)."
                   },
                   "forDurationSeconds": {
                     "type": "integer",
                     "minimum": 0,
                     "maximum": 86400,
-                    "default": 300
+                    "default": 300,
+                    "description": "How long the condition must hold before firing (default 300)."
                   },
                   "windowSeconds": {
                     "type": "integer",
                     "minimum": 60,
-                    "maximum": 86400
+                    "maximum": 86400,
+                    "description": "Lookback window for windowed metrics (restarts)."
                   },
                   "severity": {
                     "type": "string",
@@ -15559,7 +15922,8 @@
                     "default": "warning"
                   },
                   "enabled": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "description": "Turn the rule on or off without deleting it."
                   }
                 }
               }
@@ -15660,9 +16024,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The alert rule id."
             },
             "required": true,
+            "description": "The alert rule id.",
             "name": "ruleId",
             "in": "path"
           }
@@ -15764,9 +16130,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "Scope to one deployment (omit for the whole org)."
             },
             "required": false,
+            "description": "Scope to one deployment (omit for the whole org).",
             "name": "deploymentId",
             "in": "query"
           },
@@ -15775,9 +16143,11 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 100,
-              "default": 50
+              "default": 50,
+              "description": "Max number of firings to return (default 50)."
             },
             "required": false,
+            "description": "Max number of firings to return (default 50).",
             "name": "limit",
             "in": "query"
           }
@@ -15879,9 +16249,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -15981,9 +16353,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The deployment id."
             },
             "required": true,
+            "description": "The deployment id.",
             "name": "deploymentId",
             "in": "path"
           }
@@ -16095,9 +16469,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The linked custom-domain id."
             },
             "required": true,
+            "description": "The linked custom-domain id.",
             "name": "domainId",
             "in": "path"
           }
@@ -16199,9 +16575,11 @@
         "parameters": [
           {
             "schema": {
-              "type": "string"
+              "type": "string",
+              "description": "The linked custom-domain id."
             },
             "required": true,
+            "description": "The linked custom-domain id.",
             "name": "domainId",
             "in": "path"
           }

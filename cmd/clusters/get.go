@@ -33,6 +33,7 @@ func getCmd() *cobra.Command {
 				{"Provider", c.Provider},
 				{"Type", c.ClusterType},
 				{"Region", ux.Deref(c.Region)},
+				{"Cloud Account", ux.Deref(c.CloudAccountId)},
 				{"Status", c.Status},
 				{"Status Message", ux.Deref(c.StatusMessage)},
 				{"Kubernetes Version", ux.Deref(c.KubernetesVersion)},

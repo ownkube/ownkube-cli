@@ -109,10 +109,10 @@ Or run it without installing (after copying the spec):
     `ListBoxes` in `internal/client/datastores.go`.
   - `cmd/usage/`: `usage current|month-to-date (mtd)|projected|history` — Compute
     usage and cost. Wrappers in `internal/client/usage.go`.
-  - `cmd/billing/`: `billing wallet|credit (credit claim)|spend-controls (get|set)|
-    subscribe|top-up|portal` — the prepaid wallet, credit, spend controls, and
-    Polar checkout handoff (`--no-browser` to print the URL only). Wrappers in
-    `internal/client/billing.go`.
+  - `cmd/billing/`: `billing wallet|credit (credit redeem <code>)|spend-controls
+    (get|set)|subscribe|top-up|portal` — the prepaid wallet, credit, promo-code
+    redemption, spend controls, and Polar checkout handoff (`--no-browser` to
+    print the URL only). Wrappers in `internal/client/billing.go`.
   - `cmd/alerts/`: `alerts list|create|update|delete|firings` — per-deployment
     workload alert rules and firing history. Wrappers in
     `internal/client/alerts.go`.

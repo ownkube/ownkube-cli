@@ -22,7 +22,7 @@ func (c *Client) GetWallet(ctx context.Context) (*api.WalletSummaryResponse, err
 	return resp.JSON200, nil
 }
 
-// GetCredit calls GET /v1/credit — signup-credit status and wallet balance.
+// GetCredit calls GET /v1/credit — the wallet balance and top-up minimum.
 func (c *Client) GetCredit(ctx context.Context) (*api.CreditStatusResponse, error) {
 	resp, err := c.inner.GetV1CreditWithResponse(ctx)
 	if err != nil {
@@ -37,14 +37,15 @@ func (c *Client) GetCredit(ctx context.Context) (*api.CreditStatusResponse, erro
 	return resp.JSON200, nil
 }
 
-// ClaimCredit calls POST /v1/credit/claim — grants the one-time signup credit.
-// The server gates eligibility; this is a no-op grant when already claimed.
-func (c *Client) ClaimCredit(ctx context.Context) (*api.ClaimCreditResponse, error) {
-	resp, err := c.inner.PostV1CreditClaimWithResponse(ctx)
+// RedeemPromo calls POST /v1/promo/redeem — applies a promo code's credit to
+// the wallet. A refusal (unknown code, offer full or ended, already claimed,
+// existing account) comes back as a 200 with Ok: false, not an error.
+func (c *Client) RedeemPromo(ctx context.Context, code string) (*api.RedeemPromoResponse, error) {
+	resp, err := c.inner.PostV1PromoRedeemWithResponse(ctx, api.RedeemPromoBody{Code: code})
 	if err != nil {
 		return nil, fmt.Errorf("API request failed: %w", err)
 	}
-	if err := checkError(resp.StatusCode(), errorsFromClaimCredit(resp), resp.Body); err != nil {
+	if err := checkError(resp.StatusCode(), errorsFromRedeemPromo(resp), resp.Body); err != nil {
 		return nil, err
 	}
 	if resp.JSON200 == nil {
@@ -138,7 +139,7 @@ func errorsFromGetCredit(r *api.GetV1CreditResponse) []*api.ErrorResponse {
 	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
 }
 
-func errorsFromClaimCredit(r *api.PostV1CreditClaimResponse) []*api.ErrorResponse {
+func errorsFromRedeemPromo(r *api.PostV1PromoRedeemResponse) []*api.ErrorResponse {
 	return []*api.ErrorResponse{r.JSON400, r.JSON401, r.JSON403, r.JSON404, r.JSON409, r.JSON412, r.JSON500}
 }
 

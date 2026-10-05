@@ -15,10 +15,12 @@ func renderLifecycle(cmd *cobra.Command, d *api.LifecycleDeploymentResult) error
 		{"FIELD", "VALUE"},
 		{"ID", d.Id},
 		{"Name", d.Name},
+		{"Display Name", ux.Deref(d.DisplayName)},
 		{"Status", d.Status},
 		{"Message", d.StatusMessage},
 		{"Cluster", d.ClusterId},
 		{"Environment", d.EnvironmentId},
+		{"Public Hostname", ux.Deref(d.PublicHostname)},
 	})
 }
 
