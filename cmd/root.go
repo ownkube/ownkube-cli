@@ -14,6 +14,7 @@ import (
 	"github.com/ownkube/okctl/cmd/boxes"
 	"github.com/ownkube/okctl/cmd/clusters"
 	"github.com/ownkube/okctl/cmd/config"
+	"github.com/ownkube/okctl/cmd/connect"
 	"github.com/ownkube/okctl/cmd/deploy"
 	"github.com/ownkube/okctl/cmd/domains"
 	"github.com/ownkube/okctl/cmd/environments"
@@ -25,6 +26,7 @@ import (
 	"github.com/ownkube/okctl/cmd/projects"
 	"github.com/ownkube/okctl/cmd/regions"
 	"github.com/ownkube/okctl/cmd/registries"
+	sshcmd "github.com/ownkube/okctl/cmd/ssh"
 	"github.com/ownkube/okctl/cmd/up"
 	"github.com/ownkube/okctl/cmd/usage"
 	cfgpkg "github.com/ownkube/okctl/internal/config"
@@ -100,6 +102,8 @@ func init() {
 		billing.New(),
 		alerts.New(),
 		domains.New(),
+		sshcmd.New(),
+		connect.New(),
 	)
 }
 

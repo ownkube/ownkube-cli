@@ -150,6 +150,13 @@ Or run it without installing (after copying the spec):
     Wrappers in `internal/client/source_upload.go` (`PresignSourceUpload`,
     `UploadSource` — bare `net/http` PUT, the URL self-authenticates —
     `DeployFromUpload`, `DeployUploadedSource`).
+  - `cmd/ssh/`: `ssh [id] [--instance N] [-- cmd]` (shell / one-shot command on
+    a Compute app over real SSH), `ssh keys list|add|remove|github`, `ssh config`
+    (managed `# okctl:begin/end <alias>` blocks in `~/.ssh/config`). Package is
+    imported as `sshcmd` in root. Design: ownkube-app `docs/proposals/0033`.
+  - `cmd/connect/`: `connect [id] [--tunnel-only] [--port] [--ssh]` — psql /
+    valkey-cli against a Compute database/cache: public URI when ready, else a
+    local SSH tunnel.
   - `cmd/internal/ux/`: shared helpers — `RequireClient`, `ResolveDeployment`
     (flag, else this directory's link), `Print`, `Deref`,
     `UnionString` (renders generated `oneOf` scalar unions, e.g. timestamps),
@@ -159,7 +166,15 @@ Or run it without installing (after copying the spec):
 - **internal/api/**: GENERATED Go client from `api/openapi.json` — do NOT edit.
 - **internal/client/**: Thin wrapper around generated client (API key
   injection, optional HTTP basic auth via `OKCTL_BASIC_AUTH`, normalised
-  error handling). One method per endpoint.
+  error handling). One method per endpoint. Exception: `ssh.go` hand-writes
+  the 0033 SSH endpoints through `raw.go`'s `doJSON` (returns `*APIError`,
+  test with `IsAPICode`) until the app's CLI spec ships them; then regenerate
+  and switch to generated calls.
+- **internal/sshconn/**: okctl's SSH client (`golang.org/x/crypto/ssh`, no
+  OpenSSH needed). Key discovery/creation (`~/.ssh/ownkube_ed25519`, agent
+  keys), `EnsureKey` first-connect flow, host keys pinned from the API (never
+  trust-on-first-use) and mirrored into `~/.ssh/known_hosts`, `Shell`/`Run`
+  (exit code propagated), `Forward`, `~/.ssh/config` blocks.
 - **internal/config/**: Config + credentials YAML file management
   (`~/.config/ownkube/`).
 - **internal/link/**: Per-directory resource binding store — `links.yaml` in the

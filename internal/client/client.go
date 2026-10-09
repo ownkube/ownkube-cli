@@ -16,6 +16,9 @@ import (
 type Client struct {
 	inner  *api.ClientWithResponses
 	apiURL string
+	// edit applies the same auth/org/user-agent headers the generated client
+	// sends, for the few hand-written requests in raw.go.
+	edit api.RequestEditorFn
 }
 
 // New creates a new Client targeting the given API base URL with the provided
@@ -29,7 +32,7 @@ type Client struct {
 func New(apiURL, apiKey, organization string) (*Client, error) {
 	basicUser, basicPass, hasBasic := parseBasicAuthEnv(os.Getenv("OKCTL_BASIC_AUTH"))
 
-	editor := api.WithRequestEditorFn(func(ctx context.Context, req *http.Request) error {
+	edit := func(ctx context.Context, req *http.Request) error {
 		req.Header.Set("x-api-key", apiKey)
 		req.Header.Set("User-Agent", "okctl/"+version.Version)
 		if organization != "" {
@@ -39,14 +42,14 @@ func New(apiURL, apiKey, organization string) (*Client, error) {
 			req.SetBasicAuth(basicUser, basicPass)
 		}
 		return nil
-	})
+	}
 
-	inner, err := api.NewClientWithResponses(apiURL+"/api/cli", editor)
+	inner, err := api.NewClientWithResponses(apiURL+"/api/cli", api.WithRequestEditorFn(edit))
 	if err != nil {
 		return nil, fmt.Errorf("creating API client: %w", err)
 	}
 
-	return &Client{inner: inner, apiURL: apiURL}, nil
+	return &Client{inner: inner, apiURL: apiURL, edit: edit}, nil
 }
 
 // parseBasicAuthEnv splits "user:pass" into its parts. Returns hasBasic=false
