@@ -204,6 +204,11 @@ func launchClient(ctx context.Context, kind api.ConnectionInfoResourceType, uri 
 		for _, name := range []string{"valkey-cli", "redis-cli"} {
 			if p, err := exec.LookPath(name); err == nil {
 				bin, argv = p, []string{"-u", uri}
+				// The public cache edge routes by SNI, and valkey-cli/redis-cli
+				// send none over TLS unless told to.
+				if u, err := url.Parse(uri); err == nil && u.Scheme == "rediss" {
+					argv = append(argv, "--sni", u.Hostname())
+				}
 				break
 			}
 		}
