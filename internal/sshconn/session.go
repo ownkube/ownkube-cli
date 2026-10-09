@@ -171,20 +171,11 @@ func termName() string {
 	return "xterm-256color"
 }
 
-// QuoteArgs joins argv into one POSIX shell command line, quoting each
-// argument so it reaches the remote shell unchanged.
-func QuoteArgs(args []string) string {
-	quoted := make([]string, len(args))
-	for i, a := range args {
-		if a != "" && strings.IndexFunc(a, func(r rune) bool {
-			return !(r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' || strings.ContainsRune("-_./=:,+@%", r))
-		}) < 0 {
-			quoted[i] = a
-			continue
-		}
-		quoted[i] = "'" + strings.ReplaceAll(a, "'", `'\''`) + "'"
-	}
-	return strings.Join(quoted, " ")
+// JoinArgs builds the remote command line the way OpenSSH does: the words are
+// joined with spaces and the remote shell parses the result, so
+// `okctl ssh -- 'id; hostname'` runs both commands, as `ssh host 'id; hostname'` would.
+func JoinArgs(args []string) string {
+	return strings.Join(args, " ")
 }
 
 // Forward accepts connections on ln and pipes each one through the SSH

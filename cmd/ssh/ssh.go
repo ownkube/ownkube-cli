@@ -35,6 +35,7 @@ func New() *cobra.Command {
 		Example: "  okctl ssh\n" +
 			"  okctl ssh dep_123 --instance 2\n" +
 			"  okctl ssh -- ls -la /app\n" +
+			"  okctl ssh -- 'cd /app && node scripts/migrate.js'\n" +
 			"  okctl ssh config   # then: ssh ownkube-api, scp ownkube-api:/app/x .",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if n := positional(cmd, args); len(n) > 1 {
@@ -82,7 +83,7 @@ func New() *cobra.Command {
 			if len(command) == 0 {
 				code, err = sshconn.Shell(c)
 			} else {
-				code, err = sshconn.Run(c, sshconn.QuoteArgs(command))
+				code, err = sshconn.Run(c, sshconn.JoinArgs(command))
 			}
 			c.Close()
 			if err != nil {

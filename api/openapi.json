@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Ownkube CLI API",
-    "version": "1.10.0",
+    "version": "1.11.0",
     "description": "API for the Ownkube CLI tool. Authenticate via browser-based flow, then use x-api-key header for subsequent requests."
   },
   "servers": [
@@ -2190,6 +2190,190 @@
           }
         },
         "required": ["sessionId", "ticket", "relayUrl", "expiresAt", "protocol"]
+      },
+      "SshKeyList": {
+        "type": "object",
+        "properties": {
+          "keys": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SshKey"
+            }
+          }
+        },
+        "required": ["keys"]
+      },
+      "SshKey": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "algorithm": {
+            "type": "string",
+            "description": "Key type, e.g. `ssh-ed25519`."
+          },
+          "fingerprint": {
+            "type": "string",
+            "description": "`SHA256:` fingerprint."
+          },
+          "source": {
+            "type": "string",
+            "enum": ["cli", "dashboard", "github"]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "lastUsedAt": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "algorithm",
+          "fingerprint",
+          "source",
+          "createdAt",
+          "lastUsedAt"
+        ]
+      },
+      "AddSshKeyResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SshKey"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "created": {
+                "type": "boolean",
+                "description": "False when the key was already registered to you."
+              }
+            },
+            "required": ["created"]
+          }
+        ]
+      },
+      "RemoveSshKeyResult": {
+        "type": "object",
+        "properties": {
+          "removed": {
+            "type": "boolean"
+          }
+        },
+        "required": ["removed"]
+      },
+      "ConnectRegionList": {
+        "type": "object",
+        "properties": {
+          "regions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "region": {
+                  "type": "string",
+                  "description": "Public region name."
+                },
+                "label": {
+                  "type": "string"
+                },
+                "sshHost": {
+                  "type": "string"
+                },
+                "sshPort": {
+                  "type": "number"
+                },
+                "connectUrl": {
+                  "type": "string",
+                  "description": "Browser shell origin."
+                },
+                "hostKeys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Pinned SSH host public keys for `known_hosts`."
+                }
+              },
+              "required": [
+                "region",
+                "label",
+                "sshHost",
+                "sshPort",
+                "connectUrl",
+                "hostKeys"
+              ]
+            }
+          }
+        },
+        "required": ["regions"]
+      },
+      "SshTarget": {
+        "type": "object",
+        "properties": {
+          "deploymentId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["app", "database", "cache"]
+          },
+          "region": {
+            "type": "string",
+            "description": "Public region name."
+          },
+          "sshHost": {
+            "type": "string"
+          },
+          "sshPort": {
+            "type": "number"
+          },
+          "username": {
+            "type": "string",
+            "description": "SSH username; append `+n` to pick instance n."
+          },
+          "instances": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "index": {
+                  "type": "number"
+                },
+                "ready": {
+                  "type": "boolean"
+                }
+              },
+              "required": ["index", "ready"]
+            }
+          },
+          "hostKeys": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "deploymentId",
+          "name",
+          "kind",
+          "region",
+          "sshHost",
+          "sshPort",
+          "username",
+          "instances",
+          "hostKeys"
+        ]
       },
       "ConnectionInfo": {
         "type": "object",
@@ -10279,7 +10463,7 @@
       "post": {
         "tags": ["Deployments"],
         "summary": "Create a deployment",
-        "description": "Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster.",
+        "description": "Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.",
         "security": [
           {
             "apiKey": []
@@ -10379,11 +10563,15 @@
                         "properties": {
                           "repository": {
                             "type": "string",
-                            "minLength": 1
+                            "minLength": 1,
+                            "default": "pending",
+                            "description": "Image repository to run, e.g. nginx or ghcr.io/org/app. Omit when deploying from `github`; the image is built from the repository."
                           },
                           "tag": {
                             "type": "string",
-                            "minLength": 1
+                            "minLength": 1,
+                            "default": "pending",
+                            "description": "Image tag to run. Omit when deploying from `github`."
                           },
                           "port": {
                             "type": "integer",
@@ -10736,7 +10924,7 @@
                             "type": "string"
                           }
                         },
-                        "required": ["repository", "tag", "port"]
+                        "required": ["port"]
                       }
                     },
                     "required": ["resourceType", "name", "config"]
@@ -10829,11 +11017,15 @@
                         "properties": {
                           "repository": {
                             "type": "string",
-                            "minLength": 1
+                            "minLength": 1,
+                            "default": "pending",
+                            "description": "Image repository to run, e.g. nginx or ghcr.io/org/app. Omit when deploying from `github`; the image is built from the repository."
                           },
                           "tag": {
                             "type": "string",
-                            "minLength": 1
+                            "minLength": 1,
+                            "default": "pending",
+                            "description": "Image tag to run. Omit when deploying from `github`."
                           },
                           "port": {
                             "type": "integer",
@@ -11186,7 +11378,7 @@
                             "type": "string"
                           }
                         },
-                        "required": ["repository", "tag", "port"]
+                        "required": ["port"]
                       }
                     },
                     "required": ["resourceType", "name", "config"]
@@ -11279,11 +11471,15 @@
                         "properties": {
                           "repository": {
                             "type": "string",
-                            "minLength": 1
+                            "minLength": 1,
+                            "default": "pending",
+                            "description": "Image repository to run, e.g. nginx or ghcr.io/org/app. Omit when deploying from `github`; the image is built from the repository."
                           },
                           "tag": {
                             "type": "string",
-                            "minLength": 1
+                            "minLength": 1,
+                            "default": "pending",
+                            "description": "Image tag to run. Omit when deploying from `github`."
                           },
                           "command": {
                             "type": "array",
@@ -11426,7 +11622,7 @@
                             }
                           }
                         },
-                        "required": ["repository", "tag", "schedule"]
+                        "required": ["schedule"]
                       }
                     },
                     "required": ["resourceType", "name", "config"]
@@ -13244,6 +13440,691 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ConnectSessionResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ssh-keys": {
+      "get": {
+        "tags": ["SSH"],
+        "summary": "List your SSH keys",
+        "description": "Lists the SSH public keys registered to your account.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Your SSH keys",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SshKeyList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["SSH"],
+        "summary": "Add an SSH key",
+        "description": "Registers an SSH public key. Idempotent for your own key (`created: false`). Errors: `SSH_KEY_INVALID`, `SSH_KEY_IN_USE` (registered to another account), `SSH_KEY_LIMIT`.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "default": ""
+                  },
+                  "publicKey": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 16384,
+                    "description": "OpenSSH public key line, e.g. `ssh-ed25519 AAAA... me@laptop`."
+                  }
+                },
+                "required": ["publicKey"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The registered key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddSshKeyResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ssh-keys/github": {
+      "post": {
+        "tags": ["SSH"],
+        "summary": "Import SSH keys from GitHub",
+        "description": "Registers the public keys published on a GitHub account. Keys registered to another account, and keys too weak to accept, are skipped.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "nullable": true,
+                    "maxLength": 39,
+                    "default": null,
+                    "description": "GitHub username. Null uses the GitHub account you signed in with."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Keys now registered from that account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SshKeyList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/ssh-keys/{id}": {
+      "delete": {
+        "tags": ["SSH"],
+        "summary": "Remove an SSH key",
+        "description": "Removes one of your SSH keys. Open sessions using it end within a few minutes.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Removed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RemoveSshKeyResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/connect/regions": {
+      "get": {
+        "tags": ["SSH"],
+        "summary": "List regions with shell access",
+        "description": "Regions where SSH and the browser shell are enabled, with their pinned host keys.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Regions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectRegionList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/ssh-target": {
+      "get": {
+        "tags": ["SSH"],
+        "summary": "Resolve where to SSH for a deployment",
+        "description": "Host, username, host keys, and instances for `okctl ssh`. Owners and admins only, on Ownkube Compute. Refused with `SSH_NOT_AVAILABLE` otherwise.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SSH target",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SshTarget"
                 }
               }
             }
