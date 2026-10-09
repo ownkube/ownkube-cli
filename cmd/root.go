@@ -20,6 +20,7 @@ import (
 	"github.com/ownkube/okctl/cmd/functions"
 	"github.com/ownkube/okctl/cmd/internal/ux"
 	"github.com/ownkube/okctl/cmd/link"
+	"github.com/ownkube/okctl/cmd/marketplace"
 	"github.com/ownkube/okctl/cmd/organizations"
 	"github.com/ownkube/okctl/cmd/projects"
 	"github.com/ownkube/okctl/cmd/regions"
@@ -94,6 +95,7 @@ func init() {
 		registries.New(),
 		regions.New(),
 		boxes.New(),
+		marketplace.New(),
 		usage.New(),
 		billing.New(),
 		alerts.New(),

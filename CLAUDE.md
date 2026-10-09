@@ -107,6 +107,13 @@ Or run it without installing (after copying the spec):
   - `cmd/boxes/`: `boxes list [--kind web|database|cache]` — the Compute box
     catalog; a box id is the `skuId` for a Compute database/cache. Wrapper
     `ListBoxes` in `internal/client/datastores.go`.
+  - `cmd/marketplace/` (alias `mp`): `list|get <slug>|check <slug>|deploy
+    <slug>|delete <install-id>` — ready-made apps deployed with their DB/cache
+    in one call. `--input KEY=VALUE` values go up as strings (server coerces to
+    the declared type); `deploy` takes `--region` or `--cluster`, plus
+    `--db-box`/`--cache-box` on Compute. `delete` removes every piece of one
+    install (`templateInstanceId`, also on `deploy get -o json`) and confirms
+    unless `--yes`. Wrappers in `internal/client/marketplace.go`.
   - `cmd/usage/`: `usage current|month-to-date (mtd)|projected|history` — Compute
     usage and cost. Wrappers in `internal/client/usage.go`.
   - `cmd/billing/`: `billing wallet|credit (credit redeem <code>)|spend-controls
@@ -133,10 +140,18 @@ Or run it without installing (after copying the spec):
     minus `.git`) → PUT to the pre-signed URL → trigger build → `follow()` streams
     build logs + revision status to a terminal state. Target deployment from
     `--service` or this directory's link; `--note`, `--path`, `--no-follow`.
+    Unlinked + no `--service` → `create.go`: presign with no deployment (server
+    refuses an empty wallet before upload), POST `/v1/source-deploys` with
+    `nameHint` = link-root dir name, print the server's `defaults`, write the
+    `links.yaml` binding. Defaults are resolved ONLY server-side; the create-only
+    flags (`--name/--region/--port/--type/--public/--project/--environment`) are
+    sent only when set and rejected on a redeploy. Archive size checked against
+    the presign's `maxBytes` before upload.
     Wrappers in `internal/client/source_upload.go` (`PresignSourceUpload`,
     `UploadSource` — bare `net/http` PUT, the URL self-authenticates —
-    `DeployFromUpload`).
-  - `cmd/internal/ux/`: shared helpers — `RequireClient`, `Print`, `Deref`,
+    `DeployFromUpload`, `DeployUploadedSource`).
+  - `cmd/internal/ux/`: shared helpers — `RequireClient`, `ResolveDeployment`
+    (flag, else this directory's link), `Print`, `Deref`,
     `UnionString` (renders generated `oneOf` scalar unions, e.g. timestamps),
     `ReadFileOrStdin`, `IsStructured`, `APIURL`, `Config`, `OpenBrowser`. Set
     once per invocation by `cmd/root.go`'s `PersistentPreRunE` via `ux.Set(...)`.

@@ -74,7 +74,7 @@ func monthToDateCmd() *cobra.Command {
 				{"Cost", usd(res.CostUsd)},
 				{"vCPU-hours", fmt.Sprintf("%g", res.VcpuHours)},
 				{"Memory GiB-hours", fmt.Sprintf("%g", res.MemoryGibHours)},
-				{"Egress (GiB)", fmt.Sprintf("%g", res.EgressGib)},
+				{"Egress (GB)", fmt.Sprintf("%g", res.EgressGb)},
 				{"Starter Clusters", fmt.Sprintf("%g", res.StarterClusters)},
 			})
 		},

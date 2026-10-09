@@ -70,7 +70,7 @@ func listCmd() *cobra.Command {
 				return err
 			}
 			if kind == "" || kind == "database" {
-				fmt.Fprintf(cmd.OutOrStdout(), "\nDatabase storage: $%.2f per GiB per month.\n", cat.DatabaseStorageGibMonthUsd)
+				fmt.Fprintf(cmd.OutOrStdout(), "\nDatabase storage: $%.2f per GB per month.\n", cat.DatabaseStorageGbMonthUsd)
 			}
 			return nil
 		},

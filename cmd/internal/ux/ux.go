@@ -14,6 +14,7 @@ import (
 
 	"github.com/ownkube/okctl/internal/client"
 	"github.com/ownkube/okctl/internal/config"
+	linkstore "github.com/ownkube/okctl/internal/link"
 	"github.com/ownkube/okctl/internal/output"
 )
 
@@ -70,6 +71,27 @@ func RequireClient() (*client.Client, error) {
 		return nil, err
 	}
 	return client.New(g.APIURL, creds.APIKey, g.Organization)
+}
+
+// ResolveDeployment returns the target deployment id: flag when set, otherwise
+// the deployment bound to dir via `okctl link`.
+func ResolveDeployment(flag, dir string) (string, error) {
+	if flag != "" {
+		return flag, nil
+	}
+	key, err := linkstore.ResolveKey(dir)
+	if err != nil {
+		return "", err
+	}
+	binding, ok, err := linkstore.NewManager(g.Config.Dir()).Get(key)
+	if err != nil {
+		return "", err
+	}
+	if !ok || binding.DeploymentID == "" {
+		return "", fmt.Errorf(
+			"no deployment for this directory — pass --service or run 'okctl link' first")
+	}
+	return binding.DeploymentID, nil
 }
 
 // Print writes data using the configured output format.

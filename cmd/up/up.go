@@ -2,6 +2,8 @@
 // local working-tree source. It archives the working tree (honouring
 // .gitignore), uploads the tarball to a short-lived pre-signed slot, then
 // triggers an in-cluster build+deploy of that source and follows the build.
+// In an unlinked directory it creates the app first (create.go), with defaults
+// resolved server-side, and links the directory to it.
 //
 // Unlike `okctl deploy` (which builds a committed git revision), `up` ships
 // whatever is on disk right now — uncommitted edits included — for fast
@@ -17,7 +19,6 @@ import (
 
 	"github.com/ownkube/okctl/cmd/internal/ux"
 	"github.com/ownkube/okctl/internal/client"
-	linkstore "github.com/ownkube/okctl/internal/link"
 	"github.com/spf13/cobra"
 )
 
@@ -42,6 +43,7 @@ func New() *cobra.Command {
 		noteFlag    string
 		pathFlag    string
 		noFollow    bool
+		create      createFlags
 	)
 
 	cmd := &cobra.Command{
@@ -50,6 +52,12 @@ func New() *cobra.Command {
 		Long: "Archive the current directory's working tree, upload it, and build + " +
 			"deploy it — uncommitted changes included. The target deployment is taken " +
 			"from --service, or inferred from this directory's link (see 'okctl link').\n\n" +
+			"In a directory that isn't linked yet, 'up' creates a new web app on Ownkube " +
+			"Compute with sensible defaults (named after the directory, in the region you " +
+			"already use, port from the Dockerfile or framework, public URL), prints what " +
+			"it chose, and links the directory so the next 'up' redeploys it. --name, " +
+			"--region, --port, --type, --public, --project and --environment override " +
+			"those defaults.\n\n" +
 			"Files ignored by .gitignore are never uploaded. The command follows the " +
 			"build until it goes live; pass --no-follow to return as soon as the build " +
 			"is queued.",
@@ -69,9 +77,23 @@ func New() *cobra.Command {
 				}
 			}
 
-			depID, err := resolveDeployment(serviceFlag, dir)
-			if err != nil {
-				return err
+			// No --service and no link: create the app from this directory.
+			creating := false
+			if serviceFlag == "" {
+				linked, err := linkedDeploymentID(dir)
+				if err != nil {
+					return err
+				}
+				creating = linked == ""
+			}
+			var depID string
+			if !creating {
+				if err := rejectCreateFlags(cmd); err != nil {
+					return err
+				}
+				if depID, err = ux.ResolveDeployment(serviceFlag, dir); err != nil {
+					return err
+				}
 			}
 
 			cl, err := client.New(ux.APIURL(), creds.APIKey, ux.Organization())
@@ -82,8 +104,9 @@ func New() *cobra.Command {
 			structured := ux.IsStructured()
 			out := cmd.OutOrStdout()
 
-			// 1. Mint an upload slot.
-			slot, err := cl.PresignSourceUpload(ctx)
+			// 1. Mint an upload slot. The server refuses here, before any
+			// upload, when the wallet is empty (with a link to add credit).
+			slot, err := cl.PresignSourceUpload(ctx, depID)
 			if err != nil {
 				return err
 			}
@@ -97,6 +120,10 @@ func New() *cobra.Command {
 				return err
 			}
 			defer os.Remove(archivePath)
+			if limit := int64(slot.MaxBytes); limit > 0 && size > limit {
+				return fmt.Errorf("source is %s; the limit is %s. Add build output, dependencies, and other large files to .gitignore, then retry",
+					humanBytes(size), humanBytes(limit))
+			}
 
 			// 3. Upload it straight to object storage via the pre-signed URL.
 			if !structured {
@@ -119,6 +146,20 @@ func New() *cobra.Command {
 			if noteFlag != "" {
 				note = &noteFlag
 			}
+			if creating {
+				created, err := createApp(ctx, cmd, cl, &create, dir, slot.UploadId, note)
+				if err != nil {
+					return err
+				}
+				if structured {
+					return ux.Print(out, created)
+				}
+				fmt.Fprintf(out, "Build queued (revision %s).\n", created.RevisionId)
+				if noFollow {
+					return nil
+				}
+				return follow(ctx, cl, out, created.DeploymentId, created.RevisionId)
+			}
 			result, err := cl.DeployFromUpload(ctx, depID, slot.UploadId, note)
 			if err != nil {
 				return err
@@ -140,29 +181,8 @@ func New() *cobra.Command {
 	cmd.Flags().StringVar(&noteFlag, "note", "", "Note to record on the revision")
 	cmd.Flags().StringVar(&pathFlag, "path", "", "Directory to deploy (defaults to the current directory)")
 	cmd.Flags().BoolVar(&noFollow, "no-follow", false, "Return once the build is queued instead of following it")
+	create.register(cmd)
 	return cmd
-}
-
-// resolveDeployment returns the target deployment id: the --service flag when
-// set, otherwise the deployment bound to dir via `okctl link`.
-func resolveDeployment(flag, dir string) (string, error) {
-	if flag != "" {
-		return flag, nil
-	}
-	key, err := linkstore.ResolveKey(dir)
-	if err != nil {
-		return "", err
-	}
-	mgr := linkstore.NewManager(ux.Config().Dir())
-	binding, ok, err := mgr.Get(key)
-	if err != nil {
-		return "", err
-	}
-	if !ok || binding.DeploymentID == "" {
-		return "", fmt.Errorf(
-			"no deployment for this directory — pass --service or run 'okctl link' first")
-	}
-	return binding.DeploymentID, nil
 }
 
 // follow streams build logs and reports status transitions until the revision

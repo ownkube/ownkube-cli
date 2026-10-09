@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Ownkube CLI API",
-    "version": "1.8.0",
+    "version": "1.10.0",
     "description": "API for the Ownkube CLI tool. Authenticate via browser-based flow, then use x-api-key header for subsequent requests."
   },
   "servers": [
@@ -533,12 +533,12 @@
             },
             "description": "Cache boxes. Every cache on Ownkube Compute needs one: set `billingMode: \"reserved\"` and `skuId` to a box id."
           },
-          "databaseStorageGibMonthUsd": {
+          "databaseStorageGbMonthUsd": {
             "type": "number",
-            "description": "Database storage price per GiB per month, billed on top of the box."
+            "description": "Database storage price per GB per month, billed on top of the box."
           }
         },
-        "required": ["web", "database", "cache", "databaseStorageGibMonthUsd"]
+        "required": ["web", "database", "cache", "databaseStorageGbMonthUsd"]
       },
       "ComputeBox": {
         "type": "object",
@@ -561,7 +561,8 @@
           },
           "cpuClass": {
             "type": "string",
-            "enum": ["shared", "dedicated"]
+            "enum": ["shared", "performance", "dedicated"],
+            "description": "shared: a fraction of the vCPU is reserved, bursts to the full box. performance: half the vCPU is reserved, bursts to the full box. dedicated: the full box is reserved."
           }
         },
         "required": [
@@ -604,6 +605,402 @@
         },
         "required": ["id", "name"]
       },
+      "MarketplaceAppListResponse": {
+        "type": "object",
+        "properties": {
+          "apps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MarketplaceApp"
+            }
+          }
+        },
+        "required": ["apps"]
+      },
+      "MarketplaceApp": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string",
+            "description": "Marketplace app id, e.g. `n8n`."
+          },
+          "name": {
+            "type": "string"
+          },
+          "blurb": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "category": {
+            "type": "string"
+          },
+          "provisions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What one deploy creates, e.g. `[\"1 web\", \"1 db\"]`."
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MarketplaceComponent"
+            }
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": ["label", "url"]
+            }
+          },
+          "sourceUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "deployable": {
+            "type": "boolean",
+            "description": "False when the app is listed but can't be deployed yet."
+          },
+          "unavailableReason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "blurb",
+          "description",
+          "category",
+          "provisions",
+          "components",
+          "links",
+          "sourceUrl",
+          "deployable",
+          "unavailableReason"
+        ]
+      },
+      "MarketplaceComponent": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "type": "string",
+            "description": "The piece's id within the app, e.g. `app`."
+          },
+          "kind": {
+            "type": "string",
+            "description": "`web`, `worker`, `job`, `database`, or `cache`."
+          },
+          "title": {
+            "type": "string"
+          },
+          "image": {
+            "type": "string",
+            "nullable": true,
+            "description": "Container image for app pieces; null for datastores."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Short description, e.g. `PostgreSQL 17`."
+          }
+        },
+        "required": ["ref", "kind", "title", "image", "detail"]
+      },
+      "MarketplaceAppDetail": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MarketplaceApp"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "inputs": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MarketplaceInput"
+                },
+                "description": "Values to collect before deploy; empty when none are needed."
+              },
+              "connections": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MarketplaceConnection"
+                },
+                "description": "Variables the app gets set for you."
+              }
+            },
+            "required": ["inputs", "connections"]
+          }
+        ]
+      },
+      "MarketplaceInput": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "Pass the value under this key in `inputs`."
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["string", "number", "boolean", "select"]
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "default": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          },
+          "secret": {
+            "type": "boolean"
+          },
+          "placeholder": {
+            "type": "string"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "minLength": {
+            "type": "number"
+          },
+          "maxLength": {
+            "type": "number"
+          },
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": ["label", "value"]
+            },
+            "description": "Allowed values for a `select` input."
+          }
+        },
+        "required": ["key", "label", "type", "required"]
+      },
+      "MarketplaceConnection": {
+        "type": "object",
+        "properties": {
+          "appRef": {
+            "type": "string"
+          },
+          "envName": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": ["wired", "input", "generated"],
+            "description": "`wired`: from the app's own database or cache. `input`: from your `inputs`. `generated`: a fresh secret per deploy."
+          }
+        },
+        "required": ["appRef", "envName", "label", "source"]
+      },
+      "MarketplaceCheckResponse": {
+        "type": "object",
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "What to fix before deploying; empty when `ok`."
+          }
+        },
+        "required": ["ok", "errors"]
+      },
+      "MarketplaceCheckBody": {
+        "type": "object",
+        "properties": {
+          "inputs": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "description": "Values for the app's declared inputs (see get_marketplace_app), keyed by input `key`."
+          },
+          "baseName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Name prefix for every piece (`<baseName>-<ref>`). Defaults to the app id. Lowercase letters, digits, dashes."
+          }
+        }
+      },
+      "MarketplaceDeployResponse": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "templateInstanceId": {
+            "type": "string",
+            "description": "Groups every piece this deploy created. Pass it to delete_marketplace_app to remove the whole app."
+          },
+          "deployments": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "deploymentId": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "ref": {
+                  "type": "string"
+                },
+                "resourceType": {
+                  "type": "string",
+                  "enum": ["web", "worker", "job", "database", "cache"]
+                },
+                "publicHostname": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "deploymentId",
+                "name",
+                "ref",
+                "resourceType",
+                "publicHostname"
+              ]
+            }
+          }
+        },
+        "required": ["slug", "templateInstanceId", "deployments"]
+      },
+      "MarketplaceDeployBody": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "description": "Ownkube Compute region id (from list_regions). Set this or `clusterId`, not both."
+          },
+          "clusterId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Your own active cluster to deploy into. Set this or `region`, not both."
+          },
+          "projectId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Owning project. Defaults to the organization's Default."
+          },
+          "environmentId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Environment to deploy into; must belong to `projectId`. Defaults to the project's default environment."
+          },
+          "inputs": {
+            "type": "object",
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                }
+              ]
+            },
+            "description": "Values for the app's declared inputs (see get_marketplace_app), keyed by input `key`."
+          },
+          "dbSkuId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Database box id (from list_boxes `database`). Required on Ownkube Compute when the app includes a database."
+          },
+          "cacheSkuId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Cache box id (from list_boxes `cache`). Required on Ownkube Compute when the app includes a cache."
+          },
+          "baseName": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50,
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "Name prefix for every piece (`<baseName>-<ref>`). Defaults to the app id. Lowercase letters, digits, dashes."
+          }
+        }
+      },
+      "MarketplaceDeleteResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "count": {
+            "type": "number",
+            "description": "How many deployments were removed."
+          }
+        },
+        "required": ["success", "count"]
+      },
       "WalletSummaryResponse": {
         "type": "object",
         "properties": {
@@ -641,11 +1038,21 @@
           "remainingUsd": {
             "type": "number"
           },
+          "overdraftUsd": {
+            "type": "number",
+            "description": "How far below zero the balance may run before workloads pause; the overdrawn amount is billed on the next plan invoice. 0 when the plan carries no overage."
+          },
           "exhausted": {
             "type": "boolean"
           }
         },
-        "required": ["grantedUsd", "consumedUsd", "remainingUsd", "exhausted"],
+        "required": [
+          "grantedUsd",
+          "consumedUsd",
+          "remainingUsd",
+          "overdraftUsd",
+          "exhausted"
+        ],
         "description": "Live wallet balance, or null if the org has none yet."
       },
       "SpendControlsResponse": {
@@ -738,9 +1145,14 @@
           "topUpMinUsd": {
             "type": "number",
             "description": "Minimum custom wallet top-up amount, in USD."
+          },
+          "topUpMaxUsd": {
+            "type": "number",
+            "nullable": true,
+            "description": "Largest top-up the plan allows right now, in USD (Pay as you go caps each top-up and the rolling 30 days). Null means no cap."
           }
         },
-        "required": ["enabled", "balance", "topUpMinUsd"]
+        "required": ["enabled", "balance", "topUpMinUsd", "topUpMaxUsd"]
       },
       "RedeemPromoResponse": {
         "type": "object",
@@ -867,8 +1279,24 @@
           "memoryGibHours": {
             "type": "number"
           },
-          "egressGib": {
-            "type": "number"
+          "egressGb": {
+            "type": "number",
+            "description": "Outbound traffic this month, in GB."
+          },
+          "egressCostUsd": {
+            "type": "number",
+            "description": "Outbound traffic cost this month, in USD."
+          },
+          "egressByRegion": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EgressRegionLine"
+            },
+            "description": "Outbound traffic per region, billed per GB from the first GB at that region's rate. Costliest region first."
+          },
+          "storageGbHours": {
+            "type": "number",
+            "description": "Database storage, in GB-hours."
           },
           "costUsd": {
             "type": "number",
@@ -906,7 +1334,10 @@
         "required": [
           "vcpuHours",
           "memoryGibHours",
-          "egressGib",
+          "egressGb",
+          "egressCostUsd",
+          "egressByRegion",
+          "storageGbHours",
           "costUsd",
           "tier",
           "starterClusters",
@@ -916,6 +1347,28 @@
         "additionalProperties": {
           "nullable": true
         }
+      },
+      "EgressRegionLine": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string",
+            "description": "Region id, e.g. `ap-south-1`."
+          },
+          "label": {
+            "type": "string",
+            "description": "Human region name."
+          },
+          "gb": {
+            "type": "number",
+            "description": "Outbound traffic from this region, in GB."
+          },
+          "usd": {
+            "type": "number",
+            "description": "Cost of that traffic, in USD."
+          }
+        },
+        "required": ["region", "label", "gb", "usd"]
       },
       "ProjectedMonthCostResponse": {
         "type": "object",
@@ -1026,13 +1479,16 @@
           "memoryGibHours": {
             "type": "number"
           },
-          "egressGib": {
+          "egressGb": {
+            "type": "number"
+          },
+          "egressUsd": {
             "type": "number"
           },
           "reservedUsd": {
             "type": "number"
           },
-          "storageGibHours": {
+          "storageGbHours": {
             "type": "number"
           },
           "costUsd": {
@@ -1043,9 +1499,10 @@
           "periodStart",
           "vcpuHours",
           "memoryGibHours",
-          "egressGib",
+          "egressGb",
+          "egressUsd",
           "reservedUsd",
-          "storageGibHours",
+          "storageGbHours",
           "costUsd"
         ]
       },
@@ -1504,6 +1961,16 @@
           "workflowPullRequestUrl": {
             "type": "string",
             "nullable": true
+          },
+          "templateInstanceId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Set when this deployment is part of a marketplace app: every piece one marketplace deploy created shares it. Pass it to delete_marketplace_app to remove the whole app."
+          },
+          "templateSlug": {
+            "type": "string",
+            "nullable": true,
+            "description": "The marketplace app this deployment came from, e.g. `n8n`."
           },
           "appConfig": {
             "nullable": true
@@ -2214,11 +2681,6 @@
                     "type": "boolean",
                     "default": false
                   },
-                  "maxReplicas": {
-                    "type": "integer",
-                    "minimum": 1,
-                    "maximum": 20
-                  },
                   "scaledownPeriod": {
                     "type": "integer",
                     "minimum": 30,
@@ -2304,7 +2766,7 @@
                 "type": "integer",
                 "minimum": 1,
                 "maximum": 10,
-                "default": 2
+                "default": 1
               },
               "billingMode": {
                 "type": "string",
@@ -2359,11 +2821,6 @@
                   "enabled": {
                     "type": "boolean",
                     "default": false
-                  },
-                  "maxReplicas": {
-                    "type": "integer",
-                    "minimum": 1,
-                    "maximum": 20
                   },
                   "scaledownPeriod": {
                     "type": "integer",
@@ -2571,11 +3028,6 @@
                   "enabled": {
                     "type": "boolean",
                     "default": false
-                  },
-                  "maxReplicas": {
-                    "type": "integer",
-                    "minimum": 1,
-                    "maximum": 20
                   },
                   "scaledownPeriod": {
                     "type": "integer",
@@ -3653,6 +4105,10 @@
                 "nullable": true
               }
             ]
+          },
+          "canRollback": {
+            "type": "boolean",
+            "description": "Whether this revision can still be rolled back to. Only the most recent builds are retained. Present on list results only."
           }
         },
         "required": ["id", "deploymentId", "image", "tag", "status"]
@@ -3715,9 +4171,166 @@
           "expiresAt": {
             "type": "string",
             "description": "ISO expiry of the upload URL."
+          },
+          "maxBytes": {
+            "type": "integer",
+            "description": "Largest accepted upload, in bytes. A bigger tarball is rejected at deploy time."
           }
         },
-        "required": ["uploadId", "uploadUrl", "contentType", "expiresAt"]
+        "required": [
+          "uploadId",
+          "uploadUrl",
+          "contentType",
+          "expiresAt",
+          "maxBytes"
+        ]
+      },
+      "SourceDeployResult": {
+        "type": "object",
+        "properties": {
+          "created": {
+            "type": "boolean",
+            "description": "True when this call created a new app; false on a redeploy."
+          },
+          "deploymentId": {
+            "type": "string"
+          },
+          "revisionId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The build's revision id (use it for build logs). Null if the app was created but its build didn't start; upload and deploy again."
+          },
+          "clusterId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The new app's cluster id. Null on a redeploy."
+          },
+          "environmentId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The new app's environment id. Null on a redeploy."
+          },
+          "publicHostname": {
+            "type": "string",
+            "nullable": true,
+            "description": "The new app's public address, once assigned. Null on a redeploy or for a private app."
+          },
+          "defaults": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "region": {
+                "type": "string",
+                "description": "Region id (as in GET /v1/regions)."
+              },
+              "regionLabel": {
+                "type": "string",
+                "description": "Human-readable region name."
+              },
+              "port": {
+                "type": "integer"
+              },
+              "portSource": {
+                "type": "string",
+                "enum": ["explicit", "dockerfile", "language", "fallback"],
+                "description": "Where the port came from: the request, the Dockerfile's EXPOSE, the detected framework's default, or the 8080 fallback."
+              },
+              "resourceType": {
+                "type": "string",
+                "enum": ["web", "worker"]
+              },
+              "public": {
+                "type": "boolean"
+              },
+              "projectId": {
+                "type": "string"
+              },
+              "environmentId": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "region",
+              "regionLabel",
+              "port",
+              "portSource",
+              "resourceType",
+              "public",
+              "projectId",
+              "environmentId"
+            ],
+            "description": "What was chosen for the new app, including resolved defaults. Null on a redeploy."
+          }
+        },
+        "required": [
+          "created",
+          "deploymentId",
+          "revisionId",
+          "clusterId",
+          "environmentId",
+          "publicHostname",
+          "defaults"
+        ]
+      },
+      "SourceDeployBody": {
+        "type": "object",
+        "properties": {
+          "uploadId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The `uploadId` returned by POST /v1/source-uploads."
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 63,
+            "description": "Exact deployment name. Fails if taken. Omit to derive one from nameHint."
+          },
+          "nameHint": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Free-form name source (e.g. the project's directory name). Slugified and suffixed (-2, -3, …) if taken. Defaults to \"app\"."
+          },
+          "region": {
+            "type": "string",
+            "description": "Region slug from list_regions. Defaults to the region the organization already deploys in, else the platform default."
+          },
+          "port": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 65535,
+            "description": "Port the app listens on (also passed as PORT). Defaults to the Dockerfile's EXPOSE, else the detected framework's default, else 8080."
+          },
+          "resourceType": {
+            "type": "string",
+            "enum": ["web", "worker"],
+            "description": "web (default, serves HTTP) or worker (background process)."
+          },
+          "public": {
+            "type": "boolean",
+            "description": "Give a web app a public URL. Defaults to true for web."
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "environmentId": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Optional note recorded on the build."
+          },
+          "deploymentId": {
+            "type": "string",
+            "description": "Redeploy this existing app from the upload. Omit to create a new app; the create-only fields below are rejected when it's set."
+          }
+        },
+        "required": ["uploadId"]
       },
       "UpResult": {
         "type": "object",
@@ -4343,6 +4956,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -4437,6 +5060,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -4522,6 +5155,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -4635,6 +5278,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -4731,6 +5384,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -4856,6 +5519,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -4954,6 +5627,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -5068,6 +5751,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -5153,6 +5846,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -5379,6 +6082,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -5476,6 +6189,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -5599,6 +6322,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -5697,6 +6430,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -5811,6 +6554,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -5897,6 +6650,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -5999,6 +6762,608 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/marketplace/apps": {
+      "get": {
+        "tags": ["Marketplace"],
+        "summary": "List marketplace apps",
+        "description": "Every app in the marketplace catalog, each flagged `deployable` or not.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Marketplace apps",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketplaceAppListResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/marketplace/apps/{slug}": {
+      "get": {
+        "tags": ["Marketplace"],
+        "summary": "Get a marketplace app",
+        "description": "One app's detail, including the `inputs` it needs before deploy.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Marketplace app id (from list_marketplace_apps), e.g. `n8n`."
+            },
+            "required": true,
+            "description": "Marketplace app id (from list_marketplace_apps), e.g. `n8n`.",
+            "name": "slug",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Marketplace app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketplaceAppDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/marketplace/apps/{slug}/check": {
+      "post": {
+        "tags": ["Marketplace"],
+        "summary": "Check a marketplace deploy",
+        "description": "Validates `inputs` and the name prefix without creating anything.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Marketplace app id (from list_marketplace_apps), e.g. `n8n`."
+            },
+            "required": true,
+            "description": "Marketplace app id (from list_marketplace_apps), e.g. `n8n`.",
+            "name": "slug",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketplaceCheckBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Check result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketplaceCheckResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/marketplace/apps/{slug}/deploy": {
+      "post": {
+        "tags": ["Marketplace"],
+        "summary": "Deploy a marketplace app",
+        "description": "Creates every piece of the app (app, database, cache) in one call. Target an Ownkube Compute `region` or your own `clusterId`. On Ownkube Compute the wallet must have credit, and a bundled database or cache needs a box (`dbSkuId` / `cacheSkuId`).",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Marketplace app id (from list_marketplace_apps), e.g. `n8n`."
+            },
+            "required": true,
+            "description": "Marketplace app id (from list_marketplace_apps), e.g. `n8n`.",
+            "name": "slug",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarketplaceDeployBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Deployed app",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketplaceDeployResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/marketplace/installs/{templateInstanceId}": {
+      "delete": {
+        "tags": ["Marketplace"],
+        "summary": "Delete a deployed marketplace app",
+        "description": "Removes every deployment one marketplace deploy created, including its database and cache and their data. Owners and admins only.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "From the deploy result, or `templateInstanceId` on any of the app's deployments."
+            },
+            "required": true,
+            "description": "From the deploy result, or `templateInstanceId` on any of the app's deployments.",
+            "name": "templateInstanceId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarketplaceDeleteResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -6093,6 +7458,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -6179,6 +7554,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -6289,6 +7674,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -6375,6 +7770,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -6487,6 +7892,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -6573,6 +7988,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -6685,6 +8110,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -6789,6 +8224,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -6875,6 +8320,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -6977,6 +8432,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -7063,6 +8528,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -7165,6 +8640,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -7251,6 +8736,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -7360,6 +8855,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -7457,6 +8962,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -7578,6 +9093,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -7682,6 +9207,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -7768,6 +9303,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -7877,6 +9422,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -7974,6 +9529,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -8095,6 +9660,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -8191,6 +9766,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -8315,6 +9900,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -8400,6 +9995,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -8505,6 +10110,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -8639,6 +10254,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -8721,7 +10346,7 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": ["dockerfile", "railpack"]
+                            "enum": ["dockerfile", "kiln"]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -9043,11 +10668,6 @@
                               "enabled": {
                                 "type": "boolean",
                                 "default": false
-                              },
-                              "maxReplicas": {
-                                "type": "integer",
-                                "minimum": 1,
-                                "maximum": 20
                               },
                               "scaledownPeriod": {
                                 "type": "integer",
@@ -9176,7 +10796,7 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": ["dockerfile", "railpack"]
+                            "enum": ["dockerfile", "kiln"]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -9499,11 +11119,6 @@
                                 "type": "boolean",
                                 "default": false
                               },
-                              "maxReplicas": {
-                                "type": "integer",
-                                "minimum": 1,
-                                "maximum": 20
-                              },
                               "scaledownPeriod": {
                                 "type": "integer",
                                 "minimum": 30,
@@ -9631,7 +11246,7 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": ["dockerfile", "railpack"]
+                            "enum": ["dockerfile", "kiln"]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -9856,7 +11471,7 @@
                             "type": "integer",
                             "minimum": 1,
                             "maximum": 10,
-                            "default": 2
+                            "default": 1
                           },
                           "billingMode": {
                             "type": "string",
@@ -9911,11 +11526,6 @@
                               "enabled": {
                                 "type": "boolean",
                                 "default": false
-                              },
-                              "maxReplicas": {
-                                "type": "integer",
-                                "minimum": 1,
-                                "maximum": 20
                               },
                               "scaledownPeriod": {
                                 "type": "integer",
@@ -10156,11 +11766,6 @@
                                 "type": "boolean",
                                 "default": false
                               },
-                              "maxReplicas": {
-                                "type": "integer",
-                                "minimum": 1,
-                                "maximum": 20
-                              },
                               "scaledownPeriod": {
                                 "type": "integer",
                                 "minimum": 30,
@@ -10263,7 +11868,7 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": ["dockerfile", "railpack"]
+                            "enum": ["dockerfile", "kiln"]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -10507,6 +12112,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -10613,6 +12228,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -10710,6 +12335,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -10833,6 +12468,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -10931,6 +12576,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -11084,6 +12739,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -11183,6 +12848,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -11298,6 +12973,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -11384,6 +13069,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -11499,6 +13194,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -11595,6 +13300,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -11701,6 +13416,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -11817,6 +13542,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -11942,6 +13677,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -12051,6 +13796,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -12176,6 +13931,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -12275,6 +14040,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -12390,6 +14165,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -12487,6 +14272,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -12603,6 +14398,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -12728,6 +14533,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -12834,6 +14649,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -12932,6 +14757,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -13056,6 +14891,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -13164,6 +15009,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -13288,6 +15143,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -13396,6 +15261,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -13520,6 +15395,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -13628,6 +15513,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -13752,6 +15647,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -13860,6 +15765,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -13994,6 +15909,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -14110,6 +16035,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -14215,6 +16150,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -14232,7 +16177,7 @@
       "post": {
         "tags": ["Revisions"],
         "summary": "Roll a deployment back to a prior revision",
-        "description": "Restores the config snapshot from `revisionId` onto the deployment and records a new revision. Returns the new revision.",
+        "description": "Restores the config snapshot from `revisionId` onto the deployment and records a new revision. Returns the new revision. Only the most recent builds are retained: rolling back to an older build is rejected with 400 (check `canRollback` on the revision list).",
         "security": [
           {
             "apiKey": []
@@ -14333,6 +16278,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -14449,6 +16404,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -14574,6 +16539,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -14591,10 +16566,22 @@
       "post": {
         "tags": ["Revisions"],
         "summary": "Presign an upload slot for local source",
-        "description": "Mints a short-lived upload slot for `okctl up`: returns an `uploadId` plus a pre-signed URL to PUT a gzipped tarball of the working tree to. Pass the `uploadId` to POST /v1/deployments/{deploymentId}/up to build and deploy it.",
+        "description": "Mints a short-lived upload slot: returns an `uploadId` plus a pre-signed URL to PUT a gzipped tarball of the source to (files at the archive root, at most `maxBytes`). Pass the `uploadId` to POST /v1/source-deploys to build and deploy it. Refuses up front when the wallet has no credit (new apps and Ownkube Compute redeploys).",
         "security": [
           {
             "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The app this upload will redeploy. Omit when the upload will create a new app."
+            },
+            "required": false,
+            "description": "The app this upload will redeploy. Omit when the upload will create a new app.",
+            "name": "deploymentId",
+            "in": "query"
           }
         ],
         "responses": {
@@ -14668,6 +16655,130 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/source-deploys": {
+      "post": {
+        "tags": ["Revisions"],
+        "summary": "Build and deploy uploaded source (create or redeploy)",
+        "description": "Builds source uploaded via POST /v1/source-uploads. Without `deploymentId`, creates a new Ownkube Compute app and resolves every omitted field server-side (name from `nameHint`, made unique; the org's existing region, else the default; port from the Dockerfile's EXPOSE, else the detected framework's default, else 8080; public for web; the default project and environment), returning what it chose in `defaults`. With `deploymentId`, rebuilds that app from the upload (create-only fields are rejected). Returns the build's `revisionId`.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceDeployBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Created app and/or queued build",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceDeployResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -14685,7 +16796,7 @@
       "post": {
         "tags": ["Revisions"],
         "summary": "Build and deploy previously uploaded local source",
-        "description": "Builds an in-cluster deployment from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Only valid for deployments that build from source.",
+        "description": "Builds an existing app from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Equivalent to POST /v1/source-deploys with `deploymentId`; kept for older CLI versions.",
         "security": [
           {
             "apiKey": []
@@ -14776,6 +16887,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -14916,6 +17037,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -15040,6 +17171,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -15180,6 +17321,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -15304,6 +17455,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -15444,6 +17605,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -15573,6 +17744,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -15670,6 +17851,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -15829,6 +18020,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -16001,6 +18202,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -16096,6 +18307,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -16223,6 +18444,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -16321,6 +18552,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -16443,6 +18684,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -16549,6 +18800,16 @@
               }
             }
           },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal server error",
             "content": {
@@ -16647,6 +18908,16 @@
           },
           "412": {
             "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
             "content": {
               "application/json": {
                 "schema": {
