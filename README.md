@@ -130,14 +130,14 @@ okctl resolves settings in this order (highest priority first):
 | API URL | `--api-url` | `OKCTL_API_URL` | `api_url` in `config.yaml` | `https://app.ownkube.io` |
 | Output format | `-o, --output` | — | `output_format` in `config.yaml` | `table` |
 | Organization | `--organization` | `OKCTL_ORGANIZATION` | `organization` in `config.yaml` | none |
-| HTTP Basic Auth (dev only) | — | `OKCTL_BASIC_AUTH` (`user:pass`) | — | none |
+| HTTP Basic Auth | — | `OKCTL_BASIC_AUTH` (`user:pass`) | — | none |
 
 Config files live in `~/.config/ownkube/`:
 
 - `config.yaml` — non-sensitive preferences
 - `credentials.yaml` — API key (file mode `0600`)
 
-`OKCTL_BASIC_AUTH` is **only** for development environments sitting behind an HTTP Basic gateway; production (`https://app.ownkube.io`) authenticates with the API key alone.
+`OKCTL_BASIC_AUTH` is only for an API URL served behind HTTP Basic auth; `https://app.ownkube.io` authenticates with the API key alone.
 
 ## Use okctl with AI coding agents
 

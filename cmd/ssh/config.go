@@ -82,7 +82,7 @@ func configCmd() *cobra.Command {
 					Alias:        alias,
 					HostName:     target.SSHHost,
 					Port:         target.SSHPort,
-					User:         target.Username,
+					User:         sshconn.LoginUser(target),
 					IdentityFile: identity,
 				})
 				if !dryRun {

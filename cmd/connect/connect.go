@@ -1,7 +1,7 @@
 // Package connect implements `okctl connect`: open psql or valkey-cli against
 // an Ownkube Compute database or cache, or hold a local tunnel to it for GUI
 // tools. Uses the public endpoint when it is on, otherwise an SSH tunnel
-// through the region's SSH front door (proposal 0033 §3.3).
+// through the region's SSH endpoint.
 package connect
 
 import (
@@ -81,7 +81,7 @@ func New() *cobra.Command {
 					target.Name, depID)
 			}
 
-			c, err := sshconn.Open(ctx, cl, target, sshconn.OpenOptions{
+			c, redial, err := sshconn.OpenRedialable(ctx, cl, target, sshconn.OpenOptions{
 				EnsureOptions: sshconn.EnsureOptions{IdentityFile: identityFlag, Yes: yesFlag, Log: cmd.ErrOrStderr()},
 			})
 			if err != nil {
@@ -98,13 +98,22 @@ func New() *cobra.Command {
 
 			ctx, cancel := context.WithCancel(ctx)
 			defer cancel()
-			// The proxy ignores the forward destination for datastores and
-			// routes to the target; send the in-cluster port for clarity.
 			remote := net.JoinHostPort("localhost", strconv.Itoa(int(info.Port)))
+			// If the SSH session drops, Forward redials and keeps the local
+			// port, so only open client connections need to reconnect.
+			stderr := cmd.ErrOrStderr()
 			fwdErr := make(chan error, 1)
 			go func() {
-				fwdErr <- sshconn.Forward(ctx, c, ln, remote, func(err error) {
-					fmt.Fprintf(cmd.ErrOrStderr(), "Tunnel connection failed: %v\n", err)
+				fwdErr <- sshconn.Forward(ctx, c, redial, ln, remote, sshconn.ForwardHooks{
+					ConnFailed: func(err error) {
+						fmt.Fprintf(stderr, "Tunnel connection failed: %v\n", err)
+					},
+					Reconnecting: func() {
+						fmt.Fprintln(stderr, "Tunnel dropped, reconnecting...")
+					},
+					Reconnected: func() {
+						fmt.Fprintln(stderr, "Tunnel reconnected.")
+					},
 				})
 			}()
 

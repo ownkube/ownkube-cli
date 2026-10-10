@@ -1,5 +1,5 @@
-// Package sshconn is okctl's SSH client side of Ownkube shell access
-// (proposal 0033): local key discovery and creation, registering keys with
+// Package sshconn is okctl's SSH client side of Ownkube shell access:
+// local key discovery and creation, registering keys with
 // the API, pinning region host keys, and running shells, commands, and port
 // forwards over golang.org/x/crypto/ssh (no OpenSSH dependency, so it works
 // on Windows too).

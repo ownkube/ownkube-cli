@@ -28,3 +28,6 @@ Thumbs.db
 
 # Build
 dist/
+
+# Local agent notes (internal; this repo is public)
+CLAUDE.local.md

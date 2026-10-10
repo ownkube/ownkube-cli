@@ -9,6 +9,20 @@
 - **Lint**: `make lint` (requires golangci-lint)
 - **Regenerate API client**: `make generate` (requires oapi-codegen)
 
+## Public repo: don't leak internals
+
+This repo is **public** (github.com/ownkube/ownkube-cli). Everything committed is
+world-readable: code, comments, strings, this file, and commit messages. Describe
+what okctl does, never how the platform works behind the API:
+
+- No names of internal services, infrastructure vendors, or the tooling the
+  platform runs on (the app repo's banned-terms list applies here in full),
+  and no private repo paths or design-doc numbers.
+- No routing, scaling, sleep/wake, draining, or deploy mechanics of the server
+  side, and no internal hostnames, namespaces, ports, or environment details.
+- Comments justify client behaviour in client terms ("a hostname isn't accepted
+  for every target"), not by explaining the server ("the server only routes X").
+
 ## Subagent model selection (core instruction)
 
 When spawning subagents via the Agent/Task tool for work in this repo, **always pass `model` explicitly.** `sonnet` is the default; `opus` is the exception you have to justify; `haiku` is the floor for mechanical, check-guarded fan-out. Judge the task, not the tool it happens to use. "The agent writes Go" is not on its own a reason to reach for opus.
@@ -25,24 +39,18 @@ Drop to `haiku` for the mechanical floor of that fan-out — a decided edit appl
 
 Rule of thumb: ask what the agent has to *decide*. If the decisions are made and it is executing them, sonnet, and give it the worked example (an existing command or wrapper) that makes that true; drop to haiku when the edit is purely mechanical and a check will catch any slip. If it makes a call you would want to review, opus. For a mixed batch, solve the hard instance yourself first, then fan out on sonnet (or haiku).
 
-This mirrors the ecosystem rule in `../CLAUDE.md` and is repeated here as a core instruction.
-
 ## Rebuild from updated spec
 
-Whenever the CLI API changes in `ownkube-app`, refresh the Go client and rebuild:
+Where the updated spec comes from is in `CLAUDE.local.md` (gitignored; not in
+public clones). With the new spec in hand:
 
 ```sh
-# 1. Regenerate the JSON spec in ownkube-app
-( cd ../ownkube-app && pnpm cli:spec )
-
-# 2. Copy the spec into api/openapi.json and regenerate the Go client + build
-make generate
+make generate SPEC_SRC=<path to openapi.json>   # copy over api/openapi.json + regen
 make build
 ```
 
-`make generate` copies `../ownkube-app/src/services/cli/openapi.json` →
-`api/openapi.json` and runs `oapi-codegen` to update
-`internal/api/client.gen.go`. After regen, add a wrapper to
+`make generate` (with or without `SPEC_SRC`) runs `oapi-codegen` on
+`api/openapi.json` to update `internal/api/client.gen.go`. After regen, add a wrapper to
 `internal/client/client.go` for any new endpoint, then wire a cobra command
 in the appropriate `cmd/<resource>/` subpackage.
 
@@ -153,7 +161,7 @@ Or run it without installing (after copying the spec):
   - `cmd/ssh/`: `ssh [id] [--instance N] [-- cmd]` (shell / one-shot command on
     a Compute app over real SSH), `ssh keys list|add|remove|github`, `ssh config`
     (managed `# okctl:begin/end <alias>` blocks in `~/.ssh/config`). Package is
-    imported as `sshcmd` in root. Design: ownkube-app `docs/proposals/0033`.
+    imported as `sshcmd` in root.
   - `cmd/connect/`: `connect [id] [--tunnel-only] [--port] [--ssh]` — psql /
     valkey-cli against a Compute database/cache: public URI when ready, else a
     local SSH tunnel.
@@ -167,14 +175,17 @@ Or run it without installing (after copying the spec):
 - **internal/client/**: Thin wrapper around generated client (API key
   injection, optional HTTP basic auth via `OKCTL_BASIC_AUTH`, normalised
   error handling). One method per endpoint. Exception: `ssh.go` hand-writes
-  the 0033 SSH endpoints through `raw.go`'s `doJSON` (returns `*APIError`,
-  test with `IsAPICode`) until the app's CLI spec ships them; then regenerate
+  the SSH endpoints through `raw.go`'s `doJSON` (returns `*APIError`,
+  test with `IsAPICode`) until `api/openapi.json` ships them; then regenerate
   and switch to generated calls.
 - **internal/sshconn/**: okctl's SSH client (`golang.org/x/crypto/ssh`, no
   OpenSSH needed). Key discovery/creation (`~/.ssh/ownkube_ed25519`, agent
   keys), `EnsureKey` first-connect flow, host keys pinned from the API (never
   trust-on-first-use) and mirrored into `~/.ssh/known_hosts`, `Shell`/`Run`
-  (exit code propagated), `Forward`, `~/.ssh/config` blocks.
+  (exit code propagated), `Forward` (redials a dropped session via
+  `OpenRedialable` and keeps the local port), `~/.ssh/config` blocks. The SSH
+  username is the deployment ID (`LoginUser`); a hostname isn't accepted for
+  every target, so don't switch back to the API's `username`.
 - **internal/config/**: Config + credentials YAML file management
   (`~/.config/ownkube/`).
 - **internal/link/**: Per-directory resource binding store — `links.yaml` in the
@@ -187,7 +198,7 @@ Or run it without installing (after copying the spec):
 - **internal/prompt/**: Terminal input helpers (secret input, confirmations,
   `Select` numbered picker). Prompts go to stderr so stdout stays clean.
 - **internal/version/**: Build version info (set via ldflags).
-- **api/openapi.json**: OpenAPI spec copied from ownkube-app (source of truth).
+- **api/openapi.json**: the CLI API's OpenAPI spec (source of truth for types).
 
 ## Conventions
 
@@ -197,8 +208,8 @@ Or run it without installing (after copying the spec):
   `credentials.yaml` (0600, auth).
 - API URL priority: `--api-url` flag > `OKCTL_API_URL` env > config.yaml >
   `https://api.ownkube.io`.
-- `OKCTL_BASIC_AUTH=user:pass` adds HTTP Basic auth on every request — used
-  for dev environments behind an HTTP gateway.
+- `OKCTL_BASIC_AUTH=user:pass` adds HTTP Basic auth on every request, for an
+  API URL served behind it.
 - Auth: browser-based flow — CLI opens browser to `/cli-authorize`, receives
   API key via local callback.
 - Use `cmd.OutOrStdout()` for command output (testable).
@@ -251,8 +262,7 @@ flat files in `cmd/` are the root wiring, completion, and version.
 
 ## Adding a New API Endpoint
 
-1. Add the endpoint in `ownkube-app/src/services/cli/` (route file + register
-   on `cliApp`).
+1. Get the endpoint into the API spec (see `CLAUDE.local.md`).
 2. Regenerate: see "Rebuild from updated spec" above.
 3. Add a method to `internal/client/client.go` (or a topic file like
    `deployment_write.go`) wrapping the generated call and reusing

@@ -25,7 +25,7 @@ okctl status     # who is signed in, which org
 okctl logout
 ```
 
-Production (`https://app.ownkube.io`) needs only the key from `okctl login`. `OKCTL_BASIC_AUTH=user:pass` is **only** for dev environments behind an HTTP Basic gateway. Never set it for production.
+Production (`https://app.ownkube.io`) needs only the key from `okctl login`. `OKCTL_BASIC_AUTH=user:pass` is only for an API URL served behind HTTP Basic auth. Never set it for `https://app.ownkube.io`.
 
 ## okctl or the MCP server
 
@@ -190,14 +190,14 @@ Run `okctl <command> --help` for the exact flags of anything listed with `...`.
 |---|---|---|---|
 | API URL | `--api-url` | `OKCTL_API_URL` | `https://app.ownkube.io` |
 | Output format | `-o, --output` | none | `table` |
-| Basic Auth (dev only) | none | `OKCTL_BASIC_AUTH` (`user:pass`) | none |
+| Basic Auth | none | `OKCTL_BASIC_AUTH` (`user:pass`) | none |
 
 ## Errors and fixes
 
 | Error | Fix |
 |---|---|
 | `not logged in ... run 'okctl login' first` | `okctl login` |
-| `API error 401: Missing username and password` | A **dev** API is behind Basic Auth: set `OKCTL_BASIC_AUTH=user:pass`. Never needed for production. |
+| `API error 401: Missing username and password` | The API URL is behind HTTP Basic auth: set `OKCTL_BASIC_AUTH=user:pass`. Never needed for `https://app.ownkube.io`. |
 | `API error 404: 404 Not Found` | Wrong API URL: check `okctl config view` |
 | `specify exactly one of --cluster or --environment` | Pass one (not both, not neither) to `okctl deploy list` |
 | `unknown command` | The binary is older than this skill: `brew upgrade okctl` |

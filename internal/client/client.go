@@ -27,8 +27,8 @@ type Client struct {
 // account belongs to more than one organization.
 //
 // If OKCTL_BASIC_AUTH is set ("user:pass"), it is sent as an HTTP Basic
-// Authorization header on every request — useful for dev environments behind
-// an HTTP gateway.
+// Authorization header on every request, for an API URL served behind HTTP
+// Basic auth.
 func New(apiURL, apiKey, organization string) (*Client, error) {
 	basicUser, basicPass, hasBasic := parseBasicAuthEnv(os.Getenv("OKCTL_BASIC_AUTH"))
 

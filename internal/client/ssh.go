@@ -6,8 +6,8 @@ import (
 	"net/url"
 )
 
-// Hand-written wrappers for the SSH access endpoints (proposal 0033 §10.2).
-// Replace with generated calls once the app's CLI spec carries them.
+// Hand-written wrappers for the SSH access endpoints. Replace with generated
+// calls once api/openapi.json carries them.
 
 // SSHKey is a public key registered to the calling user.
 type SSHKey struct {

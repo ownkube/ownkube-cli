@@ -1,6 +1,6 @@
 // Package ssh implements `okctl ssh`: an interactive shell or one-shot command
 // on a running Ownkube Compute app over SSH, plus SSH key management and
-// ~/.ssh/config generation so stock ssh/scp/sftp work too (proposal 0033).
+// ~/.ssh/config generation so stock ssh/scp/sftp work too.
 package ssh
 
 import (

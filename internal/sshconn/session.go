@@ -16,9 +16,13 @@ import (
 	"golang.org/x/term"
 )
 
-// keepAliveInterval keeps NAT/LB state alive on quiet sessions. The proxy's
-// idle timeout counts channel data only, so this does not hold sessions open.
+// keepAliveInterval keeps quiet sessions from being dropped by routers and
+// firewalls on the way.
 const keepAliveInterval = 30 * time.Second
+
+// ErrKeyNotAccepted is a refused login: retrying with the same key won't help.
+var ErrKeyNotAccepted = errors.New("Ownkube did not accept your SSH key for this service. " +
+	"Check that you are an owner or admin of its organization, and see 'okctl ssh keys list'")
 
 // Target is where to dial: a region's SSH front door and the username that
 // selects the deployment (and optionally the instance, "<id>+<n>").
@@ -56,8 +60,7 @@ func Dial(ctx context.Context, t Target, signer ssh.Signer) (*ssh.Client, error)
 	if err != nil {
 		conn.Close()
 		if strings.Contains(err.Error(), "unable to authenticate") {
-			return nil, fmt.Errorf("Ownkube did not accept your SSH key for this service. " +
-				"Check that you are an owner or admin of its organization, and see 'okctl ssh keys list'")
+			return nil, ErrKeyNotAccepted
 		}
 		return nil, fmt.Errorf("SSH handshake with %s: %w", addr, err)
 	}
@@ -176,63 +179,4 @@ func termName() string {
 // `okctl ssh -- 'id; hostname'` runs both commands, as `ssh host 'id; hostname'` would.
 func JoinArgs(args []string) string {
 	return strings.Join(args, " ")
-}
-
-// Forward accepts connections on ln and pipes each one through the SSH
-// connection to remote (host:port as the server sees it). It returns when ln
-// is closed or the SSH connection drops.
-func Forward(ctx context.Context, c *ssh.Client, ln net.Listener, remote string, onErr func(error)) error {
-	go func() {
-		select {
-		case <-ctx.Done():
-		case <-waitClosed(c):
-		}
-		ln.Close()
-	}()
-	for {
-		local, err := ln.Accept()
-		if err != nil {
-			if ctx.Err() != nil {
-				return nil
-			}
-			return err
-		}
-		go func() {
-			defer local.Close()
-			upstream, err := c.Dial("tcp", remote)
-			if err != nil {
-				if onErr != nil {
-					onErr(err)
-				}
-				return
-			}
-			defer upstream.Close()
-			pipe(local, upstream)
-		}()
-	}
-}
-
-func waitClosed(c *ssh.Client) <-chan struct{} {
-	done := make(chan struct{})
-	go func() {
-		_ = c.Wait()
-		close(done)
-	}()
-	return done
-}
-
-// pipe copies both directions, half-closing writes when one side finishes.
-func pipe(a, b net.Conn) {
-	done := make(chan struct{}, 2)
-	cp := func(dst, src net.Conn) {
-		_, _ = io.Copy(dst, src)
-		if cw, ok := dst.(interface{ CloseWrite() error }); ok {
-			_ = cw.CloseWrite()
-		}
-		done <- struct{}{}
-	}
-	go cp(a, b)
-	go cp(b, a)
-	<-done
-	<-done
 }

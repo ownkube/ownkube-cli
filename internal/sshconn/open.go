@@ -22,14 +22,24 @@ type OpenOptions struct {
 	Instance int
 }
 
+// Redialer opens a fresh connection to the same target with the same key.
+type Redialer func(ctx context.Context) (*ssh.Client, error)
+
 // Open makes sure a registered key is available (creating one on first
 // connect), records the region host keys in ~/.ssh/known_hosts, and dials
 // target (from GetTarget). The caller closes the returned client.
 func Open(ctx context.Context, api KeyAPI, target *client.SSHTarget, opts OpenOptions) (*ssh.Client, error) {
-	user := target.Username
+	c, _, err := OpenRedialable(ctx, api, target, opts)
+	return c, err
+}
+
+// OpenRedialable is Open plus a Redialer that reconnects without repeating
+// the key setup, for long-lived tunnels.
+func OpenRedialable(ctx context.Context, api KeyAPI, target *client.SSHTarget, opts OpenOptions) (*ssh.Client, Redialer, error) {
+	user := LoginUser(target)
 	if opts.Instance > 0 {
 		if !hasInstance(target, opts.Instance) {
-			return nil, fmt.Errorf("%s has no instance %d (it is running %d)",
+			return nil, nil, fmt.Errorf("%s has no instance %d (it is running %d)",
 				target.Name, opts.Instance, len(target.Instances))
 		}
 		user += "+" + strconv.Itoa(opts.Instance)
@@ -37,11 +47,11 @@ func Open(ctx context.Context, api KeyAPI, target *client.SSHTarget, opts OpenOp
 
 	key, err := EnsureKey(ctx, api, opts.EnsureOptions)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	signer, err := key.Signer()
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	log := opts.Log
@@ -52,12 +62,27 @@ func Open(ctx context.Context, api KeyAPI, target *client.SSHTarget, opts OpenOp
 		fmt.Fprintf(log, "Warning: could not update ~/.ssh/known_hosts: %v\n", err)
 	}
 
-	return Dial(ctx, Target{
+	t := Target{
 		Host:     target.SSHHost,
 		Port:     target.SSHPort,
 		User:     user,
 		HostKeys: target.HostKeys,
-	}, signer)
+	}
+	redial := func(ctx context.Context) (*ssh.Client, error) { return Dial(ctx, t, signer) }
+	c, err := redial(ctx)
+	if err != nil {
+		return nil, nil, err
+	}
+	return c, redial, nil
+}
+
+// LoginUser is the SSH username that selects target: its deployment ID, which
+// works for every app, database, and cache. The API's username is a fallback.
+func LoginUser(target *client.SSHTarget) string {
+	if target.DeploymentID != "" {
+		return target.DeploymentID
+	}
+	return target.Username
 }
 
 // GetTarget fetches the SSH target, turning "not available" into guidance.

@@ -22,8 +22,11 @@ test:
 lint:
 	golangci-lint run
 
+# SPEC_SRC: optional path to an updated spec, copied over api/openapi.json first.
 generate:
-	cp ../ownkube-app/src/services/cli/openapi.json api/openapi.json
+ifdef SPEC_SRC
+	cp $(SPEC_SRC) api/openapi.json
+endif
 	oapi-codegen -config oapi-codegen.yaml api/openapi.json
 
 clean:
