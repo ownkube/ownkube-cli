@@ -43,6 +43,7 @@ import (
 	"github.com/ownkube/okctl/cmd/vars"
 	"github.com/ownkube/okctl/cmd/vcs"
 	cfgpkg "github.com/ownkube/okctl/internal/config"
+	linkstore "github.com/ownkube/okctl/internal/link"
 	"github.com/ownkube/okctl/internal/update"
 	"github.com/ownkube/okctl/internal/version"
 	"github.com/spf13/cobra"
@@ -203,7 +204,9 @@ func resolveAPIURL(mgr *cfgpkg.Manager) (string, error) {
 	return cfgpkg.DefaultAPIURL, nil
 }
 
-// resolveOrganization applies the priority chain: flag > env > config.
+// resolveOrganization applies the priority chain: flag > env > this
+// directory's link > config. The link's ids all belong to the org it records,
+// so a linked directory targets that org without --organization.
 // An empty result is valid — single-org accounts don't need one, and the
 // server resolves the sole membership automatically.
 func resolveOrganization(mgr *cfgpkg.Manager) (string, error) {
@@ -213,11 +216,32 @@ func resolveOrganization(mgr *cfgpkg.Manager) (string, error) {
 	if v := os.Getenv("OKCTL_ORGANIZATION"); v != "" {
 		return v, nil
 	}
+	if org := linkedOrganization(mgr); org != "" {
+		return org, nil
+	}
 	cfg, err := mgr.LoadConfig()
 	if err != nil {
 		return "", err
 	}
 	return cfg.Organization, nil
+}
+
+// linkedOrganization is the org this directory is linked to, or "". A link
+// that can't be read is ignored here; the commands that use it report that.
+func linkedOrganization(mgr *cfgpkg.Manager) string {
+	wd, err := os.Getwd()
+	if err != nil {
+		return ""
+	}
+	key, err := linkstore.ResolveKey(wd)
+	if err != nil {
+		return ""
+	}
+	binding, ok, err := linkstore.NewManager(mgr.Dir()).Get(key)
+	if err != nil || !ok {
+		return ""
+	}
+	return binding.OrganizationID
 }
 
 // resolveOutputFormat applies the priority chain: flag > config > default.

@@ -190,3 +190,91 @@ func TestPlanHashFollowsChanges(t *testing.T) {
 		t.Fatal("variable values don't feed the plan id")
 	}
 }
+
+func TestSizingFollowsBillingMode(t *testing.T) {
+	requests := map[string]any{"cpu": "20m", "memory": "128Mi"}
+	limits := map[string]any{"cpu": "500m", "memory": "512Mi"}
+	cases := []struct {
+		name     string
+		mode     any
+		want     map[string]any
+		pulled   []string // resources keys a pull keeps
+		rejected string   // the path the file can't set, "" when it's accepted
+	}{
+		{"own cluster", nil, map[string]any{"requests": requests}, []string{"limits", "requests"}, ""},
+		{"metered limits", "metered", map[string]any{"limits": limits}, []string{"limits"}, ""},
+		{"metered requests", "metered", map[string]any{"requests": requests}, []string{"limits"}, "resources.requests"},
+		{"reserved", "reserved", map[string]any{"limits": limits}, nil, "resources"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			cfg := liveWeb()
+			cfg["resources"] = map[string]any{"limits": limits, "requests": requests}
+			if tc.mode != nil {
+				cfg["billingMode"] = tc.mode
+			}
+			d := webDeployment(cfg)
+			sp, live, err := specFor(d)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			res, _ := toManifest(d, sp, live, nil).Config["resources"].(map[string]any)
+			got := sortedKeys(res)
+			if strings.Join(got, ",") != strings.Join(tc.pulled, ",") {
+				t.Errorf("pulled resources %v, want %v", got, tc.pulled)
+			}
+
+			err = checkSizing(sp, live, map[string]any{"resources": tc.want})
+			switch {
+			case tc.rejected == "" && err != nil:
+				t.Errorf("rejected: %v", err)
+			case tc.rejected != "" && (err == nil || !strings.Contains(err.Error(), "config."+tc.rejected+" ")):
+				t.Errorf("err = %v, want config.%s refused", err, tc.rejected)
+			}
+		})
+	}
+}
+
+func TestSizingJudgesTheNewBillingMode(t *testing.T) {
+	cfg := liveWeb()
+	cfg["billingMode"] = "reserved"
+	sp, live, err := specFor(webDeployment(cfg))
+	if err != nil {
+		t.Fatal(err)
+	}
+	limits := map[string]any{"limits": map[string]any{"cpu": "1"}}
+	if err := checkSizing(sp, live, map[string]any{"billingMode": "metered", "resources": limits}); err != nil {
+		t.Fatalf("switching to metered with limits: %v", err)
+	}
+	cfg["billingMode"] = "metered"
+	sp, live, _ = specFor(webDeployment(cfg))
+	if err := checkSizing(sp, live, map[string]any{"billingMode": "reserved", "resources": limits}); err == nil {
+		t.Fatal("switching to reserved with resources was accepted")
+	}
+}
+
+func TestBoxSizesADatastore(t *testing.T) {
+	for _, typ := range []string{"database", "cache"} {
+		if path, _ := sizedElsewhere(typ, map[string]any{"skuId": "box-1"}); path != "resources" {
+			t.Errorf("%s with a box: %q", typ, path)
+		}
+		if path, _ := sizedElsewhere(typ, map[string]any{}); path != "" {
+			t.Errorf("%s without a box: %q", typ, path)
+		}
+	}
+	if path, _ := sizedElsewhere("web", map[string]any{"skuId": "box-1"}); path != "" {
+		t.Errorf("web with a box but no billing mode: %q", path)
+	}
+}
+
+func TestWithoutDropsEmptyParents(t *testing.T) {
+	m := map[string]any{"resources": map[string]any{"requests": map[string]any{"cpu": "1"}}, "tag": "v1"}
+	got := without(m, "resources.requests")
+	if _, ok := got["resources"]; ok || got["tag"] != "v1" {
+		t.Fatalf("got %v", got)
+	}
+	if _, ok := m["resources"].(map[string]any)["requests"]; !ok {
+		t.Fatal("without changed its input")
+	}
+}

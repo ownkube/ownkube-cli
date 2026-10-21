@@ -87,6 +87,7 @@ okctl config plan api                       # what apply would change; prints a 
 okctl config apply api --plan <plan-id>     # applies only if nothing changed since the plan
 okctl config plan api --detect-changes      # exit 2 when the app has drifted (CI)
 ```
+The billing mode decides which resources `ownkube.yaml` can set. A reserved app (and a database or cache with a `skuId`) takes its size from its box, so change `skuId` instead of `resources`. A metered app sets `resources.limits` only, because Ownkube sets its requests. Apps on your own cluster can set both.
 
 **Add a Postgres database and wire it in:**
 ```bash
@@ -249,7 +250,7 @@ Run `okctl <command> --help` for the exact flags of anything listed with `...`.
 |---|---|---|---|
 | API URL | `--api-url` | `OKCTL_API_URL` | `https://app.ownkube.io` |
 | Output format | `-o, --output` | none | `table` |
-| Organization | `--organization` | `OKCTL_ORGANIZATION` | none (only needed with more than one org) |
+| Organization | `--organization` | `OKCTL_ORGANIZATION` | this directory's link, else none (only needed with more than one org) |
 | Basic Auth | none | `OKCTL_BASIC_AUTH` (`user:pass`) | none |
 
 ## Errors and fixes

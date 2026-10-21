@@ -144,7 +144,7 @@ okctl resolves settings in this order (highest priority first):
 |---|---|---|---|---|
 | API URL | `--api-url` | `OKCTL_API_URL` | `api_url` in `config.yaml` | `https://app.ownkube.io` |
 | Output format | `-o, --output` | — | `output_format` in `config.yaml` | `table` |
-| Organization | `--organization` | `OKCTL_ORGANIZATION` | `organization` in `config.yaml` | none |
+| Organization | `--organization` | `OKCTL_ORGANIZATION` | this directory's link (`okctl link`), then `organization` in `config.yaml` | none |
 | HTTP Basic Auth | — | `OKCTL_BASIC_AUTH` (`user:pass`) | — | none |
 
 Config files live in `~/.config/ownkube/`:

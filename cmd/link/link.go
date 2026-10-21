@@ -56,7 +56,8 @@ func Link() *cobra.Command {
 			structured := ux.IsStructured()
 
 			// Organization first — it scopes every other list. Resolve from the
-			// flag, the global default, or an interactive pick.
+			// flag, the default (this directory's current link, else config), or
+			// an interactive pick.
 			orgID, err := resolveOrg(ctx, orgFlag, structured)
 			if err != nil {
 				return err

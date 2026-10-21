@@ -78,7 +78,11 @@ Or run it without installing (after copying the spec):
     `heldBack` are never written), `overlay` (the PATCH replaces the whole
     block, so the yaml is laid over the live block and unmanaged keys are
     echoed back), `diff`/`diffVars`, and `makePlan` whose `hash()` is the plan
-    id `apply --plan` checks. `plan --detect-changes` exits 2 on drift
+    id `apply --plan` checks. `sizedElsewhere` holds back the resources the
+    billing mode sizes (judged on the overlaid block): all of `resources` when
+    reserved or a database/cache with a `skuId`, `resources.requests` when
+    metered; pull omits them and plan refuses a yaml that sets them
+    (`checkSizing`). `plan --detect-changes` exits 2 on drift
     (`ux.ExitError`). Apply sends settings first (412 → "unlocks after the first
     build"), then variables via `UpdateVariables`.
   - `cmd/deploy/`: read verbs (`list|get|status|logs|revisions|connection`) plus
@@ -298,6 +302,9 @@ Or run it without installing (after copying the spec):
   `credentials.yaml` (0600, auth).
 - API URL priority: `--api-url` flag > `OKCTL_API_URL` env > config.yaml >
   `https://app.ownkube.io`.
+- Organization priority: `--organization` > `OKCTL_ORGANIZATION` > this
+  directory's link (`links.yaml`) > config.yaml (`resolveOrganization` in
+  `cmd/root.go`).
 - `OKCTL_BASIC_AUTH=user:pass` adds HTTP Basic auth on every request, for an
   API URL served behind it.
 - Auth: browser-based flow — CLI opens browser to `/cli-authorize`, receives

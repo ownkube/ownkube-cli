@@ -32,6 +32,71 @@ var heldBack = map[string]string{
 	"awsRoleArn":  "change it in the dashboard",
 }
 
+// sizedElsewhere is the part of an app's resources ownkube.yaml doesn't set,
+// judged from cfg (the block with ownkube.yaml laid over the live one, so a
+// file that switches billing mode is judged by the new mode), and why. A box
+// fixes the whole size; a metered app sets only its limits, the way the
+// dashboard does. "" when ownkube.yaml sets all of it.
+func sizedElsewhere(resourceType string, cfg map[string]any) (path, why string) {
+	box, _ := cfg["skuId"].(string)
+	switch {
+	case cfg["billingMode"] == "reserved":
+		return "resources", "a reserved app's size comes from its box; change skuId, or set billingMode to metered"
+	case box != "" && (resourceType == "database" || resourceType == "cache"):
+		return "resources", "its size comes from its box; change skuId"
+	case cfg["billingMode"] == "metered":
+		return "resources.requests", "Ownkube sets a metered app's requests; set resources.limits"
+	}
+	return "", ""
+}
+
+// checkSizing refuses an ownkube.yaml that sets resources the app's billing
+// mode sizes another way.
+func checkSizing(sp spec, live, want map[string]any) error {
+	path, why := sizedElsewhere(sp.resourceType, overlay(live, want))
+	if path == "" || lookup(want, path) == nil {
+		return nil
+	}
+	return fmt.Errorf("%s: config.%s can't be set here: %s", manifest.FileName, path, why)
+}
+
+// lookup returns the value at a dotted path in m, or nil.
+func lookup(m map[string]any, path string) any {
+	var v any = m
+	for _, k := range strings.Split(path, ".") {
+		mm, ok := v.(map[string]any)
+		if !ok {
+			return nil
+		}
+		v = mm[k]
+	}
+	return v
+}
+
+// without returns a copy of m minus the dotted path, dropping a map the
+// removal leaves empty.
+func without(m map[string]any, path string) map[string]any {
+	head, rest, nested := strings.Cut(path, ".")
+	out := make(map[string]any, len(m))
+	for k, v := range m {
+		out[k] = v
+	}
+	if !nested {
+		delete(out, head)
+		return out
+	}
+	sub, ok := out[head].(map[string]any)
+	if !ok {
+		return out
+	}
+	if sub = without(sub, rest); len(sub) == 0 {
+		delete(out, head)
+	} else {
+		out[head] = sub
+	}
+	return out
+}
+
 // topLevel maps the manifest's own top-level fields to the block keys they set.
 var topLevel = map[string]string{
 	"repository":   "image",
@@ -188,7 +253,7 @@ func normalize(v any) any {
 }
 
 // toManifest renders the live settings as ownkube.yaml. Secret variables keep
-// only their names.
+// only their names, and resources the billing mode sizes are left out.
 func toManifest(d *api.Deployment, sp spec, live map[string]any, vars []api.AppVariable) *manifest.Manifest {
 	m := &manifest.Manifest{Name: d.Name, Type: sp.resourceType}
 	cfg := map[string]any{}
@@ -200,6 +265,9 @@ func toManifest(d *api.Deployment, sp spec, live map[string]any, vars []api.AppV
 		if !setTopLevel(m, k, v) {
 			cfg[k] = scrub(v)
 		}
+	}
+	if path, _ := sizedElsewhere(sp.resourceType, live); path != "" {
+		cfg = without(cfg, path)
 	}
 	if len(cfg) > 0 {
 		m.Config = cfg
@@ -481,6 +549,9 @@ func makePlan(ctx context.Context, cl *client.Client, depID string, m *manifest.
 	}
 	want, err := desiredBlock(m, sp)
 	if err != nil {
+		return nil, err
+	}
+	if err := checkSizing(sp, live, want); err != nil {
 		return nil, err
 	}
 
