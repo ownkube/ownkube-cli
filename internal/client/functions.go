@@ -9,7 +9,7 @@ import (
 )
 
 // Function surface (list / source / deploy) plus the deployment move-to-project
-// action. Ember functions are cluster-less deployments (they attach to a cloud
+// action. Ownkube Compute functions are cluster-less deployments (they attach to a cloud
 // account + region), listed separately from cluster-hosted workloads.
 //
 // DeployFunction sends raw JSON bytes via the WithBody variant, mirroring

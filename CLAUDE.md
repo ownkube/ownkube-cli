@@ -130,7 +130,7 @@ Or run it without installing (after copying the spec):
     `internal/client/projects.go`; color validation + render in
     `cmd/projects/helpers.go`.
   - `cmd/functions/` (alias `fn`): `functions list|source|deploy` — cluster-less
-    Compute (ember) functions. `source` prints the inline file (`--code-only` for
+    Ownkube Compute functions. `source` prints the inline file (`--code-only` for
     just the code); `deploy` takes a combined code+config manifest via `-f` (`-` =
     stdin), one revision. Wrappers in `internal/client/functions.go`.
   - `cmd/aws/`: `aws connect|list|get|verify|reconnect|resync|delete`. `connect`
