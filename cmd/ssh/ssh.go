@@ -22,16 +22,19 @@ func New() *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use:   "ssh [deployment-id] [-- command...]",
-		Short: "Open a shell on a running app, or run a command in it",
+		Use:     "ssh [app] [-- command...]",
+		Aliases: []string{"shell"},
+		Short:   "Open a shell on a running app, or run a command in it",
 		Long: "Open an interactive shell on a running Ownkube Compute app, or run a single\n" +
 			"command after -- and exit with its status.\n\n" +
-			"The target is the deployment ID argument, --service, or this directory's link\n" +
+			"The target is the app name or id argument, --service, or this directory's link\n" +
 			"(see 'okctl link'). The first time you connect, okctl creates an SSH key at\n" +
 			"~/.ssh/ownkube_ed25519 (or offers a key you already have) and adds it to your\n" +
 			"Ownkube account. Pass --yes to create it without asking.\n\n" +
 			"An app with several instances: pick one with --instance N (1-based).\n" +
-			"Databases and caches have no shell: use 'okctl connect' for those.",
+			"Databases and caches have no shell: use 'okctl connect' for those.\n\n" +
+			"'okctl shell' is the same command. To run something locally with the app's\n" +
+			"variables instead, use 'okctl run'.",
 		Example: "  okctl ssh\n" +
 			"  okctl ssh dep_123 --instance 2\n" +
 			"  okctl ssh -- ls -la /app\n" +
@@ -51,17 +54,16 @@ func New() *cobra.Command {
 			if len(pos) == 1 {
 				flag = pos[0]
 			}
-			depID, err := ux.ResolveDeployment(flag, ".")
-			if err != nil {
-				return err
-			}
-
 			api, err := ux.RequireClient()
 			if err != nil {
 				return err
 			}
 
 			ctx := cmd.Context()
+			depID, err := ux.ResolveApp(ctx, api, flag, ux.Scope{}, ".")
+			if err != nil {
+				return err
+			}
 			target, err := sshconn.GetTarget(ctx, api, depID)
 			if err != nil {
 				return err
@@ -96,7 +98,7 @@ func New() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&serviceFlag, "service", "", "Deployment ID (defaults to this directory's link)")
+	cmd.Flags().StringVarP(&serviceFlag, "service", "s", "", "App name or id (defaults to this directory's link)")
 	cmd.Flags().IntVar(&instanceFlag, "instance", 0, "Instance number to connect to, starting at 1 (default: any running instance)")
 	cmd.Flags().StringVarP(&identityFlag, "identity-file", "i", "", "SSH private key to use (added to your account if needed)")
 	cmd.Flags().BoolVarP(&yesFlag, "yes", "y", false, "Create and add an SSH key without asking when none is set up")

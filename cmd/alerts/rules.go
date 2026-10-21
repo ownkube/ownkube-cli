@@ -10,7 +10,7 @@ import (
 
 func createCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "create <deployment-id>",
+		Use:   "create [app]",
 		Short: "Create an alert rule for a deployment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

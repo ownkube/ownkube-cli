@@ -38,7 +38,7 @@ func renderRule(cmd *cobra.Command, r *api.AlertRule) error {
 
 func listCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "list <deployment-id>",
+		Use:   "list [app]",
 		Short: "List alert rules for a deployment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

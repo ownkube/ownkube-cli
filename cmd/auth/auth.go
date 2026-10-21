@@ -49,10 +49,10 @@ func Logout() *cobra.Command {
 	}
 }
 
-// Status returns the `okctl status` command.
-func Status() *cobra.Command {
+// Whoami returns the `okctl whoami` command.
+func Whoami() *cobra.Command {
 	return &cobra.Command{
-		Use:   "status",
+		Use:   "whoami",
 		Short: "Show current login status and user info",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			creds, err := ux.Config().LoadCredentials()
@@ -95,6 +95,10 @@ func Status() *cobra.Command {
 		},
 	}
 }
+
+// SignIn runs the browser sign-in on behalf of another command, writing its
+// progress to that command's output.
+func SignIn(cmd *cobra.Command) error { return runLogin(cmd, nil) }
 
 func runLogin(cmd *cobra.Command, args []string) error {
 	listener, err := net.Listen("tcp", "127.0.0.1:0")

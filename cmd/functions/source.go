@@ -11,7 +11,7 @@ func sourceCmd() *cobra.Command {
 	var codeOnly bool
 
 	cmd := &cobra.Command{
-		Use:   "source <deployment-id>",
+		Use:   "source [app]",
 		Short: "Print a function's inline source",
 		Long: "Fetch a Compute function's stored source file. By default it prints a " +
 			"metadata header followed by the code; pass --code-only to print just the " +

@@ -35,6 +35,10 @@ func Set(globals Globals) { g = globals }
 // APIURL returns the resolved API base URL.
 func APIURL() string { return g.APIURL }
 
+// SetOutputFormat overrides the output format for the rest of the invocation,
+// for commands with their own --json switch.
+func SetOutputFormat(format string) { g.OutputFormat = format }
+
 // OutputFormat returns the resolved output format ("table", "json", "yaml").
 func OutputFormat() string { return g.OutputFormat }
 

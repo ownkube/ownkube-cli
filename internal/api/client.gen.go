@@ -157,6 +157,24 @@ func (e AlertRuleSeverity) Valid() bool {
 	}
 }
 
+// Defines values for AppVariableSource.
+const (
+	AppVariableSourceApp         AppVariableSource = "app"
+	AppVariableSourceEnvironment AppVariableSource = "environment"
+)
+
+// Valid indicates whether the value is a known member of the AppVariableSource enum.
+func (e AppVariableSource) Valid() bool {
+	switch e {
+	case AppVariableSourceApp:
+		return true
+	case AppVariableSourceEnvironment:
+		return true
+	default:
+		return false
+	}
+}
+
 // Defines values for AwsConnectionFailureKind.
 const (
 	Conflict AwsConnectionFailureKind = "conflict"
@@ -220,27 +238,6 @@ func (e BuilderSizeResultBuilderSize) Valid() bool {
 	}
 }
 
-// Defines values for ComputeBoxCpuClass.
-const (
-	Dedicated   ComputeBoxCpuClass = "dedicated"
-	Performance ComputeBoxCpuClass = "performance"
-	Shared      ComputeBoxCpuClass = "shared"
-)
-
-// Valid indicates whether the value is a known member of the ComputeBoxCpuClass enum.
-func (e ComputeBoxCpuClass) Valid() bool {
-	switch e {
-	case Dedicated:
-		return true
-	case Performance:
-		return true
-	case Shared:
-		return true
-	default:
-		return false
-	}
-}
-
 // Defines values for ConnectSessionResultProtocol.
 const (
 	ConnectSessionResultProtocolPostgres ConnectSessionResultProtocol = "postgres"
@@ -276,12 +273,13 @@ func (e ConnectionInfoResourceType) Valid() bool {
 
 // Defines values for CreateDeploymentResponseResourceType.
 const (
-	CreateDeploymentResponseResourceTypeCache    CreateDeploymentResponseResourceType = "cache"
-	CreateDeploymentResponseResourceTypeDatabase CreateDeploymentResponseResourceType = "database"
-	CreateDeploymentResponseResourceTypeFunction CreateDeploymentResponseResourceType = "function"
-	CreateDeploymentResponseResourceTypeJob      CreateDeploymentResponseResourceType = "job"
-	CreateDeploymentResponseResourceTypeWeb      CreateDeploymentResponseResourceType = "web"
-	CreateDeploymentResponseResourceTypeWorker   CreateDeploymentResponseResourceType = "worker"
+	CreateDeploymentResponseResourceTypeCache     CreateDeploymentResponseResourceType = "cache"
+	CreateDeploymentResponseResourceTypeDatabase  CreateDeploymentResponseResourceType = "database"
+	CreateDeploymentResponseResourceTypeFunction  CreateDeploymentResponseResourceType = "function"
+	CreateDeploymentResponseResourceTypeJob       CreateDeploymentResponseResourceType = "job"
+	CreateDeploymentResponseResourceTypeWeb       CreateDeploymentResponseResourceType = "web"
+	CreateDeploymentResponseResourceTypeWorker    CreateDeploymentResponseResourceType = "worker"
+	CreateDeploymentResponseResourceTypeWorkspace CreateDeploymentResponseResourceType = "workspace"
 )
 
 // Valid indicates whether the value is a known member of the CreateDeploymentResponseResourceType enum.
@@ -298,6 +296,50 @@ func (e CreateDeploymentResponseResourceType) Valid() bool {
 	case CreateDeploymentResponseResourceTypeWeb:
 		return true
 	case CreateDeploymentResponseResourceTypeWorker:
+		return true
+	case CreateDeploymentResponseResourceTypeWorkspace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateDeploymentResponseSourceProvider.
+const (
+	CreateDeploymentResponseSourceProviderGithub      CreateDeploymentResponseSourceProvider = "github"
+	CreateDeploymentResponseSourceProviderGitlab      CreateDeploymentResponseSourceProvider = "gitlab"
+	CreateDeploymentResponseSourceProviderLessThannil CreateDeploymentResponseSourceProvider = "<nil>"
+)
+
+// Valid indicates whether the value is a known member of the CreateDeploymentResponseSourceProvider enum.
+func (e CreateDeploymentResponseSourceProvider) Valid() bool {
+	switch e {
+	case CreateDeploymentResponseSourceProviderGithub:
+		return true
+	case CreateDeploymentResponseSourceProviderGitlab:
+		return true
+	case CreateDeploymentResponseSourceProviderLessThannil:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for CreateDeploymentResponseSourceType.
+const (
+	CreateDeploymentResponseSourceTypeGit    CreateDeploymentResponseSourceType = "git"
+	CreateDeploymentResponseSourceTypeImage  CreateDeploymentResponseSourceType = "image"
+	CreateDeploymentResponseSourceTypeUpload CreateDeploymentResponseSourceType = "upload"
+)
+
+// Valid indicates whether the value is a known member of the CreateDeploymentResponseSourceType enum.
+func (e CreateDeploymentResponseSourceType) Valid() bool {
+	switch e {
+	case CreateDeploymentResponseSourceTypeGit:
+		return true
+	case CreateDeploymentResponseSourceTypeImage:
+		return true
+	case CreateDeploymentResponseSourceTypeUpload:
 		return true
 	default:
 		return false
@@ -432,12 +474,13 @@ func (e DeployFunctionBodyConfigTriggersHttpAuthType) Valid() bool {
 
 // Defines values for DeploymentResourceType.
 const (
-	DeploymentResourceTypeCache    DeploymentResourceType = "cache"
-	DeploymentResourceTypeDatabase DeploymentResourceType = "database"
-	DeploymentResourceTypeFunction DeploymentResourceType = "function"
-	DeploymentResourceTypeJob      DeploymentResourceType = "job"
-	DeploymentResourceTypeWeb      DeploymentResourceType = "web"
-	DeploymentResourceTypeWorker   DeploymentResourceType = "worker"
+	DeploymentResourceTypeCache     DeploymentResourceType = "cache"
+	DeploymentResourceTypeDatabase  DeploymentResourceType = "database"
+	DeploymentResourceTypeFunction  DeploymentResourceType = "function"
+	DeploymentResourceTypeJob       DeploymentResourceType = "job"
+	DeploymentResourceTypeWeb       DeploymentResourceType = "web"
+	DeploymentResourceTypeWorker    DeploymentResourceType = "worker"
+	DeploymentResourceTypeWorkspace DeploymentResourceType = "workspace"
 )
 
 // Valid indicates whether the value is a known member of the DeploymentResourceType enum.
@@ -455,6 +498,50 @@ func (e DeploymentResourceType) Valid() bool {
 		return true
 	case DeploymentResourceTypeWorker:
 		return true
+	case DeploymentResourceTypeWorkspace:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for DeploymentSourceProvider.
+const (
+	DeploymentSourceProviderGithub      DeploymentSourceProvider = "github"
+	DeploymentSourceProviderGitlab      DeploymentSourceProvider = "gitlab"
+	DeploymentSourceProviderLessThannil DeploymentSourceProvider = "<nil>"
+)
+
+// Valid indicates whether the value is a known member of the DeploymentSourceProvider enum.
+func (e DeploymentSourceProvider) Valid() bool {
+	switch e {
+	case DeploymentSourceProviderGithub:
+		return true
+	case DeploymentSourceProviderGitlab:
+		return true
+	case DeploymentSourceProviderLessThannil:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for DeploymentSourceType.
+const (
+	DeploymentSourceTypeGit    DeploymentSourceType = "git"
+	DeploymentSourceTypeImage  DeploymentSourceType = "image"
+	DeploymentSourceTypeUpload DeploymentSourceType = "upload"
+)
+
+// Valid indicates whether the value is a known member of the DeploymentSourceType enum.
+func (e DeploymentSourceType) Valid() bool {
+	switch e {
+	case DeploymentSourceTypeGit:
+		return true
+	case DeploymentSourceTypeImage:
+		return true
+	case DeploymentSourceTypeUpload:
+		return true
 	default:
 		return false
 	}
@@ -462,12 +549,13 @@ func (e DeploymentResourceType) Valid() bool {
 
 // Defines values for DeploymentActionResultResourceType.
 const (
-	DeploymentActionResultResourceTypeCache    DeploymentActionResultResourceType = "cache"
-	DeploymentActionResultResourceTypeDatabase DeploymentActionResultResourceType = "database"
-	DeploymentActionResultResourceTypeFunction DeploymentActionResultResourceType = "function"
-	DeploymentActionResultResourceTypeJob      DeploymentActionResultResourceType = "job"
-	DeploymentActionResultResourceTypeWeb      DeploymentActionResultResourceType = "web"
-	DeploymentActionResultResourceTypeWorker   DeploymentActionResultResourceType = "worker"
+	DeploymentActionResultResourceTypeCache     DeploymentActionResultResourceType = "cache"
+	DeploymentActionResultResourceTypeDatabase  DeploymentActionResultResourceType = "database"
+	DeploymentActionResultResourceTypeFunction  DeploymentActionResultResourceType = "function"
+	DeploymentActionResultResourceTypeJob       DeploymentActionResultResourceType = "job"
+	DeploymentActionResultResourceTypeWeb       DeploymentActionResultResourceType = "web"
+	DeploymentActionResultResourceTypeWorker    DeploymentActionResultResourceType = "worker"
+	DeploymentActionResultResourceTypeWorkspace DeploymentActionResultResourceType = "workspace"
 )
 
 // Valid indicates whether the value is a known member of the DeploymentActionResultResourceType enum.
@@ -484,6 +572,8 @@ func (e DeploymentActionResultResourceType) Valid() bool {
 	case DeploymentActionResultResourceTypeWeb:
 		return true
 	case DeploymentActionResultResourceTypeWorker:
+		return true
+	case DeploymentActionResultResourceTypeWorkspace:
 		return true
 	default:
 		return false
@@ -507,12 +597,13 @@ func (e FunctionSourceResponseLanguage) Valid() bool {
 
 // Defines values for LifecycleDeploymentResultResourceType.
 const (
-	LifecycleDeploymentResultResourceTypeCache    LifecycleDeploymentResultResourceType = "cache"
-	LifecycleDeploymentResultResourceTypeDatabase LifecycleDeploymentResultResourceType = "database"
-	LifecycleDeploymentResultResourceTypeFunction LifecycleDeploymentResultResourceType = "function"
-	LifecycleDeploymentResultResourceTypeJob      LifecycleDeploymentResultResourceType = "job"
-	LifecycleDeploymentResultResourceTypeWeb      LifecycleDeploymentResultResourceType = "web"
-	LifecycleDeploymentResultResourceTypeWorker   LifecycleDeploymentResultResourceType = "worker"
+	LifecycleDeploymentResultResourceTypeCache     LifecycleDeploymentResultResourceType = "cache"
+	LifecycleDeploymentResultResourceTypeDatabase  LifecycleDeploymentResultResourceType = "database"
+	LifecycleDeploymentResultResourceTypeFunction  LifecycleDeploymentResultResourceType = "function"
+	LifecycleDeploymentResultResourceTypeJob       LifecycleDeploymentResultResourceType = "job"
+	LifecycleDeploymentResultResourceTypeWeb       LifecycleDeploymentResultResourceType = "web"
+	LifecycleDeploymentResultResourceTypeWorker    LifecycleDeploymentResultResourceType = "worker"
+	LifecycleDeploymentResultResourceTypeWorkspace LifecycleDeploymentResultResourceType = "workspace"
 )
 
 // Valid indicates whether the value is a known member of the LifecycleDeploymentResultResourceType enum.
@@ -529,6 +620,8 @@ func (e LifecycleDeploymentResultResourceType) Valid() bool {
 	case LifecycleDeploymentResultResourceTypeWeb:
 		return true
 	case LifecycleDeploymentResultResourceTypeWorker:
+		return true
+	case LifecycleDeploymentResultResourceTypeWorkspace:
 		return true
 	default:
 		return false
@@ -579,11 +672,12 @@ func (e MarketplaceConnectionSource) Valid() bool {
 
 // Defines values for MarketplaceDeployResponseDeploymentsResourceType.
 const (
-	MarketplaceDeployResponseDeploymentsResourceTypeCache    MarketplaceDeployResponseDeploymentsResourceType = "cache"
-	MarketplaceDeployResponseDeploymentsResourceTypeDatabase MarketplaceDeployResponseDeploymentsResourceType = "database"
-	MarketplaceDeployResponseDeploymentsResourceTypeJob      MarketplaceDeployResponseDeploymentsResourceType = "job"
-	MarketplaceDeployResponseDeploymentsResourceTypeWeb      MarketplaceDeployResponseDeploymentsResourceType = "web"
-	MarketplaceDeployResponseDeploymentsResourceTypeWorker   MarketplaceDeployResponseDeploymentsResourceType = "worker"
+	MarketplaceDeployResponseDeploymentsResourceTypeCache     MarketplaceDeployResponseDeploymentsResourceType = "cache"
+	MarketplaceDeployResponseDeploymentsResourceTypeDatabase  MarketplaceDeployResponseDeploymentsResourceType = "database"
+	MarketplaceDeployResponseDeploymentsResourceTypeJob       MarketplaceDeployResponseDeploymentsResourceType = "job"
+	MarketplaceDeployResponseDeploymentsResourceTypeWeb       MarketplaceDeployResponseDeploymentsResourceType = "web"
+	MarketplaceDeployResponseDeploymentsResourceTypeWorker    MarketplaceDeployResponseDeploymentsResourceType = "worker"
+	MarketplaceDeployResponseDeploymentsResourceTypeWorkspace MarketplaceDeployResponseDeploymentsResourceType = "workspace"
 )
 
 // Valid indicates whether the value is a known member of the MarketplaceDeployResponseDeploymentsResourceType enum.
@@ -598,6 +692,8 @@ func (e MarketplaceDeployResponseDeploymentsResourceType) Valid() bool {
 	case MarketplaceDeployResponseDeploymentsResourceTypeWeb:
 		return true
 	case MarketplaceDeployResponseDeploymentsResourceTypeWorker:
+		return true
+	case MarketplaceDeployResponseDeploymentsResourceTypeWorkspace:
 		return true
 	default:
 		return false
@@ -652,6 +748,39 @@ func (e RedeemPromoResponseReason) Valid() bool {
 	case NotFound:
 		return true
 	case NotStarted:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for RevisionImageSource.
+const (
+	Managed RevisionImageSource = "managed"
+)
+
+// Valid indicates whether the value is a known member of the RevisionImageSource enum.
+func (e RevisionImageSource) Valid() bool {
+	switch e {
+	case Managed:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for SetDeploymentSourceResultProvider.
+const (
+	SetDeploymentSourceResultProviderGithub SetDeploymentSourceResultProvider = "github"
+	SetDeploymentSourceResultProviderGitlab SetDeploymentSourceResultProvider = "gitlab"
+)
+
+// Valid indicates whether the value is a known member of the SetDeploymentSourceResultProvider enum.
+func (e SetDeploymentSourceResultProvider) Valid() bool {
+	switch e {
+	case SetDeploymentSourceResultProviderGithub:
+		return true
+	case SetDeploymentSourceResultProviderGitlab:
 		return true
 	default:
 		return false
@@ -922,12 +1051,15 @@ func (e UpdateDeploymentBodyCacheConfigMaxmemoryPolicy) Valid() bool {
 // Defines values for UpdateDeploymentBodyCacheConfigVersion.
 const (
 	UpdateDeploymentBodyCacheConfigVersionN81 UpdateDeploymentBodyCacheConfigVersion = "8.1"
+	UpdateDeploymentBodyCacheConfigVersionN91 UpdateDeploymentBodyCacheConfigVersion = "9.1"
 )
 
 // Valid indicates whether the value is a known member of the UpdateDeploymentBodyCacheConfigVersion enum.
 func (e UpdateDeploymentBodyCacheConfigVersion) Valid() bool {
 	switch e {
 	case UpdateDeploymentBodyCacheConfigVersionN81:
+		return true
+	case UpdateDeploymentBodyCacheConfigVersionN91:
 		return true
 	default:
 		return false
@@ -954,12 +1086,15 @@ func (e UpdateDeploymentBodyDatabaseConfigBillingMode) Valid() bool {
 
 // Defines values for UpdateDeploymentBodyDatabaseConfigEngine.
 const (
+	UpdateDeploymentBodyDatabaseConfigEngineMongodb  UpdateDeploymentBodyDatabaseConfigEngine = "mongodb"
 	UpdateDeploymentBodyDatabaseConfigEnginePostgres UpdateDeploymentBodyDatabaseConfigEngine = "postgres"
 )
 
 // Valid indicates whether the value is a known member of the UpdateDeploymentBodyDatabaseConfigEngine enum.
 func (e UpdateDeploymentBodyDatabaseConfigEngine) Valid() bool {
 	switch e {
+	case UpdateDeploymentBodyDatabaseConfigEngineMongodb:
+		return true
 	case UpdateDeploymentBodyDatabaseConfigEnginePostgres:
 		return true
 	default:
@@ -1180,6 +1315,24 @@ func (e UpdateSpendControlsBodyBudgetAction) Valid() bool {
 	case UpdateSpendControlsBodyBudgetActionNotify:
 		return true
 	case UpdateSpendControlsBodyBudgetActionPause:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for VcsConnectionProvider.
+const (
+	VcsConnectionProviderGithub VcsConnectionProvider = "github"
+	VcsConnectionProviderGitlab VcsConnectionProvider = "gitlab"
+)
+
+// Valid indicates whether the value is a known member of the VcsConnectionProvider enum.
+func (e VcsConnectionProvider) Valid() bool {
+	switch e {
+	case VcsConnectionProviderGithub:
+		return true
+	case VcsConnectionProviderGitlab:
 		return true
 	default:
 		return false
@@ -1596,12 +1749,15 @@ func (e PostV1DeploymentsJSONBody3ConfigBillingMode) Valid() bool {
 
 // Defines values for PostV1DeploymentsJSONBody3ConfigEngine.
 const (
+	PostV1DeploymentsJSONBody3ConfigEngineMongodb  PostV1DeploymentsJSONBody3ConfigEngine = "mongodb"
 	PostV1DeploymentsJSONBody3ConfigEnginePostgres PostV1DeploymentsJSONBody3ConfigEngine = "postgres"
 )
 
 // Valid indicates whether the value is a known member of the PostV1DeploymentsJSONBody3ConfigEngine enum.
 func (e PostV1DeploymentsJSONBody3ConfigEngine) Valid() bool {
 	switch e {
+	case PostV1DeploymentsJSONBody3ConfigEngineMongodb:
+		return true
 	case PostV1DeploymentsJSONBody3ConfigEnginePostgres:
 		return true
 	default:
@@ -1750,12 +1906,15 @@ func (e PostV1DeploymentsJSONBody4ConfigMaxmemoryPolicy) Valid() bool {
 // Defines values for PostV1DeploymentsJSONBody4ConfigVersion.
 const (
 	PostV1DeploymentsJSONBody4ConfigVersionN81 PostV1DeploymentsJSONBody4ConfigVersion = "8.1"
+	PostV1DeploymentsJSONBody4ConfigVersionN91 PostV1DeploymentsJSONBody4ConfigVersion = "9.1"
 )
 
 // Valid indicates whether the value is a known member of the PostV1DeploymentsJSONBody4ConfigVersion enum.
 func (e PostV1DeploymentsJSONBody4ConfigVersion) Valid() bool {
 	switch e {
 	case PostV1DeploymentsJSONBody4ConfigVersionN81:
+		return true
+	case PostV1DeploymentsJSONBody4ConfigVersionN91:
 		return true
 	default:
 		return false
@@ -1921,6 +2080,24 @@ func (e PostV1DeploymentsDeploymentIdAlertsJSONBodySeverity) Valid() bool {
 	}
 }
 
+// Defines values for PostV1DeploymentsDeploymentIdVariablesResolveParamsPurpose.
+const (
+	Run   PostV1DeploymentsDeploymentIdVariablesResolveParamsPurpose = "run"
+	Shell PostV1DeploymentsDeploymentIdVariablesResolveParamsPurpose = "shell"
+)
+
+// Valid indicates whether the value is a known member of the PostV1DeploymentsDeploymentIdVariablesResolveParamsPurpose enum.
+func (e PostV1DeploymentsDeploymentIdVariablesResolveParamsPurpose) Valid() bool {
+	switch e {
+	case Run:
+		return true
+	case Shell:
+		return true
+	default:
+		return false
+	}
+}
+
 // AddSshKeyResult defines model for AddSshKeyResult.
 type AddSshKeyResult struct {
 	// Algorithm Key type, e.g. `ssh-ed25519`.
@@ -2032,6 +2209,41 @@ type AlertRuleSeverity string
 // AlertRuleListResponse defines model for AlertRuleListResponse.
 type AlertRuleListResponse struct {
 	Rules []AlertRule `json:"rules"`
+}
+
+// AppVariable defines model for AppVariable.
+type AppVariable struct {
+	Name string `json:"name"`
+
+	// OverridesEnvironment True when this app's value replaces a shared environment one.
+	OverridesEnvironment bool `json:"overridesEnvironment"`
+	Secret               bool `json:"secret"`
+
+	// Source `environment` = shared by the app's environment (change it there); `app` = set on this app.
+	Source AppVariableSource `json:"source"`
+
+	// Value The value. Always empty for a secret: secrets are write-only.
+	Value string `json:"value"`
+}
+
+// AppVariableSource `environment` = shared by the app's environment (change it there); `app` = set on this app.
+type AppVariableSource string
+
+// AppVariableInput defines model for AppVariableInput.
+type AppVariableInput struct {
+	// Name Variable name: letters, numbers and underscores, not starting with a number.
+	Name string `json:"name"`
+
+	// Secret Store as a secret (never returned on reads). Omit to keep the variable's current flag; a new variable defaults to plain.
+	Secret *bool `json:"secret,omitempty"`
+
+	// Value The new value. A secret can't be empty; to drop a variable, list its name under `unset` instead.
+	Value string `json:"value"`
+}
+
+// AppVariables defines model for AppVariables.
+type AppVariables struct {
+	Variables []AppVariable `json:"variables"`
 }
 
 // AvailableCustomDomainParent defines model for AvailableCustomDomainParent.
@@ -2280,6 +2492,11 @@ type CheckoutUrlResponse struct {
 	Url string `json:"url"`
 }
 
+// ClearDeploymentSourceResult defines model for ClearDeploymentSourceResult.
+type ClearDeploymentSourceResult struct {
+	Deployment LifecycleDeploymentResult `json:"deployment"`
+}
+
 // Cluster defines model for Cluster.
 type Cluster struct {
 	ActiveDeploymentCount *float32 `json:"activeDeploymentCount,omitempty"`
@@ -2338,8 +2555,8 @@ type ClusterStatusResponse struct {
 
 // ComputeBox defines model for ComputeBox.
 type ComputeBox struct {
-	// CpuClass shared: a fraction of the vCPU is reserved, bursts to the full box. performance: half the vCPU is reserved, bursts to the full box. dedicated: the full box is reserved.
-	CpuClass ComputeBoxCpuClass `json:"cpuClass"`
+	// DedicatedCpu True when the box's full vCPU is dedicated to it.
+	DedicatedCpu bool `json:"dedicatedCpu"`
 
 	// Id Box id, passed as `skuId`.
 	Id         string  `json:"id"`
@@ -2348,9 +2565,6 @@ type ComputeBox struct {
 	MonthlyUsd float32 `json:"monthlyUsd"`
 	Vcpu       float32 `json:"vcpu"`
 }
-
-// ComputeBoxCpuClass shared: a fraction of the vCPU is reserved, bursts to the full box. performance: half the vCPU is reserved, bursts to the full box. dedicated: the full box is reserved.
-type ComputeBoxCpuClass string
 
 // ComputeBoxCatalog defines model for ComputeBoxCatalog.
 type ComputeBoxCatalog struct {
@@ -2432,7 +2646,7 @@ type ConnectionInfo struct {
 	// PublicReady Whether the public endpoint is accepting connections yet.
 	PublicReady bool `json:"publicReady"`
 
-	// PublicUri Connection string reachable from the internet (TLS), when public access is on.
+	// PublicUri Connection string reachable from the internet (TLS), when public access is on. The endpoint routes by TLS SNI: for a cache, valkey-cli/redis-cli need `--sni <publicHostname>` or the connection is closed after the handshake (most client libraries send SNI on their own).
 	PublicUri    string                     `json:"publicUri"`
 	ResourceType ConnectionInfoResourceType `json:"resourceType"`
 
@@ -2475,8 +2689,41 @@ type CreateDeploymentResponse struct {
 	PublicHostname     string                               `json:"publicHostname"`
 	RegistryId         string                               `json:"registryId"`
 	ResourceType       CreateDeploymentResponseResourceType `json:"resourceType"`
-	Status             string                               `json:"status"`
-	StatusMessage      string                               `json:"statusMessage"`
+
+	// Source Where the code comes from (repository, upload or image). Null for databases, caches and functions.
+	Source *struct {
+		// AutoDeploy Whether pushes deploy automatically.
+		AutoDeploy bool `json:"autoDeploy"`
+
+		// Branch The branch pushes deploy from, for git sources.
+		Branch string `json:"branch"`
+
+		// BuildContext Root directory the build runs in; null is the repo root.
+		BuildContext string `json:"buildContext"`
+
+		// ConnectionId The repository connection this app builds through.
+		ConnectionId string `json:"connectionId"`
+
+		// DockerfilePath Dockerfile path inside the root directory; null is default.
+		DockerfilePath string `json:"dockerfilePath"`
+
+		// Provider The repository's host, for git sources.
+		Provider CreateDeploymentResponseSourceProvider `json:"provider"`
+
+		// Repository The repository path, e.g. owner/repo or group/sub/project.
+		Repository string `json:"repository"`
+
+		// Type git: built from a connected repository on every push. upload: built from uploaded source. image: runs a prebuilt image.
+		Type CreateDeploymentResponseSourceType `json:"type"`
+
+		// WaitForChecks Whether push builds wait for the commit's checks to pass.
+		WaitForChecks bool `json:"waitForChecks"`
+
+		// WatchPaths Globs a push must touch to build; null means every push builds.
+		WatchPaths []string `json:"watchPaths"`
+	} `json:"source,omitempty"`
+	Status        string `json:"status"`
+	StatusMessage string `json:"statusMessage"`
 
 	// TemplateInstanceId Set when this deployment is part of a marketplace app: every piece one marketplace deploy created shares it. Pass it to delete_marketplace_app to remove the whole app.
 	TemplateInstanceId *string `json:"templateInstanceId,omitempty"`
@@ -2500,6 +2747,12 @@ type CreateDeploymentResponse_CreatedAt struct {
 
 // CreateDeploymentResponseResourceType defines model for CreateDeploymentResponse.ResourceType.
 type CreateDeploymentResponseResourceType string
+
+// CreateDeploymentResponseSourceProvider The repository's host, for git sources.
+type CreateDeploymentResponseSourceProvider string
+
+// CreateDeploymentResponseSourceType git: built from a connected repository on every push. upload: built from uploaded source. image: runs a prebuilt image.
+type CreateDeploymentResponseSourceType string
 
 // CreateDeploymentResponseUpdatedAt0 defines model for CreateDeploymentResponse.UpdatedAt.0.
 type CreateDeploymentResponseUpdatedAt0 = string
@@ -2707,8 +2960,41 @@ type Deployment struct {
 	PublicHostname     string                 `json:"publicHostname"`
 	RegistryId         string                 `json:"registryId"`
 	ResourceType       DeploymentResourceType `json:"resourceType"`
-	Status             string                 `json:"status"`
-	StatusMessage      string                 `json:"statusMessage"`
+
+	// Source Where the code comes from (repository, upload or image). Null for databases, caches and functions.
+	Source *struct {
+		// AutoDeploy Whether pushes deploy automatically.
+		AutoDeploy bool `json:"autoDeploy"`
+
+		// Branch The branch pushes deploy from, for git sources.
+		Branch string `json:"branch"`
+
+		// BuildContext Root directory the build runs in; null is the repo root.
+		BuildContext string `json:"buildContext"`
+
+		// ConnectionId The repository connection this app builds through.
+		ConnectionId string `json:"connectionId"`
+
+		// DockerfilePath Dockerfile path inside the root directory; null is default.
+		DockerfilePath string `json:"dockerfilePath"`
+
+		// Provider The repository's host, for git sources.
+		Provider DeploymentSourceProvider `json:"provider"`
+
+		// Repository The repository path, e.g. owner/repo or group/sub/project.
+		Repository string `json:"repository"`
+
+		// Type git: built from a connected repository on every push. upload: built from uploaded source. image: runs a prebuilt image.
+		Type DeploymentSourceType `json:"type"`
+
+		// WaitForChecks Whether push builds wait for the commit's checks to pass.
+		WaitForChecks bool `json:"waitForChecks"`
+
+		// WatchPaths Globs a push must touch to build; null means every push builds.
+		WatchPaths []string `json:"watchPaths"`
+	} `json:"source,omitempty"`
+	Status        string `json:"status"`
+	StatusMessage string `json:"statusMessage"`
 
 	// TemplateInstanceId Set when this deployment is part of a marketplace app: every piece one marketplace deploy created shares it. Pass it to delete_marketplace_app to remove the whole app.
 	TemplateInstanceId *string `json:"templateInstanceId,omitempty"`
@@ -2732,6 +3018,12 @@ type Deployment_CreatedAt struct {
 
 // DeploymentResourceType defines model for Deployment.ResourceType.
 type DeploymentResourceType string
+
+// DeploymentSourceProvider The repository's host, for git sources.
+type DeploymentSourceProvider string
+
+// DeploymentSourceType git: built from a connected repository on every push. upload: built from uploaded source. image: runs a prebuilt image.
+type DeploymentSourceType string
 
 // DeploymentUpdatedAt0 defines model for Deployment.UpdatedAt.0.
 type DeploymentUpdatedAt0 = string
@@ -2759,6 +3051,7 @@ type DeploymentActionResult struct {
 	PublicHostname         *string                            `json:"publicHostname,omitempty"`
 	RegistryId             string                             `json:"registryId"`
 	ResourceType           DeploymentActionResultResourceType `json:"resourceType"`
+	Source                 *DeploymentSource                  `json:"source,omitempty"`
 	Status                 string                             `json:"status"`
 	StatusMessage          string                             `json:"statusMessage"`
 	UpdatedAt              *DeploymentActionResult_UpdatedAt  `json:"updatedAt,omitempty"`
@@ -2811,6 +3104,39 @@ type DeploymentObservability struct {
 	Status               interface{}            `json:"status,omitempty"`
 	WindowLabel          string                 `json:"windowLabel"`
 	AdditionalProperties map[string]interface{} `json:"-"`
+}
+
+// DeploymentSource defines model for DeploymentSource.
+type DeploymentSource struct {
+	// AutoDeploy Whether pushes deploy automatically.
+	AutoDeploy bool `json:"autoDeploy"`
+
+	// Branch The branch pushes deploy from, for git sources.
+	Branch string `json:"branch"`
+
+	// BuildContext Root directory the build runs in; null is the repo root.
+	BuildContext string `json:"buildContext"`
+
+	// ConnectionId The repository connection this app builds through.
+	ConnectionId string `json:"connectionId"`
+
+	// DockerfilePath Dockerfile path inside the root directory; null is default.
+	DockerfilePath string `json:"dockerfilePath"`
+
+	// Provider The repository's host, for git sources.
+	Provider DeploymentSourceProvider `json:"provider"`
+
+	// Repository The repository path, e.g. owner/repo or group/sub/project.
+	Repository string `json:"repository"`
+
+	// Type git: built from a connected repository on every push. upload: built from uploaded source. image: runs a prebuilt image.
+	Type DeploymentSourceType `json:"type"`
+
+	// WaitForChecks Whether push builds wait for the commit's checks to pass.
+	WaitForChecks bool `json:"waitForChecks"`
+
+	// WatchPaths Globs a push must touch to build; null means every push builds.
+	WatchPaths []string `json:"watchPaths"`
 }
 
 // DeploymentStatusResponse defines model for DeploymentStatusResponse.
@@ -2975,6 +3301,7 @@ type LifecycleDeploymentResult struct {
 	PublicHostname         *string                               `json:"publicHostname,omitempty"`
 	RegistryId             string                                `json:"registryId"`
 	ResourceType           LifecycleDeploymentResultResourceType `json:"resourceType"`
+	Source                 *DeploymentSource                     `json:"source,omitempty"`
 	Status                 string                                `json:"status"`
 	StatusMessage          string                                `json:"statusMessage"`
 	UpdatedAt              *LifecycleDeploymentResult_UpdatedAt  `json:"updatedAt,omitempty"`
@@ -3022,7 +3349,7 @@ type LinkDatastoreBody struct {
 	// DatastoreId The database or cache deployment id to link.
 	DatastoreId string `json:"datastoreId"`
 
-	// EnvVar Environment variable to set. Defaults to DATABASE_URL for a database and REDIS_URL for a cache.
+	// EnvVar Environment variable to set. Defaults to DATABASE_URL for a database (MONGODB_URI for a MongoDB-compatible one) and REDIS_URL for a cache.
 	EnvVar *string `json:"envVar,omitempty"`
 }
 
@@ -3172,15 +3499,15 @@ type MarketplaceComponent struct {
 	// Detail Short description, e.g. `PostgreSQL 17`.
 	Detail string `json:"detail"`
 
-	// Image Container image for app pieces; null for datastores.
-	Image string `json:"image"`
-
 	// Kind `web`, `worker`, `job`, `database`, or `cache`.
 	Kind string `json:"kind"`
 
 	// Ref The piece's id within the app, e.g. `app`.
 	Ref   string `json:"ref"`
 	Title string `json:"title"`
+
+	// Version App version an app piece runs, e.g. `1.123.60`; null for datastores (see `detail`) and apps Ownkube builds itself.
+	Version string `json:"version"`
 }
 
 // MarketplaceConnection defines model for MarketplaceConnection.
@@ -3493,6 +3820,9 @@ type RedeemPromoResponse struct {
 		RemainingUsd float32 `json:"remainingUsd"`
 	} `json:"balance,omitempty"`
 
+	// ExpiresAt When the unspent part of this credit expires (when `ok`); null when it never does. Usage spends promo credit first.
+	ExpiresAt *RedeemPromoResponse_ExpiresAt `json:"expiresAt,omitempty"`
+
 	// Message A user-facing sentence for the refusal (when not `ok`).
 	Message *string `json:"message,omitempty"`
 
@@ -3501,6 +3831,20 @@ type RedeemPromoResponse struct {
 
 	// Reason Why the code was refused (when not `ok`).
 	Reason *RedeemPromoResponseReason `json:"reason,omitempty"`
+}
+
+// RedeemPromoResponseExpiresAt0 defines model for RedeemPromoResponse.ExpiresAt.0.
+type RedeemPromoResponseExpiresAt0 = string
+
+// RedeemPromoResponseExpiresAt1 defines model for RedeemPromoResponse.ExpiresAt.1.
+type RedeemPromoResponseExpiresAt1 = time.Time
+
+// RedeemPromoResponseExpiresAt2 defines model for RedeemPromoResponse.ExpiresAt.2.
+type RedeemPromoResponseExpiresAt2 = interface{}
+
+// RedeemPromoResponse_ExpiresAt When the unspent part of this credit expires (when `ok`); null when it never does. Usage spends promo credit first.
+type RedeemPromoResponse_ExpiresAt struct {
+	union json.RawMessage
 }
 
 // RedeemPromoResponseReason Why the code was refused (when not `ok`).
@@ -3593,6 +3937,17 @@ type ResetPasswordResult struct {
 	Password string `json:"password"`
 }
 
+// ResolvedAppVariables defines model for ResolvedAppVariables.
+type ResolvedAppVariables struct {
+	Variables []struct {
+		Name   string `json:"name"`
+		Secret bool   `json:"secret"`
+
+		// Value The real value, secrets included.
+		Value string `json:"value"`
+	} `json:"variables"`
+}
+
 // RestartResult defines model for RestartResult.
 type RestartResult struct {
 	// Restarted How many workloads were rolled.
@@ -3618,23 +3973,32 @@ type Revision struct {
 	BuildStartedAt *Revision_BuildStartedAt `json:"buildStartedAt,omitempty"`
 
 	// CanRollback Whether this revision can still be rolled back to. Only the most recent builds are retained. Present on list results only.
-	CanRollback            *bool                   `json:"canRollback,omitempty"`
-	Changes                *[]interface{}          `json:"changes,omitempty"`
-	CreatedAt              *Revision_CreatedAt     `json:"createdAt,omitempty"`
-	DeployingAt            *Revision_DeployingAt   `json:"deployingAt,omitempty"`
-	DeploymentId           string                  `json:"deploymentId"`
-	FailedAt               *Revision_FailedAt      `json:"failedAt,omitempty"`
-	FailureReason          *string                 `json:"failureReason,omitempty"`
-	Id                     string                  `json:"id"`
-	Image                  string                  `json:"image"`
-	ImagePushedAt          *Revision_ImagePushedAt `json:"imagePushedAt,omitempty"`
-	LiveAt                 *Revision_LiveAt        `json:"liveAt,omitempty"`
-	Note                   *string                 `json:"note,omitempty"`
-	PromotedFromRevisionId *string                 `json:"promotedFromRevisionId,omitempty"`
-	QueuedAt               *Revision_QueuedAt      `json:"queuedAt,omitempty"`
-	Source                 *string                 `json:"source,omitempty"`
-	Status                 string                  `json:"status"`
-	Tag                    string                  `json:"tag"`
+	CanRollback *bool          `json:"canRollback,omitempty"`
+	Changes     *[]interface{} `json:"changes,omitempty"`
+
+	// CommitAuthor Author of the built commit, for builds from a repository
+	CommitAuthor *string `json:"commitAuthor,omitempty"`
+
+	// CommitMessage First line of the built commit's message, for builds from a repository
+	CommitMessage *string                 `json:"commitMessage,omitempty"`
+	CreatedAt     *Revision_CreatedAt     `json:"createdAt,omitempty"`
+	DeployingAt   *Revision_DeployingAt   `json:"deployingAt,omitempty"`
+	DeploymentId  string                  `json:"deploymentId"`
+	FailedAt      *Revision_FailedAt      `json:"failedAt,omitempty"`
+	FailureReason *string                 `json:"failureReason,omitempty"`
+	Id            string                  `json:"id"`
+	Image         string                  `json:"image"`
+	ImagePushedAt *Revision_ImagePushedAt `json:"imagePushedAt,omitempty"`
+
+	// ImageSource Set to managed when Ownkube built and stores the image; image is then null
+	ImageSource            *RevisionImageSource `json:"imageSource,omitempty"`
+	LiveAt                 *Revision_LiveAt     `json:"liveAt,omitempty"`
+	Note                   *string              `json:"note,omitempty"`
+	PromotedFromRevisionId *string              `json:"promotedFromRevisionId,omitempty"`
+	QueuedAt               *Revision_QueuedAt   `json:"queuedAt,omitempty"`
+	Source                 *string              `json:"source,omitempty"`
+	Status                 string               `json:"status"`
+	Tag                    string               `json:"tag"`
 	TriggeredByUser        *struct {
 		Id   string `json:"id"`
 		Name string `json:"name"`
@@ -3709,6 +4073,9 @@ type Revision_ImagePushedAt struct {
 	union json.RawMessage
 }
 
+// RevisionImageSource Set to managed when Ownkube built and stores the image; image is then null
+type RevisionImageSource string
+
 // RevisionLiveAt0 defines model for Revision.LiveAt.0.
 type RevisionLiveAt0 = string
 
@@ -3754,6 +4121,58 @@ type SetAutoDeployBody struct {
 	Enabled bool `json:"enabled"`
 }
 
+// SetDeploymentSourceBody defines model for SetDeploymentSourceBody.
+type SetDeploymentSourceBody struct {
+	// Branch Branch to deploy and track; pushes to it deploy automatically.
+	Branch string `json:"branch"`
+
+	// Commit Deploy this commit SHA instead of the branch tip. The branch is still tracked for later pushes.
+	Commit *string `json:"commit,omitempty"`
+
+	// ConnectionId Connected account to use (from list_vcs_connections). Omit to use whichever connected account can see the repository.
+	ConnectionId *string `json:"connectionId,omitempty"`
+
+	// ContextPath Root directory to build from, relative to the repository root. Empty string means the repository root.
+	ContextPath *string `json:"contextPath,omitempty"`
+
+	// Deploy Build and deploy now (default true). false saves the source and waits for the next push or rebuild.
+	Deploy *bool `json:"deploy,omitempty"`
+
+	// DockerfilePath Dockerfile path relative to the root directory. Empty string means the default Dockerfile.
+	DockerfilePath *string `json:"dockerfilePath,omitempty"`
+
+	// Repository Repository as owner/repo (GitLab: group/subgroup/project). A trailing .git is fine.
+	Repository string `json:"repository"`
+
+	// WaitForChecks Hold push deploys until the commit's CI checks pass; a failing check skips the deploy.
+	WaitForChecks *bool `json:"waitForChecks,omitempty"`
+
+	// WatchPaths Globs such as src/** or !docs/**: a push deploys only when a changed file matches. An empty list deploys on every push.
+	WatchPaths *[]string `json:"watchPaths,omitempty"`
+}
+
+// SetDeploymentSourceResult defines model for SetDeploymentSourceResult.
+type SetDeploymentSourceResult struct {
+	// Branch Tracked branch.
+	Branch     string                    `json:"branch"`
+	Deployment LifecycleDeploymentResult `json:"deployment"`
+
+	// GitSha Commit being deployed, or null when deploy was false.
+	GitSha string `json:"gitSha"`
+
+	// Provider The version control provider.
+	Provider SetDeploymentSourceResultProvider `json:"provider"`
+
+	// Repository Repository as the provider spells it, e.g. owner/repo.
+	Repository string `json:"repository"`
+
+	// RevisionId Revision building now (follow it with list_revisions), or null when deploy was false.
+	RevisionId string `json:"revisionId"`
+}
+
+// SetDeploymentSourceResultProvider The version control provider.
+type SetDeploymentSourceResultProvider string
+
 // SetEnvVarsBody defines model for SetEnvVarsBody.
 type SetEnvVarsBody struct {
 	// Env The full shared env-var set for the environment (replaces the existing set). Every cluster-bound app in the environment is redeployed to apply it.
@@ -3779,7 +4198,9 @@ type SetMaintenanceBody struct {
 // SourceDeployBody defines model for SourceDeployBody.
 type SourceDeployBody struct {
 	// DeploymentId Redeploy this existing app from the upload. Omit to create a new app; the create-only fields below are rejected when it's set.
-	DeploymentId  *string `json:"deploymentId,omitempty"`
+	DeploymentId *string `json:"deploymentId,omitempty"`
+
+	// EnvironmentId Environment id from list_environments. Defaults to the project's default environment.
 	EnvironmentId *string `json:"environmentId,omitempty"`
 
 	// Name Exact deployment name. Fails if taken. Omit to derive one from nameHint.
@@ -3792,7 +4213,9 @@ type SourceDeployBody struct {
 	Note *string `json:"note,omitempty"`
 
 	// Port Port the app listens on (also passed as PORT). Defaults to the Dockerfile's EXPOSE, else the detected framework's default, else 8080.
-	Port      *int    `json:"port,omitempty"`
+	Port *int `json:"port,omitempty"`
+
+	// ProjectId Project id from list_projects. Defaults to the organization's default project.
 	ProjectId *string `json:"projectId,omitempty"`
 
 	// Public Give a web app a public URL. Defaults to true for web.
@@ -3877,7 +4300,9 @@ type SourceUploadResponse struct {
 type SpendControls struct {
 	// AlertThresholdsPct Percent-of-budget thresholds that fire a spend alert.
 	AlertThresholdsPct []float32 `json:"alertThresholdsPct"`
-	AlertsEnabled      bool      `json:"alertsEnabled"`
+
+	// AlertsEnabled Whether spend alerts fire at the thresholds.
+	AlertsEnabled bool `json:"alertsEnabled"`
 
 	// BudgetAction What happens at the budget cap: `notify` only alerts; `pause` suspends compute (data retained) like wallet exhaustion.
 	BudgetAction SpendControlsBudgetAction `json:"budgetAction"`
@@ -3990,6 +4415,30 @@ type UpResult struct {
 	RevisionId string `json:"revisionId"`
 }
 
+// UpdateAppVariablesBody defines model for UpdateAppVariablesBody.
+type UpdateAppVariablesBody struct {
+	// Set Variables to add or change on this app. A name shared by the environment is overridden for this app only.
+	Set *[]AppVariableInput `json:"set,omitempty"`
+
+	// Unset Names to remove from this app. Only the app's own variables can be removed; shared ones are changed on the environment.
+	Unset *[]string `json:"unset,omitempty"`
+}
+
+// UpdateAppVariablesResult defines model for UpdateAppVariablesResult.
+type UpdateAppVariablesResult struct {
+	// Changed False when every value already matched, so nothing redeployed.
+	Changed bool `json:"changed"`
+
+	// RevisionId The revision the change rolled out as; null when unchanged.
+	RevisionId string `json:"revisionId"`
+
+	// Set Names that were added or changed.
+	Set []string `json:"set"`
+
+	// Unset Names that were removed.
+	Unset []string `json:"unset"`
+}
+
 // UpdateDeploymentBody defines model for UpdateDeploymentBody.
 type UpdateDeploymentBody struct {
 	// AppConfig New config for a web/worker deployment.
@@ -4053,10 +4502,12 @@ type UpdateDeploymentBody struct {
 			Enabled *bool   `json:"enabled,omitempty"`
 			Message *string `json:"message,omitempty"`
 		} `json:"maintenance,omitempty"`
-		Port       int    `json:"port"`
-		Public     *bool  `json:"public,omitempty"`
-		Replicas   *int   `json:"replicas,omitempty"`
-		Repository string `json:"repository"`
+		Port     int   `json:"port"`
+		Public   *bool `json:"public,omitempty"`
+		Replicas *int  `json:"replicas,omitempty"`
+
+		// Repository Image repository to run, e.g. nginx or ghcr.io/org/app. Omit to keep the current image (always kept for an Ownkube build).
+		Repository *string `json:"repository,omitempty"`
 		Resources  *struct {
 			Limits struct {
 				Cpu    string `json:"cpu"`
@@ -4073,8 +4524,10 @@ type UpdateDeploymentBody struct {
 		} `json:"scaleToZero,omitempty"`
 		SkuId        *string `json:"skuId,omitempty"`
 		StartCommand *string `json:"startCommand,omitempty"`
-		Tag          string  `json:"tag"`
-		Targeting    *struct {
+
+		// Tag Image tag to run. Omit to keep the current tag (always kept for an Ownkube build).
+		Tag       *string `json:"tag,omitempty"`
+		Targeting *struct {
 			NodeSelector *map[string]string `json:"nodeSelector,omitempty"`
 			Tolerations  *[]struct {
 				Effect UpdateDeploymentBodyAppConfigTargetingTolerationsEffect `json:"effect"`
@@ -4133,7 +4586,28 @@ type UpdateDeploymentBody struct {
 			PostInitSQL *[]string `json:"postInitSQL,omitempty"`
 		} `json:"bootstrap"`
 		Engine     UpdateDeploymentBodyDatabaseConfigEngine `json:"engine"`
-		Instances  *int                                     `json:"instances,omitempty"`
+		Extensions *struct {
+			BtreeGin         *bool `json:"btree_gin,omitempty"`
+			BtreeGist        *bool `json:"btree_gist,omitempty"`
+			Citext           *bool `json:"citext,omitempty"`
+			Fuzzystrmatch    *bool `json:"fuzzystrmatch,omitempty"`
+			Hll              *bool `json:"hll,omitempty"`
+			Hstore           *bool `json:"hstore,omitempty"`
+			PgCron           *bool `json:"pg_cron,omitempty"`
+			PgDuckdb         *bool `json:"pg_duckdb,omitempty"`
+			PgIvm            *bool `json:"pg_ivm,omitempty"`
+			PgPartman        *bool `json:"pg_partman,omitempty"`
+			PgStatStatements *bool `json:"pg_stat_statements,omitempty"`
+			PgTrgm           *bool `json:"pg_trgm,omitempty"`
+			Pgcrypto         *bool `json:"pgcrypto,omitempty"`
+			Pgmq             *bool `json:"pgmq,omitempty"`
+			Postgis          *bool `json:"postgis,omitempty"`
+			Tdigest          *bool `json:"tdigest,omitempty"`
+			Unaccent         *bool `json:"unaccent,omitempty"`
+			UuidOssp         *bool `json:"uuid-ossp,omitempty"`
+			Vector           *bool `json:"vector,omitempty"`
+		} `json:"extensions,omitempty"`
+		Instances  *int `json:"instances,omitempty"`
 		Monitoring *struct {
 			EnablePodMonitor bool `json:"enablePodMonitor"`
 		} `json:"monitoring,omitempty"`
@@ -4192,7 +4666,9 @@ type UpdateDeploymentBody struct {
 			RestartPolicy           *UpdateDeploymentBodyJobConfigJobRestartPolicy `json:"restartPolicy,omitempty"`
 			TtlSecondsAfterFinished *int                                           `json:"ttlSecondsAfterFinished,omitempty"`
 		} `json:"job,omitempty"`
-		Repository string `json:"repository"`
+
+		// Repository Image repository to run, e.g. nginx or ghcr.io/org/app. Omit to keep the current image (always kept for an Ownkube build).
+		Repository *string `json:"repository,omitempty"`
 		Resources  *struct {
 			Limits struct {
 				Cpu    string `json:"cpu"`
@@ -4212,7 +4688,9 @@ type UpdateDeploymentBody struct {
 			SuccessfulJobsHistoryLimit *int                                                    `json:"successfulJobsHistoryLimit,omitempty"`
 			TimeZone                   *string                                                 `json:"timeZone,omitempty"`
 		} `json:"schedule"`
-		Tag string `json:"tag"`
+
+		// Tag Image tag to run. Omit to keep the current tag (always kept for an Ownkube build).
+		Tag *string `json:"tag,omitempty"`
 	} `json:"jobConfig,omitempty"`
 
 	// Note Optional revision note.
@@ -4345,7 +4823,9 @@ type UpdateProjectBodyColor string
 type UpdateSpendControlsBody struct {
 	// AlertThresholdsPct Percent-of-budget thresholds that fire a spend alert.
 	AlertThresholdsPct *[]int `json:"alertThresholdsPct,omitempty"`
-	AlertsEnabled      *bool  `json:"alertsEnabled,omitempty"`
+
+	// AlertsEnabled Turn spend alerts at the thresholds on or off.
+	AlertsEnabled *bool `json:"alertsEnabled,omitempty"`
 
 	// BudgetAction At the cap: 'notify' alerts only; 'pause' suspends compute.
 	BudgetAction *UpdateSpendControlsBodyBudgetAction `json:"budgetAction,omitempty"`
@@ -4438,6 +4918,71 @@ type UserInfoResponse struct {
 	} `json:"user"`
 }
 
+// VcsBranches defines model for VcsBranches.
+type VcsBranches struct {
+	Branches []struct {
+		// LastCommitAt ISO timestamp of the branch tip commit, when known.
+		LastCommitAt string `json:"lastCommitAt"`
+
+		// Name Branch name.
+		Name string `json:"name"`
+	} `json:"branches"`
+}
+
+// VcsConnection defines model for VcsConnection.
+type VcsConnection struct {
+	// Account Connected account or group name, e.g. the GitHub org login.
+	Account string `json:"account"`
+
+	// AccountType Organization or User (GitHub), or the GitLab namespace kind.
+	AccountType string `json:"accountType"`
+
+	// Id Connection id; pass it as connectionId.
+	Id string `json:"id"`
+
+	// Provider The version control provider.
+	Provider VcsConnectionProvider `json:"provider"`
+
+	// Status active when usable; anything else needs fixing in the dashboard.
+	Status string `json:"status"`
+}
+
+// VcsConnectionProvider The version control provider.
+type VcsConnectionProvider string
+
+// VcsConnections defines model for VcsConnections.
+type VcsConnections struct {
+	// ConnectUrl Dashboard page to connect GitHub or GitLab, or grant access to more repositories.
+	ConnectUrl  string          `json:"connectUrl"`
+	Connections []VcsConnection `json:"connections"`
+}
+
+// VcsRepositories defines model for VcsRepositories.
+type VcsRepositories struct {
+	Repositories []VcsRepository `json:"repositories"`
+}
+
+// VcsRepository defines model for VcsRepository.
+type VcsRepository struct {
+	// Account Login of the connected account the repository came from.
+	Account string `json:"account"`
+
+	// ConnectionId Connected account the repository was listed through.
+	ConnectionId string `json:"connectionId"`
+
+	// DefaultBranch The repository's default branch.
+	DefaultBranch string `json:"defaultBranch"`
+
+	// FullName owner/repo; pass it as repository when setting a source.
+	FullName string `json:"fullName"`
+
+	// Private Whether the repository is private.
+	Private bool `json:"private"`
+
+	// Url Repository web URL.
+	Url string `json:"url"`
+}
+
 // VerifyCustomDomainResponse defines model for VerifyCustomDomainResponse.
 type VerifyCustomDomainResponse struct {
 	CertStatus string `json:"certStatus"`
@@ -4482,7 +5027,9 @@ type PatchV1AlertRulesRuleIdJSONBody struct {
 	Metric *PatchV1AlertRulesRuleIdJSONBodyMetric `json:"metric,omitempty"`
 
 	// Name Short label for the rule.
-	Name     *string                                  `json:"name,omitempty"`
+	Name *string `json:"name,omitempty"`
+
+	// Severity warning (default) or critical.
 	Severity *PatchV1AlertRulesRuleIdJSONBodySeverity `json:"severity,omitempty"`
 
 	// Threshold Percent (cpu/memory, ≤ 100) or count (restarts).
@@ -4940,7 +5487,28 @@ type PostV1DeploymentsJSONBody3 struct {
 			PostInitSQL *[]string `json:"postInitSQL,omitempty"`
 		} `json:"bootstrap"`
 		Engine     PostV1DeploymentsJSONBody3ConfigEngine `json:"engine"`
-		Instances  *int                                   `json:"instances,omitempty"`
+		Extensions *struct {
+			BtreeGin         *bool `json:"btree_gin,omitempty"`
+			BtreeGist        *bool `json:"btree_gist,omitempty"`
+			Citext           *bool `json:"citext,omitempty"`
+			Fuzzystrmatch    *bool `json:"fuzzystrmatch,omitempty"`
+			Hll              *bool `json:"hll,omitempty"`
+			Hstore           *bool `json:"hstore,omitempty"`
+			PgCron           *bool `json:"pg_cron,omitempty"`
+			PgDuckdb         *bool `json:"pg_duckdb,omitempty"`
+			PgIvm            *bool `json:"pg_ivm,omitempty"`
+			PgPartman        *bool `json:"pg_partman,omitempty"`
+			PgStatStatements *bool `json:"pg_stat_statements,omitempty"`
+			PgTrgm           *bool `json:"pg_trgm,omitempty"`
+			Pgcrypto         *bool `json:"pgcrypto,omitempty"`
+			Pgmq             *bool `json:"pgmq,omitempty"`
+			Postgis          *bool `json:"postgis,omitempty"`
+			Tdigest          *bool `json:"tdigest,omitempty"`
+			Unaccent         *bool `json:"unaccent,omitempty"`
+			UuidOssp         *bool `json:"uuid-ossp,omitempty"`
+			Vector           *bool `json:"vector,omitempty"`
+		} `json:"extensions,omitempty"`
+		Instances  *int `json:"instances,omitempty"`
 		Monitoring *struct {
 			EnablePodMonitor bool `json:"enablePodMonitor"`
 		} `json:"monitoring,omitempty"`
@@ -5148,7 +5716,9 @@ type PostV1DeploymentsDeploymentIdAlertsJSONBody struct {
 	Metric PostV1DeploymentsDeploymentIdAlertsJSONBodyMetric `json:"metric"`
 
 	// Name Short label for the rule.
-	Name     string                                               `json:"name"`
+	Name string `json:"name"`
+
+	// Severity warning (default) or critical.
 	Severity *PostV1DeploymentsDeploymentIdAlertsJSONBodySeverity `json:"severity,omitempty"`
 
 	// Threshold Percent (cpu/memory, ≤ 100) or count (restarts).
@@ -5169,8 +5739,14 @@ type PostV1DeploymentsDeploymentIdAlertsJSONBodySeverity string
 
 // GetV1DeploymentsDeploymentIdLogsParams defines parameters for GetV1DeploymentsDeploymentIdLogs.
 type GetV1DeploymentsDeploymentIdLogsParams struct {
-	// RangeSeconds How far back to read, in seconds (default 3600).
+	// RangeSeconds How far back to read, in seconds (default 3600). Ignored when `start` and `end` are sent.
 	RangeSeconds *int `form:"rangeSeconds,omitempty" json:"rangeSeconds,omitempty"`
+
+	// Start Window start, unix seconds. Send with `end` to read a fixed window instead of a look-back.
+	Start *int `form:"start,omitempty" json:"start,omitempty"`
+
+	// End Window end, unix seconds, after `start`. Capped to now and to the plan's log retention.
+	End *int `form:"end,omitempty" json:"end,omitempty"`
 
 	// Limit Max number of log lines to return (default 300).
 	Limit *int `form:"limit,omitempty" json:"limit,omitempty"`
@@ -5192,6 +5768,9 @@ type GetV1DeploymentsDeploymentIdObservabilityParams struct {
 type PostV1DeploymentsDeploymentIdRebuildParams struct {
 	// Note Optional note recorded on the queued revision.
 	Note *string `form:"note,omitempty" json:"note,omitempty"`
+
+	// Commit Commit sha (7 to 40 hex characters) to build instead of the tracked branch's current head.
+	Commit *string `form:"commit,omitempty" json:"commit,omitempty"`
 }
 
 // PostV1DeploymentsDeploymentIdRestoreParams defines parameters for PostV1DeploymentsDeploymentIdRestore.
@@ -5216,7 +5795,9 @@ type GetV1DeploymentsDeploymentIdSubdomainCheckParams struct {
 type GetV1DeploymentsDeploymentIdSubdomainSuggestParams struct {
 	// Desired Seed the suggestions from what the user has typed so far.
 	Desired *string `form:"desired,omitempty" json:"desired,omitempty"`
-	Limit   *int    `form:"limit,omitempty" json:"limit,omitempty"`
+
+	// Limit How many suggestions to return (1 to 12).
+	Limit *int `form:"limit,omitempty" json:"limit,omitempty"`
 }
 
 // GetV1DeploymentsDeploymentIdTelemetryParams defines parameters for GetV1DeploymentsDeploymentIdTelemetry.
@@ -5255,6 +5836,15 @@ type GetV1DeploymentsDeploymentIdTelemetryFunctionParams struct {
 	PeriodSeconds *int `form:"periodSeconds,omitempty" json:"periodSeconds,omitempty"`
 }
 
+// PostV1DeploymentsDeploymentIdVariablesResolveParams defines parameters for PostV1DeploymentsDeploymentIdVariablesResolve.
+type PostV1DeploymentsDeploymentIdVariablesResolveParams struct {
+	// Purpose What the values are for: `run` for a single local command, `shell` for an interactive local shell. Recorded in the audit log.
+	Purpose PostV1DeploymentsDeploymentIdVariablesResolveParamsPurpose `form:"purpose" json:"purpose"`
+}
+
+// PostV1DeploymentsDeploymentIdVariablesResolveParamsPurpose defines parameters for PostV1DeploymentsDeploymentIdVariablesResolve.
+type PostV1DeploymentsDeploymentIdVariablesResolveParamsPurpose string
+
 // PostV1SourceUploadsParams defines parameters for PostV1SourceUploads.
 type PostV1SourceUploadsParams struct {
 	// DeploymentId The app this upload will redeploy. Omit when the upload will create a new app.
@@ -5273,6 +5863,21 @@ type PostV1SshKeysJSONBody struct {
 type PostV1SshKeysGithubJSONBody struct {
 	// Username GitHub username. Null uses the GitHub account you signed in with.
 	Username *string `json:"username,omitempty"`
+}
+
+// GetV1VcsBranchesParams defines parameters for GetV1VcsBranches.
+type GetV1VcsBranchesParams struct {
+	// Repository Repository as owner/repo (GitLab: group/subgroup/project).
+	Repository string `form:"repository" json:"repository"`
+
+	// ConnectionId Connected account to read through. Omit to use whichever connected account can see the repository.
+	ConnectionId *string `form:"connectionId,omitempty" json:"connectionId,omitempty"`
+}
+
+// GetV1VcsReposParams defines parameters for GetV1VcsRepos.
+type GetV1VcsReposParams struct {
+	// ConnectionId Only list this connected account's repositories. Omit to list across every connected account.
+	ConnectionId *string `form:"connectionId,omitempty" json:"connectionId,omitempty"`
 }
 
 // PatchV1AlertRulesRuleIdJSONRequestBody defines body for PatchV1AlertRulesRuleId for application/json ContentType.
@@ -5338,11 +5943,17 @@ type PostV1DeploymentsDeploymentIdPromoteJSONRequestBody = PromoteBody
 // PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody defines body for PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback for application/json ContentType.
 type PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody = RollbackBody
 
+// PutV1DeploymentsDeploymentIdSourceJSONRequestBody defines body for PutV1DeploymentsDeploymentIdSource for application/json ContentType.
+type PutV1DeploymentsDeploymentIdSourceJSONRequestBody = SetDeploymentSourceBody
+
 // PutV1DeploymentsDeploymentIdSubdomainJSONRequestBody defines body for PutV1DeploymentsDeploymentIdSubdomain for application/json ContentType.
 type PutV1DeploymentsDeploymentIdSubdomainJSONRequestBody = ChangeSubdomainBody
 
 // PostV1DeploymentsDeploymentIdUpJSONRequestBody defines body for PostV1DeploymentsDeploymentIdUp for application/json ContentType.
 type PostV1DeploymentsDeploymentIdUpJSONRequestBody = UpBody
+
+// PatchV1DeploymentsDeploymentIdVariablesJSONRequestBody defines body for PatchV1DeploymentsDeploymentIdVariables for application/json ContentType.
+type PatchV1DeploymentsDeploymentIdVariablesJSONRequestBody = UpdateAppVariablesBody
 
 // PostV1EnvironmentsJSONRequestBody defines body for PostV1Environments for application/json ContentType.
 type PostV1EnvironmentsJSONRequestBody = CreateEnvironmentBody
@@ -8552,6 +9163,94 @@ func (t *ProjectedMonthCostResponse_PeriodStart) UnmarshalJSON(b []byte) error {
 	return err
 }
 
+// AsRedeemPromoResponseExpiresAt0 returns the union data inside the RedeemPromoResponse_ExpiresAt as a RedeemPromoResponseExpiresAt0
+func (t RedeemPromoResponse_ExpiresAt) AsRedeemPromoResponseExpiresAt0() (RedeemPromoResponseExpiresAt0, error) {
+	var body RedeemPromoResponseExpiresAt0
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromRedeemPromoResponseExpiresAt0 overwrites any union data inside the RedeemPromoResponse_ExpiresAt as the provided RedeemPromoResponseExpiresAt0
+func (t *RedeemPromoResponse_ExpiresAt) FromRedeemPromoResponseExpiresAt0(v RedeemPromoResponseExpiresAt0) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeRedeemPromoResponseExpiresAt0 performs a merge with any union data inside the RedeemPromoResponse_ExpiresAt, using the provided RedeemPromoResponseExpiresAt0
+func (t *RedeemPromoResponse_ExpiresAt) MergeRedeemPromoResponseExpiresAt0(v RedeemPromoResponseExpiresAt0) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsRedeemPromoResponseExpiresAt1 returns the union data inside the RedeemPromoResponse_ExpiresAt as a RedeemPromoResponseExpiresAt1
+func (t RedeemPromoResponse_ExpiresAt) AsRedeemPromoResponseExpiresAt1() (RedeemPromoResponseExpiresAt1, error) {
+	var body RedeemPromoResponseExpiresAt1
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromRedeemPromoResponseExpiresAt1 overwrites any union data inside the RedeemPromoResponse_ExpiresAt as the provided RedeemPromoResponseExpiresAt1
+func (t *RedeemPromoResponse_ExpiresAt) FromRedeemPromoResponseExpiresAt1(v RedeemPromoResponseExpiresAt1) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeRedeemPromoResponseExpiresAt1 performs a merge with any union data inside the RedeemPromoResponse_ExpiresAt, using the provided RedeemPromoResponseExpiresAt1
+func (t *RedeemPromoResponse_ExpiresAt) MergeRedeemPromoResponseExpiresAt1(v RedeemPromoResponseExpiresAt1) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+// AsRedeemPromoResponseExpiresAt2 returns the union data inside the RedeemPromoResponse_ExpiresAt as a RedeemPromoResponseExpiresAt2
+func (t RedeemPromoResponse_ExpiresAt) AsRedeemPromoResponseExpiresAt2() (RedeemPromoResponseExpiresAt2, error) {
+	var body RedeemPromoResponseExpiresAt2
+	err := json.Unmarshal(t.union, &body)
+	return body, err
+}
+
+// FromRedeemPromoResponseExpiresAt2 overwrites any union data inside the RedeemPromoResponse_ExpiresAt as the provided RedeemPromoResponseExpiresAt2
+func (t *RedeemPromoResponse_ExpiresAt) FromRedeemPromoResponseExpiresAt2(v RedeemPromoResponseExpiresAt2) error {
+	b, err := json.Marshal(v)
+	t.union = b
+	return err
+}
+
+// MergeRedeemPromoResponseExpiresAt2 performs a merge with any union data inside the RedeemPromoResponse_ExpiresAt, using the provided RedeemPromoResponseExpiresAt2
+func (t *RedeemPromoResponse_ExpiresAt) MergeRedeemPromoResponseExpiresAt2(v RedeemPromoResponseExpiresAt2) error {
+	b, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	merged, err := runtime.JSONMerge(t.union, b)
+	t.union = merged
+	return err
+}
+
+func (t RedeemPromoResponse_ExpiresAt) MarshalJSON() ([]byte, error) {
+	b, err := t.union.MarshalJSON()
+	return b, err
+}
+
+func (t *RedeemPromoResponse_ExpiresAt) UnmarshalJSON(b []byte) error {
+	err := t.union.UnmarshalJSON(b)
+	return err
+}
+
 // AsRegistryCreatedAt0 returns the union data inside the Registry_CreatedAt as a RegistryCreatedAt0
 func (t Registry_CreatedAt) AsRegistryCreatedAt0() (RegistryCreatedAt0, error) {
 	var body RegistryCreatedAt0
@@ -9977,14 +10676,14 @@ type ClientInterface interface {
 
 	// GetV1Deployments List deployments
 	//
-	// Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the shared, no-cluster deploy path). Passing more than one is an error.
+	// Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the managed, no-cluster deploy path). Passing more than one is an error.
 	//
 	// Corresponds with GET /v1/deployments (the `GetV1Deployments` operationId).
 	GetV1Deployments(ctx context.Context, params *GetV1DeploymentsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// PostV1DeploymentsWithBody Create a deployment
 	//
-	// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
+	// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto Ownkube Compute. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
 	//
 	// Takes any type of body and a specified content type.
 	//
@@ -9993,7 +10692,7 @@ type ClientInterface interface {
 
 	// PostV1Deployments Create a deployment
 	//
-	// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
+	// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto Ownkube Compute. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
 	//
 	// Takes a body of the `application/json` content type.
 	//
@@ -10366,7 +11065,7 @@ type ClientInterface interface {
 
 	// PostV1DeploymentsDeploymentIdRebuild Rebuild a deployment from source
 	//
-	// Rebuilds an in-cluster deployment from the current head of its tracked branch — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.
+	// Rebuilds an in-cluster deployment from the current head of its tracked branch (or a pinned `commit`) — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.
 	//
 	// Corresponds with POST /v1/deployments/{deploymentId}/rebuild (the `PostV1DeploymentsDeploymentIdRebuild` operationId).
 	PostV1DeploymentsDeploymentIdRebuild(ctx context.Context, deploymentId string, params *PostV1DeploymentsDeploymentIdRebuildParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -10428,6 +11127,31 @@ type ClientInterface interface {
 	//
 	// Corresponds with POST /v1/deployments/{deploymentId}/revisions/{revisionId}/rollback (the `PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback` operationId).
 	PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback(ctx context.Context, deploymentId string, revisionId string, body PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteV1DeploymentsDeploymentIdSource Disconnect an app's repository
+	//
+	// Disconnects the app's repository: pushes stop deploying and the app goes back to deploying from uploaded source. The running version keeps serving; nothing is rebuilt.
+	//
+	// Corresponds with DELETE /v1/deployments/{deploymentId}/source (the `DeleteV1DeploymentsDeploymentIdSource` operationId).
+	DeleteV1DeploymentsDeploymentIdSource(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PutV1DeploymentsDeploymentIdSourceWithBody Connect or switch an app's repository
+	//
+	// Connects a repository and branch to an existing web app, worker or job, or switches its repository or branch, then builds and deploys it. Settings, secrets, linked databases, address and resources are kept; the running version keeps serving until the new build is live. Later pushes to the branch deploy automatically.
+	//
+	// Takes any type of body and a specified content type.
+	//
+	// Corresponds with PUT /v1/deployments/{deploymentId}/source (the `PutV1DeploymentsDeploymentIdSource` operationId).
+	PutV1DeploymentsDeploymentIdSourceWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PutV1DeploymentsDeploymentIdSource Connect or switch an app's repository
+	//
+	// Connects a repository and branch to an existing web app, worker or job, or switches its repository or branch, then builds and deploys it. Settings, secrets, linked databases, address and resources are kept; the running version keeps serving until the new build is live. Later pushes to the branch deploy automatically.
+	//
+	// Takes a body of the `application/json` content type.
+	//
+	// Corresponds with PUT /v1/deployments/{deploymentId}/source (the `PutV1DeploymentsDeploymentIdSource` operationId).
+	PutV1DeploymentsDeploymentIdSource(ctx context.Context, deploymentId string, body PutV1DeploymentsDeploymentIdSourceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1DeploymentsDeploymentIdSshTarget Resolve where to SSH for a deployment
 	//
@@ -10518,6 +11242,38 @@ type ClientInterface interface {
 	//
 	// Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
 	PostV1DeploymentsDeploymentIdUp(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdUpJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetV1DeploymentsDeploymentIdVariables List an app's variables
+	//
+	// Returns the app's effective variables: the environment's shared ones with the app's own on top. Secret values are always empty.
+	//
+	// Corresponds with GET /v1/deployments/{deploymentId}/variables (the `GetV1DeploymentsDeploymentIdVariables` operationId).
+	GetV1DeploymentsDeploymentIdVariables(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PatchV1DeploymentsDeploymentIdVariablesWithBody Set or remove an app's variables
+	//
+	// Adds, changes and removes the app's own variables in one save, which rolls out as one revision. Untouched variables, secrets included, keep their values. Sending only values that already match changes nothing.
+	//
+	// Takes any type of body and a specified content type.
+	//
+	// Corresponds with PATCH /v1/deployments/{deploymentId}/variables (the `PatchV1DeploymentsDeploymentIdVariables` operationId).
+	PatchV1DeploymentsDeploymentIdVariablesWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PatchV1DeploymentsDeploymentIdVariables Set or remove an app's variables
+	//
+	// Adds, changes and removes the app's own variables in one save, which rolls out as one revision. Untouched variables, secrets included, keep their values. Sending only values that already match changes nothing.
+	//
+	// Takes a body of the `application/json` content type.
+	//
+	// Corresponds with PATCH /v1/deployments/{deploymentId}/variables (the `PatchV1DeploymentsDeploymentIdVariables` operationId).
+	PatchV1DeploymentsDeploymentIdVariables(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdVariablesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostV1DeploymentsDeploymentIdVariablesResolve Resolve an app's variables for a local command
+	//
+	// Returns the app's full effective variables WITH secret values, for injecting into a local process (`okctl run`, `okctl shell`). Every call is audit-logged. Never print or store the result.
+	//
+	// Corresponds with POST /v1/deployments/{deploymentId}/variables/resolve (the `PostV1DeploymentsDeploymentIdVariablesResolve` operationId).
+	PostV1DeploymentsDeploymentIdVariablesResolve(ctx context.Context, deploymentId string, params *PostV1DeploymentsDeploymentIdVariablesResolveParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1Environments List environments in the current organization
 	//
@@ -10736,7 +11492,7 @@ type ClientInterface interface {
 
 	// GetV1Regions List Ownkube Compute regions
 	//
-	// Lists the regions available for deploying on Ownkube Compute (the shared, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
+	// Lists the regions available for deploying on Ownkube Compute (the managed, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
 	//
 	// Corresponds with GET /v1/regions (the `GetV1Regions` operationId).
 	GetV1Regions(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -10878,6 +11634,27 @@ type ClientInterface interface {
 	//
 	// Corresponds with GET /v1/usage/projected (the `GetV1UsageProjected` operationId).
 	GetV1UsageProjected(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetV1VcsBranches List a repository's branches
+	//
+	// Lists a repository's branches, most recently committed first, through the connected account that can see it.
+	//
+	// Corresponds with GET /v1/vcs/branches (the `GetV1VcsBranches` operationId).
+	GetV1VcsBranches(ctx context.Context, params *GetV1VcsBranchesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetV1VcsConnections List connected version control accounts
+	//
+	// Lists the GitHub and GitLab accounts connected to the organization. Connecting a new account happens in the dashboard at `connectUrl`.
+	//
+	// Corresponds with GET /v1/vcs/connections (the `GetV1VcsConnections` operationId).
+	GetV1VcsConnections(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetV1VcsRepos List repositories the connected accounts can see
+	//
+	// Lists repositories visible to the organization's connected GitHub and GitLab accounts, optionally for one connection.
+	//
+	// Corresponds with GET /v1/vcs/repos (the `GetV1VcsRepos` operationId).
+	GetV1VcsRepos(ctx context.Context, params *GetV1VcsReposParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetV1Wallet Get the prepaid wallet balance
 	//
@@ -11354,7 +12131,7 @@ func (c *Client) PostV1CustomDomainsDomainIdVerify(ctx context.Context, domainId
 
 // GetV1Deployments List deployments
 //
-// Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the shared, no-cluster deploy path). Passing more than one is an error.
+// Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the managed, no-cluster deploy path). Passing more than one is an error.
 //
 // Corresponds with GET /v1/deployments (the `GetV1Deployments` operationId).
 func (c *Client) GetV1Deployments(ctx context.Context, params *GetV1DeploymentsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -11371,7 +12148,7 @@ func (c *Client) GetV1Deployments(ctx context.Context, params *GetV1DeploymentsP
 
 // PostV1DeploymentsWithBody Create a deployment
 //
-// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
+// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto Ownkube Compute. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
 //
 // Takes any type of body and a specified content type.
 //
@@ -11390,7 +12167,7 @@ func (c *Client) PostV1DeploymentsWithBody(ctx context.Context, contentType stri
 
 // PostV1Deployments Create a deployment
 //
-// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
+// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto Ownkube Compute. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
 //
 // Takes a body of the `application/json` content type.
 //
@@ -12213,7 +12990,7 @@ func (c *Client) PostV1DeploymentsDeploymentIdPromote(ctx context.Context, deplo
 
 // PostV1DeploymentsDeploymentIdRebuild Rebuild a deployment from source
 //
-// Rebuilds an in-cluster deployment from the current head of its tracked branch — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.
+// Rebuilds an in-cluster deployment from the current head of its tracked branch (or a pinned `commit`) — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.
 //
 // Corresponds with POST /v1/deployments/{deploymentId}/rebuild (the `PostV1DeploymentsDeploymentIdRebuild` operationId).
 func (c *Client) PostV1DeploymentsDeploymentIdRebuild(ctx context.Context, deploymentId string, params *PostV1DeploymentsDeploymentIdRebuildParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -12356,6 +13133,61 @@ func (c *Client) PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithBod
 // Corresponds with POST /v1/deployments/{deploymentId}/revisions/{revisionId}/rollback (the `PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback` operationId).
 func (c *Client) PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback(ctx context.Context, deploymentId string, revisionId string, body PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackRequest(c.Server, deploymentId, revisionId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteV1DeploymentsDeploymentIdSource Disconnect an app's repository
+//
+// Disconnects the app's repository: pushes stop deploying and the app goes back to deploying from uploaded source. The running version keeps serving; nothing is rebuilt.
+//
+// Corresponds with DELETE /v1/deployments/{deploymentId}/source (the `DeleteV1DeploymentsDeploymentIdSource` operationId).
+func (c *Client) DeleteV1DeploymentsDeploymentIdSource(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteV1DeploymentsDeploymentIdSourceRequest(c.Server, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PutV1DeploymentsDeploymentIdSourceWithBody Connect or switch an app's repository
+//
+// Connects a repository and branch to an existing web app, worker or job, or switches its repository or branch, then builds and deploys it. Settings, secrets, linked databases, address and resources are kept; the running version keeps serving until the new build is live. Later pushes to the branch deploy automatically.
+//
+// Takes any type of body and a specified content type.
+//
+// Corresponds with PUT /v1/deployments/{deploymentId}/source (the `PutV1DeploymentsDeploymentIdSource` operationId).
+func (c *Client) PutV1DeploymentsDeploymentIdSourceWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutV1DeploymentsDeploymentIdSourceRequestWithBody(c.Server, deploymentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PutV1DeploymentsDeploymentIdSource Connect or switch an app's repository
+//
+// Connects a repository and branch to an existing web app, worker or job, or switches its repository or branch, then builds and deploys it. Settings, secrets, linked databases, address and resources are kept; the running version keeps serving until the new build is live. Later pushes to the branch deploy automatically.
+//
+// Takes a body of the `application/json` content type.
+//
+// Corresponds with PUT /v1/deployments/{deploymentId}/source (the `PutV1DeploymentsDeploymentIdSource` operationId).
+func (c *Client) PutV1DeploymentsDeploymentIdSource(ctx context.Context, deploymentId string, body PutV1DeploymentsDeploymentIdSourceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutV1DeploymentsDeploymentIdSourceRequest(c.Server, deploymentId, body)
 	if err != nil {
 		return nil, err
 	}
@@ -12566,6 +13398,78 @@ func (c *Client) PostV1DeploymentsDeploymentIdUpWithBody(ctx context.Context, de
 // Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
 func (c *Client) PostV1DeploymentsDeploymentIdUp(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdUpJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostV1DeploymentsDeploymentIdUpRequest(c.Server, deploymentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetV1DeploymentsDeploymentIdVariables List an app's variables
+//
+// Returns the app's effective variables: the environment's shared ones with the app's own on top. Secret values are always empty.
+//
+// Corresponds with GET /v1/deployments/{deploymentId}/variables (the `GetV1DeploymentsDeploymentIdVariables` operationId).
+func (c *Client) GetV1DeploymentsDeploymentIdVariables(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetV1DeploymentsDeploymentIdVariablesRequest(c.Server, deploymentId)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PatchV1DeploymentsDeploymentIdVariablesWithBody Set or remove an app's variables
+//
+// Adds, changes and removes the app's own variables in one save, which rolls out as one revision. Untouched variables, secrets included, keep their values. Sending only values that already match changes nothing.
+//
+// Takes any type of body and a specified content type.
+//
+// Corresponds with PATCH /v1/deployments/{deploymentId}/variables (the `PatchV1DeploymentsDeploymentIdVariables` operationId).
+func (c *Client) PatchV1DeploymentsDeploymentIdVariablesWithBody(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchV1DeploymentsDeploymentIdVariablesRequestWithBody(c.Server, deploymentId, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PatchV1DeploymentsDeploymentIdVariables Set or remove an app's variables
+//
+// Adds, changes and removes the app's own variables in one save, which rolls out as one revision. Untouched variables, secrets included, keep their values. Sending only values that already match changes nothing.
+//
+// Takes a body of the `application/json` content type.
+//
+// Corresponds with PATCH /v1/deployments/{deploymentId}/variables (the `PatchV1DeploymentsDeploymentIdVariables` operationId).
+func (c *Client) PatchV1DeploymentsDeploymentIdVariables(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdVariablesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPatchV1DeploymentsDeploymentIdVariablesRequest(c.Server, deploymentId, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostV1DeploymentsDeploymentIdVariablesResolve Resolve an app's variables for a local command
+//
+// Returns the app's full effective variables WITH secret values, for injecting into a local process (`okctl run`, `okctl shell`). Every call is audit-logged. Never print or store the result.
+//
+// Corresponds with POST /v1/deployments/{deploymentId}/variables/resolve (the `PostV1DeploymentsDeploymentIdVariablesResolve` operationId).
+func (c *Client) PostV1DeploymentsDeploymentIdVariablesResolve(ctx context.Context, deploymentId string, params *PostV1DeploymentsDeploymentIdVariablesResolveParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostV1DeploymentsDeploymentIdVariablesResolveRequest(c.Server, deploymentId, params)
 	if err != nil {
 		return nil, err
 	}
@@ -13083,7 +13987,7 @@ func (c *Client) PostV1PromoRedeem(ctx context.Context, body PostV1PromoRedeemJS
 
 // GetV1Regions List Ownkube Compute regions
 //
-// Lists the regions available for deploying on Ownkube Compute (the shared, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
+// Lists the regions available for deploying on Ownkube Compute (the managed, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
 //
 // Corresponds with GET /v1/regions (the `GetV1Regions` operationId).
 func (c *Client) GetV1Regions(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -13406,6 +14310,57 @@ func (c *Client) GetV1UsageMonthToDate(ctx context.Context, reqEditors ...Reques
 // Corresponds with GET /v1/usage/projected (the `GetV1UsageProjected` operationId).
 func (c *Client) GetV1UsageProjected(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetV1UsageProjectedRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetV1VcsBranches List a repository's branches
+//
+// Lists a repository's branches, most recently committed first, through the connected account that can see it.
+//
+// Corresponds with GET /v1/vcs/branches (the `GetV1VcsBranches` operationId).
+func (c *Client) GetV1VcsBranches(ctx context.Context, params *GetV1VcsBranchesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetV1VcsBranchesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetV1VcsConnections List connected version control accounts
+//
+// Lists the GitHub and GitLab accounts connected to the organization. Connecting a new account happens in the dashboard at `connectUrl`.
+//
+// Corresponds with GET /v1/vcs/connections (the `GetV1VcsConnections` operationId).
+func (c *Client) GetV1VcsConnections(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetV1VcsConnectionsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetV1VcsRepos List repositories the connected accounts can see
+//
+// Lists repositories visible to the organization's connected GitHub and GitLab accounts, optionally for one connection.
+//
+// Corresponds with GET /v1/vcs/repos (the `GetV1VcsRepos` operationId).
+func (c *Client) GetV1VcsRepos(ctx context.Context, params *GetV1VcsReposParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetV1VcsReposRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -15387,6 +16342,30 @@ func NewGetV1DeploymentsDeploymentIdLogsRequest(server string, deploymentId stri
 
 		}
 
+		if params.Start != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "start", *params.Start, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.End != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "end", *params.End, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
 		if params.Limit != nil {
 
 			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "limit", *params.Limit, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
@@ -15733,6 +16712,18 @@ func NewPostV1DeploymentsDeploymentIdRebuildRequest(server string, deploymentId 
 
 		}
 
+		if params.Commit != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "commit", *params.Commit, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
 		if encoded := queryValues.Encode(); encoded != "" {
 			rawQueryFragments = append(rawQueryFragments, encoded)
 		}
@@ -16057,6 +17048,87 @@ func NewPostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackRequestWithBody(
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteV1DeploymentsDeploymentIdSourceRequest constructs an http.Request for the DeleteV1DeploymentsDeploymentIdSource method
+func NewDeleteV1DeploymentsDeploymentIdSourceRequest(server string, deploymentId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "deploymentId", deploymentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/source", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPutV1DeploymentsDeploymentIdSourceRequest calls the generic PutV1DeploymentsDeploymentIdSource builder with application/json body
+func NewPutV1DeploymentsDeploymentIdSourceRequest(server string, deploymentId string, body PutV1DeploymentsDeploymentIdSourceJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPutV1DeploymentsDeploymentIdSourceRequestWithBody(server, deploymentId, "application/json", bodyReader)
+}
+
+// NewPutV1DeploymentsDeploymentIdSourceRequestWithBody constructs an http.Request for the PutV1DeploymentsDeploymentIdSource method, with any body, and a specified content type
+func NewPutV1DeploymentsDeploymentIdSourceRequestWithBody(server string, deploymentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "deploymentId", deploymentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/source", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -16646,6 +17718,144 @@ func NewPostV1DeploymentsDeploymentIdUpRequestWithBody(server string, deployment
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetV1DeploymentsDeploymentIdVariablesRequest constructs an http.Request for the GetV1DeploymentsDeploymentIdVariables method
+func NewGetV1DeploymentsDeploymentIdVariablesRequest(server string, deploymentId string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "deploymentId", deploymentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/variables", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPatchV1DeploymentsDeploymentIdVariablesRequest calls the generic PatchV1DeploymentsDeploymentIdVariables builder with application/json body
+func NewPatchV1DeploymentsDeploymentIdVariablesRequest(server string, deploymentId string, body PatchV1DeploymentsDeploymentIdVariablesJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPatchV1DeploymentsDeploymentIdVariablesRequestWithBody(server, deploymentId, "application/json", bodyReader)
+}
+
+// NewPatchV1DeploymentsDeploymentIdVariablesRequestWithBody constructs an http.Request for the PatchV1DeploymentsDeploymentIdVariables method, with any body, and a specified content type
+func NewPatchV1DeploymentsDeploymentIdVariablesRequestWithBody(server string, deploymentId string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "deploymentId", deploymentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/variables", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewPostV1DeploymentsDeploymentIdVariablesResolveRequest constructs an http.Request for the PostV1DeploymentsDeploymentIdVariablesResolve method
+func NewPostV1DeploymentsDeploymentIdVariablesResolveRequest(server string, deploymentId string, params *PostV1DeploymentsDeploymentIdVariablesResolveParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "deploymentId", deploymentId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/deployments/%s/variables/resolve", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "purpose", params.Purpose, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -17896,6 +19106,149 @@ func NewGetV1UsageProjectedRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
+// NewGetV1VcsBranchesRequest constructs an http.Request for the GetV1VcsBranches method
+func NewGetV1VcsBranchesRequest(server string, params *GetV1VcsBranchesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/vcs/branches")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "repository", params.Repository, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if params.ConnectionId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "connectionId", *params.ConnectionId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetV1VcsConnectionsRequest constructs an http.Request for the GetV1VcsConnections method
+func NewGetV1VcsConnectionsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/vcs/connections")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetV1VcsReposRequest constructs an http.Request for the GetV1VcsRepos method
+func NewGetV1VcsReposRequest(server string, params *GetV1VcsReposParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/v1/vcs/repos")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.ConnectionId != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "connectionId", *params.ConnectionId, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetV1WalletRequest constructs an http.Request for the GetV1Wallet method
 func NewGetV1WalletRequest(server string) (*http.Request, error) {
 	var err error
@@ -18202,7 +19555,7 @@ type ClientWithResponsesInterface interface {
 
 	// GetV1DeploymentsWithResponse List deployments
 	//
-	// Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the shared, no-cluster deploy path). Passing more than one is an error.
+	// Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the managed, no-cluster deploy path). Passing more than one is an error.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
@@ -18211,7 +19564,7 @@ type ClientWithResponsesInterface interface {
 
 	// PostV1DeploymentsWithBodyWithResponse Create a deployment
 	//
-	// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
+	// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto Ownkube Compute. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
 	//
 	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 	//
@@ -18220,7 +19573,7 @@ type ClientWithResponsesInterface interface {
 
 	// PostV1DeploymentsWithResponse Create a deployment
 	//
-	// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
+	// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto Ownkube Compute. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
 	//
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	//
@@ -18621,7 +19974,7 @@ type ClientWithResponsesInterface interface {
 
 	// PostV1DeploymentsDeploymentIdRebuildWithResponse Rebuild a deployment from source
 	//
-	// Rebuilds an in-cluster deployment from the current head of its tracked branch — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.
+	// Rebuilds an in-cluster deployment from the current head of its tracked branch (or a pinned `commit`) — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
@@ -18697,6 +20050,33 @@ type ClientWithResponsesInterface interface {
 	//
 	// Corresponds with POST /v1/deployments/{deploymentId}/revisions/{revisionId}/rollback (the `PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollback` operationId).
 	PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackWithResponse(ctx context.Context, deploymentId string, revisionId string, body PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse, error)
+
+	// DeleteV1DeploymentsDeploymentIdSourceWithResponse Disconnect an app's repository
+	//
+	// Disconnects the app's repository: pushes stop deploying and the app goes back to deploying from uploaded source. The running version keeps serving; nothing is rebuilt.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with DELETE /v1/deployments/{deploymentId}/source (the `DeleteV1DeploymentsDeploymentIdSource` operationId).
+	DeleteV1DeploymentsDeploymentIdSourceWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*DeleteV1DeploymentsDeploymentIdSourceResponse, error)
+
+	// PutV1DeploymentsDeploymentIdSourceWithBodyWithResponse Connect or switch an app's repository
+	//
+	// Connects a repository and branch to an existing web app, worker or job, or switches its repository or branch, then builds and deploys it. Settings, secrets, linked databases, address and resources are kept; the running version keeps serving until the new build is live. Later pushes to the branch deploy automatically.
+	//
+	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with PUT /v1/deployments/{deploymentId}/source (the `PutV1DeploymentsDeploymentIdSource` operationId).
+	PutV1DeploymentsDeploymentIdSourceWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutV1DeploymentsDeploymentIdSourceResponse, error)
+
+	// PutV1DeploymentsDeploymentIdSourceWithResponse Connect or switch an app's repository
+	//
+	// Connects a repository and branch to an existing web app, worker or job, or switches its repository or branch, then builds and deploys it. Settings, secrets, linked databases, address and resources are kept; the running version keeps serving until the new build is live. Later pushes to the branch deploy automatically.
+	//
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with PUT /v1/deployments/{deploymentId}/source (the `PutV1DeploymentsDeploymentIdSource` operationId).
+	PutV1DeploymentsDeploymentIdSourceWithResponse(ctx context.Context, deploymentId string, body PutV1DeploymentsDeploymentIdSourceJSONRequestBody, reqEditors ...RequestEditorFn) (*PutV1DeploymentsDeploymentIdSourceResponse, error)
 
 	// GetV1DeploymentsDeploymentIdSshTargetWithResponse Resolve where to SSH for a deployment
 	//
@@ -18803,6 +20183,42 @@ type ClientWithResponsesInterface interface {
 	//
 	// Corresponds with POST /v1/deployments/{deploymentId}/up (the `PostV1DeploymentsDeploymentIdUp` operationId).
 	PostV1DeploymentsDeploymentIdUpWithResponse(ctx context.Context, deploymentId string, body PostV1DeploymentsDeploymentIdUpJSONRequestBody, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdUpResponse, error)
+
+	// GetV1DeploymentsDeploymentIdVariablesWithResponse List an app's variables
+	//
+	// Returns the app's effective variables: the environment's shared ones with the app's own on top. Secret values are always empty.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with GET /v1/deployments/{deploymentId}/variables (the `GetV1DeploymentsDeploymentIdVariables` operationId).
+	GetV1DeploymentsDeploymentIdVariablesWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdVariablesResponse, error)
+
+	// PatchV1DeploymentsDeploymentIdVariablesWithBodyWithResponse Set or remove an app's variables
+	//
+	// Adds, changes and removes the app's own variables in one save, which rolls out as one revision. Untouched variables, secrets included, keep their values. Sending only values that already match changes nothing.
+	//
+	// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with PATCH /v1/deployments/{deploymentId}/variables (the `PatchV1DeploymentsDeploymentIdVariables` operationId).
+	PatchV1DeploymentsDeploymentIdVariablesWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdVariablesResponse, error)
+
+	// PatchV1DeploymentsDeploymentIdVariablesWithResponse Set or remove an app's variables
+	//
+	// Adds, changes and removes the app's own variables in one save, which rolls out as one revision. Untouched variables, secrets included, keep their values. Sending only values that already match changes nothing.
+	//
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with PATCH /v1/deployments/{deploymentId}/variables (the `PatchV1DeploymentsDeploymentIdVariables` operationId).
+	PatchV1DeploymentsDeploymentIdVariablesWithResponse(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdVariablesJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdVariablesResponse, error)
+
+	// PostV1DeploymentsDeploymentIdVariablesResolveWithResponse Resolve an app's variables for a local command
+	//
+	// Returns the app's full effective variables WITH secret values, for injecting into a local process (`okctl run`, `okctl shell`). Every call is audit-logged. Never print or store the result.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with POST /v1/deployments/{deploymentId}/variables/resolve (the `PostV1DeploymentsDeploymentIdVariablesResolve` operationId).
+	PostV1DeploymentsDeploymentIdVariablesResolveWithResponse(ctx context.Context, deploymentId string, params *PostV1DeploymentsDeploymentIdVariablesResolveParams, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdVariablesResolveResponse, error)
 
 	// GetV1EnvironmentsWithResponse List environments in the current organization
 	//
@@ -19047,7 +20463,7 @@ type ClientWithResponsesInterface interface {
 
 	// GetV1RegionsWithResponse List Ownkube Compute regions
 	//
-	// Lists the regions available for deploying on Ownkube Compute (the shared, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
+	// Lists the regions available for deploying on Ownkube Compute (the managed, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
@@ -19211,6 +20627,33 @@ type ClientWithResponsesInterface interface {
 	//
 	// Corresponds with GET /v1/usage/projected (the `GetV1UsageProjected` operationId).
 	GetV1UsageProjectedWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1UsageProjectedResponse, error)
+
+	// GetV1VcsBranchesWithResponse List a repository's branches
+	//
+	// Lists a repository's branches, most recently committed first, through the connected account that can see it.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with GET /v1/vcs/branches (the `GetV1VcsBranches` operationId).
+	GetV1VcsBranchesWithResponse(ctx context.Context, params *GetV1VcsBranchesParams, reqEditors ...RequestEditorFn) (*GetV1VcsBranchesResponse, error)
+
+	// GetV1VcsConnectionsWithResponse List connected version control accounts
+	//
+	// Lists the GitHub and GitLab accounts connected to the organization. Connecting a new account happens in the dashboard at `connectUrl`.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with GET /v1/vcs/connections (the `GetV1VcsConnections` operationId).
+	GetV1VcsConnectionsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1VcsConnectionsResponse, error)
+
+	// GetV1VcsReposWithResponse List repositories the connected accounts can see
+	//
+	// Lists repositories visible to the organization's connected GitHub and GitLab accounts, optionally for one connection.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	//
+	// Corresponds with GET /v1/vcs/repos (the `GetV1VcsRepos` operationId).
+	GetV1VcsReposWithResponse(ctx context.Context, params *GetV1VcsReposParams, reqEditors ...RequestEditorFn) (*GetV1VcsReposResponse, error)
 
 	// GetV1WalletWithResponse Get the prepaid wallet balance
 	//
@@ -25236,6 +26679,200 @@ func (r PostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse) Conten
 	return ""
 }
 
+type DeleteV1DeploymentsDeploymentIdSourceResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ClearDeploymentSourceResult
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON429 the response for an HTTP 429 `application/json` response
+	JSON429 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) GetJSON200() *ClearDeploymentSourceResult {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON429 returns the response for an HTTP 429 `application/json` response
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) GetJSON429() *ErrorResponse {
+	return r.JSON429
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteV1DeploymentsDeploymentIdSourceResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PutV1DeploymentsDeploymentIdSourceResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *SetDeploymentSourceResult
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON429 the response for an HTTP 429 `application/json` response
+	JSON429 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PutV1DeploymentsDeploymentIdSourceResponse) GetJSON200() *SetDeploymentSourceResult {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PutV1DeploymentsDeploymentIdSourceResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r PutV1DeploymentsDeploymentIdSourceResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r PutV1DeploymentsDeploymentIdSourceResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PutV1DeploymentsDeploymentIdSourceResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PutV1DeploymentsDeploymentIdSourceResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r PutV1DeploymentsDeploymentIdSourceResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON429 returns the response for an HTTP 429 `application/json` response
+func (r PutV1DeploymentsDeploymentIdSourceResponse) GetJSON429() *ErrorResponse {
+	return r.JSON429
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PutV1DeploymentsDeploymentIdSourceResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PutV1DeploymentsDeploymentIdSourceResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PutV1DeploymentsDeploymentIdSourceResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PutV1DeploymentsDeploymentIdSourceResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PutV1DeploymentsDeploymentIdSourceResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetV1DeploymentsDeploymentIdSshTargetResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -26200,6 +27837,297 @@ func (r PostV1DeploymentsDeploymentIdUpResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r PostV1DeploymentsDeploymentIdUpResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetV1DeploymentsDeploymentIdVariablesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *AppVariables
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON429 the response for an HTTP 429 `application/json` response
+	JSON429 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) GetJSON200() *AppVariables {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON429 returns the response for an HTTP 429 `application/json` response
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) GetJSON429() *ErrorResponse {
+	return r.JSON429
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetV1DeploymentsDeploymentIdVariablesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PatchV1DeploymentsDeploymentIdVariablesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *UpdateAppVariablesResult
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON429 the response for an HTTP 429 `application/json` response
+	JSON429 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) GetJSON200() *UpdateAppVariablesResult {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON429 returns the response for an HTTP 429 `application/json` response
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) GetJSON429() *ErrorResponse {
+	return r.JSON429
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PatchV1DeploymentsDeploymentIdVariablesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PostV1DeploymentsDeploymentIdVariablesResolveResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ResolvedAppVariables
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON429 the response for an HTTP 429 `application/json` response
+	JSON429 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) GetJSON200() *ResolvedAppVariables {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON429 returns the response for an HTTP 429 `application/json` response
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) GetJSON429() *ErrorResponse {
+	return r.JSON429
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostV1DeploymentsDeploymentIdVariablesResolveResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -29649,6 +31577,297 @@ func (r GetV1UsageProjectedResponse) ContentType() string {
 	return ""
 }
 
+type GetV1VcsBranchesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *VcsBranches
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON429 the response for an HTTP 429 `application/json` response
+	JSON429 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetV1VcsBranchesResponse) GetJSON200() *VcsBranches {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetV1VcsBranchesResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetV1VcsBranchesResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetV1VcsBranchesResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetV1VcsBranchesResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r GetV1VcsBranchesResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r GetV1VcsBranchesResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON429 returns the response for an HTTP 429 `application/json` response
+func (r GetV1VcsBranchesResponse) GetJSON429() *ErrorResponse {
+	return r.JSON429
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetV1VcsBranchesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetV1VcsBranchesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetV1VcsBranchesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetV1VcsBranchesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetV1VcsBranchesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetV1VcsConnectionsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *VcsConnections
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON429 the response for an HTTP 429 `application/json` response
+	JSON429 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetV1VcsConnectionsResponse) GetJSON200() *VcsConnections {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetV1VcsConnectionsResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetV1VcsConnectionsResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetV1VcsConnectionsResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetV1VcsConnectionsResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r GetV1VcsConnectionsResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r GetV1VcsConnectionsResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON429 returns the response for an HTTP 429 `application/json` response
+func (r GetV1VcsConnectionsResponse) GetJSON429() *ErrorResponse {
+	return r.JSON429
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetV1VcsConnectionsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetV1VcsConnectionsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetV1VcsConnectionsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetV1VcsConnectionsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetV1VcsConnectionsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetV1VcsReposResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *VcsRepositories
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *ErrorResponse
+	// JSON401 the response for an HTTP 401 `application/json` response
+	JSON401 *ErrorResponse
+	// JSON403 the response for an HTTP 403 `application/json` response
+	JSON403 *ErrorResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *ErrorResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *ErrorResponse
+	// JSON412 the response for an HTTP 412 `application/json` response
+	JSON412 *ErrorResponse
+	// JSON429 the response for an HTTP 429 `application/json` response
+	JSON429 *ErrorResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetV1VcsReposResponse) GetJSON200() *VcsRepositories {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r GetV1VcsReposResponse) GetJSON400() *ErrorResponse {
+	return r.JSON400
+}
+
+// GetJSON401 returns the response for an HTTP 401 `application/json` response
+func (r GetV1VcsReposResponse) GetJSON401() *ErrorResponse {
+	return r.JSON401
+}
+
+// GetJSON403 returns the response for an HTTP 403 `application/json` response
+func (r GetV1VcsReposResponse) GetJSON403() *ErrorResponse {
+	return r.JSON403
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetV1VcsReposResponse) GetJSON404() *ErrorResponse {
+	return r.JSON404
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r GetV1VcsReposResponse) GetJSON409() *ErrorResponse {
+	return r.JSON409
+}
+
+// GetJSON412 returns the response for an HTTP 412 `application/json` response
+func (r GetV1VcsReposResponse) GetJSON412() *ErrorResponse {
+	return r.JSON412
+}
+
+// GetJSON429 returns the response for an HTTP 429 `application/json` response
+func (r GetV1VcsReposResponse) GetJSON429() *ErrorResponse {
+	return r.JSON429
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetV1VcsReposResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetV1VcsReposResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetV1VcsReposResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetV1VcsReposResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetV1VcsReposResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetV1WalletResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -30143,7 +32362,7 @@ func (c *ClientWithResponses) PostV1CustomDomainsDomainIdVerifyWithResponse(ctx 
 
 // GetV1DeploymentsWithResponse List deployments
 //
-// Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the shared, no-cluster deploy path). Passing more than one is an error.
+// Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the managed, no-cluster deploy path). Passing more than one is an error.
 //
 // Returns a wrapper object for the known response body format(s).
 //
@@ -30158,7 +32377,7 @@ func (c *ClientWithResponses) GetV1DeploymentsWithResponse(ctx context.Context, 
 
 // PostV1DeploymentsWithBodyWithResponse Create a deployment
 //
-// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
+// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto Ownkube Compute. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
 //
 // Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
 //
@@ -30173,7 +32392,7 @@ func (c *ClientWithResponses) PostV1DeploymentsWithBodyWithResponse(ctx context.
 
 // PostV1DeploymentsWithResponse Create a deployment
 //
-// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
+// Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto Ownkube Compute. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.
 //
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 //
@@ -30844,7 +33063,7 @@ func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdPromoteWithResponse(c
 
 // PostV1DeploymentsDeploymentIdRebuildWithResponse Rebuild a deployment from source
 //
-// Rebuilds an in-cluster deployment from the current head of its tracked branch — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.
+// Rebuilds an in-cluster deployment from the current head of its tracked branch (or a pinned `commit`) — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.
 //
 // Returns a wrapper object for the known response body format(s).
 //
@@ -30973,6 +33192,51 @@ func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdRevisionsRevisionIdRo
 		return nil, err
 	}
 	return ParsePostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse(rsp)
+}
+
+// DeleteV1DeploymentsDeploymentIdSourceWithResponse Disconnect an app's repository
+//
+// Disconnects the app's repository: pushes stop deploying and the app goes back to deploying from uploaded source. The running version keeps serving; nothing is rebuilt.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with DELETE /v1/deployments/{deploymentId}/source (the `DeleteV1DeploymentsDeploymentIdSource` operationId).
+func (c *ClientWithResponses) DeleteV1DeploymentsDeploymentIdSourceWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*DeleteV1DeploymentsDeploymentIdSourceResponse, error) {
+	rsp, err := c.DeleteV1DeploymentsDeploymentIdSource(ctx, deploymentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteV1DeploymentsDeploymentIdSourceResponse(rsp)
+}
+
+// PutV1DeploymentsDeploymentIdSourceWithBodyWithResponse Connect or switch an app's repository
+//
+// Connects a repository and branch to an existing web app, worker or job, or switches its repository or branch, then builds and deploys it. Settings, secrets, linked databases, address and resources are kept; the running version keeps serving until the new build is live. Later pushes to the branch deploy automatically.
+//
+// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with PUT /v1/deployments/{deploymentId}/source (the `PutV1DeploymentsDeploymentIdSource` operationId).
+func (c *ClientWithResponses) PutV1DeploymentsDeploymentIdSourceWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutV1DeploymentsDeploymentIdSourceResponse, error) {
+	rsp, err := c.PutV1DeploymentsDeploymentIdSourceWithBody(ctx, deploymentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutV1DeploymentsDeploymentIdSourceResponse(rsp)
+}
+
+// PutV1DeploymentsDeploymentIdSourceWithResponse Connect or switch an app's repository
+//
+// Connects a repository and branch to an existing web app, worker or job, or switches its repository or branch, then builds and deploys it. Settings, secrets, linked databases, address and resources are kept; the running version keeps serving until the new build is live. Later pushes to the branch deploy automatically.
+//
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with PUT /v1/deployments/{deploymentId}/source (the `PutV1DeploymentsDeploymentIdSource` operationId).
+func (c *ClientWithResponses) PutV1DeploymentsDeploymentIdSourceWithResponse(ctx context.Context, deploymentId string, body PutV1DeploymentsDeploymentIdSourceJSONRequestBody, reqEditors ...RequestEditorFn) (*PutV1DeploymentsDeploymentIdSourceResponse, error) {
+	rsp, err := c.PutV1DeploymentsDeploymentIdSource(ctx, deploymentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutV1DeploymentsDeploymentIdSourceResponse(rsp)
 }
 
 // GetV1DeploymentsDeploymentIdSshTargetWithResponse Resolve where to SSH for a deployment
@@ -31151,6 +33415,66 @@ func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdUpWithResponse(ctx co
 		return nil, err
 	}
 	return ParsePostV1DeploymentsDeploymentIdUpResponse(rsp)
+}
+
+// GetV1DeploymentsDeploymentIdVariablesWithResponse List an app's variables
+//
+// Returns the app's effective variables: the environment's shared ones with the app's own on top. Secret values are always empty.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with GET /v1/deployments/{deploymentId}/variables (the `GetV1DeploymentsDeploymentIdVariables` operationId).
+func (c *ClientWithResponses) GetV1DeploymentsDeploymentIdVariablesWithResponse(ctx context.Context, deploymentId string, reqEditors ...RequestEditorFn) (*GetV1DeploymentsDeploymentIdVariablesResponse, error) {
+	rsp, err := c.GetV1DeploymentsDeploymentIdVariables(ctx, deploymentId, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetV1DeploymentsDeploymentIdVariablesResponse(rsp)
+}
+
+// PatchV1DeploymentsDeploymentIdVariablesWithBodyWithResponse Set or remove an app's variables
+//
+// Adds, changes and removes the app's own variables in one save, which rolls out as one revision. Untouched variables, secrets included, keep their values. Sending only values that already match changes nothing.
+//
+// Takes any type of body and a specified content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with PATCH /v1/deployments/{deploymentId}/variables (the `PatchV1DeploymentsDeploymentIdVariables` operationId).
+func (c *ClientWithResponses) PatchV1DeploymentsDeploymentIdVariablesWithBodyWithResponse(ctx context.Context, deploymentId string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdVariablesResponse, error) {
+	rsp, err := c.PatchV1DeploymentsDeploymentIdVariablesWithBody(ctx, deploymentId, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchV1DeploymentsDeploymentIdVariablesResponse(rsp)
+}
+
+// PatchV1DeploymentsDeploymentIdVariablesWithResponse Set or remove an app's variables
+//
+// Adds, changes and removes the app's own variables in one save, which rolls out as one revision. Untouched variables, secrets included, keep their values. Sending only values that already match changes nothing.
+//
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+//
+// Corresponds with PATCH /v1/deployments/{deploymentId}/variables (the `PatchV1DeploymentsDeploymentIdVariables` operationId).
+func (c *ClientWithResponses) PatchV1DeploymentsDeploymentIdVariablesWithResponse(ctx context.Context, deploymentId string, body PatchV1DeploymentsDeploymentIdVariablesJSONRequestBody, reqEditors ...RequestEditorFn) (*PatchV1DeploymentsDeploymentIdVariablesResponse, error) {
+	rsp, err := c.PatchV1DeploymentsDeploymentIdVariables(ctx, deploymentId, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePatchV1DeploymentsDeploymentIdVariablesResponse(rsp)
+}
+
+// PostV1DeploymentsDeploymentIdVariablesResolveWithResponse Resolve an app's variables for a local command
+//
+// Returns the app's full effective variables WITH secret values, for injecting into a local process (`okctl run`, `okctl shell`). Every call is audit-logged. Never print or store the result.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with POST /v1/deployments/{deploymentId}/variables/resolve (the `PostV1DeploymentsDeploymentIdVariablesResolve` operationId).
+func (c *ClientWithResponses) PostV1DeploymentsDeploymentIdVariablesResolveWithResponse(ctx context.Context, deploymentId string, params *PostV1DeploymentsDeploymentIdVariablesResolveParams, reqEditors ...RequestEditorFn) (*PostV1DeploymentsDeploymentIdVariablesResolveResponse, error) {
+	rsp, err := c.PostV1DeploymentsDeploymentIdVariablesResolve(ctx, deploymentId, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostV1DeploymentsDeploymentIdVariablesResolveResponse(rsp)
 }
 
 // GetV1EnvironmentsWithResponse List environments in the current organization
@@ -31570,7 +33894,7 @@ func (c *ClientWithResponses) PostV1PromoRedeemWithResponse(ctx context.Context,
 
 // GetV1RegionsWithResponse List Ownkube Compute regions
 //
-// Lists the regions available for deploying on Ownkube Compute (the shared, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
+// Lists the regions available for deploying on Ownkube Compute (the managed, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.
 //
 // Returns a wrapper object for the known response body format(s).
 //
@@ -31847,6 +34171,51 @@ func (c *ClientWithResponses) GetV1UsageProjectedWithResponse(ctx context.Contex
 		return nil, err
 	}
 	return ParseGetV1UsageProjectedResponse(rsp)
+}
+
+// GetV1VcsBranchesWithResponse List a repository's branches
+//
+// Lists a repository's branches, most recently committed first, through the connected account that can see it.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with GET /v1/vcs/branches (the `GetV1VcsBranches` operationId).
+func (c *ClientWithResponses) GetV1VcsBranchesWithResponse(ctx context.Context, params *GetV1VcsBranchesParams, reqEditors ...RequestEditorFn) (*GetV1VcsBranchesResponse, error) {
+	rsp, err := c.GetV1VcsBranches(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetV1VcsBranchesResponse(rsp)
+}
+
+// GetV1VcsConnectionsWithResponse List connected version control accounts
+//
+// Lists the GitHub and GitLab accounts connected to the organization. Connecting a new account happens in the dashboard at `connectUrl`.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with GET /v1/vcs/connections (the `GetV1VcsConnections` operationId).
+func (c *ClientWithResponses) GetV1VcsConnectionsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetV1VcsConnectionsResponse, error) {
+	rsp, err := c.GetV1VcsConnections(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetV1VcsConnectionsResponse(rsp)
+}
+
+// GetV1VcsReposWithResponse List repositories the connected accounts can see
+//
+// Lists repositories visible to the organization's connected GitHub and GitLab accounts, optionally for one connection.
+//
+// Returns a wrapper object for the known response body format(s).
+//
+// Corresponds with GET /v1/vcs/repos (the `GetV1VcsRepos` operationId).
+func (c *ClientWithResponses) GetV1VcsReposWithResponse(ctx context.Context, params *GetV1VcsReposParams, reqEditors ...RequestEditorFn) (*GetV1VcsReposResponse, error) {
+	rsp, err := c.GetV1VcsRepos(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetV1VcsReposResponse(rsp)
 }
 
 // GetV1WalletWithResponse Get the prepaid wallet balance
@@ -36948,6 +39317,170 @@ func ParsePostV1DeploymentsDeploymentIdRevisionsRevisionIdRollbackResponse(rsp *
 	return response, nil
 }
 
+// ParseDeleteV1DeploymentsDeploymentIdSourceResponse parses an HTTP response from a DeleteV1DeploymentsDeploymentIdSourceWithResponse call
+func ParseDeleteV1DeploymentsDeploymentIdSourceResponse(rsp *http.Response) (*DeleteV1DeploymentsDeploymentIdSourceResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteV1DeploymentsDeploymentIdSourceResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ClearDeploymentSourceResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON429 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePutV1DeploymentsDeploymentIdSourceResponse parses an HTTP response from a PutV1DeploymentsDeploymentIdSourceWithResponse call
+func ParsePutV1DeploymentsDeploymentIdSourceResponse(rsp *http.Response) (*PutV1DeploymentsDeploymentIdSourceResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PutV1DeploymentsDeploymentIdSourceResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SetDeploymentSourceResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON429 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetV1DeploymentsDeploymentIdSshTargetResponse parses an HTTP response from a GetV1DeploymentsDeploymentIdSshTargetWithResponse call
 func ParseGetV1DeploymentsDeploymentIdSshTargetResponse(rsp *http.Response) (*GetV1DeploymentsDeploymentIdSshTargetResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -37702,6 +40235,252 @@ func ParsePostV1DeploymentsDeploymentIdUpResponse(rsp *http.Response) (*PostV1De
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest UpResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON429 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetV1DeploymentsDeploymentIdVariablesResponse parses an HTTP response from a GetV1DeploymentsDeploymentIdVariablesWithResponse call
+func ParseGetV1DeploymentsDeploymentIdVariablesResponse(rsp *http.Response) (*GetV1DeploymentsDeploymentIdVariablesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetV1DeploymentsDeploymentIdVariablesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest AppVariables
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON429 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePatchV1DeploymentsDeploymentIdVariablesResponse parses an HTTP response from a PatchV1DeploymentsDeploymentIdVariablesWithResponse call
+func ParsePatchV1DeploymentsDeploymentIdVariablesResponse(rsp *http.Response) (*PatchV1DeploymentsDeploymentIdVariablesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PatchV1DeploymentsDeploymentIdVariablesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest UpdateAppVariablesResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON429 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostV1DeploymentsDeploymentIdVariablesResolveResponse parses an HTTP response from a PostV1DeploymentsDeploymentIdVariablesResolveWithResponse call
+func ParsePostV1DeploymentsDeploymentIdVariablesResolveResponse(rsp *http.Response) (*PostV1DeploymentsDeploymentIdVariablesResolveResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostV1DeploymentsDeploymentIdVariablesResolveResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ResolvedAppVariables
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -40671,6 +43450,252 @@ func ParseGetV1UsageProjectedResponse(rsp *http.Response) (*GetV1UsageProjectedR
 	return response, nil
 }
 
+// ParseGetV1VcsBranchesResponse parses an HTTP response from a GetV1VcsBranchesWithResponse call
+func ParseGetV1VcsBranchesResponse(rsp *http.Response) (*GetV1VcsBranchesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetV1VcsBranchesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest VcsBranches
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON429 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetV1VcsConnectionsResponse parses an HTTP response from a GetV1VcsConnectionsWithResponse call
+func ParseGetV1VcsConnectionsResponse(rsp *http.Response) (*GetV1VcsConnectionsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetV1VcsConnectionsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest VcsConnections
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON429 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetV1VcsReposResponse parses an HTTP response from a GetV1VcsReposWithResponse call
+func ParseGetV1VcsReposResponse(rsp *http.Response) (*GetV1VcsReposResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetV1VcsReposResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest VcsRepositories
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 401:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON401 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 403:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON403 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 412:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON412 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 429:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON429 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetV1WalletResponse parses an HTTP response from a GetV1WalletWithResponse call
 func ParseGetV1WalletResponse(rsp *http.Response) (*GetV1WalletResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -40758,522 +43783,597 @@ func ParseGetV1WalletResponse(rsp *http.Response) (*GetV1WalletResponse, error) 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"7L3rchw3li76Kog6EyFyT/Gm29hU7NhBkbKlbsnikFT3OdPWuFCZq6ogIoFsAMli2aGI+bv/zyPsOA/W",
-	"T7IDt7wiL0VSst3O/tEWKzNxx7qvb/0yiXiScgZMycnxLxMZrSDB5p8ncXwpV3+GzQXIjCr9E6b0/WJy",
-	"/LdfJv8iYDE5nvw/B8XnB+7bA/vV5PP0l0kqeApCETAtRgKwglj/MwYZCZIqwtnkePIdphLQegUMqRWg",
-	"a9igNZYIUwE43iABSyIVCIiR4mjDs/3JdKI2KUyOJ3POKWA2+fx5OhHw94wI3cHf8r4+5m/y+SeI1OTz",
-	"x8/TyQkFob4jgrClHk11mFg/vMgovDFDZRmleE5hcqxEBnlzUpmvP08nMaSUbxJgauAHwGJ5YheUbdyC",
-	"1l/6ZbLgIsFqcjyJsYI9RRKYTAOvVXv7/HFaW9u/+lU100ICJKc3EL9A+kO0XhEKSCpCKVqY9djXIyRm",
-	"Io2BJ6AEifQjYFliljnNJvr3hIvNRO+AVFgoWVr24msulpiRn7Ee2JtwByKj8ANOIPhQwg0Iojbl/tdY",
-	"MP14OokEUSTCNNi1HdWvteamd4jLCywVVpksz8Q+tGtodig8kSxJsNgMOmY3mGYw4M3azSHxpLFX08ql",
-	"qB350rblR6S0W/lki9H7sZU2Jr8VzQtbua5viVQXIFPOJDSvrl1E80+iIDH/6CJVZTrwOe8YC4E3jXXx",
-	"bbcOUK9Oc0i6Vyyw4qK820s9Y6qCe1ynJwH6oXez/CynglN9hM8yYTbuEiLOYll6j2XJHMQXu+Gs7eoO",
-	"uPr3uN1qJUCuOA1wlnMQETCFdqI0O7CT2EVcIIHXKOKZfuJntLsfuOuTNWExX5dWsuUy+ZUddJlq14fV",
-	"rk7pyJQnF9zb+ggrF88flM4j232j9NXe8j6Ze9B3m2y7wYHdYGJW+DSTiidnPMGEnWMBzJLvOCZ6ATA9",
-	"rwy0RpOn9WsIou066UeXOT0OnAAaR1jEdiCBV+qSh+2p8WGlo+DE1/IkMocyIJNEitzAKc20HFTdj9o8",
-	"7SutTDR470OHttxQaLTV3Z1OcD76N4F7ePR4LyZLotDJXy8Rtu+hN2eIswgMp5QKR9dIQMqFksgsVy+D",
-	"iyjP4u8My9Y3QrdQ7GP/11ZCfBihQAuVC0xoJqD3jqzlKWcMIj3o79w3+c5Ul+39ml1nc8hXTPC1XrWd",
-	"lNvJ7YZIFsVS/QUEWZCHml1A5NHUHiCWH9KlwDGEeZEW3DkLk/t8o6ozToHFhC3RzhoTpf/BWXE+dtEB",
-	"ijhbkGUmzEup4DdEEq65hF4kkFK/c+Nmjw6Q3hSIQ8uUpfFD7n/oDlXuREkOcuvSdYJryzutU4DiuHWT",
-	"km7q7s7VFgS+oFF9FD5vu2WA7hL0Di5ETs45pej7V1fo4OboAK/lge/s4Jf8q89owQXK17wpRd0qEAzT",
-	"Fq7w94xE16eGRnwQNHA1U2CIMITRXPC1BIEwi1FESXSN7GeOpu2sMIv5YoESHocvbMc1UZCkFKstiMqV",
-	"/6JlP8xJLM29dBprUy713r2FV6VBVhfpzAg6SK2IdKux4ZmQQBdoTdTKcINIQFzo+oSZVxCwGyI4S4zw",
-	"hjPFGU94Ju0i7qNzLHACCgS6ho1ECVbRytAJP2QEtzhSdKOFuuqxSv2nAe55iimd4+j6il8Dy/sI7ox/",
-	"9YOg3S++yte6+70rkUl1Ijq7rW1p85Nwdy2jnbbNN7TdZvtaxQq/7O6qdA+7aKr64bS8N91HrsQ6G4fu",
-	"UoksUpnQGrd9B/0rEpBATAyZtYYmSxgQkWhmecQsIHLUVbk40N0FXqPTCh33bev37dlPcCrRQvBkEtT3",
-	"Ss390jAlYIVWOE2BQWxIzFr/ojiKOWJwq4It8kgGiZY/HGgFNEWUsOupXQ0BFG4wU0PErmvCAiT5NV/r",
-	"UQmI+A2IYzQToMRmhnaUwEwSYOpAryZemiWaIgF7hk1vjDoGexRnzN1hiRPP8Kdo9veMKzxDOwtyizAz",
-	"JIOShCj9Kiua0a9q2YCSSM3QjpeYIopJAjECKmG9AgFTlElAGMVksQCtVHjhyuh/XvM0gzckkStsVDLb",
-	"clj/JIqGzuGKC4VSiglDK8AxJSwgOdS1B264vVlj33L1iBTb23JFLrQq2M1at+Z93YOusJPaxy2DvMyM",
-	"tNY+RGlfCAmWdXLi3mzpyYjCm461EMLaZnoP/sMM6WVGaHwilvIljzfN4cz94y5lN8G3b4Et1Wpy/PTw",
-	"2+d9RMX2ibBYZpqhSoQlwppzHhg7nCZPJeOHH2ptTsXAOmdVeAvuMK+mRSm8J0W/Pcay2hxqhpcBUzrl",
-	"TMGtCu9VZB+eY70RDb7AuUIxERApLjZGGNXEzfSpyR/FWqDXNFP/rDVfJDhX++hVkqoNsjNAEQUsJCJK",
-	"b1Bp258dPe4nJcXo+ubXtmu1GW7tC9lqOwYN+C1vP2OUL2V/r+at1vZBXJKfoeNu2hea+33lNxcEkuRn",
-	"QKkACarMVWSCKbWKIIux0HOmWCwhwFVCl8/13DP0zgtYDP4OY3qI29Yxh1McraCQ78oU+45GvxgUJlRu",
-	"1UIvxZEQCVAtknBjBewAKl+1zv0KKCRG8LjPgBsX2K1n+OsozYK/r4i6cCpd45lzBgQHA2rNxXXwGU/l",
-	"OYhLiIJPrRn7LZ7DAIGj/HJ4OVkE1BlL2lm/s3G2eSTabMJ1Opu3kn/TPqY/8flFxlrJrXkn7Nqp9+pf",
-	"Dfa1wmwJl9k8NrbnMDWT/nGYljFYIxzHAqREVK+0ZlVGnN7vlWKLpgeMrnUxzGstbq6CtvSZRt6SBUSb",
-	"iMJZ/onrUR9zLhUbdJX9aErfVEYRnihE173zxN7hEZ5plAnv+6htkshKQRN2i4g0f3DmFM9igLmFZcVp",
-	"LEMRFJ2roW+9lHjZ4povH6XudSxmW0ytsqa+n2nvKYLommfqg6DtNzwLacEvncEuci2gDxdv95E16BnV",
-	"Wp8iCgpQis3avbDOfKdSWsOxLHwX7i0kQSkKsv96ZC16kSNYbe6f4gCfei9Rw69rLModjhh9sx1PgBiZ",
-	"t/OJmRPjqBkSGZOIsP1hjhjzzZX5/Zev4Gpp8V4TthBYevOPs52fdF+v62wOgoECrShKZ4PpnXHrLUkp",
-	"VnoWwzo3/ou4xSBYmIX7NdN296V99K64vL2NPbBjRDfYvxYh94kjCPkiVQ9aN7O1L3Z7P6KQO7WLlfj7",
-	"2ef6yBvuGJr187QPruWIlz1e54IvhTNINOSpBzwSob3pWnuepJmCl/w2sORpdkqxDDj+5AoLiI8RRguB",
-	"jcCK+MKQ15vT8w+asWl1StxAPEXzTEglveq8yChFc367j1IQ5kyyCI7RCtNtv48hJpE++8eVB+WPK+qc",
-	"GbI+oUW/RihwrQRVqJCb96XuI56iFEsJMcISzeR19iae7Yf9u2EZ2Qvm35OXQdaQcKZWdPNBxsHHN04V",
-	"GBDQYkfgPil3W+lkWux29zE5xQpTvgyJw9EqoGkbZUlvDMh99OoGxAaZNxFnyHvMXevIeFG1PHSs2TOa",
-	"zQmlhC3f8RiO0Y8Tv60/TmbGuO7WXR8NbLfe7Pgw6lCc+0B8RIwVnmMZcpK5J9UZ+fd/F5O6VFzgJXw/",
-	"f6e3352wlllK+y5KBYlAX1n0/UvzH3N0pkhPBmLj9+eppwH6ek6mzUO7hnnINWsV5/zS2pU1Jrg1zA+0",
-	"hgqiJBvLffQObIDxDuP67V0vScewwBlVD7JedSUW5pPSuZi64961quF75Iz9WlrQDC8QxGWedYYN2UY+",
-	"dInLcgWUIi7I0oqFDfKjhfg/wyZA3M8JYxCjy8vXSL+E0mxOSWR9t3pXZteMr9lP+pmcVda66WypHcF2",
-	"aljIT7XB2M7tY6SFjOBspFy95lKFOahcnXOh+sll7lv3JNO3WrQxLS9+aRH7g66CfcmuQ3IJUlrTWlAT",
-	"hduUCHBx0jXPYcqjFZI2yhDhhVYR1ivive4kugal7wzjiHK2BIFuMLV0pnFpU8EVj3jgqP2VCE0Y7GN/",
-	"9xUWS1Box18LTfnopuKuS7lUWhQKclwBFG+CJ/vKGN4p3iBgccqJ0YEAnb59g2KCqQyfC7uGIeXqfYr/",
-	"nuX6FXJvosoylN2GetECfkPClhT2MglTJFdcqD1KNBGz7++jc03WmHK6qsrnoDjiqbMGqIwxoC/0OxFm",
-	"jCs0169lEuIB1pt8hvkgS6s4LR2T0l52nDrC2Zk1hP6xbLr57N+wBW/etgESgSZOwYPfq8StHOmqO+ml",
-	"QjhNtWZfuNrLsTaZBOvGx9EKEbWPftBCcMYUoYioRxKJjDGTxTBgEFqeXXMxLCsmxfp0hiIgQK1AICfk",
-	"oBWWyL5rGTRWWIsUgHak4mmq5Xv9G7qGVO3uoxP/cvEijiJIlaFVJfN4PkktNmQJtNjIUkf3e+LApxPL",
-	"416XTGrVeb1hyhgekLd9uVAMxxttNKMmqXyYEcZ+d77d8C4AW9NweM2NdcuOJ6eQRLoFNO7J0vptrLMr",
-	"sGSmhQ+CBET5/Hvv8DQnT4/cxMuYERC/UjtXby9377lMAiTPRATeWOVZSEMOC7GSbNgctEjTdcsGDTST",
-	"IMIn54N7chfK0JAZSqvhqIY74xXRNB9M6VLb5Wgc9MpJLG9+9czlFz5MOtNNYe0Muy8Yt+6pklP88eFh",
-	"iM8a+eG009dj33lVbNEQ/2boo2Z3wfkZg+iX8k8FLDwP48Eyo664UQpuPig1tPjWGBADmZm2j9KatkVe",
-	"UBu0U70ZJ5HJ9jFP99GZ1d2MoWc2pxnMyjIjNpRwOlkKAC2hz21GWpqJ1DgnRIsBpzNcL1c99emshWyE",
-	"T2f4ip8RmWqZzmsncIsTPazjyaXCS5sTVY4GOZxOEsL8n0fToOFQr/KbcJaBplrujX30PrGipZEFVoDK",
-	"+UuPpFeJ8/eDQjLNls2O3vI1iAgbwdbkXNkoYIwoKAXihfuvnCLLp+QUrTbpCpilb9WFkKGFeNJYiBTr",
-	"JnXv//k3vPfzR/1/h3vf7n38H//SKwg7emYm034hzu06jAe1uj/n1ismtz6pX+HspMGxffXDExP1ElNj",
-	"Nm7Ol9wAWmNKQaG5fWmKuLBp22ThL6YRhxln4MWv3nAQLdvGbUZguF1hzQtavO5LgZlq/5rfgIgFXqig",
-	"BfA1X6MFFmgOlK/RzyCs8uomhxK80coFmsNCC+lrLq4px7ET9q0L1nWwZggnxmVJZNleaKIWbk3MLUOE",
-	"3XASwT46LJzk5kGEhSBgxH/dHl5C0EohIMFEE8bwbGu7XVqZaWWVaw3VFqm84u2HpM9XNC8OUadtsnLi",
-	"qonEYfm/bnjewSxGRN89czCNlTR36KMVCAhrAIqnH9J3+DZ4Lt5qgUlqjpPuZWmxT5hSvpZIkOVKIcbX",
-	"Uy1Of7g8QzvneIOwRBueoSVHEU4lMvqqa0EP0phFuNUYnxyiGG/krlNmE8DMKn827LVXVbKjJyw4+neE",
-	"kSRLUGSyVf2N9SMxp9QPPHDM6oHUbkOm+ZZWe6+uZPDA2JCKD1rw60qtqqeTNia94pmgm1Muw5fZ9YPm",
-	"mWBIYAX57qQgkP54inAkuJQIbkBs1MoZDZpuqbLTKkADE2eZt++hne/Jy91gQxZmQZRnVVfUNMngC2Sn",
-	"jxYUqz3jhojRpf3Yhz/IYA/eRdYxSutsZFp26t/ugP+suuyBtL/6LMOHoMic1nrZGZOhM5DA6UofV7Zs",
-	"B93Qb50BBZu2cWV0m7C1nWeKsOUFRFzErc1V3qqr4CeT6eT0h5N3r8JmXPtpMYTtNN3mdFsmF5pKaOD1",
-	"EYU2whvyfkuRnbl3yQUCN18g8voh4z5NApB16X+1AFC9qwpyOII2h8fDZHTYzsJ68Zfrr6Qjf50OnZ7z",
-	"5TvT6/hdxsyJadOqQpl4P8AaEUYJA2StWoUqa6M3TYQeYctCJShrPc+eHx72ayc2/zzsS1q4QbskdeNw",
-	"T9NQEioW0YooMHFqti2jARrfXvL8aUn7u/3m+U/mB/vgYxBP6qbDtev1tj6tyzgzwmJ/jiQ0SOOxbw/B",
-	"jFhhFlMb/VbaiKPH3/TuAuXLC1DAjG8Je5ezW8Ojp2ZjtVg2OX7y/NkT05z9s2iMMAXLsgjybl5p5fGz",
-	"56Vmjg4fPz0st6MH2WxJZMzEwVVn9Pxpv9KbzaUSLuLe7z3FyTzG+jAY8SGce5gAz1QJoCafgFFn/fi/",
-	"PTzsWwUlyHIZTIuOhDUh1CLUWJq1uMejFcQODaln3nr8P3M24HTljYZO1kqpNCDiZGrlhYzihmltuXTB",
-	"3J8EJ8EFjnhoRYxu8hpwXA8f7I1XMF++A7Xi8V2+fG/CL7b8MsG3J0t/KO0J+Ob508qJOGyeiM+hjMAh",
-	"v1RxfpgLDPWXvXTQQju5IBTCpqZLQ9ORfwHtxCWzmdb3XDg5AqbExjirdms0fghp8X6F1pgiG3851HDW",
-	"TMrT7KOd8fmUhtp5S9PTnPE0RCecKW6/flVo9C3icYmsF59d4eUFLOF2GHBO2Svx9WF2Ymtx9CrGALTF",
-	"mlOn94slUatsfgEpl0TxgWh7LfG67YHiDffwANflkkglNgOn0ebptHFnNghuMp184i1haF6aaUNUfLiI",
-	"cw8C8YZJhVkEISfFJShvx6vmtRCJUiysXo8SLK5BpRRHoEWvY2t8QCmByGbFlF+wjSB3QpEJ5zWptugc",
-	"S+nia2Ij+/5U+u4nnKY2RiLhN9ZDsl5xajoc5Nn1070MGrq1IFmbRmPOkaZ/C8GTKYL95T6asW/YbJhX",
-	"+aGD+/U5WlC+Ps8ovYC/ZyB9FOEdosqdBFn2R0LNvVq6BNO6+7oAmqwcwcZl66a+Jz79NJytNVLikRL/",
-	"01LiPyJ56KYG3SlEpRjywVlElSCI7pDecvM9w7SwCG0YJ0wJsgWO51u+fKWF6N4B+oa7B/d+LkHc4Dmh",
-	"DuD1oUygbcnrWLqzdoYVDts0NANm0eYhDZ2i6PM1YWrLzL2HM4g2FqA5tO796vM3rgBTCwhyL2pU9zlu",
-	"cq8dz5RDbkQ7Cy6Q89wj7H81ZjXEBcIoEliuTPwKj3cdrHnGKEiJZrbLWRnlax+dVBuJMLPB0fokxzaq",
-	"QIDcsGiQQKVfDE43EzSPruyTAGqb6dbXNd4h1+R9dO/nF3E/tNy9O96d9Ntnb+2NfCe7Lpc8B/GOsK/h",
-	"QZBK8M1vC0Pilcn39Kk+LDCcZSgfKlNznrEYKYEXCxL5yFqT1rg0aGyEoe9fBn2eeX5NLZgjSzDrzaFp",
-	"S8GxMzA5j1Z/weme5Jla7R2Fcx6zoA+aS2WTRLDycxvua2+k5iznE9tRcOXZzV+weONNnmETe1ORu8GC",
-	"mNgIa7Eykz07uTp5eXL56qcPF293q3FJ5UeT6XCTfS0kAYtrhCWyz5G01jEL9UUkYlon1vQuE8wGzgjA",
-	"sdxHr6IVRxhJfKO1YfvxHEfXLtKKITDIVDPTkkknvAZwARsCbgjPpO0lHASSexE6lsl+jr7jwg1AHtvR",
-	"oTnF7NqPyrwmp3pq2P+24Zl51Q4ZC0FuQNaG7pq/dCDD5uCUnpgIFvTnV6/OLyuzopvqouzYb1yKYIql",
-	"VCvBs+UKSWCKMKC7SGAXQY+ZBfHSHRK1j644WgLL9Fsb+ySfwxTFgqdut9yK5FHwEoxlkwigmxclnxZR",
-	"U91t7MKf1hZxUMGt2h8ao9busSk5GTtiG38F1XMAFEYt/nGIejrAjfabcJy14V/IM+/lCI2mXQMuxwb3",
-	"SzzObPVrIGr3BVWWzmu34lbSG4erReXb0K8ZlToIDlUI3iVXBF3c73C0Igz2NKEz5MGgVyKHGto80h7b",
-	"MsC8620UuDs9YJ+mzakdYGhi3nXfU6rFvfVF9Oai8a4BWofStltQdvQ/ktWAA+OcQgbHkKlw+mi7f0s3",
-	"XLiucj9XCwYEW2ZBNcp5yfwLaOcHHsPBq8t36B//9d8I0zXeSDT7hG+w/WqmBaabo0o6bfE0bHEyXbzG",
-	"chVMhtJzRyssVz6B12TdxW6JpogsDEqwiG0u6nZ2IHfS81UsLUVlYF37/jDqUKN5C+32mkhvqawnVxOp",
-	"ZJsxQqpL59++IgONkOYjG0izyOjgz0RWu3ODV6CXLZX9/gPQdGUKLG4LNddc4T9cYMB2R8QtdGk4btKh",
-	"M9GODjda/kfL/2j5/8NZ/t8Sdl2Onw4HIK5a07o1FzcYJ4obgH3LdlGOZYgcDjRO4db6rFNT26oRjfik",
-	"b2FWXe7M+jQ6XBg5cGM3iia7hrjcYtNZ0Y7VqL8+8/n34RXN0/PbUAsLQCTh4J7KQQCxX++guATGehNA",
-	"NSkhH+Qat+Ja165m5ZUNMza9uxgPZjG6eHX25rL00AywX/8uT7p33VpRW/LJNUUEs2sDAnLdi/lKtQ2m",
-	"dgTuV4+to+hazPqRlgJJDn0Ypi0MQktSBk701eBaAF+ryNZQAzKpIdPmFK+00I1RN2ZuFz68+VKVV7zD",
-	"O5QnhNmifVsUl+qo/BdCfsoP9zCfZoCC9aiR+a1oTCm4RN5pGihLCjTervBBe0kb09YUXcMGYjQ3PjMi",
-	"LByGXEFsgYAD5RymEwo31pTvpRCvyhO24FocwSIsaHRB/+rDLBVO0h8CGVcfGLlFDDPugKOmtvKE/bqf",
-	"PJbbLgMD24lM/bqGNuNdEUF1kgZCg+c0E/MwWC1WsHQSZyAauFwte9C5K43k1D8NYukZbubxUTsLZOM0",
-	"RUQiSqTSZyAzIE+PDMaTbQXidjSWbc2i+hJ0Qce1A7BlQ2rHeO9LGyZyfZm6jJg2Mle2VFHirBbyJ733",
-	"6W8/To7QGuY/TqZI/zOe/zj5uCUOXThr/V0tkK/wePmIvRbryjBReTrJWE6bLgDLQXtaD6zXI89FbHsx",
-	"6iWH8ktRWefKffAnpTyDyqkODbb/6lrksOEQI7WLH6hCX82bq+7XX5wQKPN7tgQlje9FC3au9vz29953",
-	"GTTmszRTwbHQDKTFI6cUIuVT4+2avnCeK0MVDAIAFhYaFOK7DNL6NvtYohvstLKM4SL71Z3oKUSZpnei",
-	"qHaLewpR6rZ7DpqRgVqKvmCZp8fW8s1wYnyEC3JrTkc51nhn9mN2ePgk8l+bv2DP/ihgYf+e7VbVjJy4",
-	"x/soB7wokC1MCV39XyxXFp+sE1ljK/SK8jlsk1K6RNy6+62pcnxsiDXuhC9ylTg18DIRxVrSseNBOxJA",
-	"38J6CPZuSQYyr6LZNWxm4UJWvXvfUx+sjacojvTuVy4mYcvK3Zzx6y15Cb8eoLLx68nUD67vdOdyRyCA",
-	"0ZPXUPG60m+eb51bqM3Lf3+Ljv4tzMFIEvRMnHKmMGEgkHnBo6TZCyNd5Jb+MdeK5f7d6xHO1jCfTdHM",
-	"2tj0vz5x84PX22cGTmVmNPVZS/TKImyKMCN+JBGx4WIkl8qKcJZ01oL5qegAh7DuuVEE0C7r1G9Z757n",
-	"PCdEbS/s3EKWktbk/XZJz3L80CboGc2OiygGe8f5mjXtOftoZu6xf93UgbU/ydk+mi2BgcDKtIfRQoBc",
-	"+YCMNIdzLruxTOcTR9gm00neQH+9LbdCxXqUEHztXHuW36ZMd/kWM6bCGDkJZpsyODVagwCXbRIG1N0+",
-	"8XrqBtA7Cz2KPzhfNIfz8joLGSZzKHpNC3bMsdVa2U8WcNwRl919dOH2IITmXlXrWESzGGTZhtiXkV72",
-	"BVWH9//pK6Qvm0M88cVdTF6T0YQIU3wfXYKr/qIpog2Mm02RgQ3majVgDPG8ZYHK4PbhNcrp8R2XyX8/",
-	"YJQNN1S7Nbi6Qi9QkkllkKuYSeuf5SEzs+ZJdc9KUHk17M+eYf7TCmJboRDWV7WGQnhWAPP3LGdbEGr9",
-	"gAkflFo+pA5Ufbd2R/I7V78mWyT9fx5Ce7dPPWl7683XcI4uWpD47+MF7WXWtTqTzpBhZaiaI3BAImCb",
-	"YedOWavfC56lssIBS7mcPvX0ngmng8w7gdFOe/OLGuaBwPnKAw4fmCgFVvwaAljVZumKAOeMxSbslkhN",
-	"lRBhhQi5ZTEdfBsuo1Nc8dDTSg28yu8dX/G0xR51QilfQ+wCnp1zcSaBQmQit9KsWppkqGl2YGBqXuhn",
-	"cGRqLluFa6NFsOK0veCZ7zkUENQVZ6tqhMW1OfVLPM1f1u3oxeunKvqwFVK/cpBf/oXgbeFMra74GVbQ",
-	"wN+7q5u0DX/vewOtZ0rm7Cm+F2MFSL+MLDxmrm9ZPMKOrIjpBExSycvNRRufrKePpCZ9wCaOOPRNV8Yn",
-	"73ZBhFT6F6xslL19/5E0WIH76JRLRQlI/8B+MNhs2ciDCZxEO61WAMPGrMzqGbrhChH1Ltn3Q3Jtai22",
-	"ZNl4CMD5a561ADKmIAiPX1lbx0ME6NgGDfDhQzUZgGAMwDS6qkb5VLsLRbll21vp14OLp0gLQbmJ0qxt",
-	"QQNQjPbVxmaUtrt+qhqXpzG9aX6F3Tibi1TdifJGh4nMDVzxTsxpi0B/3i5qXxVKipUr9kzcch1lwrDS",
-	"AV7aWne9o24LZDEGjkE2EST4Wt+qG4jRTgP1A/2rwahNMMNLV/hDH6gDGzVkZSi+tAi32NRRQ0stp+22",
-	"VSsatI7VgCTG105d1ApM2NF3B6tNMZipW67Qar8vqUrdfpeyUjXcAVNu/zJLEjwgU7zaU9+ofasBKLKv",
-	"U0qW8iW/XyVYwWlLwpBTKO4eBulEejNG11FoQd11+yMkbnnrSnujD5wy1aIV3iVnyW1T90V1F3/4HfWb",
-	"33cv84Y7hgaxEW0113sAmTZRcUkq+13KOalfl1bx8lIJTJYrtWeyg/L3PT64ltJzc1u/vDlErmqRgsLb",
-	"XYx8Wt6PB5JRzgVPuILuuj0d9Sjy/CCP6p+aBokt8TSw4M9ZzfIViCgu2LXirg8Ic+ugyFPpIbQOFzDP",
-	"CI3b5J25wCwKw2gsibpc4RYt2YbfDKlQVHo3b3Pq+w2POAZIzP5tg7x75ffIZCI6L6hRBjGaHVC+JOx/",
-	"CVj8T+vm0e84P08esr2l4bSREtYzmY7IEwPRH8a4N/USEI5jiIviA7lPPywulmoxDAtYqldlaMQZVGqA",
-	"uNKbBu7SDo9ipm9KZVyGSCVtSCsnKJMg9hY4ImxpUtZBt+zJkYBFJjF1LTKuGrMtDqONVKgdBpGVvDVu",
-	"lGss7ULuIxvMSCTCvitrQ8fMZqIeIwmAZsJEiLkKxm4us3BIo8gj38KQMvqEmBGY/vLFqkytgINVPy20",
-	"Bm+yb6ipd2my1Awy6E+WMJoiHxSTxMbM3xKpCFv+hKO6V7XlyPLrlgO7DPrrQzXDGxAamdwDLFUbgkY4",
-	"W6WWCeyMMfUQ4l7ppn0yPWFfPhywuwRh3VPjrOcpVit9jhzuK92Y+qdtR2QZtrDaYdpiIhFmvm3FAz5I",
-	"Z6fHfp1mJJ5ZzAhsTdDed2qjtO0lMCK0vmi4zHAMLgXjZU/SYOuXOya9cW/54k47awNfuMSpUImIqCZP",
-	"lwtDmGfepfP1NYmOXI6vkZhhwmDbLNltqF7TXwU0IR9qvmud56D7yro0u23Q5PIDNqSCtWwHlLsw/q9L",
-	"ufozbNpkKhcmM8Co4t8M96TJWl8FyloWbAOcKAFFIuTeckQVvUpStTlYr4gCmeIILASMcf7tLDCl0uLX",
-	"OKc3SZJM5QBCDTjrfrzp8hjDM5Wgzl1Jz7ZFLdfx7VEv/JstfWnu2b51nrm2mwCLqmA2KIpT2hITlbcW",
-	"qmZuC3+bF1CeZILM/5eUDh4j7zXtZ4bF6Kt9ty0EF+At3a3VSYrl6DMQujdbOtuwqGPRNywaeGHcq+Fe",
-	"rKaxbdq8UZAuyzv1Zch1hNkFp1TfrS5Zw0CiOYB3LQ1IRSg18IDmpPm7uY/eM7pxyrtxYkW2GBahsTRx",
-	"+AJMrGtclGvXchWRtro0VUUJkqasYoGdqvS1DYwhd3d9IUsdYcsvuS294SkWqvFLDkH3kInh2TPtpsRk",
-	"aK69efM8k6svOzNKbuBLtu8tOf2lya1pJf5O8OSiYr7o/fTvGWRfOMM2j12+M1hr0Aa1HPaerYUB8cvN",
-	"BwlBo3xIF2xV7+7qVAjRdI/gcJGxuyM31IKzfBC7Xp9OqEt/Tvqk0VLO30Bh1DGqfmHUNx0cnmMmD2fj",
-	"FK7FYTVFGgO6BHWSY8mER9Vb7hNniu85BViueEZjzfp4UKVuqVz5MTw0C58p28Z10wazRaktyxAjYDd7",
-	"N1jkqXhqVSmpj3YEGAewVcS9SUa/vruPXpn4O6dq79kADRtG3GjHSAB5Fq2v4IXIFsEpJajQAShxPUvW",
-	"CWG3DXJd+5g8lw26FYrF6A+i0COqfJG33DLHdwapkmEWwR2PbFK0gBIeQ++57bCL5vfTIrqt+Jr5y1nu",
-	"JsVL2EdvlsygmhkbT0wknlOX075dQaDOi2NYU9eVjjudHBfgrVlasM3vhD75eaRWlmp9qlQpz8iRCBso",
-	"UZymL7wVV/NVLbM6BAJXxtnKut65pdeCqEcmYbYNiKUagT/QTvnqFkeqEl+BE9hH32FCpamGja+BFZOI",
-	"QZAbW/DFTFS//Zo0QHaeP+mvBuW+DOTkC4A9LXZYbF8HAGghfmtZAERApLjYOCUeXdJsaQxUxrgts8WC",
-	"3EKMdvYeT9Hekyn6x3/9/7ulWZUj4X/U+tSPk2EV2+/AhYwKM6j1lIvAqpxzofIsDQNQYAqwox1MJTdQ",
-	"uXrWEp2/v7gKJPmc8egaxIJQeCTRq//3/P3lqykCKsHF1yh70BYCJ6DFkyLHwr32zeE3h274trDZ82fP",
-	"njzrK31XifFpiYQPxGDqM4bRGuZmttiCcETow8Xb2sxEZt0ra5h3madbrfySZkvUSEpoLp+zS9fTJRCm",
-	"AnDsI6gkIqy0qinFypzjuEip6A3hrw5TL8FOvhESxA1I9Prq6nwX6VmbAH+0o6WbpTDMNxU8AikrnpdK",
-	"NsDHoKlUk6o2b+7MP54V2NbzDTp/f3mFDm6ODuz49+xbJpAw1xmyzIiq3YQ6772PUreZWjrytK4cdLNN",
-	"vPFZWiR2Fcv1DuZSyaCcWGcN6HbOEYkiTGleAKtE8xfGR9foN4QmYk9gS370GksUrbgElgttro+py+HS",
-	"DEkfLnoDsT+Bcui8WzF9t052ccQsQBq4UJct6a1/Nb4faysUpapcx+4yGtC7aTth66dpbs00VdN7kisI",
-	"OYLPbUpJRJRWtPIeqqCo/rPglRpK+LamWCRGO1ia0N1X9v7lmVTthQLedtQaaDgpO4oODMg2+jgQGj2v",
-	"ElAeoTsvlcPRkmpUi9msHtEQJem1iPUkMVZJSUWzuTs5aeaCdXXq2CCOYwFSThE3cQtSkqUxiDbHoI+5",
-	"TW1JBbkx4ufAUnrVYJjmoIw486hk1NXnMpOAiNUizXNE+VLuuoGRRS6+GOLlaOM8Uyao2H4Qk5g9UsiY",
-	"3V84EdrIcm4+eIkJuwO4saPaDatJJY6nCwSztlEl+tzOtT6Y4XelqhtI5zDnd3jPe/ppSZ9A5x+ubM6s",
-	"1td3EqyilVPNUwH6JITpANymRIAM+WzeXL5H5vHG40q7rrS4FWorwbcvNwoCrOktFkuQCuEoglTvrm3J",
-	"xPjM9Sf76ATNjWEOKSzmmkkau4DTc7DKwwRIhQiV+Ea7sPI+xX/PQJ9EiFa8cCqUQsgtX1YckRiYIgun",
-	"wTldbdIqGzkzXU0kF7Bn755eKt2q3hzd2fJnkqY5Mnc+1SERcPn0yl1PK2elvJul3QgexBRYrI+S4FSG",
-	"bzIXS61X6hcNwLp+0/BHAxtiIy1ceAiRiC8W/fICpiDU1UqAXHEay/MopM+AiPT55ou9eRYvTQ6w/8Bm",
-	"Ni2I0FqAHZlpMgT2UorTbJR1BqFkCTS6yWttzyc5mkdA0FrhNNWqFlZOjTNjjXB6jGaM6yM0Mx4nO0L5",
-	"As1SnEmYIQfDLfPV24mxwrn/ahdRcu3TyBDcrnAmfSBmKWSKLAw0mG4yjCDImVrRzUszrHA+lldL3at+",
-	"q3GaR8ZaAp0AZhIxXpqj3nFncWghuC0Gq8awamtd351p6Mz0Huhu0uqPfJf5rno/jBDQYxerh0wRifJ4",
-	"IBOytIVNd1qMMzhXE5ARqpG+5IKoVdIc5Z9hg3Q7PnZNytUexI+fPTv6Nhy9VvFuBmoqsCWIVATtNLPL",
-	"1yePnz0/nqHSa2HcovaIog/Sd373hJDC0eQvTkSJSXiXqznHwsXorrJ5v3RaTiwo1rm6EnmP5eWrTKd9",
-	"N98SGdBgr2Ez3NHijkWfBdy02TKQKxNmfQdQgxWX6s/1wfbCbhGXGt+Fp0BYDLcthnJX7K/nVtkW/PtD",
-	"cqo9wJU/NjhNh+EkdGUntahv51Z279OxpFxpITN8zuXqvKpOF4uUSRAt1f0vXyP/9AUy3CxGs39lps5Y",
-	"SqJr5LcHsQHA2kFICAeolet0fhbFmEsjLJ+H0okKHtVsnk/FoMnxrC010yVpBMLnKWYGety2NQek+DGa",
-	"pSCkZosztPMvzw4SbgxqMwU40b88PtQ/7aNXOFohGxdlZJIki1aeZ7sAbAtBYUpdlHm3b98gROCkn/KY",
-	"GYQXYamF6ksPdC9bw5rsiw2vbTvCfivkWyCncl7g2Q+Ezy9/5Zruv5WNDM1iTqGPr3j6Ie0+Gh2JCCfm",
-	"kXFGxrHXFGqZ/eidRSjSEiAFLK0cqHi6l6XIWb8thM9M6cG8I+yDjLVQmFto7ElxJQm1lklu4J23m1tu",
-	"l5vRD/tEq2I6wfWwYQ+2ZE7bQfnE5y1YdLW+/Iuhnj4wOrgUwsMEj35Iu4MCej0rv2E794e0PZDwTmlJ",
-	"4U5irHqjbytxhTUAOlhrHXFBls6stIb5gfNCFJxhf9JQCDOLz9IAuiPRSfBRRQx3aaTGdB4ylZejaCuV",
-	"Pp4FC54WjLL+cjua3X8e//ij/Piv/9K/yb750Prz8Dpgi0Xj8P8rpLteuKTHqZrg2zf202eHIYXY9PMq",
-	"wYRWu8kPMuhnVSflk8eHnT2Vr1qBEbLV/pUi/vO3J0vOl8bk7jmq++HjgKidUBwPzhSXEab6k/udtwTf",
-	"XkBKSYSrSE1PSt5RE0He7RtNNMUMNHO0XTM2ZfL0/MMHRajzSzrjigvG2L61dwao4wEaDG3EnFC9Ce9c",
-	"wqPf3gQUCB/lDeImiCY6tJjo4AK/X6+0qK09bkSVAKAUuQHmMCvucTJdyG1uRqls1pPezSeMKILpGVC8",
-	"ubSFJWotHAYllbJXD1sK17MBLum5t49wUEFVCaqWzOCZCjX7vP+gVtMtVDiPVyuXZNyp38FOGR9Slo77",
-	"9JvepxCDKMUE3pdTFxGJd4j89auyZchTKaipb3yij/8/7j0eolLJsRex1SoxIUhDkhAV+D1KswENW2Sv",
-	"3hfrbtk0y1HBWqitifT4bQ2roXO5MU79GgapUYQpXPH/AMHveaZNSzFfa5mM8BpBel65608Oh0lk0kNM",
-	"hxIzhDrlSYJZXb06Onz8tFchcdkavW9poTMomDMew6UBlrTASm3QOLXg0zaTdEk84xQE7jOWwWLhgJ68",
-	"mPoDvyyq354LWICo/PQDf3ULUabCZmMHtLqlWpeLpN2zDOJsuhl8DNJZr8MdPQ+Y4fqOfU53fNKJoZeh",
-	"jowZfbBNoV6DsmlOuK8GsSSs8uENpnqxPob13IFEpPTuOack2pR7YBxuSOH61N3JPSqy8l8L/dcNp1gR",
-	"Cu5h8eei/K7ALOZJ+XnzF6VoODINhDThwz3cNUB5yM+wLS0tXJ3m69Dp6A6GGxnWyLC2YFg3+nRb/5u/",
-	"e9/sH/V7XxxRKBoIhhA6z+BgUpaXYumkZji6DukpcywSzN6b3i8VF3C/mvKdV9s9bAkDEDatfktyIcBp",
-	"P45sBNClDd/3Bfbvns4jQAEzZqqc8N69sfsxlznnSiqB03AhZuNXbjLyHqrA18xaR7f7LOVSvWFEXf77",
-	"22389YFSys4dbsfxMXi46jw1teWsZHCVKgEBLYbPXvMpZ1r86DDnnvP4nX1pgOOp8UmQVWGBzUHYruZs",
-	"s53l6zneLoYi1eMW9yTFlXXfaq2rl0GClFaWUQIzidtL6T/UitWB6MXaALQO8gaMIsYoYmwvYjiVLn7Z",
-	"yp717+81SbzQWqAXqAP6RgeTJEkCMcGqhUP6UdxD7PYtfNxS8Tdo64EgkyFKQP79KcVS1vx66ZPJdjiU",
-	"rZpDQNg7+rfJdHL0zR0EvjLvLuYf6vYTnw+WAD/xebdnXCx7gukKLf350wA6TWGbuWsTv1uP2ic+D0Hr",
-	"KXIDZ4BjShiEDNffPH/abxHXt5svFm819ap83W+RjXiSUsgtS+Evw6ZjLDClQIlMtvzSAWMV8m9x336A",
-	"G4NQlxuw3N/v2XfWtxHk20pRt3YnCwXiO8JMEfyaB+DpN33+i89BDjaarH8X7LngPY3oegsNGm1CJ+47",
-	"LuYkLh05U2xpMi0eXFhIkRbzXJPxVyLCy2rrbSqcKNq/shYx4098Ll8TTd43zct91O+OM/eMsOU2FCbc",
-	"kK09scjofYekSAL/wVlDsXzaywOL5QvS2wHG+36rcKcA0oOkkGcX6vcGgSdIYPGl5G/YDQlmqJngJ4SR",
-	"JEu2xxki5kWkOGKwphsLpYxMpNSeQZVzyZYgW/I6WoLsSiUv2/C+XamIpgCBIwN6Z94ohxRjV3JrKQCM",
-	"vKIZpVZuROqwaMM2iVrZh2aHpV+G4V+Eq9Pqlhwmp49v7ywXO0Bxs4v5XcaMhtm2kmFZzOfOLtzXTjAL",
-	"yWDRiiiIVCagSsmwSJ4/Le3A7TfPfzI/2Af/XPFJmMW0YWY6evxNr52J8uWFt8Cd4U3NqPN0WtbFnLer",
-	"y9ZgmNi7eaWVx8+eV4xDj59WRCI9yIBQlDFFkhBZ7Fv+bK71AFWxOFCczGOsD4O5hkGhqREtUcQGHpbG",
-	"/+2AODwbxx0SI0QQydxXkWxOZqgKacf/s2MkPSpZF1FfKRXQl3GmVkWqs79hjDOoZDyaP0kwYUKL1qEV",
-	"MdT6NeDYrddwo5r58h2oFY/v8uV7QZb1iN3eLxN8e1ILoxwgLwyJce332boLUVz20kH7Cuy5UV/CEO72",
-	"SPXOYmwjAx3OQCtpri1R/18jZ3ur8OgiOuHwCyR3n9g8HpPI/cgmWj9yOdwmn/sFemSyrh81ErkfPEP7",
-	"XT0x26UeFVn4ils0c4eW2JpEVFpe/b8qSenP4G6eHomX4FSTc+6ygFsLqXZW82x52Pbp4LqdD1p+yrv2",
-	"2kbVLLHZeGWL0pjVyk/bFcq0OfXl8XZUyPzYs7XtiVtEntoaIOaMtqJe2SKXgCQIAvqi3ICwoCSU3Lg6",
-	"XB77ygX5WCMZxPZhGAPrd1GxTF+L4cnbzRvVW0fOdtBeKGxa36XwdoN4wxZ8i4qVNaZffuxQUySIci1O",
-	"V8TFlW/xlVtu97iFTNgr9zBDKyOwIc5MZi78PTPlR51lyuKOJEbUlitigChSmglMO6pyky2xyb58IcnW",
-	"CpJ1dpbJoG/XZGO12TCsYaKchuizt5pKqX7gi7e0Y1uY1/RS3/hXg07kQAv6eKE3Z5NpB3p7jf/eYIUF",
-	"+nDxdggcVVhgOisJS5NttscvlAfNrq5Pr/3U7NZ0QOVV0+RmWI5sBEJd5jjoPZJz8W6oW1vZzJV6be+x",
-	"VFFtmzpq22Ok7GAWG5Avm1q9Oww0ZTqhHMcQv2EvN0URgZ4QgpZip5MrrjDNK7uZdhFhwYzvKbqGjc39",
-	"JWxB+RrZMmgOgtbgCVhUK5sEPvUV+oos70C0cZ4ZHpD/XBJ5ZM6JhxdwGeY23bujiGWr59dvb2AdqwMK",
-	"nncJUSaI2lzqU+ATg4nDo6ld5fM3eskQkTKz62aQkgRfSxB7cywhRqdv3yCcqRUXHjpVr6wh5roJywz8",
-	"BT2e3O7hlOzZCGZPK23vnz+bOJYFD4/Dg2HmR/DtG6Q4p/voJFMrYIpEWAG6Ibg2QD0cAxzJNF9D+QA8",
-	"n9INBxiV2RCiNOmalPs8OX9T8i0fT472j472D00wVwoMp2RyPHmyr3+yGT5mgQ9ujg6MCrK3IPremx8d",
-	"UEsNaI1oJumqo5hPkPskX4EydZoi7nR2rWZEPLUI7JxVIhPRiWvEYrI5/GLDiTESGQWLyyfRXACOVgbx",
-	"msXIFdrSDc484OjMQ1abdvQy6IXS99WM5008OZ58D+ovRyd67N+52VbDhf7WQDLRA2+OG+3whBTY9esV",
-	"p2b2u/np+nsGxiHhDlcNw8TSuQBwyh26a5Dtxl3Ht8jeXMQX+Z6ZWvEqEywH+0XPDlvHb3x2tYE7e9qz",
-	"w+k9O9wit/ejUUAMczEn9fHhYQnW0EEJUH3hCGcHnxwBL0bdxXRK56JSqMJc/9q1Lx9/fcOePuA4XgnB",
-	"RVfvL3HsiYHt++jr9f2G3WBKYsQFSoiU+kI6WmyH8uTrDcW6dmNgtuenX6/nH7i+jBmLbc/ffr2eTzlb",
-	"UGIZ/NOjx1+v43NhPAzE8lFbCEKP4fFXnPyFZqOGEkH8QhMTsSmV0L3Qf++Z0BHHQE3tAusX+TydPPua",
-	"V/QNUyAYphY/XdhiuBUhxzAbL9787aOmbNJKz47XhlntDoM1SPO3VLvW4y1twAMIJSemamTB1DULlQe/",
-	"6P+8iT9buk3BWtirrPHM/O6444X+7MJ81Mchr1bghmjYNYlzFmLSb3MOInxrheRoFa82XhhsuM7sviQ/",
-	"sCuSr4cDywlstn0xHvnAyAdGPjDygQfkA5ayIMxKlDBE841CFwWM5a9iomT1+0fSV/3R6gRfLilINHM6",
-	"/GwfnVCK5jzOawNhAbkq9wKl1h+HElCCRNIV1YxwaiHqvG8OYYWODg+bGti5HufvkssYOusdmYNPT91z",
-	"lehpKl4HnjJFH6pUjYhS5X0TU6N15KVBfxV7aoUZ2lkqgyFJQUr3C1WVOiymYar6ox4ra6KVNFP1Qi8J",
-	"Z7oLvliYOuc8U8iIEEZnV2Ej2oKLs8xuejgwpaEyvuZrRDlbuhL/nsAY1Hlznuaw4AK8sSDXIJ8c1lTI",
-	"QXGQ9vA2Jx6l2YH1gyG7U4BwfuJ5XkzgkbTU54WvOyyNdREJvEamJHd5ByphsnnUtOxEeK0ZBVZcKFty",
-	"OjcB6J2p+eq/OewPMoIbsDSnfPjWWDD9Qql6T/5LJIgiEQ6ndasyQk3QbY92iiWdon/87/+jiYI5smad",
-	"0I5fjt27+5gbVtg1YTFfVw5exY7F+bVB6bfv2VpO5p8Q52StOrDW0/V8WNjM5zo9+vylzRiaqob40Qdn",
-	"ODOMZJRXR3l1lFdHefXh5FVLXvrlVW+jWMsDHBlWUPY7hGz2a3niX/yStDPvptcC/NdLlA99JKQjIR0J",
-	"6UhIH9gAHHHGbJGqCrUp0dO/XqL3zNQb0SJ5kK4e/OL+1bD/1mgK5dG18b0Sqil4XmLbqfjCJ5zbGCvX",
-	"KNqxFYW5lHv+J8EpWHeuFXkNyL2JJGULgVHM18xUi5VKmHLGXILvS1q7dtNskFunCz5w4qc1xHbg/eSl",
-	"hUSCr9sNCbjU+ja2hO6Ovqb5+mQtL22+X+eVcuD3IwsbWdjIwkYW9nAszFIWrQuUaGEX85oOk/9Huj9U",
-	"h+nRW0aaP9L8keaPNP8Baf73oEzoYonK6MnYsPG76y0HZhOZg0VOXbG6uiC7h0VilRO4JdI4qAwFZsgg",
-	"f6AdiRP9zM3wzZkJJfXE+s3ZrvnbxihKhNFCgFyhU8qz+DuT7qCPECXseh9dwJ7IGCPOYSUVjq6RAFua",
-	"0Y7BaEG2wT2X22AfmFG4XqdIcsQ4ijO7o0ZvcgUeA75TLltY4UW+PiNPbOGJ+RJ1a0PuJYSFIgscjca9",
-	"kUuOXHLkkg+sGWlWZbwkjiqujREMG2uN4yZrLJGvTHgvzik3LOpmm3qhPHNaYQGxYV7ScK+UUxLppyaH",
-	"liFMTa1bz9Jy/rmPLvHCpC74cvemzmuWmo/yxKssXQocA9qZMYBYfrB/HiPNTGa727E8M7GR393H9qeX",
-	"0GbYjCbAkdGNjG5kdA/N6ERWcDkJKksRZwijOvu4D4szbW3aWdwPWnmjdFOoao8kSlecwd6KJ4AWhJmC",
-	"AdIHH2oFQJ8PnCmu1T7N0Tb76NQwthUxqWwLLiLwE9lUkh1TbAnKDK8LdmVKn2MpswQK9TAmAiJFNz66",
-	"0aLDUGrC07AQ5AbkNjzR5n7/jnliI3fx6PFeTJZEVb5/c7aPLrM0pRtETCVtuwkoB7amG7SjN4/xhGcS",
-	"JTyGXVNyHnCM+AKtMTHmAR9N2TwUbXmQ5S3tyOP8NYfdjdf0haUOewK7SIqFPLDtI+FyakbJY5Q8Rslj",
-	"lDweTPKwdMg7HwuePlDO6LU2vyNMSYRrkS9OgXekpWJO1gtcMyXnJsZ9dAGZBAdxxMXykUSE7S0oWa4U",
-	"2slYKvgNsF3NOI3FWEBqTMRGWJAo5ohxhVJiFGwHoyD30TmnFH3/6gp1iU8oY4pQZ6NHRKKZl81mmkbN",
-	"7FGddYghp7np+UtyltN+6+3paLsdGcvIWEbG8gUZi8HCyxmKgaMZGt/i+Muc30Ifyo5etQW5hXhPkp8B",
-	"mU8MO1ErIAI5fE+UChKB3Ednrl6afccUM5Vaz66DYpl0Omb8j7pNhCWamXo8M7SzJmqFZqVKdMfoxxzs",
-	"8cfJbFc3aF2TL9yAIszQPLfpxohivcPzTBl2FPM106OPW2B4Xpp1+IJMw836Jb89xQpTvgxSbH6LIv94",
-	"5BYjtxi5xcgtHjaMv06FNeXVhLEcEXMBS4vo6LlEtILommfqQGbzChJ4WB85dZEnGPkPHehtziooZmjn",
-	"HIQ0MOpcoCvAya5WPXy8iwOnQ7NMUGOu9IC5KMUGhuyFtTqVBmRACT3Gooc6BBytULSJTO54BMiWx2pT",
-	"IE7deC/L87x7vn3Xbpe78N2aDr5yhq7v+4OgnTTC7+SHi7cjbxp508ibRt704JoMtpyhQtQ9Cynxp5dW",
-	"LwjwJ4sZuxVnUhzhONa/WPRZizeL+MJzEIeRW4YTfSRRKiDFJHbc5g6cy6HTOvRQabmTfuDeQhKUolqh",
-	"OkGzp4eHM5QAdrY7N0YiDfr42qLdWLhchwbRx+CuePoh/UKczbQ9srSRpY0sbWRpf1yWdsVTlFkksiqz",
-	"6ORkLvW4G4Di1L/1JYmo7aMPeiIfykhARwI6EtCRgD407ITHYiAWBdDWXVYVcbxEUHNyZEsThXSAc8Ft",
-	"1T4trBu9A0QOL7FjqzjRxd6KSwUxkiucmsAnrScUkYLlUKqdWUR5FhfRdSVDVjmcyjg1MJq5vt7EM+Mh",
-	"mVlv97H1ZxC2nL1AKacUzcoM4eCX/LPPB/aLmfOWmyIDKRdKopk1b1Wd5ehc8DizUYQ7vverTQrHCK7l",
-	"zFQjYVzZaZutQv/4r/9G+ozgSKHMhBhafEaEy425plp1jTKXehDAysoyBysXuSH9gBtlT582EAlTrPT5",
-	"nBxP/vNveO/nw71vP+64f+x9/B/+p93/9S+hqj6lZSwXSYVrPd3lNUymE2z+ff1EttVU1NrQO1fp7GW1",
-	"aGy52uuzo8cllL+nIQxJ19hfXIn1vJ1vSs3YErK+mcehZuwmn2SKywgbwaTcmClfFiyIxIgimJ7lJSI6",
-	"6v6W6tA+6YWI1Ie6Op9yFdnnz549edZXRTHN5tSja/YUUxdgjmK1UOPj3jqNW1Xzv0NJcVeyqVFZPFT4",
-	"yO3EFSQpdeV7q/vgK3ttMwDzTai362wOgoEC+Rdf5yVUfozH8IZJhVkEzfq36sm+ppBZMgnufyxPSVzD",
-	"pz063H/89On+4f7hwdHz4Geawse2oFhe+nRtLmaU6ov5cyZMEVhQP7OWUsbC+EDC1dFA3JAIwiP79rkd",
-	"2OPQwBRQSDSHbi8XXamT/OT5s97jt+biGsQpTnFE1Ka5wJztxZBgUyfPL0b5N5lyk6hrIJX2zF8fewvX",
-	"VglxacWrhLFKj/NFDZ2cj78yUKm1DDqWNUDhcdyaM/T3DLIxYWnUf0b9Z9R/HlT/sSQJYS9nh9WcmuGo",
-	"rCd0IexdAXYVar3qE/M120cF8p4De68C762wdC70UkUwiTJGQUo0M4lI/9Pkz5qKpVjKUMiVB9Dz0zj1",
-	"Qx6SLeQH1JodFJVa2yY7qNpwbzaQxwyEG2DbLdc+OrPs2SZvabG6LcXHLGhHbs+DD8KLCHq5JtOJ+T0k",
-	"EHzZWjdmUlsw41h/4bTSkR+P/HjkxyM//gL1byyt7WHI0wGOm98Dw/v45Z1LHSR9pN8j/R7p90i/HxgP",
-	"MKfdaL5x9fq3UqkOIswioO0RZn+xF5nRjQMvL8vjxJcom+W+nj7nSc4pTm3Hf1B+YSZ/F+uc3S/qDLAj",
-	"Rxk5yshRRo7yUBY6Q1wQZqUM+ahGgbZnMQ6htj0pc7lSazCdmTgBhcUSFIozU43QZkUexFZZOXa59FOU",
-	"gJR4CVMLpOdjIPQXqeBLAVLmJRVNwmdGKRJ83ZIv2WBPlx5W9w+sztg1GMKe3BaPHGnkSCNHGjnSF9Jx",
-	"TGnYG6hS+wb+eYArWUCBA+HyQNs4kcsTResVCECXl689KkCeAyNXQKkp2uzq+05tFJxFDkgJYxCjFZdK",
-	"0wHZxms82IodzRdN0i/19JZIFQYqteMYifdIvEfiPRLvBw54Fp6oajrp6KdB8iqR7MvL1yVqbdIUO4i0",
-	"jURer0CtQDQAAIgsELGnZkkNz3BZ9C5LcZpTdvd7X7ahJdx2ZF82aismaoDcbVM5R7F7pNwj5R4p95cR",
-	"u106SFShNV25fibhfC/mCSZMHvxi/9ETt3UGyiJqYSs3LwRPEFGyFNqzj65MGrnJk7GN6tFspOEtWtaH",
-	"GPFqpNCCC8QNf8BpKjsitsyYz+yQz9yAh1h9KGHXEKPKnNtNQHHR8jYWoI5OvqY56APTAykvVdfRs2+P",
-	"EUsjWxrZ0siWHpQtWdJSYJtYili2/djfHT0fwJp66xvYKguu6pxetYhQcPBfjjwbvmXhiG3WoirYVQRC",
-	"WUR2cBzUcjPzzZKDs2gZsBTN9QTPbG09AzOMBEhObwp4ykp7RPahf4WY2/AyBn8kFmdXZSiLO23s6sjs",
-	"RmY3MruR2T1ofR+D6VXwmW2ZXik5otWado6lRDNgN0Rwpl91xXRkxFNTcI4zQKXH00q6f/1F92hq0vVT",
-	"wT9BFGzQPUI72ED8I7gBscl1N8tKl4Sz3X30PiEK2dpAAkwDlEgVQjCrGwLL+Tw7Rfm9KWJ8L88RMu8g",
-	"zcl299G5qy2U2HJBmJnBajbL7Oa12AXPSgvdw1eNSdROtxifxYIgsrzQbQk0la3qSKTZqqPe3KBwa9y1",
-	"VsJNCA25HP+w3XADHdxxqH7i7uS1DTU/s3de2VIHXzfFyI+kD+CofFhHoWUUWkahZRRaHtjlF1f4oRdT",
-	"yoSnHc2oQDStG4DnPN4YZoxior9ICDNlejKmd5YzNNPaciYsKscM7czWMJ9N0cwiSuh/feLmh9hVdND/",
-	"XmTMpFnOdl9YbG1NtVGEhSAgjUrO1wzNIs4WZDlDc8qjayeVlCUhU3fR/b031zfMNqS4lzE4K4BX9f7a",
-	"WsCes6G/OjClJVGrbD5DdiZTxG1Ppvv9AjPFQS253xVeziwKK0nw0ogs84xQZ023pgv/ZZuxoCrE3BXg",
-	"iDN4vzAnpA515GWAIMqRmUYT3QVnatX8dY4liU6Cj1xUzjCYnxRLueYiruH4PH72LAB1kkl9LRqgP+bl",
-	"dhim/zz+8Uf58V//ZdKHQJI3H8Kl4eF1wJTyNcRe7j/+ZUIUJLIxwn5cogTfvrGfPjvMH2MhsOGNrp9X",
-	"CSa02s3ClNvSUql+NpmW+33y+LCzp8eHga62278SLE6BD7PkfEmhlPntfgiCwNQhWgKLj6voUfc4bwm+",
-	"vShBMhUQOSWEnKPDXoCchLBgM0fbNWOjrE/PP3xQhDot6hxEBEzhJVQwowa3ZsG/HqDB0EaUqueUgZCM",
-	"qgXW7Gjr6QTxj4DdVI5uC5xX9z2REAmrRTd39wbTDALULYx+Zd8OXfb6lVgBpmplsJ2b46bkBhhIec+T",
-	"qcWiTMDVSoBccRpXNutJ7+bneGkUby6d3FJtodzEYRDWDFsK1wegBoLwuL+PMHSaQ19rwliRBHimQs0+",
-	"7z+o5d010wjtqgAck3Gnfgc7ZQr2O8z9cZ9+q/sUYhBaDFLAMIvgvpza5hbVJanDwwEyRLEq9wZ2bB2f",
-	"6OP/j3uPRxXlsRCfUmCmol5DLzSKRfGV1mxExqYI9pf7iC0Ju0VcoOUqEvuEH3CxPMBp6jQlA+Rj9SBT",
-	"YltrJV7T2UZv6TnLXv+TIUaZEBX43QGM9snHRq7ZFmdSt51/G2YKRsn6bQ2r9nY+xqlfwyDRjDCFK/4f",
-	"IPg9r55pKeZrLToSXqObzysk6cnhMMHRFGEMI19qWn/KEwMdWb3sR4ePn04Hop8OvT0KL921GXAvBpx3",
-	"K3QHFRPGY7gECpHiRj/CsbWAYXpeea+GX9vsoiGecupsB7JDnobFwlV49mL6D/wyWkGcGdXs3IBzVn76",
-	"gb+6hShTEJTer2FzB7U2F8m7Z1k78bqvqZ/BxyCf8Trs0fO6vP657z4Z5hBqterYadjFXhWPS0YlA+O9",
-	"gxkisT09lEj1U6kpubuP3iyMFUlBbOPhS14LE4FCvGXK+S4eSeROdI+faDqxZzVgohGYRUPED03u4xOx",
-	"lAMP6dPDb58POaam3XegVpaE+FMY8+gaxIKYI3dNKAuetqKiud2JnjkY49itOh8mcBVDGPgBXzNr4+iT",
-	"5LBafUeor7ZR2IJ6mAhh/jQ3lU/NfgfpxQZB+NKDMXeBYt8Dpbx2lezCuEFO/ZkL3a07onXnzsAQ7+gA",
-	"VLZhyWLT+mVhpi4fzjXM+6GKKx9PvTnBGVADcx8NsaMhdjTEjobY0RA7GmJHs9FoiB0NseM+jYbY0RA7",
-	"GmJHQ+xoiB0NsaMhdjTEjobY0RA7GmJLhlgTMPybtcW6S5qfqw7b3vOnzaMUFWz2rk38bm04n3iARtok",
-	"6jPAMSUMQqrSN8+f9utgcxxd88XirRbO2ktuBnWAiCcphZyXb1GsM8UCUwqUyGTrMp9G6DrnlEQ11eMH",
-	"uDH3ORcZ3N/v2XdWmw4Sa6WoWzuTyvAdYUSuIK7pnE+/6dOYPwcF9FFJGpWkh1OSnLTbnAlntiB3tAld",
-	"DJu4VboZJ5Ty9WRaPLiAlOIIWizfTfWrrXYv3KYCpK9B27OyNqvpT3wuXxOpT1+TBh3126kMOSBsuQ0h",
-	"DDeUGXy/RUbvOyRFEvgPzhoiw9O+U1NaviBb+DXVxXo1Yn8YR11k1EVGXWTURaq6iJZYf6OKiBZ4Q/6Z",
-	"ORYJZu9NZ5eKC+i6xiyjBqo1r4gdoIE52wzwSfvwRLUtqu+/1RIaMuo7rw/5GcJvWHvfFUkG6Ci+q7BI",
-	"5cqmF8LG3Ru7n1t+zrmSSuDAfvp02e0vS0GltrtjXKo3jKjLf3/braU2TH7ltcqH7ccRZrBLwirrpTtf",
-	"CpDBVSKu7n9XwEdv2AhnWkXoCGM55/E7+1Lo+AWPROmT0DTLmCTtd7Gfg6bL13O8zZ7ozeTUHoJ7OCMq",
-	"677VWlcvg3RC4XSiBGYSG34e3OmHWjFVo+dCqwuCD4qCKvsiQ2Rq1B9HJ1urchu/bGXP+vf3miRewAK0",
-	"sgvBs9zJJEmSQEywauGQZRV7m+3yfU679aIuTyIXLmKgOm3puHmf1Gq/P6VYylo8Y/pkW9VOdxka/g0I",
-	"r9p7unD0b5Pp5OibflnPcayikTLvLub/T6NNfnUxPSyH59LEb1UYv2dQZl0MusH0GjbBlxN8O5AWl94t",
-	"JFzfA+NwQyJXUg5T3Z3coyIr/7XQf91wihWh4B4Wfy7K7wrMYp6Unzd/UYqGmb2+SlJBX8BSgM4NoSrt",
-	"NK6NQIx8f+T7DxZcE+A23+wf3YHTjDzlYXlKhKPVV2EoPItPbDWHNq5yR090tCIKIpUJqMpKWCTPn5b8",
-	"JLffPP/J/GAf/HPlBWAW04aZ4+jxN70HivLlhbcAneFNzajwdFqmCS7KqkvXNbTu3bzSyuNnzyvGicdP",
-	"KzqzHmTANZwxRZKQ16Vv+bO5lkNV5ZRTnMxjrA9DMg9GVYSilIucnMPS+L8dkP8iyHLptPbaNRD2elZ/",
-	"JSzNwsbDwSqMHf/Pzk91D2/PSqk0nHvnKUdxwxhn5dwq9yfBSYvzIrQiJp/stUEclNsZdcyX1pNyly/f",
-	"C7KsZ8r1fpng25Na+tIAd+SQ3LLeWEF/IYrLXjpoo99u9NuNfrt/Yr9dWHjzwKHBQ2c/CcWXxM3E5eeH",
-	"joh1xngQCoGZ94sZtXXO25nawQxQjbaSPj9+rjbgvHpfsmIiVlCAl/ZUTTSIsQXNHBGwRwTsEQF7RMB+",
-	"QARsS2Qq+NWtINjNQh0HvxR/9FROvOQLtWcfyrooaMpFARYSxXzNDIy1L3mRmw/30XeOhUmkxVrEFwst",
-	"jWKGsNywyDRgPi9qW6GZ6ZCw5QxpmZgiotCCMBMr0VFmsTTts9L8hlShKtdYaK09VW1zm/pTjebhFicp",
-	"9a3+dHi02t//+tUc9LINY2r23bHa4sjJRk42crKH5GSWsgzjZFNfXqq7PNJI/Lcp5dNdvmek+CPFHyn+",
-	"SPEfuux7mSrON+jNWVcNH6ysZbhWAjyNXRGfakmcUss7a5gf2ETbg098fuDjaw6MU3TX6RwRF7FuRsAN",
-	"kYSzfXQJvhKusUDZgjwo0ePQRKGqBz2SpgrPMZrhND11JXwWXKCic1sVqPzsE5+XagSVn/jfpmhmRll+",
-	"Zn7YRx8kmDF46yDKzFIgYHHKCVPmXf8woDCd64n887LMuxUV6qxNb9a3WCTT+Fe2QRa9n5h9vQCZ0SD3",
-	"tqMdLZAjFx+5+MjFv1SVfMtycJURWn6ZWV5zd4vkAaYgKgWFh2t8J/bT3yAT+5r6nVmFi4xCX6VW8yIS",
-	"GYWxUuvIJUYuMXKJB6/UigsSYzSTivK3w2ANUqEFEVLtlliGo+NDirgmoASJSv2YSqmso1j7PprZj2aI",
-	"SDSL0mx2MLOxjTO0k1oca8QXZkNwmj6Sdr+mpkK8wXhF//jf/wcdHR7umjr0DuhGztAORgKvkQmE3d1H",
-	"7xndIEtq9Nw76scPqJn6O+Zzd1PK6oEtiZ6sS1ktJU2pBqbGd0SARdDQO2jibPVOL82ZEXum7v7OUpnN",
-	"oyCl+4Wq3f0ymLxumKpg9M2CizMn6IRDSg/rY3rN14hyZz8oiFCSSYXMiZrDggvQV0Gzox0fUvfk8NCM",
-	"ajuAFHu+m1sWpdmBPenIrqcW4tpPvKZP9mjbssj52S6vUyUPIkd9Cmc3+/iimp95xYVCFM+BmntigI4y",
-	"CvvVMgPf9McwSbgBS5fKR2SNBbPYKzn+Wv5LJIgiEQ5n7agypnONlbhF2ymWdFqhCmad0I5fDnu0biOa",
-	"SXID7/zu2RtWRqw5PGzZXpaZ6ObP08masJivKwevPLS3nF/PcXSN7HvWHGX+CbEjl7I2sNbT9fywF7bZ",
-	"xWu5I1detEDk11e1muRycFeoljDPR+F3FH5H4XcUfh88SIuVJNOQgDvAHJIpvmd/MlJRpkLh/niuJWwu",
-	"UEyk/XfpOyMSu4L/e5o1VAzE++gCMulCvGxYNIpwqjIBMcIKRXYqiiSgX9WUHKxAWxo1WhO14pnK+6lB",
-	"FdaE26xDts0Ut3//k8u3XcfzElSxDr+Gx+EtWUC0iWg1Rmx0OowcdeSoI0f9NTjqVSZYnalxgfhicQ9f",
-	"g0n82vOA10He6gBXLXuMMql4guxnmiMiLJaZ5YAN85ZaYWVflXqwG54JH66wj070QoN5oBtmcOve3Ucn",
-	"DEGSqg1KcIoiaqKs1QqS7fjoyzxX7o/LRvM1+DVYaN55P+M0G4/MMRwZ58g4R8Y5Ms6HY5yXoCp8q2BZ",
-	"92acLpe5lXdegrJ8U3CuUEyEqVK0QTt2IO7z3a1YJ/rHf/03WvE1wijhjGs1E+E0RcTouNm86GWpezcA",
-	"+p3s9pXhtZYVeXZL1B2Y7albjT84v3XL8KuxXNf/UK7rz/DIeEfGOzLekfE+LOM1NlVDZ6os8L6sF8Se",
-	"Rwbs5ry285THeh3Jz4B2ZIIpRQdIKsxiLGJ0gCgWS9h9OA32fSP+YopmppMZctzAju4KcIJSitkd2C2I",
-	"S70Cf3Bua1fhV2O2tvuBvBaEOYIjqx1Z7chqR1b7pVitJzN3Z7Em12qvAPYqBaPXjcMqE8zyshWXaopS",
-	"LvT/YynXXMRTk2ZWNIQ+XLxxbNb0UXHD1sIFZ2VgpGP7/qzJJ7vi4U9dEpmfxpgQHYZ4qi5TJz0xu1ba",
-	"0BgUJnS02448beRpI0976FzpqI3c3IO32cb2ZFH9MRxj/44wJRFG+n5T2MskTJFccaH2KLmBGCkSXYPy",
-	"SqNRbJHKGANqQJ5QghleQpwnNVd43Zn7UauPdLOPzgVIq3GCb9jBjArDYkFTO4o36MPFW/0EpMJzSuTK",
-	"B1S7BdoykN4R/cu8ak+NP96H+X1VDlaZR7s6VjA55PbfhXeN8E4jAxsZ2MjAHpKBvU+BFawhapIewyZK",
-	"VfTuydLuoqhFAmJgimAqO3S1IAvrVtf8J9tqbKOyNozVEc7OrCzUQ2lGRW3kcyOfG/ncl1XUcg7xJXQ1",
-	"wtkeYQs+iLstMkrLo9AfIr4oczGPJnVcYYX5Y804piiTek30v1qNmS5mxvDINJWIWE+gxAmUa0FMUUoz",
-	"OzhbdqwAq9INGuzgRqMmf9e9jk25f0S0smgRsGaUsOuZFiCW5Mam2aSpVQVzho6w0V5NwR50gwXBc5tT",
-	"ehdu/EYv/xCOXF/jL8OYW3r5dfiwWZtu5mtO78h5R847ct6R834hzpvTwhrzuxf/TTftBtJTypmJYyGy",
-	"hoSVCaGVJocgaSomzWxJ/1fluk0zxJl/cOoL5M2m1iSnSQZGDNYVpVNfqULn7MJ57DZ7ppsR6jHA0tLN",
-	"7wXocSw1M/LXkb+O/PXLohjwdFOLCOUIM65Wuq2Cld2HxZrMlL2YJ9gVbAxquG+JVIX1ViKt/0FsfYRE",
-	"ojXMjQZYKJrYcGDXLBKwJNIUKtcst1ytxoS4GiCkG0yoVhF1o7r5ffQKRyvfk+4WRVgI4kJXz364dPjR",
-	"pcxQEEiayFuOBM8UBBNJOjVO08yZW40/OJCl3vTKgnSSJJvi5A/SyAxHZjgyw5EZPjSeZVXTc8whqtKe",
-	"ghs6ouTpeTug5VvCriXCls3s2ERG8xGi5BpMeYF9z2L2I57Mpsgh5eEUbtGs8mzXelad9dTxxn105bjn",
-	"I1lljxaFEFMBON6gOdS4ZQEKmKd+lO3NZf64JmrVYI7chZhsq6P+Ljnhwyul+mSU1+LXQQOqjqHrlr21",
-	"58EerZENj2x4ZMMjG35QNsyuEa6yXBdJFKoi1+DA/SppXnj7+Jf++kMz//ZsTzOEUEkEtOOK+k+Rq/M/",
-	"1crzFPkK/63FiLas3uPLrY6m3ZYqPn6Bfh81fPJzODLRkYmOTHRkol+ggo+nMQ9Yv8c3eVACrQ3qvJcr",
-	"kkrn4/Qsz0QqNas37MwgmYOY7eYDPkbY4Q/ovZlFrlLeNeNziXYseyUJ8EzV+ew//uu/bXTRLOIxmCIQ",
-	"S3IDzDzIUspxLB2iwRoRRgkDh2k7RQtOY02S5lytrF/3/Q+vSsUD3ydE+Xa14rvCbAlIglKELX2uS9WH",
-	"y9dsL6I8i9HOW5zMY1zMUb5A2ZByf2rF5bbqtWeFv12o3V9ZYrAL8/uQGOybo8gwigyjyDCKDF+qWLtB",
-	"3dW8zbDRnKkZ3dsz6kWhgt5bfrBMd1DQs1RcQFzl1mhBKNjg5KZA4TtppPHgDpnjRYlZ5zzaLAbjbK/4",
-	"xaasotnTw6ezfXSCFgLkim72XKplwczXmnE7mQOtsGSPFKKYxRCjDSiEqeSuMela28qZ7JnXpV3IMaEo",
-	"eHGqq9RJ3f2+uZM5MtmRyY5MdmSyD10fv86kHskqZ7sHc/3E53si6wi0ugCv/p4Kzv7E53mOjkzx2uAw",
-	"ZEwiSm4ALQRPbPCTdwz/wNneJz6vVIZx3BA7VPupYZZwS6TeDrQi0oD1CmyCykwpPrNohC2343Z/4vOL",
-	"7LfpKv4tsDm7PK/tcoeOrt5rkTG/IyN3G7nbyN1G7vbwEVS6uzijEKNPfP5IMwhTSlNkrD1Xti1u6lIz",
-	"JYkw4gz2+GJhKJjJdp194vOGTxbxxWLP9++8roUW6fUzTQk1F9jSpDoyoM7TdWWt8HaV2m2Z7jUraIxM",
-	"aGRCIxMamdBD1hGz9KXOhxDj6wfQqw5++cTnP+AEPlvKTEEFKl6fmd+dlxEnltY9kobx7CgQCWE2AVTr",
-	"Xec8lrs2ete+q98yIbtzsCXFeSAH1WlvTRZm++5jYn+ysxjCy6r63hfhZ8Eu6rxrGvrSrusnx9DRjlFZ",
-	"KZHqp098/pPesd2W4X7KV2CbkQ7s7+ui27IIaB/btW+NOIAjxx057shxHzaL1JAWhBkibG9ByXKlDIXU",
-	"8v3dOS4l7Lo9tuivgngG2wkQ4dCGTChPkehSSm0Nogg5zdEOSPoPLY8uARARiRjoBfMYtvvoJVcrz7zb",
-	"8JJsBdBbIo0IkPeZJ9eY9w17IVp5NuVJ4y111bd69QYwdwOr5PJhH5yt1xr/igk1Z1hh4zP+tbJp8gG0",
-	"c2SbSDPy45Efj/x45McPn0HT5IsG3EFT5fuwZb7scy5SvtQ0H2ThQCRszwMy6AbQHEfXwGLEb9z6O4oE",
-	"MVoTFvP1PpotCFUgZgYdMDVI9W/5Uv77WyRgCbcowUrr9wgvMWHSIssnICVeAprzeLOdc1E3/Xs27DaU",
-	"49d8jRZYmJU2cBWA46mWSNyhRjsxLHBGFXry/PCwUJL/noGpXufmIjBbwqW7B9Wxm68nx/rz6f07T/At",
-	"SbJkcvzN86e6wYQw+/fzw3y2hClYgghN9x2+RSxL5iAQX5ROoPIBVqUuO6Zr6EPLPJvTvEOn+TSPDiuz",
-	"PBoyyQtYZhQLBLepcBDboVugB+JuwgtXad57QbS0ujGjbFsBe+vCSzCZTL/wiBJ8+xbYUq0mx48PD7+u",
-	"HaUgB5oYdKZA8yUCpgSBEYdkFN9G8W0U3x7UgYEJ9T7znKfcQ2JLsGYpDLOovZzsGbkBYWSsEqhIxd/g",
-	"6vJgNBc2gLnULEq10LWjN2LNxbWJdr4GSCUSGWOELXcrYdjcfNKEfjZWF5MMRYR0tWbRCkukN4GCChpB",
-	"OqrIvitN/I+LL3IJqrQQv449ZAHRJqJQbE5/cvSIezmy2JHFjiz2y7BYrZuVGVjCY9AciGtNbnEPZmv5",
-	"RFfR9h0uUEQBC7nratvJBBSJUExkSvEGUTwHuo9+MJ4FxbNo5RwdJEkyZVwFxjlwkGNcEuOQUJspijIl",
-	"EeN5xrIt6RBz0L8qJGBPbli0HRsdGifwT8o/L0CP/deFjR456MhBRw46ctDfVkH2Glam51/M8ou7clA+",
-	"1yPCc0LNGHrTmOA2tQpp5UOUYgbUQH6kIPakwiqTexHFUnrKhARWMEUUK2DRRr+mVW5CQU7R6fmHgwQS",
-	"LjYGZWRPgiDgKggyUFrLRYQd8Ewh+8j01OXNcF8ZOJKUF60ogRcLEiFi1V/d4s58o0AeSIjMEC3oNXZN",
-	"IcUVpvp189buC0QUinhmavlS6tubIsIimhkwE9/FHNQagKENz4TZdhLpOUmumxBmQVdkmWdpzQmlEKM5",
-	"ZvGaxGpVm8SMZZTOTE51PZ9N7qPZCssLuwpnWGHzxQJTaRO2vZVAugzpJVawxhsjqLBHejApF8rsXInt",
-	"+31TQCHRd6kAKnWDMbAvpYQ1RFxzOFoZwWkDW+J1v6+cxt+BFPTP4wh6/Ozbx1UnyZPDQb6gS+MyQ1JB",
-	"Guzqefss9Tfh2T1vzG1gN/l8/u1x1ePzLDCXr+PfqB7qAHOovTBKj6P0OEqPo/T4oGnwLXKbFadK8uOV",
-	"5/aDpMdU8E8QqVYTzAXsLbSIV616krHYZIzEZLEAg5zu2tlHJ/6fWoLBKM0E0A3i4v+y923LbRxJ2q+S",
-	"oRuRMQCosT0TtnzzU4cZMUayOIJk/xMbE+5CdwKoYaGqXVUNCnY4Yh9in3CfZKNOfQDQAEkBpG3lnUR0",
-	"dx0a+L7MrMwvZ0zyn/3eMgEzraqSy5k3pnythr/YvQutxLAUTOJQSbGKinFPvdG2EatpzB8fpmlbMsH0",
-	"DIcq3uptt9905GVKluMAWFFoNNFSjacvLXMLP7LcipUzlLQXnlsB0+hWuWD6Cq3PNfV5m0kVYMEkm2FR",
-	"ZxOdhVSihVoiWDVDX9XPDCiJYRtuF1y6jO/r840vvVFLfK/iPjxEcKkzgf6wkrsMdPyYLAKyCMgiIIvg",
-	"YBaBR5e+TmRlTRJ3DSqVWi1UqNTs6fWpSn7bXp9tHssGW/Td3VvSGLhY+AYw3Nau8OZQglkflqrVZtsK",
-	"eF0R3RDlCNO4ZWXIZdyK2zGuVRD30Cf1HpV+t4x1T1wc9+YhWPhdfLdb0bf17ol7iXuJe4l7D8i9EfXW",
-	"z3Mi47V4eGsDlgRcNyNijT6tr5+I34ULTCwnTYH8Fj00qnSRmt3+g5p6d9Vqll9h4bMU87k/lfGFIUxW",
-	"TIRzEtQl0xZiQWhZmXkSkB/BPyusfHAgJB96HdyqRG2wcH+Wq1aJq5K4oS7b1sXznUfDc/yUg7bfLdk6",
-	"bsfv8uThbRnDI9J9u4J51LSc+8ltddHphbMtIi+DrdI3s1uP8ZAVBvFl9vvY/0zzDS+dqJ6onqieqP5w",
-	"VB8RqOtpt9jpE3jdoB2WzJhrpXfRu7IsCTeoa4l6qJVASDdGab8UbN7U91uX9HNucbo56DMk9Aaf3RnY",
-	"Qax8LN63Cg89TZdtIYdbc7JBe5mWSmqAPVzX2qR+xvuu9f6I74jviO+I7w7KdyYkKiYthI6HWzYYftfA",
-	"skZjmba7CE8IVdlhvNCHh9OxLE4gJsN1PdyTKPqTqqNLVaypA/EFm+FpaDXGkr8QO5XYtZZrG07qNU7O",
-	"NgaN/irTWHcKdyx5e2r02/F7Oc49Hvm5beinvXgByf8Q5xHnEecdmvMctvQ1zL4Lwym94+j0BRqrq9zy",
-	"JQ6Ay2HIIfLdK4dcDi1fhMCcp7I9/t1T+OHi8uW4E95dKlEtkiRfDA53dP+8/8qtcQ4lsMqqha9/mrD8",
-	"qioNMJsObN/zBWZwohY89dXEdOjqp3s6gneBYkx9t1UwQUDJJgK9h8kN5Ew6mp0gVLJQ8i4k6Xb0jyQ3",
-	"9O5vz7/88stvmhcdz6ZDx1Sf+e2LQ2LUPe46WzIufGK+3/++GHDz9nZEgg82g/s2FJTGF/GrvMtgiKsi",
-	"u4HsBrIbyG44ht3gIabtLQfBQGRacNQBIb2oLf+kCj+NZiXzXUfAw3bv763pWO3upI760zmxd5OlSofX",
-	"sUF3cIzXvOIPBiExQ1q5Dt568IWNZb4CTklgYDWThruh/ba26+vSdoVWoT4/2qx3AW9K425tK7i9In96",
-	"JfOd7vRK5sSKxIrEisSKh/amVzI/nDOdDlWbwvabFyM3R7KfPR+EjXjNjd35Na03jIiBiIGIgYjhwM0u",
-	"azz3Rn4nq+ZE4jUaG8QsTz8hsSZeffZL+qf7s4+DDm8gxu62PZwOqsqWVQh8KolNMUnKkfVJMeFSf+A4",
-	"5wLrTFhunOMXMl8HgMJg8M0q7YNnQs3AR7KCuGczqPPThHOHnqGxQ5xOlbZP6wye1DPa37+tQ3RQ9JCq",
-	"uwRumrjd7eQ86r1/V+/lM/fk36r8+816oKU3yYuopxJ2K+pt9Eyz+TbdtgXa/uH2Tvu7WjXdasaFe9M7",
-	"5dO/eLJDmsQyLl5Hkdy+id95QPyYi8rwJb5Jwh1hhzpC7m1djyf3LOtRf3/73WN/iVsvmUFkBpEZRGbQ",
-	"gaU8morXxyaSgQObu2p49Jg8WgkxYfnVrsCxt0Fis+8QATaSlWauYpZz1jwwA5Wawm3kF6dC3m7AuK8c",
-	"NyZY+Toj5Y1Cr92e6pi0o0zLuMTiqQ8wOyRKVcBMghIF6sbM0vgfzIN0nJ3DV0+ewEk+x/wKspzJd3EP",
-	"slThUpOx4Mae3jq4vGENpQH+EMaQ43UlRNrsYxpCW4a6L33a+MaoaJnsDrI7yO74XOLyDm07AZeaUqHU",
-	"XOkGfO4aejFmPgxJRL0xllfK2AFUxq1kgQOYO/6/wlUU4OLSWCZzDOGhTF3lVoAx82wEb68l6nBizIoF",
-	"lwaUFKuB4/W31/KqmmCSVXWGx7QyySLIxuNXP3739v2P59+fX7w+f/b6ZQa+PPuam1tGQ8Zm/j6sb4Pt",
-	"P4XK7/MkoFnClq/YePwqZoERAREBEQERAR32YFiJJSYpRQUObdZPAVrcMx6/uhnreKnyO50Pj8OtVJG6",
-	"R/847NOu70bcSWINYg1iDWKNw4ZL/UFryjQ1CbPvmlJkqkmhFozLXs3jN2qJa60dWVkGVymfK4MyyQaH",
-	"3lMxCOo1iI3PrtXK+yEO2pUo6quNVaUB7YmQy9l6zmuTF3ti58g15Kgtn7oXg/5A2ZgKi7oSx/lOjnpO",
-	"b6cgPK7X//lqCD/3ac71TjxEKHBtCv2HkefxyxNTs0lRmJiWmJaY9uBM+zyWfqxJPsS2wwGEDkG7Z/50",
-	"rjdC+Nx9apyXGJTy17mWGxA4Y4F0pxoRtFcXlOo6MmNHJngEWSyBeQoO0jNYIJOOpR9HaSP/1PVTzajo",
-	"MFeiMLeMEaZ1+oX8bo8Fu5tuFfi31tsGqGVT3GZu/aPcp6Pr39RNmDjk0FGTHyJgImAi4MMTMOZXwKdb",
-	"Oa/O3z0IBZtqNkNjd6RCx3xjmDNZTCvhdSjac2rJH3VJeAAGscCikR1uEZDvw3wS/desQOOIIvN3nIai",
-	"09SZpyXg1GrdE1o+tnoJ1R0MVz6XFq5RiDvy9Tjuye+RsceIRRC7CosIGfbuBVy7t+Q+qYz7iTAD7mEF",
-	"GAVTpvv4PL6ZHfnBnzLiluVsm4T/0Xem0OQQf9FuDHjPCcTxi1J/cXYkEo+bzSGDgQwGMhjIYDhkT+mA",
-	"Li1Nni5Ff4KpULcMvkG1lFqiXnK8bvoMg+8K7Qulnl9+GEDoDD1YayRdfvOX1Ex6a6No6hDd6RB99NbN",
-	"TdI5tW2+x7bNX//1qz9Q0+awO7+Fps3N13kL8rY+JLOMzDIyy8gsO2jKwhab6GSbKWQGjQkUTYHTO9eB",
-	"1WOFnsN7TDd/zdDMmXPOm2k6qytXUoaaqlxwN1Izb1V6M2oAc57sOL+uTfvtD2KhrZldzjiTSg5DV+e2",
-	"HLjSx7TJnvs3SoYZGWa/U8PMf4F32mT+igaJyDIjy4wsM7LMDmyZ5Wso8+nGVkrb3GNvpct2mlxcSTOA",
-	"gpsrqAyb4aDRljX852RsJWPMa6wyf1e0xT43M2xLn5pjW2JJe5yMMTLGfrdRsvgd3mmPvahVrckkI5OM",
-	"TDIyyY5kkhWbQPPpVlk6OdtjlXG5VGFjtttlzedmENbm7LMqGA0DsHOtvGBjML1yJUO2cR7uDuWtaSqd",
-	"tOQeg2bLtV2Dpr4gWDSlVkGiAYtPsGn+ljaLbJrfvk1zPptpnIX0txI1V8VtTZtw1861bto4txu2z9T5",
-	"633LPaav9k5TJ11Epg6ZOmTqkKlzNFNnugk0dzV1qrJf2PFZlFKUgB+5se4Hzcqy3bgeqlIoVmABS87g",
-	"8u34PbjxwofD8GFQW9JKCAPcgg8mjasStcHCN+9ZAZfDoHEd9BhH8PKnii+ZcPRt1cZzwwpMFGZqryf7",
-	"Fq6wjGrbXuDx+esLWKI2d2gC9KH8jGubP5QPUc78oezPgv5nhRUW4RtCvEq8SrxKvHpAXn1W93IPkAul",
-	"xiVXlRGrhuWEyt0AnoZ2Cxy2yo36e0W8iN5O9gKXKFTprs78HLJLrYrKk3zWLl0KwsassmqYCqQc1elZ",
-	"rKSasyWCVNIfTfiTEV/JjLIIbQSZuGYr03SCsCCQGQv2WoFW131Vyi/bqzki/rfG2ddkqDMlogOiA6ID",
-	"ooMD9xnqAC+Xnf7o7frRFhV0YOnfvw5q12qb47EBq0fQKNLILLYGegizvjX81p+Un2PR3m5CdEJ0QnRC",
-	"9EMKI3iU8dGsFs70IvcWO/7sl9b/Lopfg0Ev0OKWynY1tcPwoVnXHxjBM6Hyq1pa/Ks/f5EFxYZV58DO",
-	"WC4EaJyiRpkj8C0Hcy/8EF0qedme5U1iWG1thN4gFq499TZRrM0B7leC1u1Ra1d2fcvCxRRhIgIiAiIC",
-	"OiQBBWS5MQENdiiRE9rf2dl4SU4GYTxhPGH88foydgAeJiu4eLEzQsRsPt8SInJ//oNA/THOp4vffFwr",
-	"zJHiWkQ5RDlEOceinIAya6zz2EBojZcrofTA/QTbg35K1Mt92Nv04h2WguWbIS+3vXOmAxgOl0yDwdT2",
-	"N6Vz4RL1KpXaDSfuNxM6ZsyZBS7nqLn1D16Ec21MzQwsu0IDOJ1iboEvFlhwZlGsejpa9DLqS7n8vEl1",
-	"jPalXH7PtHkINm1G33PuD0umDfiBKFBHjEqMSox64B6DnsQ2KbWhMA9Be2m01l3szQB7zY2N+petfILH",
-	"BrJ0bzZ04N8+FxpBKjQJ2WCJMQWa0PNpBcxals9jrymhqgJY7kvs4U+gceaLzqSy/lN/82mk1BVIR8MO",
-	"XJFpqGSBGrJ4kc+v9vlk3ERN7sK3lSqajHQREsV78sjqiT+6h1qdfRlkzWSIQohCiEKIQg6cPrbWUbyR",
-	"4d0nqczlVO3tquC2rNRqygWCmjZa+cwYlXNm280PfH1vgUX6qffA84Ub95jlHQa1G2PXxrtrwG/AbwkZ",
-	"bxX/rewcpY3MWNXraV66W2PzthdMX6H1JscZK8t+Y+Gld5CdSxxzEVt3Qs4sE2o2AHTMPxVsNsMiVUex",
-	"icAMfHF4X3H3m+ZZ524SR/wadIfaR9Otq8FvD7E1sTWxNbH1gdl6sY4zDV63IKgfts9+MaKa/dqL3m+l",
-	"f+5jAwVaxkVH4GyOkHFZVtZkwC1IxMLABKdKJ9fvZrA9FtVsXwxzDVCBF3Dia3qd7/Zja1k/umWdDgBH",
-	"sxFk8muZ9QQ7TRj1pjHOT5zAgsvXKGd23m7acy+pJd3NfuFf4w0oixiLGIsYixjr0Hkm65R1R8ZqWulu",
-	"l4H43v2emUXTUBSToW2b78RXapzyj97ZVJWFXCMLWhFyZedbY4Gh+mkLdd2o2+1nwF+HP9przdlv8kMc",
-	"8K3PYSeO+TaW1Kae+JP4k/jzSF1yuwwa/Ky7kmi8u5dFQ/lZynIpOeZ12NZxyAkry0amexAExk+BS1AS",
-	"IWdCjOA907OQX7oeWc7CoZ4P8XlxbHUt28d2I3i7eZMb+poJgRYWlYnaEbnGgtugQ8lgUslCYNFoayod",
-	"pc+Dh8pgoj7CSVZMxlfVRZHBGWT+8/Df01tQ/4u0+8T9R+T+sMsPTP5hEruL8NwVWJD3TOxP7E/sf/BK",
-	"PK/w9EkONJfGMiHM2S8WF6VgFi/cX2SOeyrD3+FCLWtDoKXv54h+0x4J/jQW7XAxt00jkKAY7Tk5euVc",
-	"+w9HjvBRB/lFViy4NKDktqzYVEPeWvNFXN37jbXtY+i/dRv2RxfOZyBnmzuVgZK+7r0xhXyAvEl22s7a",
-	"dtu8bsrhR5jibyImHd4jFbcTpRKlEqU+THF7BEYsbsut7fzX/hSYDwZjI3dbaYkFZLzIgIVsqOzjUAUf",
-	"d9h+WhY31+G4qSbG4ZC0de/U0BTBe80pSXaCQsmZAatgoTSGblKOnpXuy2x925n+EfG+PdC+1Jn2tbDA",
-	"xQS1mXNKoSH8J/wn/D98Ck0Hw/0S4y/tsQl5kA2wtuigC501IZRKWyb2B1QZ5JWxaoF6GG4Bg8ZwJWN5",
-	"YVS6hYlW124OWaVF5qGdSTZDKFlwvxZo58q7WUsV+gq6+x1hpEFHcB7FuhbIZF22AXNmQCrfbtCfe0YW",
-	"WaGFE2OZtsCgFEzClGtje4Oil2HBx+yeO8f8SlX2gxY7fzlhGz+8e01EQURBREFEcUCieFvGFmQJLhN6",
-	"Q5nwLxHDs3BFixK0+g/mOwTVzyGLmuoZxIuBmyPopbs7tLrucQYu0zyPiOVxjH0uQD0VQnJCckJyQvID",
-	"m/wJkm8oj17D0T5p9A6EHksWPQ7yEMfhcehdcuhluoSQm5CbkJuQ++BS6DXEbAXoNaP77Jf4r9sqn8fb",
-	"RvB+jpBaHiXrPGfysYUJQrijgBMfYTlNGWjpOl/KzEDwZbcnnoFJ1FKPN0IlLRfA7WNnti/UEosRnNfP",
-	"mSvhj9CVFKtuf4845W/96fpGy6X4qDCPXULsaQMv02bdRFKq9lX65KTK1tNuIyXVffD9i67HXaAzaaI5",
-	"ojmiuQc6k95Jc7t01gnM93orl+SlEHwTfBN8H6nGNYHeuox6N5K0U0L9d4fix5JL/23Gu5JMOsW7iEmI",
-	"SYhJjieRniDmxuroW6NhC3WmsUBc9OcmnRe+ONJfDDlblIzP5GMTqyvBqlbx5QhesnzeOTDxsS+v4+az",
-	"pnImIYwIrH4aKJnjCM5B47QyTMBJJa+kupaQqwIHoKZT1DCthHDLQ1lgMQAmNLJiBblgfOH+gB+DXmtK",
-	"Wjqtj7qzL548yWKDQnX1FKZMGMwGwCDTyIySWQrRuTkOpyx3j8kWaAybYdab5OS25F3YvuNQXXi4H+ch",
-	"iK41/M4fX3ifJHBAlEeUR5R3BA3zyBeRg1SBuzKrgn7ATXTK45XAlowLNhHoM6rCkUw4WNkQGjhx9wXt",
-	"9AFINYy6BOD8qdMRfDCOmuuKjjBAt7AjyRtMOYrCDZFdvh2/BzfzViFeBtdzr4a74NaTWkcBIatnnMgM",
-	"TnBR2lV6vMlOW4m9afJuksCN49OebK93ce+OSiqzG5R7pCmnl0msQqxCrEKscmRZc13jX6KXhIgdejFW",
-	"c2wzTA+UxuuOjKbG6tU+PG3NhqCUoJSglKD0wFDqZsq4RA0RIVfuTxI32kS0oGgLqJ79km6PuVk3Qdh3",
-	"9S03OQ6p59d7HqLbz7vNgcjao+/zXDvtwQ70XxH2E/YT9hP2H/xku8a99aPtbWBvVKVzHMZeqf0nD88q",
-	"LgoD4XKoSqFYgQUsOYM6ZBKfFT40I/ghKjdnTSzlosgGUXnKAAOJ1xtmPyvLWGFtlGgErXzwBYsYqgn7",
-	"MzS8QDjxatFeLDFz/3zFpc0GsGAFQiX5TxV+m0qqH5vmZCL1q0MRtT+KkEL8rS8YDM9zf36h8ivUUy7w",
-	"sYGX///y7fhl5yaLuZ+XI7prpa+8iJN/Urzs6ydfP/kWymoieO6DWtc4+bY9Yn10749nmgzh00GMXrnp",
-	"XvtutRbyuTIIXLpd9XebLOz0xjZrnISX5isS3bbWawqvCE7Cmxj6pGW/sSkp+T9+UacjaHeF8o97bCDT",
-	"uOTG03/veczYfxdexK/VkdrKtsZ4kMayrfHfxQOX/rKb+L0+Uxp+qrDCIuwnmQFkBpAZQGbAAc0Az9We",
-	"TKIQYU3Xkb4j7rufYWqTftqxEwK8b5oJkdr7zYQ33Be2gJkrbYeCL7FIZGOEsk+bincJWfjgosigFFXI",
-	"a8Ch4TOJBXx49xqsgssP74HB7GdelliAZXrChEiKiXE1VsGJo2dfRu+VFHU+50sErZQduD8ulLGQLdjH",
-	"ZyuLJjsdwSUz8QiomYQbbs2USS3krQpg3d5Ubh07TiuDBirPrdIGza+WAHaUcIn5GSfO3mFlGbQzN+Od",
-	"cbjT3aT6Ib6EG3jXoc09N+kdXHMh6nFG8HbBW1NuX5OnSq4449o3/6lCvWqc87bJ8Wi3O37QudynM9/e",
-	"9Z0dJpvvOZE6kTqROpH6AUn9UqOjRkecLUL1/qRQuXush6k9NF6iLIZuvVoJc6NWwMFrVv4jJmChpJ2L",
-	"FUyqYoYWclYOgms6Z2WJsuZg/0Fq5xSGZQK1+1CjmStRmJ60h7G7+Hma4jFxvT3QrjfnL4R61wjbCdsJ",
-	"2wnbDxu3NR2QgZMGYOFP4KHTnG7NtBs8KqsdMpZKQ1WGNnu+tfcGfgc5Sj96GGYEY7SQhSvO/ZHhUyhZ",
-	"ZdD7SCy3FRNi5e9NgmtwYir/DAN5cGdC0yH32hiXPke8JobTbyGTyvLpKgt6CWnct+4/7qIYi1ypCkrn",
-	"qTGNkM+ZnGGxxTeqtrLGsYqdOiM9SNixs9QdhU+GeIt4i3iLeOtYvDX+FN5KLomZD69wdZMU8fH4VTpG",
-	"c3fEg07UWDheaivt97kWZv4PXB3XqfBDuDlv2+9/uTm6ZfgVEyATIBMgEyAfOPlv1QGZBnrH41cdecxt",
-	"aWmhr9ca0o7gosBFqdz6fcCpbgV6hSs4yWInsVT+cjoCv07zFLLx+NWP/3j5rx8vvvv+/PXFi2zQ/tOP",
-	"H8YvMzjpwjiTys6xRvLT1h2vL95cvO/POGiB+91s/1K759qYTR5OONw2+TSLR08fPRo8WrCPqR/XF0+e",
-	"bJxDOF/M7Zp/Oes7/LZE2d1YEFxiauXpiBCLL/7ylz9/A+fn5+ej0QgW+P8EK60qQ5PPZvA///XLr7/a",
-	"1x6s7ZT8V2tm/64vVZNGPOH+HJjzoggvqz9posnf9N+LmiaILYktiS2JLQ/CludFkcjO/bLWmXLNQTmb",
-	"cTuvJv25Dw2DenXSlqPi/23m6EtMGfyd21fVpPZV4B+bzswaC4ajFP8sqxRcI7sKobgcS/ehRjBXPkdi",
-	"Dzv+PazhUBxZGbf/iy1qrXGN6YIRfFcJAT5Zwu1Odwt8oC8mfnDpxSHW+O7LbwaPZCV8mW3K/d+kuwdl",
-	"td2en3/HUl2333NMx2Q27QNxHHEccRxx3AE57mLhs9mTOxgwJ6DvXsL7hd+s47TvYDnt+p0j8A15Yss0",
-	"A5UJDaYBZRC75o4Jp3gNCy4ri6Zf+TpS17Z6si3lYnx3mdj9VoG5/dnn6oSrKA+csJ+wn7D/sFo9Dllu",
-	"4OJUhs3wLLbY6T2IeR5b8Hj8xQKWzy8/wJ9ggQulV85urwzWKV9BgMz9sOeq0mIFuTLOztXKxIouRwGz",
-	"utelrmRfQtgHN7s4+FG7WIYh/HC73sprvkTwW0aYTZhNmE2YfeBUMLcm35BmUmkJmtl2Vq+Hp3XonnNj",
-	"lV71Qvcl6mHBVgG1PEZ7OJ4q3WmuljOBsmA6ZIkN4GfUajjlQsT+lsyf83NZqcptsOa4E7NfxVkdEbPb",
-	"4+xsBsO4SMsPEyfsJuwm7CbsPgJ2F5tgswe/Pd4OrRoWLARatqK4vxWsskwYOHHm99AZ12YQbfDh3/mz",
-	"9BecaTTmtLbHZ97w9qhfaHYtGy2AWKloFEyZDhV6XR7YBfFv3AXv1YvAUUeD+dYwe83zN+29JDudsJ6w",
-	"nrD+KFi/2ESa2rbeh/hR8gWLXrT/jjkXwFjN+Gxuh4LLuseLe8OxBt7P4bFJKO6wHU66E/OgbxymF6lD",
-	"gJfv91edjuB7JZjlAgGZFqvUcHkv9F/WKzh+excsPKo/VzdqSo9FmH14EYT9hP2E/YT9h7fzy21w04v7",
-	"AaFvVHPtgz8R0SdMMJkjnMw0kxaLAeRKmsp3WdG4YFxyOTsNCipzdQ2LKp8nvZFrZiAqv0wcsE+FT0Bh",
-	"RskRPJ9jfhXs/QlOlcbdYvv/+9//Ayxpn0jE0IhGGW59pCrMsocvfghLPyJPhBHG4RXtevU/dHaVyIHI",
-	"gciByOEo5IAl48UajG+vhNvzbD+PkPBSafHo6aMzVvKzXPBHv/771/8LAAD//w==",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

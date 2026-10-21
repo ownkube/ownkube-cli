@@ -9,7 +9,7 @@ func rollbackCmd() *cobra.Command {
 	var note string
 
 	cmd := &cobra.Command{
-		Use:   "rollback <deployment-id> <revision-id>",
+		Use:   "rollback [app] <revision-id>",
 		Short: "Roll a deployment back to an earlier revision",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

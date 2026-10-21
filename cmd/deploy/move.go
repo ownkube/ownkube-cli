@@ -11,7 +11,7 @@ func moveCmd() *cobra.Command {
 	var project string
 
 	cmd := &cobra.Command{
-		Use:   "move <deployment-id>",
+		Use:   "move [app]",
 		Short: "Re-file a deployment under a different project",
 		Long: "Move a deployment to another project (--project). This is a " +
 			"control-plane-only change: it cuts no revision, doesn't re-sync, and " +
@@ -28,7 +28,11 @@ func moveCmd() *cobra.Command {
 				return err
 			}
 
-			result, err := client.MoveToProject(cmd.Context(), args[0], project)
+			projectID, err := ux.ResolveProject(cmd.Context(), client, project)
+			if err != nil {
+				return err
+			}
+			result, err := client.MoveToProject(cmd.Context(), args[0], projectID)
 			if err != nil {
 				return err
 			}
@@ -41,6 +45,6 @@ func moveCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&project, "project", "", "Target project ID (required)")
+	cmd.Flags().StringVar(&project, "project", "", "Target project name or id (required)")
 	return cmd
 }

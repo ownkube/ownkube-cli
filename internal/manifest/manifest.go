@@ -35,17 +35,21 @@ type EnvVar struct {
 }
 
 // Manifest is the typed view of ownkube.yaml. Fields cover the common web case;
-// the server validates the full spec on deploy.
+// the server validates the full spec on deploy. Config holds every other
+// setting of the app's type, keyed as the API names them (healthCheck,
+// resources, autoscaling, ...). A field left out is left as it is on apply, so
+// Replicas and Public are pointers: 0 and false are real settings.
 type Manifest struct {
-	Name         string   `yaml:"name" json:"name"`
-	Type         string   `yaml:"type,omitempty" json:"type,omitempty"` // resourceType: web|worker|job|database|function
-	Image        string   `yaml:"image,omitempty" json:"image,omitempty"`
-	Tag          string   `yaml:"tag,omitempty" json:"tag,omitempty"`
-	Port         int      `yaml:"port,omitempty" json:"port,omitempty"`
-	Replicas     int      `yaml:"replicas,omitempty" json:"replicas,omitempty"`
-	Public       bool     `yaml:"public,omitempty" json:"public,omitempty"`
-	StartCommand string   `yaml:"startCommand,omitempty" json:"startCommand,omitempty"`
-	Env          []EnvVar `yaml:"env,omitempty" json:"env,omitempty"`
+	Name         string         `yaml:"name" json:"name"`
+	Type         string         `yaml:"type,omitempty" json:"type,omitempty"` // resourceType: web|worker|job|database|function
+	Image        string         `yaml:"image,omitempty" json:"image,omitempty"`
+	Tag          string         `yaml:"tag,omitempty" json:"tag,omitempty"`
+	Port         int            `yaml:"port,omitempty" json:"port,omitempty"`
+	Replicas     *int           `yaml:"replicas,omitempty" json:"replicas,omitempty"`
+	Public       *bool          `yaml:"public,omitempty" json:"public,omitempty"`
+	StartCommand string         `yaml:"startCommand,omitempty" json:"startCommand,omitempty"`
+	Env          []EnvVar       `yaml:"env,omitempty" json:"env,omitempty"`
+	Config       map[string]any `yaml:"config,omitempty" json:"config,omitempty"`
 }
 
 // Path returns the ownkube.yaml path for dir.
@@ -83,11 +87,20 @@ func Write(dir string, m *Manifest, force bool) error {
 			return fmt.Errorf("%s already exists", FileName)
 		}
 	}
-	data, err := yaml.Marshal(m)
+	data, err := m.YAML()
 	if err != nil {
-		return fmt.Errorf("marshalling %s: %w", FileName, err)
+		return err
 	}
 	return os.WriteFile(p, data, 0644)
+}
+
+// YAML returns the manifest as ownkube.yaml content.
+func (m *Manifest) YAML() ([]byte, error) {
+	data, err := yaml.Marshal(m)
+	if err != nil {
+		return nil, fmt.Errorf("marshalling %s: %w", FileName, err)
+	}
+	return data, nil
 }
 
 // JSON returns the manifest as JSON — the shape the deploy API accepts as a

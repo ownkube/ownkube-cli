@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Ownkube CLI API",
-    "version": "1.11.0",
+    "version": "1.12.0",
     "description": "API for the Ownkube CLI tool. Authenticate via browser-based flow, then use x-api-key header for subsequent requests."
   },
   "servers": [
@@ -559,10 +559,9 @@
           "monthlyUsd": {
             "type": "number"
           },
-          "cpuClass": {
-            "type": "string",
-            "enum": ["shared", "performance", "dedicated"],
-            "description": "shared: a fraction of the vCPU is reserved, bursts to the full box. performance: half the vCPU is reserved, bursts to the full box. dedicated: the full box is reserved."
+          "dedicatedCpu": {
+            "type": "boolean",
+            "description": "True when the box's full vCPU is dedicated to it."
           }
         },
         "required": [
@@ -571,7 +570,7 @@
           "vcpu",
           "memoryGiB",
           "monthlyUsd",
-          "cpuClass"
+          "dedicatedCpu"
         ]
       },
       "RegionListResponse": {
@@ -706,17 +705,17 @@
           "title": {
             "type": "string"
           },
-          "image": {
-            "type": "string",
-            "nullable": true,
-            "description": "Container image for app pieces; null for datastores."
-          },
           "detail": {
             "type": "string",
             "description": "Short description, e.g. `PostgreSQL 17`."
+          },
+          "version": {
+            "type": "string",
+            "nullable": true,
+            "description": "App version an app piece runs, e.g. `1.123.60`; null for datastores (see `detail`) and apps Ownkube builds itself."
           }
         },
-        "required": ["ref", "kind", "title", "image", "detail"]
+        "required": ["ref", "kind", "title", "detail", "version"]
       },
       "MarketplaceAppDetail": {
         "allOf": [
@@ -909,7 +908,14 @@
                 },
                 "resourceType": {
                   "type": "string",
-                  "enum": ["web", "worker", "job", "database", "cache"]
+                  "enum": [
+                    "web",
+                    "worker",
+                    "job",
+                    "database",
+                    "cache",
+                    "workspace"
+                  ]
                 },
                 "publicHostname": {
                   "type": "string",
@@ -1083,7 +1089,8 @@
             "description": "What happens at the budget cap: `notify` only alerts; `pause` suspends compute (data retained) like wallet exhaustion."
           },
           "alertsEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether spend alerts fire at the thresholds."
           },
           "alertThresholdsPct": {
             "type": "array",
@@ -1118,7 +1125,8 @@
             "description": "At the cap: 'notify' alerts only; 'pause' suspends compute."
           },
           "alertsEnabled": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Turn spend alerts at the thresholds on or off."
           },
           "alertThresholdsPct": {
             "type": "array",
@@ -1174,6 +1182,21 @@
                 "description": "Wallet balance after the credit landed (when `ok`)."
               }
             ]
+          },
+          "expiresAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "nullable": true
+              }
+            ],
+            "description": "When the unspent part of this credit expires (when `ok`); null when it never does. Usage spends promo credit first."
           },
           "reason": {
             "type": "string",
@@ -1933,7 +1956,15 @@
           },
           "resourceType": {
             "type": "string",
-            "enum": ["web", "worker", "job", "database", "cache", "function"]
+            "enum": [
+              "web",
+              "worker",
+              "job",
+              "database",
+              "cache",
+              "function",
+              "workspace"
+            ]
           },
           "status": {
             "type": "string"
@@ -1957,6 +1988,77 @@
           "githubRepository": {
             "type": "string",
             "nullable": true
+          },
+          "source": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["git", "upload", "image"],
+                "description": "git: built from a connected repository on every push. upload: built from uploaded source. image: runs a prebuilt image."
+              },
+              "provider": {
+                "type": "string",
+                "nullable": true,
+                "enum": ["github", "gitlab", null],
+                "description": "The repository's host, for git sources."
+              },
+              "repository": {
+                "type": "string",
+                "nullable": true,
+                "description": "The repository path, e.g. owner/repo or group/sub/project."
+              },
+              "branch": {
+                "type": "string",
+                "nullable": true,
+                "description": "The branch pushes deploy from, for git sources."
+              },
+              "connectionId": {
+                "type": "string",
+                "nullable": true,
+                "description": "The repository connection this app builds through."
+              },
+              "buildContext": {
+                "type": "string",
+                "nullable": true,
+                "description": "Root directory the build runs in; null is the repo root."
+              },
+              "dockerfilePath": {
+                "type": "string",
+                "nullable": true,
+                "description": "Dockerfile path inside the root directory; null is default."
+              },
+              "autoDeploy": {
+                "type": "boolean",
+                "description": "Whether pushes deploy automatically."
+              },
+              "waitForChecks": {
+                "type": "boolean",
+                "description": "Whether push builds wait for the commit's checks to pass."
+              },
+              "watchPaths": {
+                "type": "array",
+                "nullable": true,
+                "items": {
+                  "type": "string"
+                },
+                "description": "Globs a push must touch to build; null means every push builds."
+              }
+            },
+            "required": [
+              "type",
+              "provider",
+              "repository",
+              "branch",
+              "connectionId",
+              "buildContext",
+              "dockerfilePath",
+              "autoDeploy",
+              "waitForChecks",
+              "watchPaths"
+            ],
+            "description": "Where the code comes from (repository, upload or image). Null for databases, caches and functions."
           },
           "workflowPullRequestUrl": {
             "type": "string",
@@ -2422,7 +2524,7 @@
           "publicUri": {
             "type": "string",
             "nullable": true,
-            "description": "Connection string reachable from the internet (TLS), when public access is on."
+            "description": "Connection string reachable from the internet (TLS), when public access is on. The endpoint routes by TLS SNI: for a cache, valkey-cli/redis-cli need `--sni <publicHostname>` or the connection is closed after the handshake (most client libraries send SNI on their own)."
           },
           "publicReady": {
             "type": "boolean",
@@ -2469,7 +2571,7 @@
           },
           "envVar": {
             "type": "string",
-            "description": "Environment variable to set. Defaults to DATABASE_URL for a database and REDIS_URL for a cache."
+            "description": "Environment variable to set. Defaults to DATABASE_URL for a database (MONGODB_URI for a MongoDB-compatible one) and REDIS_URL for a cache."
           }
         },
         "required": ["datastoreId"]
@@ -2501,7 +2603,15 @@
           },
           "resourceType": {
             "type": "string",
-            "enum": ["web", "worker", "job", "database", "cache", "function"]
+            "enum": [
+              "web",
+              "worker",
+              "job",
+              "database",
+              "cache",
+              "function",
+              "workspace"
+            ]
           },
           "status": {
             "type": "string"
@@ -2525,6 +2635,9 @@
           "githubRepository": {
             "type": "string",
             "nullable": true
+          },
+          "source": {
+            "$ref": "#/components/schemas/DeploymentSource"
           },
           "workflowPullRequestUrl": {
             "type": "string",
@@ -2567,6 +2680,76 @@
           "statusMessage"
         ]
       },
+      "DeploymentSource": {
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["git", "upload", "image"],
+            "description": "git: built from a connected repository on every push. upload: built from uploaded source. image: runs a prebuilt image."
+          },
+          "provider": {
+            "type": "string",
+            "nullable": true,
+            "enum": ["github", "gitlab", null],
+            "description": "The repository's host, for git sources."
+          },
+          "repository": {
+            "type": "string",
+            "nullable": true,
+            "description": "The repository path, e.g. owner/repo or group/sub/project."
+          },
+          "branch": {
+            "type": "string",
+            "nullable": true,
+            "description": "The branch pushes deploy from, for git sources."
+          },
+          "connectionId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The repository connection this app builds through."
+          },
+          "buildContext": {
+            "type": "string",
+            "nullable": true,
+            "description": "Root directory the build runs in; null is the repo root."
+          },
+          "dockerfilePath": {
+            "type": "string",
+            "nullable": true,
+            "description": "Dockerfile path inside the root directory; null is default."
+          },
+          "autoDeploy": {
+            "type": "boolean",
+            "description": "Whether pushes deploy automatically."
+          },
+          "waitForChecks": {
+            "type": "boolean",
+            "description": "Whether push builds wait for the commit's checks to pass."
+          },
+          "watchPaths": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "string"
+            },
+            "description": "Globs a push must touch to build; null means every push builds."
+          }
+        },
+        "required": [
+          "type",
+          "provider",
+          "repository",
+          "branch",
+          "connectionId",
+          "buildContext",
+          "dockerfilePath",
+          "autoDeploy",
+          "waitForChecks",
+          "watchPaths"
+        ]
+      },
       "UpdateDeploymentBody": {
         "type": "object",
         "properties": {
@@ -2575,11 +2758,13 @@
             "properties": {
               "repository": {
                 "type": "string",
-                "minLength": 1
+                "minLength": 1,
+                "description": "Image repository to run, e.g. nginx or ghcr.io/org/app. Omit to keep the current image (always kept for an Ownkube build)."
               },
               "tag": {
                 "type": "string",
-                "minLength": 1
+                "minLength": 1,
+                "description": "Image tag to run. Omit to keep the current tag (always kept for an Ownkube build)."
               },
               "port": {
                 "type": "integer",
@@ -2932,7 +3117,7 @@
                 "type": "string"
               }
             },
-            "required": ["repository", "tag", "port"],
+            "required": ["port"],
             "description": "New config for a web/worker deployment."
           },
           "databaseConfig": {
@@ -2940,7 +3125,7 @@
             "properties": {
               "engine": {
                 "type": "string",
-                "enum": ["postgres"]
+                "enum": ["postgres", "mongodb"]
               },
               "version": {
                 "type": "string",
@@ -3081,6 +3266,68 @@
                   "type": "string"
                 }
               },
+              "extensions": {
+                "type": "object",
+                "properties": {
+                  "vector": {
+                    "type": "boolean"
+                  },
+                  "pg_trgm": {
+                    "type": "boolean"
+                  },
+                  "unaccent": {
+                    "type": "boolean"
+                  },
+                  "fuzzystrmatch": {
+                    "type": "boolean"
+                  },
+                  "postgis": {
+                    "type": "boolean"
+                  },
+                  "citext": {
+                    "type": "boolean"
+                  },
+                  "hstore": {
+                    "type": "boolean"
+                  },
+                  "btree_gin": {
+                    "type": "boolean"
+                  },
+                  "btree_gist": {
+                    "type": "boolean"
+                  },
+                  "pgcrypto": {
+                    "type": "boolean"
+                  },
+                  "uuid-ossp": {
+                    "type": "boolean"
+                  },
+                  "pg_cron": {
+                    "type": "boolean"
+                  },
+                  "pgmq": {
+                    "type": "boolean"
+                  },
+                  "pg_partman": {
+                    "type": "boolean"
+                  },
+                  "pg_duckdb": {
+                    "type": "boolean"
+                  },
+                  "pg_ivm": {
+                    "type": "boolean"
+                  },
+                  "hll": {
+                    "type": "boolean"
+                  },
+                  "tdigest": {
+                    "type": "boolean"
+                  },
+                  "pg_stat_statements": {
+                    "type": "boolean"
+                  }
+                }
+              },
               "pgHba": {
                 "type": "array",
                 "items": {
@@ -3164,7 +3411,7 @@
               },
               "version": {
                 "type": "string",
-                "enum": ["8.1"]
+                "enum": ["9.1", "8.1"]
               },
               "billingMode": {
                 "type": "string",
@@ -3263,11 +3510,13 @@
             "properties": {
               "repository": {
                 "type": "string",
-                "minLength": 1
+                "minLength": 1,
+                "description": "Image repository to run, e.g. nginx or ghcr.io/org/app. Omit to keep the current image (always kept for an Ownkube build)."
               },
               "tag": {
                 "type": "string",
-                "minLength": 1
+                "minLength": 1,
+                "description": "Image tag to run. Omit to keep the current tag (always kept for an Ownkube build)."
               },
               "command": {
                 "type": "array",
@@ -3410,7 +3659,7 @@
                 }
               }
             },
-            "required": ["repository", "tag", "schedule"],
+            "required": ["schedule"],
             "description": "New config for a job deployment."
           },
           "note": {
@@ -3841,7 +4090,15 @@
           },
           "resourceType": {
             "type": "string",
-            "enum": ["web", "worker", "job", "database", "cache", "function"]
+            "enum": [
+              "web",
+              "worker",
+              "job",
+              "database",
+              "cache",
+              "function",
+              "workspace"
+            ]
           },
           "status": {
             "type": "string"
@@ -3865,6 +4122,9 @@
           "githubRepository": {
             "type": "string",
             "nullable": true
+          },
+          "source": {
+            "$ref": "#/components/schemas/DeploymentSource"
           },
           "workflowPullRequestUrl": {
             "type": "string",
@@ -4119,6 +4379,368 @@
         },
         "required": ["subdomain"]
       },
+      "VcsConnections": {
+        "type": "object",
+        "properties": {
+          "connections": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VcsConnection"
+            }
+          },
+          "connectUrl": {
+            "type": "string",
+            "description": "Dashboard page to connect GitHub or GitLab, or grant access to more repositories."
+          }
+        },
+        "required": ["connections", "connectUrl"]
+      },
+      "VcsConnection": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Connection id; pass it as connectionId."
+          },
+          "provider": {
+            "type": "string",
+            "enum": ["github", "gitlab"],
+            "description": "The version control provider."
+          },
+          "account": {
+            "type": "string",
+            "nullable": true,
+            "description": "Connected account or group name, e.g. the GitHub org login."
+          },
+          "accountType": {
+            "type": "string",
+            "nullable": true,
+            "description": "Organization or User (GitHub), or the GitLab namespace kind."
+          },
+          "status": {
+            "type": "string",
+            "description": "active when usable; anything else needs fixing in the dashboard."
+          }
+        },
+        "required": ["id", "provider", "account", "accountType", "status"]
+      },
+      "VcsRepositories": {
+        "type": "object",
+        "properties": {
+          "repositories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VcsRepository"
+            }
+          }
+        },
+        "required": ["repositories"]
+      },
+      "VcsRepository": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "description": "owner/repo; pass it as repository when setting a source."
+          },
+          "defaultBranch": {
+            "type": "string",
+            "description": "The repository's default branch."
+          },
+          "private": {
+            "type": "boolean",
+            "description": "Whether the repository is private."
+          },
+          "url": {
+            "type": "string",
+            "description": "Repository web URL."
+          },
+          "connectionId": {
+            "type": "string",
+            "description": "Connected account the repository was listed through."
+          },
+          "account": {
+            "type": "string",
+            "nullable": true,
+            "description": "Login of the connected account the repository came from."
+          }
+        },
+        "required": [
+          "fullName",
+          "defaultBranch",
+          "private",
+          "url",
+          "connectionId",
+          "account"
+        ]
+      },
+      "VcsBranches": {
+        "type": "object",
+        "properties": {
+          "branches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Branch name."
+                },
+                "lastCommitAt": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "ISO timestamp of the branch tip commit, when known."
+                }
+              },
+              "required": ["name", "lastCommitAt"]
+            }
+          }
+        },
+        "required": ["branches"]
+      },
+      "SetDeploymentSourceResult": {
+        "type": "object",
+        "properties": {
+          "deployment": {
+            "$ref": "#/components/schemas/LifecycleDeploymentResult"
+          },
+          "provider": {
+            "type": "string",
+            "enum": ["github", "gitlab"],
+            "description": "The version control provider."
+          },
+          "repository": {
+            "type": "string",
+            "description": "Repository as the provider spells it, e.g. owner/repo."
+          },
+          "branch": {
+            "type": "string",
+            "description": "Tracked branch."
+          },
+          "gitSha": {
+            "type": "string",
+            "nullable": true,
+            "description": "Commit being deployed, or null when deploy was false."
+          },
+          "revisionId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Revision building now (follow it with list_revisions), or null when deploy was false."
+          }
+        },
+        "required": [
+          "deployment",
+          "provider",
+          "repository",
+          "branch",
+          "gitSha",
+          "revisionId"
+        ]
+      },
+      "SetDeploymentSourceBody": {
+        "type": "object",
+        "properties": {
+          "repository": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300,
+            "description": "Repository as owner/repo (GitLab: group/subgroup/project). A trailing .git is fine."
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255,
+            "description": "Branch to deploy and track; pushes to it deploy automatically."
+          },
+          "connectionId": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Connected account to use (from list_vcs_connections). Omit to use whichever connected account can see the repository."
+          },
+          "contextPath": {
+            "type": "string",
+            "maxLength": 512,
+            "description": "Root directory to build from, relative to the repository root. Empty string means the repository root."
+          },
+          "dockerfilePath": {
+            "type": "string",
+            "maxLength": 512,
+            "description": "Dockerfile path relative to the root directory. Empty string means the default Dockerfile."
+          },
+          "watchPaths": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "maxItems": 20,
+            "description": "Globs such as src/** or !docs/**: a push deploys only when a changed file matches. An empty list deploys on every push."
+          },
+          "waitForChecks": {
+            "type": "boolean",
+            "description": "Hold push deploys until the commit's CI checks pass; a failing check skips the deploy."
+          },
+          "deploy": {
+            "type": "boolean",
+            "description": "Build and deploy now (default true). false saves the source and waits for the next push or rebuild."
+          },
+          "commit": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{7,40}$/i",
+            "description": "Deploy this commit SHA instead of the branch tip. The branch is still tracked for later pushes."
+          }
+        },
+        "required": ["repository", "branch"]
+      },
+      "ClearDeploymentSourceResult": {
+        "type": "object",
+        "properties": {
+          "deployment": {
+            "$ref": "#/components/schemas/LifecycleDeploymentResult"
+          }
+        },
+        "required": ["deployment"]
+      },
+      "AppVariables": {
+        "type": "object",
+        "properties": {
+          "variables": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AppVariable"
+            }
+          }
+        },
+        "required": ["variables"]
+      },
+      "AppVariable": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value. Always empty for a secret: secrets are write-only."
+          },
+          "secret": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": "string",
+            "enum": ["environment", "app"],
+            "description": "`environment` = shared by the app's environment (change it there); `app` = set on this app."
+          },
+          "overridesEnvironment": {
+            "type": "boolean",
+            "description": "True when this app's value replaces a shared environment one."
+          }
+        },
+        "required": [
+          "name",
+          "value",
+          "secret",
+          "source",
+          "overridesEnvironment"
+        ]
+      },
+      "UpdateAppVariablesResult": {
+        "type": "object",
+        "properties": {
+          "changed": {
+            "type": "boolean",
+            "description": "False when every value already matched, so nothing redeployed."
+          },
+          "revisionId": {
+            "type": "string",
+            "nullable": true,
+            "description": "The revision the change rolled out as; null when unchanged."
+          },
+          "set": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Names that were added or changed."
+          },
+          "unset": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Names that were removed."
+          }
+        },
+        "required": ["changed", "revisionId", "set", "unset"]
+      },
+      "UpdateAppVariablesBody": {
+        "type": "object",
+        "properties": {
+          "set": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AppVariableInput"
+            },
+            "maxItems": 200,
+            "description": "Variables to add or change on this app. A name shared by the environment is overridden for this app only."
+          },
+          "unset": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "maxItems": 200,
+            "description": "Names to remove from this app. Only the app's own variables can be removed; shared ones are changed on the environment."
+          }
+        }
+      },
+      "AppVariableInput": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "API_BASE_URL",
+            "description": "Variable name: letters, numbers and underscores, not starting with a number."
+          },
+          "value": {
+            "type": "string",
+            "description": "The new value. A secret can't be empty; to drop a variable, list its name under `unset` instead."
+          },
+          "secret": {
+            "type": "boolean",
+            "description": "Store as a secret (never returned on reads). Omit to keep the variable's current flag; a new variable defaults to plain."
+          }
+        },
+        "required": ["name", "value"]
+      },
+      "ResolvedAppVariables": {
+        "type": "object",
+        "properties": {
+          "variables": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The real value, secrets included."
+                },
+                "secret": {
+                  "type": "boolean"
+                }
+              },
+              "required": ["name", "value", "secret"]
+            }
+          }
+        },
+        "required": ["variables"]
+      },
       "RevisionListResponse": {
         "type": "object",
         "properties": {
@@ -4144,6 +4766,11 @@
             "type": "string",
             "nullable": true
           },
+          "imageSource": {
+            "type": "string",
+            "enum": ["managed"],
+            "description": "Set to managed when Ownkube built and stores the image; image is then null"
+          },
           "tag": {
             "type": "string",
             "nullable": true
@@ -4151,6 +4778,16 @@
           "status": {
             "type": "string",
             "nullable": true
+          },
+          "commitMessage": {
+            "type": "string",
+            "nullable": true,
+            "description": "First line of the built commit's message, for builds from a repository"
+          },
+          "commitAuthor": {
+            "type": "string",
+            "nullable": true,
+            "description": "Author of the built commit, for builds from a repository"
           },
           "note": {
             "type": "string",
@@ -4499,10 +5136,12 @@
             "description": "Give a web app a public URL. Defaults to true for web."
           },
           "projectId": {
-            "type": "string"
+            "type": "string",
+            "description": "Project id from list_projects. Defaults to the organization's default project."
           },
           "environmentId": {
-            "type": "string"
+            "type": "string",
+            "description": "Environment id from list_environments. Defaults to the project's default environment."
           },
           "note": {
             "type": "string",
@@ -6869,7 +7508,7 @@
       "get": {
         "tags": ["Regions"],
         "summary": "List Ownkube Compute regions",
-        "description": "Lists the regions available for deploying on Ownkube Compute (the shared, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.",
+        "description": "Lists the regions available for deploying on Ownkube Compute (the managed, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.",
         "security": [
           {
             "apiKey": []
@@ -10329,7 +10968,7 @@
       "get": {
         "tags": ["Deployments"],
         "summary": "List deployments",
-        "description": "Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the shared, no-cluster deploy path). Passing more than one is an error.",
+        "description": "Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the managed, no-cluster deploy path). Passing more than one is an error.",
         "security": [
           {
             "apiKey": []
@@ -10463,7 +11102,7 @@
       "post": {
         "tags": ["Deployments"],
         "summary": "Create a deployment",
-        "description": "Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto the org's shared cluster. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.",
+        "description": "Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto Ownkube Compute. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.",
         "security": [
           {
             "apiKey": []
@@ -11657,7 +12296,7 @@
                         "properties": {
                           "engine": {
                             "type": "string",
-                            "enum": ["postgres"]
+                            "enum": ["postgres", "mongodb"]
                           },
                           "version": {
                             "type": "string",
@@ -11798,6 +12437,68 @@
                               "type": "string"
                             }
                           },
+                          "extensions": {
+                            "type": "object",
+                            "properties": {
+                              "vector": {
+                                "type": "boolean"
+                              },
+                              "pg_trgm": {
+                                "type": "boolean"
+                              },
+                              "unaccent": {
+                                "type": "boolean"
+                              },
+                              "fuzzystrmatch": {
+                                "type": "boolean"
+                              },
+                              "postgis": {
+                                "type": "boolean"
+                              },
+                              "citext": {
+                                "type": "boolean"
+                              },
+                              "hstore": {
+                                "type": "boolean"
+                              },
+                              "btree_gin": {
+                                "type": "boolean"
+                              },
+                              "btree_gist": {
+                                "type": "boolean"
+                              },
+                              "pgcrypto": {
+                                "type": "boolean"
+                              },
+                              "uuid-ossp": {
+                                "type": "boolean"
+                              },
+                              "pg_cron": {
+                                "type": "boolean"
+                              },
+                              "pgmq": {
+                                "type": "boolean"
+                              },
+                              "pg_partman": {
+                                "type": "boolean"
+                              },
+                              "pg_duckdb": {
+                                "type": "boolean"
+                              },
+                              "pg_ivm": {
+                                "type": "boolean"
+                              },
+                              "hll": {
+                                "type": "boolean"
+                              },
+                              "tdigest": {
+                                "type": "boolean"
+                              },
+                              "pg_stat_statements": {
+                                "type": "boolean"
+                              }
+                            }
+                          },
                           "pgHba": {
                             "type": "array",
                             "items": {
@@ -11913,7 +12614,7 @@
                           },
                           "version": {
                             "type": "string",
-                            "enum": ["8.1"]
+                            "enum": ["9.1", "8.1"]
                           },
                           "billingMode": {
                             "type": "string",
@@ -12829,13 +13530,37 @@
             "schema": {
               "type": "integer",
               "minimum": 60,
-              "maximum": 86400,
+              "maximum": 7776000,
               "default": 3600,
-              "description": "How far back to read, in seconds (default 3600)."
+              "description": "How far back to read, in seconds (default 3600). Ignored when `start` and `end` are sent."
             },
             "required": false,
-            "description": "How far back to read, in seconds (default 3600).",
+            "description": "How far back to read, in seconds (default 3600). Ignored when `start` and `end` are sent.",
             "name": "rangeSeconds",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "description": "Window start, unix seconds. Send with `end` to read a fixed window instead of a look-back."
+            },
+            "required": false,
+            "description": "Window start, unix seconds. Send with `end` to read a fixed window instead of a look-back.",
+            "name": "start",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "exclusiveMinimum": true,
+              "description": "Window end, unix seconds, after `start`. Capped to now and to the plan's log retention."
+            },
+            "required": false,
+            "description": "Window end, unix seconds, after `start`. Capped to now and to the plan's log retention.",
+            "name": "end",
             "in": "query"
           },
           {
@@ -16712,9 +17437,11 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 12
+              "maximum": 12,
+              "description": "How many suggestions to return (1 to 12)."
             },
             "required": false,
+            "description": "How many suggestions to return (1 to 12).",
             "name": "limit",
             "in": "query"
           }
@@ -16852,6 +17579,962 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ChangeSubdomainResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/vcs/connections": {
+      "get": {
+        "tags": ["Version control"],
+        "summary": "List connected version control accounts",
+        "description": "Lists the GitHub and GitLab accounts connected to the organization. Connecting a new account happens in the dashboard at `connectUrl`.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Connected accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcsConnections"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/vcs/repos": {
+      "get": {
+        "tags": ["Version control"],
+        "summary": "List repositories the connected accounts can see",
+        "description": "Lists repositories visible to the organization's connected GitHub and GitLab accounts, optionally for one connection.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Only list this connected account's repositories. Omit to list across every connected account."
+            },
+            "required": false,
+            "description": "Only list this connected account's repositories. Omit to list across every connected account.",
+            "name": "connectionId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Repositories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcsRepositories"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/vcs/branches": {
+      "get": {
+        "tags": ["Version control"],
+        "summary": "List a repository's branches",
+        "description": "Lists a repository's branches, most recently committed first, through the connected account that can see it.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 3,
+              "description": "Repository as owner/repo (GitLab: group/subgroup/project)."
+            },
+            "required": true,
+            "description": "Repository as owner/repo (GitLab: group/subgroup/project).",
+            "name": "repository",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Connected account to read through. Omit to use whichever connected account can see the repository."
+            },
+            "required": false,
+            "description": "Connected account to read through. Omit to use whichever connected account can see the repository.",
+            "name": "connectionId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Branches",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VcsBranches"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/source": {
+      "put": {
+        "tags": ["Deployments"],
+        "summary": "Connect or switch an app's repository",
+        "description": "Connects a repository and branch to an existing web app, worker or job, or switches its repository or branch, then builds and deploys it. Settings, secrets, linked databases, address and resources are kept; the running version keeps serving until the new build is live. Later pushes to the branch deploy automatically.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The deployment id."
+            },
+            "required": true,
+            "description": "The deployment id.",
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetDeploymentSourceBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated source",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetDeploymentSourceResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Deployments"],
+        "summary": "Disconnect an app's repository",
+        "description": "Disconnects the app's repository: pushes stop deploying and the app goes back to deploying from uploaded source. The running version keeps serving; nothing is rebuilt.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The deployment id."
+            },
+            "required": true,
+            "description": "The deployment id.",
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated deployment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClearDeploymentSourceResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/variables": {
+      "get": {
+        "tags": ["Deployments"],
+        "summary": "List an app's variables",
+        "description": "Returns the app's effective variables: the environment's shared ones with the app's own on top. Secret values are always empty.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The app (web, worker or job) whose variables to use."
+            },
+            "required": true,
+            "description": "The app (web, worker or job) whose variables to use.",
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Variables",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppVariables"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Deployments"],
+        "summary": "Set or remove an app's variables",
+        "description": "Adds, changes and removes the app's own variables in one save, which rolls out as one revision. Untouched variables, secrets included, keep their values. Sending only values that already match changes nothing.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The app (web, worker or job) whose variables to use."
+            },
+            "required": true,
+            "description": "The app (web, worker or job) whose variables to use.",
+            "name": "deploymentId",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAppVariablesBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Saved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateAppVariablesResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/deployments/{deploymentId}/variables/resolve": {
+      "post": {
+        "tags": ["Deployments"],
+        "summary": "Resolve an app's variables for a local command",
+        "description": "Returns the app's full effective variables WITH secret values, for injecting into a local process (`okctl run`, `okctl shell`). Every call is audit-logged. Never print or store the result.",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "description": "The app (web, worker or job) whose variables to use."
+            },
+            "required": true,
+            "description": "The app (web, worker or job) whose variables to use.",
+            "name": "deploymentId",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": ["run", "shell"],
+              "description": "What the values are for: `run` for a single local command, `shell` for an interactive local shell. Recorded in the audit log."
+            },
+            "required": true,
+            "description": "What the values are for: `run` for a single local command, `shell` for an interactive local shell. Recorded in the audit log.",
+            "name": "purpose",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Resolved variables",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResolvedAppVariables"
                 }
               }
             }
@@ -17320,7 +19003,7 @@
       "post": {
         "tags": ["Revisions"],
         "summary": "Rebuild a deployment from source",
-        "description": "Rebuilds an in-cluster deployment from the current head of its tracked branch — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.",
+        "description": "Rebuilds an in-cluster deployment from the current head of its tracked branch (or a pinned `commit`) — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.",
         "security": [
           {
             "apiKey": []
@@ -17346,6 +19029,17 @@
             "required": false,
             "description": "Optional note recorded on the queued revision.",
             "name": "note",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{7,40}$/i",
+              "description": "Commit sha (7 to 40 hex characters) to build instead of the tracked branch's current head."
+            },
+            "required": false,
+            "description": "Commit sha (7 to 40 hex characters) to build instead of the tracked branch's current head.",
+            "name": "commit",
             "in": "query"
           }
         ],
@@ -18830,7 +20524,8 @@
                   "severity": {
                     "type": "string",
                     "enum": ["warning", "critical"],
-                    "default": "warning"
+                    "default": "warning",
+                    "description": "warning (default) or critical."
                   }
                 },
                 "required": ["name", "metric", "threshold"]
@@ -19001,7 +20696,8 @@
                   "severity": {
                     "type": "string",
                     "enum": ["warning", "critical"],
-                    "default": "warning"
+                    "default": "warning",
+                    "description": "warning (default) or critical."
                   },
                   "enabled": {
                     "type": "boolean",

@@ -31,6 +31,8 @@ func New() *cobra.Command {
 		jobRunsCmd(),
 		restartCmd(),
 		rebuildCmd(),
+		sourceCmd(),
+		watchCmd(),
 		restoreCmd(),
 		maintenanceCmd(),
 		renameCmd(),

@@ -9,7 +9,7 @@ import (
 
 func linkCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "link <app-id> <datastore-id>",
+		Use:   "link [app] <datastore-id>",
 		Short: "Give an app a database's or cache's connection string as a secret variable",
 		Long: "Write a database's or cache's connection string into an app's " +
 			"environment as a secret variable, then redeploy the app. The " +

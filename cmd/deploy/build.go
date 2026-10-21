@@ -11,7 +11,7 @@ import (
 
 func buildArgsCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "build-args <deployment-id>",
+		Use:   "build-args [app]",
 		Short: "Replace the build argument map (KEY=VALUE pairs)",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -52,7 +52,7 @@ func buildArgsCmd() *cobra.Command {
 
 func buildContextCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "build-context <deployment-id> <context-path>",
+		Use:   "build-context [app] <context-path>",
 		Short: "Set the build context root, relative to the repo (empty clears it)",
 		Args:  cobra.RangeArgs(1, 2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -79,7 +79,7 @@ func buildContextCmd() *cobra.Command {
 
 func builderSizeCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "builder-size <deployment-id> <small|standard|large>",
+		Use:   "builder-size [app] <small|standard|large>",
 		Short: "Set the build machine size",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

@@ -31,7 +31,7 @@ func printDNS(rows [][]string, d api.CustomDomainHostDns) [][]string {
 
 func listCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "list <deployment-id>",
+		Use:   "list [app]",
 		Short: "List linked custom domains and available parent domains",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -74,7 +74,7 @@ func listCmd() *cobra.Command {
 
 func addCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "add <deployment-id> <hostname>",
+		Use:   "add [app] <hostname>",
 		Short: "Link a custom hostname to a deployment",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

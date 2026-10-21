@@ -9,14 +9,15 @@ import (
 
 func TestWriteLoadRoundTrip(t *testing.T) {
 	dir := t.TempDir()
+	replicas, public := 2, true
 	m := &Manifest{
 		Name:     "api",
 		Type:     "web",
 		Image:    "ghcr.io/acme/api",
 		Tag:      "v1.2.3",
 		Port:     8080,
-		Replicas: 2,
-		Public:   true,
+		Replicas: &replicas,
+		Public:   &public,
 		Env: []EnvVar{
 			{Name: "LOG_LEVEL", Value: "info"},
 			{Name: "DB_PASSWORD", Secret: true},
@@ -30,7 +31,7 @@ func TestWriteLoadRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Load: %v", err)
 	}
-	if got.Name != m.Name || got.Type != m.Type || got.Port != m.Port || got.Replicas != m.Replicas || got.Public != m.Public {
+	if got.Name != m.Name || got.Type != m.Type || got.Port != m.Port || got.Replicas == nil || *got.Replicas != 2 || got.Public == nil || !*got.Public {
 		t.Fatalf("scalar round-trip mismatch: got %+v", got)
 	}
 	if len(got.Env) != 2 || got.Env[1].Name != "DB_PASSWORD" || !got.Env[1].Secret {

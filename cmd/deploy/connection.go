@@ -10,7 +10,7 @@ import (
 
 func connectionCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "connection <deployment-id>",
+		Use:   "connection [app]",
 		Short: "Show a database's connection secret and details (see connection-info for credentials)",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

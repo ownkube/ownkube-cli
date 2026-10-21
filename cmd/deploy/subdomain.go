@@ -19,7 +19,7 @@ func subdomainCmd() *cobra.Command {
 
 func subdomainSetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "set <deployment-id> <subdomain>",
+		Use:   "set [app] <subdomain>",
 		Short: "Move the deployment to a new address label",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -46,7 +46,7 @@ func subdomainSetCmd() *cobra.Command {
 
 func subdomainCheckCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "check <deployment-id> <subdomain>",
+		Use:   "check [app] <subdomain>",
 		Short: "Check whether an address label is available",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -75,7 +75,7 @@ func subdomainCheckCmd() *cobra.Command {
 
 func subdomainSuggestCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "suggest <deployment-id>",
+		Use:   "suggest [app]",
 		Short: "Suggest available address labels",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

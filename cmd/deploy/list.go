@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/ownkube/okctl/cmd/internal/ux"
+	"github.com/ownkube/okctl/internal/api"
 	"github.com/ownkube/okctl/internal/client"
 	"github.com/spf13/cobra"
 )
@@ -11,25 +12,46 @@ import (
 func listCmd() *cobra.Command {
 	c := &cobra.Command{
 		Use:   "list",
-		Short: "List deployments (scoped to one cluster or environment)",
-		Long: `List deployments. Exactly one of --cluster or --environment is required —
-the API does not support listing across all clusters at once.`,
+		Short: "List deployments",
+		Long: `List deployments in one cluster (--cluster), environment (--environment)
+or project (--project); environments and projects take a name or an id. With
+none of them, a linked directory lists its environment, and an unlinked one
+lists every project's deployments.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cluster, _ := cmd.Flags().GetString("cluster")
-			env, _ := cmd.Flags().GetString("environment")
-			if (cluster == "") == (env == "") {
-				return fmt.Errorf("specify exactly one of --cluster or --environment")
+			envRef, _ := cmd.Flags().GetString("environment")
+			projectRef, _ := cmd.Flags().GetString("project")
+			if cluster != "" && (envRef != "" || projectRef != "") {
+				return fmt.Errorf("--cluster can't be combined with --environment or --project")
 			}
 
-			api, err := ux.RequireClient()
+			cl, err := ux.RequireClient()
 			if err != nil {
 				return err
 			}
+			ctx := cmd.Context()
 
-			deps, err := api.ListDeployments(cmd.Context(), client.ListDeploymentsFilter{
-				ClusterID:     cluster,
-				EnvironmentID: env,
-			})
+			var deps []api.Deployment
+			if cluster != "" {
+				deps, err = cl.ListDeployments(ctx, client.ListDeploymentsFilter{ClusterID: cluster})
+			} else {
+				var scope ux.Scope
+				if scope, err = ux.ResolveScope(ctx, cl, projectRef, envRef); err != nil {
+					return err
+				}
+				if scope == (ux.Scope{}) {
+					scope = linkedScope()
+				}
+				if scope == (ux.Scope{}) {
+					if b, ok, _ := ux.Linked("."); ok && b.ClusterID != "" {
+						deps, err = cl.ListDeployments(ctx, client.ListDeploymentsFilter{ClusterID: b.ClusterID})
+					} else {
+						deps, err = ux.ListAllDeployments(ctx, cl)
+					}
+				} else {
+					deps, err = ux.ListScopedDeployments(ctx, cl, scope)
+				}
+			}
 			if err != nil {
 				return err
 			}
@@ -52,6 +74,15 @@ the API does not support listing across all clusters at once.`,
 		},
 	}
 	c.Flags().String("cluster", "", "Filter by cluster ID")
-	c.Flags().String("environment", "", "Filter by environment ID")
+	c.Flags().StringP("environment", "e", "", "Filter by environment (name or id)")
+	c.Flags().StringP("project", "p", "", "Filter by project (name or id)")
 	return c
+}
+
+// linkedScope is this directory's linked environment, or an empty Scope.
+func linkedScope() ux.Scope {
+	if b, ok, _ := ux.Linked("."); ok && b.EnvironmentID != "" {
+		return ux.Scope{EnvironmentID: b.EnvironmentID}
+	}
+	return ux.Scope{}
 }

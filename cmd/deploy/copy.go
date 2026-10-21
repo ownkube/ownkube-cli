@@ -14,7 +14,7 @@ func copyCmd() *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use:   "copy <deployment-id>",
+		Use:   "copy [app]",
 		Short: "Copy a deployment into another environment/cluster",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

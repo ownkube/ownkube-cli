@@ -48,17 +48,20 @@ func listCmd() *cobra.Command {
 				return ux.Print(cmd.OutOrStdout(), cat)
 			}
 
-			rows := [][]string{{"KIND", "ID", "LABEL", "VCPU", "MEMORY", "CPU", "MONTHLY"}}
+			rows := [][]string{{"KIND", "ID", "LABEL", "VCPU", "MEMORY", "MONTHLY"}}
 			add := func(k string, boxes []api.ComputeBox) {
 				if kind != "" && kind != k {
 					return
 				}
 				for _, b := range boxes {
+					vcpu := fmt.Sprintf("%g", b.Vcpu)
+					if b.DedicatedCpu {
+						vcpu += " (dedicated)"
+					}
 					rows = append(rows, []string{
 						k, b.Id, b.Label,
-						fmt.Sprintf("%g", b.Vcpu),
+						vcpu,
 						fmt.Sprintf("%g GiB", b.MemoryGiB),
-						string(b.CpuClass),
 						fmt.Sprintf("$%.2f", b.MonthlyUsd),
 					})
 				}

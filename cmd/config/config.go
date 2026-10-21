@@ -1,4 +1,6 @@
-// Package config exposes the `okctl config` command tree (get, set, view).
+// Package config exposes the `okctl config` command tree: CLI preferences
+// (get, set, view) and an app's settings as code in ownkube.yaml (pull, plan,
+// apply).
 package config
 
 import (
@@ -8,13 +10,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// New returns the `okctl config` command with get/set/view attached.
+// New returns the `okctl config` command with get/set/view and pull/plan/apply
+// attached.
 func New() *cobra.Command {
 	root := &cobra.Command{
 		Use:   "config",
-		Short: "Manage CLI configuration",
+		Short: "Manage CLI configuration and app settings as code",
+		Long: "get, set and view manage okctl's own preferences. pull, plan and apply " +
+			"keep an app's settings and variables in ownkube.yaml: pull writes the live " +
+			"settings, plan shows how they differ from the file, and apply makes the app " +
+			"match it.",
 	}
-	root.AddCommand(getCmd(), setCmd(), viewCmd())
+	root.AddCommand(getCmd(), setCmd(), viewCmd(), pullCmd(), planCmd(), applyCmd())
 	return root
 }
 

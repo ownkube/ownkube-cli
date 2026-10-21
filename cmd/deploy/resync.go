@@ -9,7 +9,7 @@ import (
 
 func resyncCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "resync <deployment-id>",
+		Use:   "resync [app]",
 		Short: "Re-apply a deployment's current settings to recover a stalled rollout",
 		Long: "Re-apply the deployment's current settings with no config change and " +
 			"no new revision. Use it to recover a rollout that stalled on a " +

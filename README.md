@@ -40,29 +40,31 @@ go install github.com/ownkube/okctl@latest
 ```sh
 # Log in via browser-based flow
 okctl login
+okctl whoami
 
-# Check who you are
+# Build and deploy this directory (creates and links an app the first time)
+okctl up
+
+# The linked project's apps, environments, URLs and health
 okctl status
 
-# Connect an AWS account (opens the console to deploy a scoped access role)
-okctl aws connect
+# Follow an app's logs, set a variable, run a local command with its variables
+okctl deploy logs api -f
+okctl vars set api LOG_LEVEL=debug
+okctl run api -- npm run dev
 
-# List clusters / environments / deployments
-okctl clusters list
-okctl environments list
-okctl deploy list --cluster <cluster-id>
-
-# Tail logs from a deployment
-okctl deploy logs <deployment-id>
-
-# Get in-cluster connection details (namespace, service, secret)
-okctl deploy connection <deployment-id>
+# Shell on the running app
+okctl ssh api
 ```
+
+Commands that act on one app take its name or id. In a directory linked with
+`okctl link` (or deployed with `okctl up`), you can leave the app out. Use
+`-e/--environment` or `-p/--project` when more than one app has the same name.
 
 Use `--output json` (or `yaml`) on any read command for machine-readable output:
 
 ```sh
-okctl deploy get <deployment-id> -o json | jq .
+okctl deploy get api -o json | jq .
 ```
 
 ## Connect an AWS account
@@ -93,14 +95,27 @@ agent to drive the flow itself.
 
 | Group | What it does |
 |---|---|
-| `okctl login` / `logout` / `status` | Browser-based auth + credential management |
-| `okctl aws connect\|list\|get\|verify\|reconnect\|resync\|delete` | Connect an AWS account and manage its access |
+| `okctl login` / `logout` / `whoami` | Browser-based auth + credential management |
+| `okctl status` | The linked project's apps, environments, URLs and health |
+| `okctl up` | Build and deploy the current directory (`--json`/`--ci` for pipelines) |
+| `okctl link` / `unlink` | Bind this directory to an app |
+| `okctl deploy list\|get\|status\|watch\|logs\|revisions\|...` | Inspect and operate deployments |
+| `okctl deploy source` | Connect an app to a repository so pushes deploy it |
+| `okctl vars list\|set\|delete\|edit` | An app's variables (secret values are write-only) |
+| `okctl run [app] [-- cmd]` | Run a local command, or your shell, with an app's variables |
+| `okctl ssh` (alias `shell`) / `okctl connect` | Shell on a running app / `psql` or `valkey-cli` to a database or cache |
+| `okctl config pull\|plan\|apply` | An app's settings as code in `ownkube.yaml` |
 | `okctl config get\|set\|view` | Manage `~/.config/ownkube/config.yaml` |
-| `okctl clusters list\|get` | Inspect clusters |
-| `okctl environments list\|get` | Inspect environments |
-| `okctl organizations list` | List organizations you belong to |
-| `okctl registries list\|get` | Inspect container registries |
-| `okctl deploy list\|get\|status\|logs\|revisions\|connection` | Inspect deployments |
+| `okctl projects` / `environments` / `organizations` | Organize apps |
+| `okctl domains` / `alerts` | Custom domains and alert rules |
+| `okctl marketplace` | Ready-made apps deployed with their database and cache |
+| `okctl usage` / `billing` | Usage, cost and the prepaid wallet |
+| `okctl vcs connections\|repos\|branches` | Connected GitHub/GitLab accounts |
+| `okctl aws` / `clusters` / `registries` | Your own cloud account |
+| `okctl setup agent` / `mcp` / `skills` | Connect AI coding agents |
+| `okctl open` / `docs` | Open an app in the dashboard / the docs |
+| `okctl api <method> <path>` | Raw authenticated API request |
+| `okctl upgrade` | Upgrade okctl to the latest release |
 | `okctl completion <shell>` | Generate shell completion (bash, zsh, fish, powershell) |
 | `okctl version` | Print version info |
 
@@ -141,9 +156,25 @@ Config files live in `~/.config/ownkube/`:
 
 ## Use okctl with AI coding agents
 
-A Claude / Cursor / Codex / Copilot / Cline skill ships in this repo at [`skills/okctl/SKILL.md`](./skills/okctl/SKILL.md). It teaches your agent when okctl is the right tool (BYOC PaaS, cloud-credit deploys, self-hosted marketplace) and exactly which command to run for common tasks (deploy diagnostics, logs, connection details, name → ID lookups).
+One command sets up Claude Code, Cursor or Codex. It signs you in if needed,
+adds the Ownkube MCP server, and installs the okctl skill:
 
-Install it into any [skills.sh](https://skills.sh)-compatible agent:
+```sh
+okctl setup agent                  # every agent found on this machine
+okctl setup agent --agent claude   # or just one: claude, cursor, codex
+```
+
+The MCP server entry runs `okctl mcp serve`, which signs the agent's requests
+with your `okctl login`. No API key is written into the agent's config. To do
+the two steps separately, use `okctl mcp install` and `okctl skills install`.
+`okctl mcp install --print` shows the config without writing it.
+
+The skill ([`skills/okctl/SKILL.md`](./skills/okctl/SKILL.md)) is embedded in
+the binary, so it always matches the commands you have. It teaches your agent
+when okctl is the right tool and which command to run for common tasks: deploys,
+diagnostics, logs, variables and connection details. Re-run
+`okctl setup agent` after `okctl upgrade`. You can also install it into any
+[skills.sh](https://skills.sh)-compatible agent:
 
 ```sh
 # Into the current project

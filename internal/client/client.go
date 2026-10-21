@@ -96,10 +96,12 @@ func (c *Client) GetUserInfo(ctx context.Context) (*UserInfo, error) {
 	}, nil
 }
 
-// ListDeploymentsFilter narrows the deployment list by cluster or environment.
+// ListDeploymentsFilter narrows the deployment list by cluster, environment or
+// project. Set at most one; none lists the organization's Compute deployments.
 type ListDeploymentsFilter struct {
 	ClusterID     string
 	EnvironmentID string
+	ProjectID     string
 }
 
 // ListDeployments calls GET /v1/deployments.
@@ -110,6 +112,9 @@ func (c *Client) ListDeployments(ctx context.Context, f ListDeploymentsFilter) (
 	}
 	if f.EnvironmentID != "" {
 		params.EnvironmentId = &f.EnvironmentID
+	}
+	if f.ProjectID != "" {
+		params.ProjectId = &f.ProjectID
 	}
 
 	resp, err := c.inner.GetV1DeploymentsWithResponse(ctx, params)
@@ -158,8 +163,11 @@ func (c *Client) GetDeploymentStatus(ctx context.Context, id string) (*api.Deplo
 // LogsOptions configures a logs query.
 type LogsOptions struct {
 	RangeSeconds int
-	Limit        int
-	Filter       string
+	// Start and End (unix seconds) read a fixed window instead of a look-back;
+	// they're sent only as a pair.
+	Start, End int64
+	Limit      int
+	Filter     string
 }
 
 // GetDeploymentLogs calls GET /v1/deployments/{id}/logs.
@@ -167,6 +175,10 @@ func (c *Client) GetDeploymentLogs(ctx context.Context, id string, opts LogsOpti
 	params := &api.GetV1DeploymentsDeploymentIdLogsParams{}
 	if opts.RangeSeconds > 0 {
 		params.RangeSeconds = &opts.RangeSeconds
+	}
+	if opts.Start > 0 && opts.End > opts.Start {
+		start, end := int(opts.Start), int(opts.End)
+		params.Start, params.End = &start, &end
 	}
 	if opts.Limit > 0 {
 		params.Limit = &opts.Limit
@@ -454,13 +466,13 @@ func checkError(status int, candidates []*api.ErrorResponse, body []byte) error 
 						"OKCTL_ORGANIZATION, or 'okctl config set organization <id>' " +
 						"(list them with 'okctl organizations list')")
 			}
-			return fmt.Errorf("API error %d (%s): %s", status, e.Code, e.Error)
+			return &APIError{Status: status, Code: e.Code, Message: e.Error}
 		}
 	}
 	if status >= 400 {
 		var generic api.ErrorResponse
 		if err := json.Unmarshal(body, &generic); err == nil && generic.Error != "" {
-			return fmt.Errorf("API error %d (%s): %s", status, generic.Code, generic.Error)
+			return &APIError{Status: status, Code: generic.Code, Message: generic.Error}
 		}
 		return fmt.Errorf("API error %d: %s", status, truncate(body))
 	}

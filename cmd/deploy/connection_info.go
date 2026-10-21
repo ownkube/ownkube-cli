@@ -9,7 +9,7 @@ import (
 
 func connectionInfoCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "connection-info <deployment-id>",
+		Use:   "connection-info [app]",
 		Short: "Show a database's or cache's full connection info, including credentials",
 		Long: "Print everything needed to connect to a database or cache: host, port, " +
 			"database name, username, password, and the connection string for apps " +

@@ -11,30 +11,13 @@
 package up
 
 import (
-	"context"
 	"fmt"
-	"io"
 	"os"
-	"time"
 
 	"github.com/ownkube/okctl/cmd/internal/ux"
 	"github.com/ownkube/okctl/internal/client"
 	"github.com/spf13/cobra"
 )
-
-// pollInterval is how often the follow loop re-reads build logs and revision
-// status. The build itself takes minutes; a 2s cadence keeps output live
-// without hammering the API.
-const pollInterval = 2 * time.Second
-
-// terminalStatuses are the revision states at which the follow loop stops.
-// image_pushed/deploying are intermediate — the loop keeps going until the
-// rollout settles at live (or the revision fails / is superseded).
-var terminalStatuses = map[string]bool{
-	"live":       true,
-	"failed":     true,
-	"superseded": true,
-}
 
 // New builds the `okctl up` command.
 func New() *cobra.Command {
@@ -43,6 +26,10 @@ func New() *cobra.Command {
 		noteFlag    string
 		pathFlag    string
 		noFollow    bool
+		repoFlag    string
+		branchFlag  string
+		jsonFlag    bool
+		ciFlag      bool
 		create      createFlags
 	)
 
@@ -60,9 +47,21 @@ func New() *cobra.Command {
 			"those defaults.\n\n" +
 			"Files ignored by .gitignore are never uploaded. The command follows the " +
 			"build until it goes live; pass --no-follow to return as soon as the build " +
-			"is queued.",
+			"is queued.\n\n" +
+			"--repo/--branch switch an existing app to build from a connected " +
+			"repository instead (nothing is uploaded; later pushes deploy it), the " +
+			"same as 'okctl deploy source'. Either one alone is filled in from this " +
+			"checkout's origin remote and current branch.\n\n" +
+			"--json (or --ci) is for scripts and CI: nothing prompts, the build log goes " +
+			"to stderr, stdout gets one JSON result once the revision is live or fails, " +
+			"and the exit code is non-zero when it fails. (-o json alone prints the " +
+			"queued build and returns without following.)",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
+			finalJSON := jsonFlag || ciFlag
+			if finalJSON {
+				ux.SetOutputFormat("json")
+			}
 
 			creds, err := ux.RequireAuth()
 			if err != nil {
@@ -91,18 +90,30 @@ func New() *cobra.Command {
 				if err := rejectCreateFlags(cmd); err != nil {
 					return err
 				}
-				if depID, err = ux.ResolveDeployment(serviceFlag, dir); err != nil {
-					return err
-				}
 			}
 
 			cl, err := client.New(ux.APIURL(), creds.APIKey, ux.Organization())
 			if err != nil {
 				return err
 			}
+			if !creating {
+				if depID, err = ux.ResolveApp(cmd.Context(), cl, serviceFlag, ux.Scope{}, dir); err != nil {
+					return err
+				}
+			}
 
 			structured := ux.IsStructured()
 			out := cmd.OutOrStdout()
+
+			if repoFlag != "" || branchFlag != "" {
+				if creating {
+					return fmt.Errorf("--repo connects an existing app; create one from the repository with 'okctl deploy create --repo', or run 'okctl up' without it first")
+				}
+				if noteFlag != "" {
+					return fmt.Errorf("--note applies to uploaded source, not --repo")
+				}
+				return upFromRepo(cmd, cl, dir, depID, repoFlag, branchFlag, noFollow, finalJSON)
+			}
 
 			// 1. Mint an upload slot. The server refuses here, before any
 			// upload, when the wallet is empty (with a link to add credit).
@@ -151,111 +162,54 @@ func New() *cobra.Command {
 				if err != nil {
 					return err
 				}
+				if finalJSON {
+					return printOutcome(cmd, cl, created.DeploymentId, created.RevisionId, created, !noFollow)
+				}
 				if structured {
 					return ux.Print(out, created)
 				}
 				fmt.Fprintf(out, "Build queued (revision %s).\n", created.RevisionId)
-				if noFollow {
-					return nil
+				if !noFollow {
+					if err := ux.FollowRevision(ctx, cl, out, created.DeploymentId, created.RevisionId); err != nil {
+						return err
+					}
 				}
-				return follow(ctx, cl, out, created.DeploymentId, created.RevisionId)
+				printPushDeployTip(cmd, cl, dir, created.DeploymentId)
+				return nil
 			}
 			result, err := cl.DeployFromUpload(ctx, depID, slot.UploadId, note)
 			if err != nil {
 				return err
 			}
 
+			if finalJSON {
+				return printOutcome(cmd, cl, depID, result.RevisionId, result, !noFollow)
+			}
 			if structured {
 				return ux.Print(out, result)
 			}
 			fmt.Fprintf(out, "Build queued (revision %s).\n", result.RevisionId)
 
-			if noFollow {
-				return nil
+			if !noFollow {
+				if err := ux.FollowRevision(ctx, cl, out, depID, result.RevisionId); err != nil {
+					return err
+				}
 			}
-			return follow(ctx, cl, out, depID, result.RevisionId)
+			printPushDeployTip(cmd, cl, dir, depID)
+			return nil
 		},
 	}
 
-	cmd.Flags().StringVar(&serviceFlag, "service", "", "Deployment ID to deploy to (defaults to this directory's link)")
+	cmd.Flags().StringVarP(&serviceFlag, "service", "s", "", "App name or id to deploy to (defaults to this directory's link)")
 	cmd.Flags().StringVar(&noteFlag, "note", "", "Note to record on the revision")
 	cmd.Flags().StringVar(&pathFlag, "path", "", "Directory to deploy (defaults to the current directory)")
 	cmd.Flags().BoolVar(&noFollow, "no-follow", false, "Return once the build is queued instead of following it")
+	cmd.Flags().StringVar(&repoFlag, "repo", "", "Build an existing app from this connected repository (owner/repo) instead of uploading; default with --branch: this checkout's origin")
+	cmd.Flags().StringVar(&branchFlag, "branch", "", "Branch to build and deploy on push (with --repo); default: the current branch")
+	cmd.Flags().BoolVar(&jsonFlag, "json", false, "Follow the build (log on stderr) and print one JSON result; non-zero exit on failure")
+	cmd.Flags().BoolVar(&ciFlag, "ci", false, "Same as --json, for CI pipelines")
 	create.register(cmd)
 	return cmd
-}
-
-// follow streams build logs and reports status transitions until the revision
-// reaches a terminal state. It returns an error when the build fails or is
-// superseded so the exit code reflects the outcome.
-func follow(ctx context.Context, cl *client.Client, out io.Writer, depID, revisionID string) error {
-	printed := 0     // bytes of build log already emitted
-	lastStatus := "" // last status we announced
-
-	ticker := time.NewTicker(pollInterval)
-	defer ticker.Stop()
-
-	for {
-		// Stream any new build-log output. Errors are transient early on (the
-		// build job may not exist yet) — status polling still drives the loop.
-		if logs, err := cl.BuildLogs(ctx, depID, revisionID, nil); err == nil && len(logs) > printed {
-			fmt.Fprint(out, logs[printed:])
-			printed = len(logs)
-		}
-
-		status, err := revisionStatus(ctx, cl, depID, revisionID)
-		if err != nil {
-			return err
-		}
-		if status != "" && status != lastStatus {
-			fmt.Fprintf(out, "\n[%s]\n", statusLabel(status))
-			lastStatus = status
-		}
-
-		if terminalStatuses[status] {
-			switch status {
-			case "live":
-				fmt.Fprintln(out, "Deployment is live.")
-				return nil
-			case "failed":
-				return fmt.Errorf("build failed for revision %s", revisionID)
-			default: // superseded
-				return fmt.Errorf("revision %s was superseded before going live", revisionID)
-			}
-		}
-
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		case <-ticker.C:
-		}
-	}
-}
-
-// revisionStatus finds the given revision among the deployment's revisions and
-// returns its status. A missing revision yields "" (keep polling — it may not
-// be listed yet).
-func revisionStatus(ctx context.Context, cl *client.Client, depID, revisionID string) (string, error) {
-	revs, err := cl.ListRevisions(ctx, depID)
-	if err != nil {
-		return "", err
-	}
-	for _, r := range revs {
-		if r.Id == revisionID {
-			return r.Status, nil
-		}
-	}
-	return "", nil
-}
-
-// statusLabel renders a revision status for humans (underscores → spaces).
-func statusLabel(status string) string {
-	switch status {
-	case "image_pushed":
-		return "image pushed"
-	default:
-		return status
-	}
 }
 
 // humanBytes formats a byte count for the upload progress line.

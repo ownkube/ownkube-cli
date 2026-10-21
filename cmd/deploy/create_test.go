@@ -132,3 +132,43 @@ func TestManifestToJSON_YAMLAndJSON(t *testing.T) {
 		t.Errorf("json decode mismatch: %v", got2)
 	}
 }
+
+func TestBuildWebCreateBody_Repo(t *testing.T) {
+	body, err := buildWebCreateBody(webCreateFlags{
+		name:   "api",
+		repo:   "group/sub/project",
+		branch: "main",
+		port:   8080,
+	})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	var got map[string]any
+	if err := json.Unmarshal(body, &got); err != nil {
+		t.Fatalf("body is not valid JSON: %v", err)
+	}
+	gh, ok := got["github"].(map[string]any)
+	if !ok {
+		t.Fatalf("github = %v, want an object", got["github"])
+	}
+	if gh["owner"] != "group/sub" || gh["repo"] != "project" || gh["branch"] != "main" {
+		t.Errorf("github = %v, want owner group/sub, repo project, branch main", gh)
+	}
+	cfg := got["config"].(map[string]any)
+	if _, ok := cfg["repository"]; ok {
+		t.Errorf("config.repository = %v, want it omitted for a repo build", cfg["repository"])
+	}
+	if _, ok := cfg["tag"]; ok {
+		t.Errorf("config.tag = %v, want it omitted for a repo build", cfg["tag"])
+	}
+}
+
+func TestBuildWebCreateBody_RepoRejectsImage(t *testing.T) {
+	_, err := buildWebCreateBody(webCreateFlags{
+		name: "api", repo: "owner/repo", branch: "main", image: "nginx", port: 80,
+	})
+	if err == nil {
+		t.Fatal("expected error when --repo is combined with --image")
+	}
+}

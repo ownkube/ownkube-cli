@@ -14,7 +14,7 @@ func updateCmd() *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use:   "update <deployment-id>",
+		Use:   "update [app]",
 		Short: "Update a deployment from a manifest",
 		Long: "Update a deployment's configuration from a manifest file (-f), or '-' " +
 			"for stdin. The body carries the resource's config plus an optional note. " +

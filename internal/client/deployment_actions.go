@@ -30,9 +30,10 @@ func (c *Client) Restart(ctx context.Context, id string) (*api.RestartResult, er
 }
 
 // Rebuild calls POST /v1/deployments/{id}/rebuild, queuing a fresh build of the
-// current source. note is recorded on the queued revision when set.
-func (c *Client) Rebuild(ctx context.Context, id string, note *string) (*api.RebuildResult, error) {
-	params := &api.PostV1DeploymentsDeploymentIdRebuildParams{Note: note}
+// current source. note is recorded on the queued revision when set; commit
+// (7-40 hex) builds that commit instead of the tracked branch's tip.
+func (c *Client) Rebuild(ctx context.Context, id string, note, commit *string) (*api.RebuildResult, error) {
+	params := &api.PostV1DeploymentsDeploymentIdRebuildParams{Note: note, Commit: commit}
 	resp, err := c.inner.PostV1DeploymentsDeploymentIdRebuildWithResponse(ctx, id, params)
 	if err != nil {
 		return nil, fmt.Errorf("API request failed: %w", err)

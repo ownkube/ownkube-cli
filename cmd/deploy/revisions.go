@@ -4,21 +4,22 @@ import (
 	"fmt"
 
 	"github.com/ownkube/okctl/cmd/internal/ux"
+	"github.com/ownkube/okctl/internal/api"
 	"github.com/spf13/cobra"
 )
 
 func revisionsCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "revisions <deployment-id>",
+		Use:   "revisions [app]",
 		Short: "List revisions for a deployment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			api, err := ux.RequireClient()
+			cl, err := ux.RequireClient()
 			if err != nil {
 				return err
 			}
 
-			revs, err := api.ListRevisions(cmd.Context(), args[0])
+			revs, err := cl.ListRevisions(cmd.Context(), args[0])
 			if err != nil {
 				return err
 			}
@@ -31,11 +32,30 @@ func revisionsCmd() *cobra.Command {
 				return nil
 			}
 
-			rows := [][]string{{"ID", "STATUS", "IMAGE", "TAG", "SOURCE", "NOTE"}}
+			rows := [][]string{{"ID", "STATUS", "COMMIT", "MESSAGE", "AUTHOR", "IMAGE", "SOURCE", "NOTE"}}
 			for _, r := range revs {
-				rows = append(rows, []string{r.Id, r.Status, r.Image, r.Tag, ux.Deref(r.Source), ux.Deref(r.Note)})
+				rows = append(rows, []string{
+					r.Id, r.Status, revisionSha(r),
+					truncateText(ux.Deref(r.CommitMessage), 50), ux.Deref(r.CommitAuthor),
+					revisionImage(r), ux.Deref(r.Source), ux.Deref(r.Note),
+				})
 			}
 			return ux.Print(cmd.OutOrStdout(), rows)
 		},
 	}
+}
+
+// revisionImage renders the image a revision runs as repository:tag. An
+// Ownkube-built image has no reference to show.
+func revisionImage(r api.Revision) string {
+	if r.Image == "" {
+		if r.ImageSource != nil {
+			return "(built by Ownkube)"
+		}
+		return ""
+	}
+	if r.Tag == "" {
+		return r.Image
+	}
+	return r.Image + ":" + r.Tag
 }

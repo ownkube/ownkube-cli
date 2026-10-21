@@ -33,7 +33,7 @@ func New() *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use:   "connect [deployment-id]",
+		Use:   "connect [app]",
 		Short: "Open a client for a database or cache, or a local tunnel to it",
 		Long: "Open psql (databases) or valkey-cli / redis-cli (caches) connected to an\n" +
 			"Ownkube Compute database or cache.\n\n" +
@@ -50,15 +50,15 @@ func New() *cobra.Command {
 			if len(args) == 1 {
 				flag = args[0]
 			}
-			depID, err := ux.ResolveDeployment(flag, ".")
-			if err != nil {
-				return err
-			}
 			cl, err := ux.RequireClient()
 			if err != nil {
 				return err
 			}
 			ctx := cmd.Context()
+			depID, err := ux.ResolveApp(ctx, cl, flag, ux.Scope{}, ".")
+			if err != nil {
+				return err
+			}
 
 			info, err := cl.ConnectionInfo(ctx, depID)
 			if err != nil {
@@ -146,7 +146,7 @@ func New() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().StringVar(&serviceFlag, "service", "", "Deployment ID (defaults to this directory's link)")
+	cmd.Flags().StringVarP(&serviceFlag, "service", "s", "", "App name or id (defaults to this directory's link)")
 	cmd.Flags().BoolVar(&tunnelOnly, "tunnel-only", false, "Hold a local tunnel open instead of launching a client")
 	cmd.Flags().IntVar(&portFlag, "port", 0, "Local port for the tunnel (default: the standard port if free, else any free port)")
 	cmd.Flags().BoolVar(&viaSSH, "ssh", false, "Use a private SSH tunnel even when public access is on")

@@ -69,8 +69,18 @@ Or run it without installing (after copying the spec):
   resource. The root package only builds the root command and wires subtrees.
   - `cmd/root.go`: root command, flag/env/config resolution, `init()` hooks
     subpackages via `rootCmd.AddCommand(auth.Login(), ..., deploy.New(), ...)`.
-  - `cmd/auth/`: `login`, `logout`, `status`.
-  - `cmd/config/`: `config get|set|view`.
+  - `cmd/auth/`: `login`, `logout`, `whoami`. `SignIn(cmd)` runs the browser
+    login for another command (`setup agent`).
+  - `cmd/config/`: `config get|set|view` (CLI prefs) plus settings-as-code
+    `pull|plan|apply [app]` against `ownkube.yaml`. `spec.go` holds the logic:
+    `specFor` maps a deployment type to its PATCH config block, `toManifest`
+    (secrets by name only, never values; sensitive keys and the keys in
+    `heldBack` are never written), `overlay` (the PATCH replaces the whole
+    block, so the yaml is laid over the live block and unmanaged keys are
+    echoed back), `diff`/`diffVars`, and `makePlan` whose `hash()` is the plan
+    id `apply --plan` checks. `plan --detect-changes` exits 2 on drift
+    (`ux.ExitError`). Apply sends settings first (412 → "unlocks after the first
+    build"), then variables via `UpdateVariables`.
   - `cmd/deploy/`: read verbs (`list|get|status|logs|revisions|connection`) plus
     the write/lifecycle surface (`create|update|delete|copy|move|promote|rollback|
     reset-password|job-runs|restart|rebuild|restore|maintenance|rename|
@@ -80,6 +90,10 @@ Or run it without installing (after copying the spec):
     `create` also has web convenience flags
     (`--name/--image/--tag/--port/--env/--public`). `delete` and `reset-password`
     confirm unless `--yes`. `subdomain` is a group (`set|check|suggest`).
+    `logs` reads runtime logs (`--range`, or `--since/--until` parsed by
+    `parseWhen` into the API's unix-second `start`/`end`, max 90 days; `-f`
+    polls via `followLogs`, deduping on timestamp+message, NDJSON with `-o
+    json`) or, with `--build [--latest|--revision]`, a revision's build log.
     `observability`/`telemetry` return nested metric blobs — they render as JSON
     even in table mode (`printBlob`). Client wrappers: write/lifecycle in
     `internal/client/deployment_write.go` + `deployment_actions.go` (reads stay in
@@ -89,7 +103,15 @@ Or run it without installing (after copying the spec):
     `internal/client/functions.go`). Datastore verbs: `connection-info` (full
     credentials incl. password/URI), `link <app> <datastore> [--env-var]`
     (injects the connection string as a secret var + redeploys), and `resync`;
-    wrappers in `internal/client/datastores.go`.
+    wrappers in `internal/client/datastores.go`. Repo source: `source <id>`
+    connects/switches an app's GitHub/GitLab repo (PUT `/source`; with no
+    `--repo` the repo + branch come from this checkout's `origin` and current
+    branch via `ux.ResolveRepoBranch`; confirms unless `--yes`; `--clear` →
+    DELETE), `watch <id> [--revision]` follows the latest revision via
+    `ux.FollowRevision`, and `rebuild --commit <sha>` builds one commit;
+    `create --repo/--branch` sends the create body's `github` member. Commit
+    helpers (`commitFlag`, `revisionCommit`; a repo build's revision `tag` is
+    its commit) in `cmd/deploy/commit.go`. Wrappers in `internal/client/vcs.go`.
   - `cmd/environments/`: read verbs (`list|get`) plus the write surface
     (`create|update|set-env|delete`). `set-env` REPLACES the full shared env-var
     set (`--env`/`--secret KEY=VALUE`, repeatable, or `-f` JSON array) and
@@ -145,8 +167,8 @@ Or run it without installing (after copying the spec):
     directory's LOCAL working tree (uncommitted edits included), not a committed
     git revision. Flow: presign an upload slot → tar+gzip the tree (`archive.go`;
     honours `.gitignore` via `git ls-files -co --exclude-standard`, else walks
-    minus `.git`) → PUT to the pre-signed URL → trigger build → `follow()` streams
-    build logs + revision status to a terminal state. Target deployment from
+    minus `.git`) → PUT to the pre-signed URL → trigger build → follow streams
+    build logs + revision status to a terminal state (`ux.FollowRevision`). Target deployment from
     `--service` or this directory's link; `--note`, `--path`, `--no-follow`.
     Unlinked + no `--service` → `create.go`: presign with no deployment (server
     refuses an empty wallet before upload), POST `/v1/source-deploys` with
@@ -157,19 +179,71 @@ Or run it without installing (after copying the spec):
     the presign's `maxBytes` before upload.
     Wrappers in `internal/client/source_upload.go` (`PresignSourceUpload`,
     `UploadSource` — bare `net/http` PUT, the URL self-authenticates —
-    `DeployFromUpload`, `DeployUploadedSource`).
-  - `cmd/ssh/`: `ssh [id] [--instance N] [-- cmd]` (shell / one-shot command on
+    `DeployFromUpload`, `DeployUploadedSource`). `--repo/--branch` (`repo.go`)
+    skip the upload and connect an existing (linked) app to the repo, same call
+    as `deploy source`; refused when `up` would create the app. In a git
+    checkout whose app isn't repo-built yet, `up` ends with a one-line tip
+    pointing at `deploy source`.
+    `--json`/`--ci` follow with the log on stderr and print one JSON result
+    (`outcome.go`), non-zero exit on failure.
+  - `cmd/ssh/` (alias `shell`): `ssh [app] [--instance N] [-- cmd]` (shell / one-shot command on
     a Compute app over real SSH), `ssh keys list|add|remove|github`, `ssh config`
     (managed `# okctl:begin/end <alias>` blocks in `~/.ssh/config`). Package is
     imported as `sshcmd` in root.
   - `cmd/connect/`: `connect [id] [--tunnel-only] [--port] [--ssh]` — psql /
     valkey-cli against a Compute database/cache: public URI when ready, else a
     local SSH tunnel.
+  - `cmd/vcs/`: `vcs connections [--open]|repos [--connection]|branches
+    <owner/repo> [--connection]` — read-only listings of the org's connected
+    GitHub/GitLab accounts. Connecting an account is dashboard-only;
+    `connections --open` opens `connectUrl`. Wrappers in
+    `internal/client/vcs.go`.
+  - `cmd/status/`: top-level `status` (alias `overview`) — the linked (or
+    `-p`) project's apps, environments, URLs and health.
+  - `cmd/vars/` (aliases `variables`, `var`): `vars list [app] [--kv]|set [app]
+    K=V... [--secret] [--stdin]|delete [app] K... [-y]|edit [app]`. Secret
+    values are write-only (never read back; `edit` shows `<secret>` and refuses
+    edits to them); environment-shared vars are listed, never unset. `set`'s
+    custom Args: an arg containing `=` can't be the app. Wrappers in
+    `internal/client/variables.go` (`ListVariables`, `UpdateVariables`,
+    `ResolveVariables`).
+  - `cmd/run/`: top-level `run [app] [-- cmd...]` — resolves the app's
+    variables (`purpose=run`, or `shell` with no command → `$SHELL`) and runs
+    the command locally with them in its env only: never printed, written to
+    disk, or put in argv. Exits with the child's status (`ux.ExitError`). Own
+    `-s/-e/-p` flags.
+  - `cmd/mcp/`: `mcp serve` — stdio ↔ the MCP endpoint (`<api-url>/api/mcp`,
+    `client.MCP`): one JSON-RPC message per line, SSE `data:` events relayed
+    one per line, `Mcp-Session-Id` echoed, an expired session re-initialized by
+    replaying the agent's `initialize`; stdout carries only JSON-RPC (it's in
+    root's `quietCommands`). `mcp install [--agent] [--print]` writes an
+    `ownkube` server entry running `okctl mcp serve` (the API key stays in
+    okctl's credential store, never in the agent's config); `Install` is
+    reused by `setup agent`.
+  - `cmd/skills/`: `skills install [--agent]|show` — writes the embedded
+    `skills/okctl/SKILL.md` (package `skills` at the repo root, `go:embed`) into
+    each agent's user skills dir.
+  - `cmd/setup/`: `setup agent [--agent] [--no-mcp] [--no-skills]` — login if
+    needed, then `mcp.Install` + `skills.Install`.
+  - `cmd/apicall/`: `api <method> <path> [-d]` — raw authenticated request
+    (`client.Do`); refuses full URLs so the key never leaves the API host.
+  - `cmd/open/`, `cmd/docs/`: open an app in the dashboard / the docs
+    (`https://ownkube.io/docs`); `--print` for the URL only.
+  - `cmd/upgrade/`: `upgrade [--check]` — replaces a hand-installed binary from
+    the latest GitHub release (checksum-verified, `internal/update`), or prints
+    the package manager's upgrade command.
   - `cmd/internal/ux/`: shared helpers — `RequireClient`, `ResolveDeployment`
     (flag, else this directory's link), `Print`, `Deref`,
     `UnionString` (renders generated `oneOf` scalar unions, e.g. timestamps),
-    `ReadFileOrStdin`, `IsStructured`, `APIURL`, `Config`, `OpenBrowser`. Set
-    once per invocation by `cmd/root.go`'s `PersistentPreRunE` via `ux.Set(...)`.
+    `ReadFileOrStdin`, `IsStructured`, `APIURL`, `Config`, `OpenBrowser`,
+    `FollowRevision`/`LatestRevision` (build-log + status follow loop shared by
+    `up`, `deploy watch`), `ResolveRepoBranch` (flags, else git origin),
+    name-or-id resolution (`resolve.go`: `ResolveApp`/`ResolveProject`/
+    `ResolveEnvironment`, `ResolveScope`, `LooksLikeID`; an ambiguous name
+    errors listing the ids), `WireAppTargets` (`target.go`, see "The `[app]`
+    argument" below), and `ExitError` (`exit.go`: root exits with its `Code`,
+    silently when `Err` is nil). Set once per invocation by `cmd/root.go`'s
+    `PersistentPreRunE` via `ux.Set(...)`.
   - `completion.go`, `version.go`: small leaf commands kept flat.
 - **internal/api/**: GENERATED Go client from `api/openapi.json` — do NOT edit.
 - **internal/client/**: Thin wrapper around generated client (API key
@@ -177,7 +251,19 @@ Or run it without installing (after copying the spec):
   error handling). One method per endpoint. Exception: `ssh.go` hand-writes
   the SSH endpoints through `raw.go`'s `doJSON` (returns `*APIError`,
   test with `IsAPICode`) until `api/openapi.json` ships them; then regenerate
-  and switch to generated calls.
+  and switch to generated calls. `checkError` also returns `*APIError`, so
+  `IsAPICode` works for every endpoint. `mcp.go` (`MCP`, `MCPEndpoint`) is the
+  one non-`/api/cli` call.
+- **internal/agents/**: AI-agent setup shared by `mcp install`, `skills
+  install` and `setup agent`: detection (`Select`; CLI on PATH or config dir,
+  honouring `CLAUDE_CONFIG_DIR`/`CODEX_HOME`), `InstallMCP` (Claude Code via
+  `claude mcp add --scope user`, Cursor `~/.cursor/mcp.json` merge, Codex
+  `config.toml` table replace; other entries untouched, atomic writes),
+  `InstallSkill`, and `OkctlServer` (absolute okctl path, since a desktop-
+  launched agent may not share the shell's PATH).
+- **internal/update/**: release lookup, the passive daily update notice, and
+  self-replace for `upgrade`. Release archives are named after the repo:
+  `ownkube-cli_<os>_<arch>.tar.gz` (`.zip` on Windows) + `checksums.txt`.
 - **internal/sshconn/**: okctl's SSH client (`golang.org/x/crypto/ssh`, no
   OpenSSH needed). Key discovery/creation (`~/.ssh/ownkube_ed25519`, agent
   keys), `EnsureKey` first-connect flow, host keys pinned from the API (never
@@ -186,6 +272,10 @@ Or run it without installing (after copying the spec):
   `OpenRedialable` and keeps the local port), `~/.ssh/config` blocks. The SSH
   username is the deployment ID (`LoginUser`); a hostname isn't accepted for
   every target, so don't switch back to the API's `username`.
+- **internal/gitrepo/**: Reads a checkout's `origin` (scp-like, ssh://,
+  https:// forms → host + `owner/repo`, GitLab subgroups kept whole) and current
+  branch (`Detect`, `ParseRemoteURL`); `SplitRepository` splits at the LAST
+  slash, matching how the API reads GitLab `group/sub/project`.
 - **internal/config/**: Config + credentials YAML file management
   (`~/.config/ownkube/`).
 - **internal/link/**: Per-directory resource binding store — `links.yaml` in the
@@ -207,7 +297,7 @@ Or run it without installing (after copying the spec):
 - Config dir: `~/.config/ownkube/` with `config.yaml` (prefs) and
   `credentials.yaml` (0600, auth).
 - API URL priority: `--api-url` flag > `OKCTL_API_URL` env > config.yaml >
-  `https://api.ownkube.io`.
+  `https://app.ownkube.io`.
 - `OKCTL_BASIC_AUTH=user:pass` adds HTTP Basic auth on every request, for an
   API URL served behind it.
 - Auth: browser-based flow — CLI opens browser to `/cli-authorize`, receives
@@ -259,6 +349,24 @@ flat files in `cmd/` are the root wiring, completion, and version.
 3. Attach it inside `New()` via `root.AddCommand(<verb>Cmd())`.
 4. If it needs auth or a client, call `ux.RequireClient()` at the start of
    `RunE` — do not hand-roll the auth check.
+5. If it acts on one app, make `[app]` the first positional in `Use` (see
+   below) instead of taking a raw deployment id.
+
+### The `[app]` argument
+
+`ux.WireAppTargets(rootCmd)` (called once in `cmd/root.go` after every
+`AddCommand`) wires each command whose `Use` has `[app]` as its first
+positional and that has no `--service` flag of its own. It adds
+`-s/--service`, `-e/--environment` and `-p/--project`, and appends the shared
+help text. The command's `Args` validator accepts the args with or without the
+app. Before `RunE` runs, the app (an argument, `--service`, or this directory's
+link) is resolved by name or id to a deployment id and passed in as `args[0]`.
+So write `RunE` as if `args[0]` were always an id, and declare `Args` for the
+full form (e.g. `cobra.ExactArgs(2)` for `rollback [app] <revision-id>`).
+Variadic commands need a custom validator that can tell the app from the other
+args (`vars set`: an arg containing `=` is never the app). A command with its
+own `--service` (`ssh`, `connect`, `run`) is skipped and resolves itself with
+`ux.ResolveScope` + `ux.ResolveApp`.
 
 ## Adding a New API Endpoint
 

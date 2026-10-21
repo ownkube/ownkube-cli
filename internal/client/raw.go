@@ -81,3 +81,25 @@ func IsAPICode(err error, code string) bool {
 	var apiErr *APIError
 	return errors.As(err, &apiErr) && apiErr.Code == code
 }
+
+// Do sends an authenticated request to path (e.g. "/v1/projects") under the
+// CLI API and returns the response as-is, for `okctl api`. The caller closes
+// the body.
+func (c *Client) Do(ctx context.Context, method, path string, body io.Reader) (*http.Response, error) {
+	req, err := http.NewRequestWithContext(ctx, method, c.apiURL+"/api/cli"+path, body)
+	if err != nil {
+		return nil, fmt.Errorf("building request: %w", err)
+	}
+	if body != nil {
+		req.Header.Set("Content-Type", "application/json")
+	}
+	req.Header.Set("Accept", "application/json")
+	if err := c.edit(ctx, req); err != nil {
+		return nil, err
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("API request failed: %w", err)
+	}
+	return resp, nil
+}

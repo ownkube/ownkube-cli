@@ -26,7 +26,7 @@ func renderLifecycle(cmd *cobra.Command, d *api.LifecycleDeploymentResult) error
 
 func restartCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "restart <deployment-id>",
+		Use:   "restart [app]",
 		Short: "Roll the workload, restarting every pod",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -49,9 +49,12 @@ func restartCmd() *cobra.Command {
 
 func rebuildCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "rebuild <deployment-id>",
+		Use:   "rebuild [app]",
 		Short: "Queue a fresh build of the current source",
-		Args:  cobra.ExactArgs(1),
+		Long: "Queue a fresh build of the deployment's current source. For an app " +
+			"connected to a repository, --commit builds that commit instead of the " +
+			"tracked branch's tip; later pushes to the branch still deploy.",
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cl, err := ux.RequireClient()
 			if err != nil {
@@ -62,24 +65,30 @@ func rebuildCmd() *cobra.Command {
 				v, _ := cmd.Flags().GetString("note")
 				note = &v
 			}
-			res, err := cl.Rebuild(cmd.Context(), args[0], note)
+			commit, err := commitFlag(cmd)
+			if err != nil {
+				return err
+			}
+			res, err := cl.Rebuild(cmd.Context(), args[0], note, commit)
 			if err != nil {
 				return err
 			}
 			if ux.IsStructured() {
 				return ux.Print(cmd.OutOrStdout(), res)
 			}
-			fmt.Fprintf(cmd.OutOrStdout(), "Queued rebuild: revision %s (%s @ %s).\n", res.RevisionId, res.Branch, res.GitSha)
+			fmt.Fprintf(cmd.OutOrStdout(), "Queued rebuild: revision %s (%s @ %s).\n", res.RevisionId, res.Branch, shortSha(res.GitSha))
+			printWatchHint(cmd.OutOrStdout(), args[0])
 			return nil
 		},
 	}
 	c.Flags().String("note", "", "Optional note recorded on the queued revision")
+	c.Flags().String("commit", "", "Commit SHA (7-40 hex characters) to build instead of the branch tip")
 	return c
 }
 
 func restoreCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "restore <deployment-id>",
+		Use:   "restore [app]",
 		Short: "Restore a managed database to a point in time",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -109,7 +118,7 @@ func restoreCmd() *cobra.Command {
 
 func maintenanceCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "maintenance <deployment-id>",
+		Use:   "maintenance [app]",
 		Short: "Toggle the maintenance page for a deployment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -140,7 +149,7 @@ func maintenanceCmd() *cobra.Command {
 
 func renameCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "rename <deployment-id> <display-name>",
+		Use:   "rename [app] <display-name>",
 		Short: "Set the cosmetic display label (empty clears it)",
 		Args:  cobra.RangeArgs(1, 2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -166,7 +175,7 @@ func renameCmd() *cobra.Command {
 
 func autoDeployCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "auto-deploy <deployment-id>",
+		Use:   "auto-deploy [app]",
 		Short: "Toggle automatic deploys on new commits",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

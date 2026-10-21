@@ -12,7 +12,7 @@ func promoteCmd() *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use:   "promote <deployment-id>",
+		Use:   "promote [app]",
 		Short: "Promote a deployment's live revision to a target deployment",
 		Long: "Ship the source deployment's currently live revision to a target " +
 			"deployment (for example, staging → production).",

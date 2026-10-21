@@ -14,7 +14,7 @@ func deployCmd() *cobra.Command {
 	var file string
 
 	cmd := &cobra.Command{
-		Use:   "deploy <deployment-id>",
+		Use:   "deploy [app]",
 		Short: "Deploy code and settings to a Compute function",
 		Long: "Deploy a function's combined source and configuration from a manifest " +
 			"file (-f), or '-' for stdin, in one revision. The body carries the inline " +

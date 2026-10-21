@@ -90,9 +90,9 @@ func renderDetail(cmd *cobra.Command, app *api.MarketplaceAppDetail) error {
 	}
 
 	fmt.Fprintln(w, "\nCreates:")
-	rows := [][]string{{"REF", "KIND", "DETAIL", "IMAGE"}}
+	rows := [][]string{{"REF", "KIND", "DETAIL", "VERSION"}}
 	for _, c := range app.Components {
-		rows = append(rows, []string{c.Ref, c.Kind, c.Detail, c.Image})
+		rows = append(rows, []string{c.Ref, c.Kind, c.Detail, c.Version})
 	}
 	if err := ux.Print(w, rows); err != nil {
 		return err

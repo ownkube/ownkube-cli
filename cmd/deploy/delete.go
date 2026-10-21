@@ -12,7 +12,7 @@ func deleteCmd() *cobra.Command {
 	var yes bool
 
 	cmd := &cobra.Command{
-		Use:   "delete <deployment-id>",
+		Use:   "delete [app]",
 		Short: "Delete a deployment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

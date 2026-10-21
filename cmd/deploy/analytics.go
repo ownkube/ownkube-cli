@@ -37,7 +37,7 @@ func printBlob(cmd *cobra.Command, data any) error {
 
 func observabilityCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "observability <deployment-id>",
+		Use:   "observability [app]",
 		Short: "Show request/latency/error observability metrics",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -59,7 +59,7 @@ func observabilityCmd() *cobra.Command {
 
 func telemetryCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "telemetry <deployment-id>",
+		Use:   "telemetry [app]",
 		Short: "Show CPU/memory/replica telemetry",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -81,7 +81,7 @@ func telemetryCmd() *cobra.Command {
 
 func cacheConnectionCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "cache-connection <deployment-id>",
+		Use:   "cache-connection [app]",
 		Short: "Show a managed cache's connection secret (see connection-info for credentials)",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -113,7 +113,7 @@ func cacheConnectionCmd() *cobra.Command {
 
 func buildLogsCmd() *cobra.Command {
 	c := &cobra.Command{
-		Use:   "build-logs <deployment-id> <revision-id>",
+		Use:   "build-logs [app] <revision-id>",
 		Short: "Print the build logs for a revision",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

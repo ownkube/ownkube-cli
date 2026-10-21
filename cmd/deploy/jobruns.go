@@ -19,7 +19,7 @@ func jobRunsCmd() *cobra.Command {
 
 func jobRunsListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "list <deployment-id>",
+		Use:   "list [app]",
 		Short: "List a job's run history",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -58,7 +58,7 @@ func jobRunsListCmd() *cobra.Command {
 
 func jobRunsTriggerCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "trigger <deployment-id>",
+		Use:   "trigger [app]",
 		Short: "Trigger a one-off run of a job",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -82,7 +82,7 @@ func jobRunsTriggerCmd() *cobra.Command {
 
 func jobRunsCancelCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "cancel <deployment-id> <job-name>",
+		Use:   "cancel [app] <job-name>",
 		Short: "Cancel an in-flight job run",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

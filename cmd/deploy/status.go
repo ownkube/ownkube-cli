@@ -9,7 +9,7 @@ import (
 
 func statusCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "status <deployment-id>",
+		Use:   "status [app]",
 		Short: "Show live status (sync, health, URL readiness) for a deployment",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {

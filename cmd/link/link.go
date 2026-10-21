@@ -115,8 +115,8 @@ func Link() *cobra.Command {
 
 	cmd.Flags().StringVar(&orgFlag, "organization", "", "Organization ID (skips the org picker)")
 	cmd.Flags().StringVar(&clusterFlag, "cluster", "", "Cluster ID (skips the cluster picker)")
-	cmd.Flags().StringVar(&envFlag, "environment", "", "Environment ID (skips the environment picker)")
-	cmd.Flags().StringVar(&serviceFlag, "service", "", "Deployment ID to target (skips the deployment picker)")
+	cmd.Flags().StringVar(&envFlag, "environment", "", "Environment name or id (skips the environment picker)")
+	cmd.Flags().StringVar(&serviceFlag, "service", "", "App name or id to target (skips the deployment picker)")
 	cmd.Flags().BoolVar(&initSpec, "init", false, fmt.Sprintf("Scaffold an %s deploy spec if one does not exist", manifest.FileName))
 	return cmd
 }
@@ -219,7 +219,7 @@ func resolveCluster(ctx context.Context, c *client.Client, flag string, structur
 
 func resolveEnvironment(ctx context.Context, c *client.Client, flag string, structured bool) (string, error) {
 	if flag != "" {
-		return flag, nil
+		return ux.ResolveEnvironment(ctx, c, flag, "")
 	}
 	envs, err := c.ListEnvironments(ctx)
 	if err != nil {
@@ -236,7 +236,7 @@ func resolveEnvironment(ctx context.Context, c *client.Client, flag string, stru
 
 func resolveDeployment(ctx context.Context, c *client.Client, flag, clusterID, envID string, structured bool) (string, error) {
 	if flag != "" {
-		return flag, nil
+		return ux.ResolveApp(ctx, c, flag, ux.Scope{EnvironmentID: envID}, ".")
 	}
 	deps, err := c.ListDeployments(ctx, client.ListDeploymentsFilter{ClusterID: clusterID, EnvironmentID: envID})
 	if err != nil {
@@ -292,11 +292,12 @@ func scaffoldManifest(ctx context.Context, c *client.Client, dir, depID string) 
 	if manifest.Exists(dir) {
 		return fmt.Errorf("%s already exists", manifest.FileName)
 	}
+	replicas := 1
 	m := &manifest.Manifest{
 		Name:     filepath.Base(dir),
 		Type:     "web",
 		Port:     8080,
-		Replicas: 1,
+		Replicas: &replicas,
 	}
 	if depID != "" {
 		if d, err := c.GetDeployment(ctx, depID); err == nil {

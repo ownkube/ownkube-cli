@@ -12,7 +12,7 @@ func resetPasswordCmd() *cobra.Command {
 	var yes bool
 
 	cmd := &cobra.Command{
-		Use:   "reset-password <deployment-id>",
+		Use:   "reset-password [app]",
 		Short: "Reset a database deployment's password",
 		Long: "Rotate the password for a database deployment and print the new " +
 			"credential. The current password stops working immediately — update " +
