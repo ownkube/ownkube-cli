@@ -39,7 +39,8 @@ func (c *Client) GetCredit(ctx context.Context) (*api.CreditStatusResponse, erro
 
 // RedeemPromo calls POST /v1/promo/redeem — applies a promo code's credit to
 // the wallet. A refusal (unknown code, offer full or ended, already claimed,
-// existing account) comes back as a 200 with Ok: false, not an error.
+// existing account, unverified email, another offer already taken) comes back
+// as a 200 with Ok: false, not an error.
 func (c *Client) RedeemPromo(ctx context.Context, code string) (*api.RedeemPromoResponse, error) {
 	resp, err := c.inner.PostV1PromoRedeemWithResponse(ctx, api.RedeemPromoBody{Code: code})
 	if err != nil {

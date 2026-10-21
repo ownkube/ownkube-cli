@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Ownkube CLI API",
-    "version": "1.12.0",
+    "version": "1.13.0",
     "description": "API for the Ownkube CLI tool. Authenticate via browser-based flow, then use x-api-key header for subsequent requests."
   },
   "servers": [
@@ -46,7 +46,13 @@
                 "description": "Whether email is verified"
               }
             },
-            "required": ["id", "name", "email", "image", "emailVerified"]
+            "required": [
+              "id",
+              "name",
+              "email",
+              "image",
+              "emailVerified"
+            ]
           },
           "organizations": {
             "type": "array",
@@ -67,12 +73,20 @@
                   "type": "string"
                 }
               },
-              "required": ["id", "name", "slug", "role"]
+              "required": [
+                "id",
+                "name",
+                "slug",
+                "role"
+              ]
             },
             "description": "Organizations this user belongs to. Pass an `id` as the `x-ownkube-organization` header on subsequent requests when membership is plural."
           }
         },
-        "required": ["user", "organizations"]
+        "required": [
+          "user",
+          "organizations"
+        ]
       },
       "ErrorResponse": {
         "type": "object",
@@ -86,7 +100,10 @@
             "description": "Machine-readable error code"
           }
         },
-        "required": ["error", "code"]
+        "required": [
+          "error",
+          "code"
+        ]
       },
       "OrganizationListResponse": {
         "type": "object",
@@ -98,7 +115,9 @@
             }
           }
         },
-        "required": ["organizations"]
+        "required": [
+          "organizations"
+        ]
       },
       "OrganizationSummary": {
         "type": "object",
@@ -132,7 +151,13 @@
             ]
           }
         },
-        "required": ["id", "name", "slug", "logo", "role"]
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "logo",
+          "role"
+        ]
       },
       "AwsConnectResponse": {
         "type": "object",
@@ -196,7 +221,11 @@
             ]
           }
         },
-        "required": ["stackName", "templateUrl", "parameters"],
+        "required": [
+          "stackName",
+          "templateUrl",
+          "parameters"
+        ],
         "description": "Deploy this stack yourself with AWS creds already in your environment (autonomous mode). Parameter keys match the template exactly."
       },
       "AwsAccountListResponse": {
@@ -209,7 +238,9 @@
             }
           }
         },
-        "required": ["accounts"]
+        "required": [
+          "accounts"
+        ]
       },
       "AwsAccount": {
         "type": "object",
@@ -249,7 +280,10 @@
                   "type": "string"
                 }
               },
-              "required": ["id", "clusterName"]
+              "required": [
+                "id",
+                "clusterName"
+              ]
             }
           },
           "lastVerifiedAt": {
@@ -313,7 +347,11 @@
           },
           "kind": {
             "type": "string",
-            "enum": ["retry", "quota", "conflict"],
+            "enum": [
+              "retry",
+              "quota",
+              "conflict"
+            ],
             "description": "How to recover: `retry` (transient/propagation, re-verify or re-launch the same stack), `quota` (fix an AWS limit then re-verify), `conflict` (account claimed elsewhere, use a different account)."
           },
           "title": {
@@ -330,7 +368,13 @@
             "description": "External help link, when relevant"
           }
         },
-        "required": ["code", "kind", "title", "description", "docsUrl"],
+        "required": [
+          "code",
+          "kind",
+          "title",
+          "description",
+          "docsUrl"
+        ],
         "description": "Structured failure + remediation when status is `failed`"
       },
       "AwsVerifyResponse": {
@@ -344,7 +388,9 @@
             "nullable": true
           }
         },
-        "required": ["success"]
+        "required": [
+          "success"
+        ]
       },
       "AwsReconnectResponse": {
         "type": "object",
@@ -356,7 +402,10 @@
             "type": "string"
           }
         },
-        "required": ["externalId", "quickCreateUrl"]
+        "required": [
+          "externalId",
+          "quickCreateUrl"
+        ]
       },
       "AwsSuccessResponse": {
         "type": "object",
@@ -365,7 +414,9 @@
             "type": "boolean"
           }
         },
-        "required": ["success"]
+        "required": [
+          "success"
+        ]
       },
       "ClusterListResponse": {
         "type": "object",
@@ -377,7 +428,9 @@
             }
           }
         },
-        "required": ["clusters"]
+        "required": [
+          "clusters"
+        ]
       },
       "Cluster": {
         "type": "object",
@@ -449,7 +502,13 @@
             ]
           }
         },
-        "required": ["id", "name", "provider", "clusterType", "status"]
+        "required": [
+          "id",
+          "name",
+          "provider",
+          "clusterType",
+          "status"
+        ]
       },
       "ClusterStatusResponse": {
         "type": "object",
@@ -468,7 +527,10 @@
             "nullable": true
           }
         },
-        "required": ["id", "status"]
+        "required": [
+          "id",
+          "status"
+        ]
       },
       "CreateClusterResponse": {
         "type": "object",
@@ -483,7 +545,10 @@
             "type": "string"
           }
         },
-        "required": ["clusterId", "status"]
+        "required": [
+          "clusterId",
+          "status"
+        ]
       },
       "DestroyClusterResponse": {
         "type": "object",
@@ -495,7 +560,10 @@
             "type": "string"
           }
         },
-        "required": ["clusterId", "status"]
+        "required": [
+          "clusterId",
+          "status"
+        ]
       },
       "CancelClusterResponse": {
         "type": "object",
@@ -507,7 +575,10 @@
             "type": "string"
           }
         },
-        "required": ["clusterId", "status"]
+        "required": [
+          "clusterId",
+          "status"
+        ]
       },
       "ComputeBoxCatalog": {
         "type": "object",
@@ -538,7 +609,12 @@
             "description": "Database storage price per GB per month, billed on top of the box."
           }
         },
-        "required": ["web", "database", "cache", "databaseStorageGbMonthUsd"]
+        "required": [
+          "web",
+          "database",
+          "cache",
+          "databaseStorageGbMonthUsd"
+        ]
       },
       "ComputeBox": {
         "type": "object",
@@ -588,7 +664,10 @@
             "description": "Regions you can deploy to on Ownkube Compute. Pass a region `id` here as the `region` field when creating a deployment with no `clusterId`."
           }
         },
-        "required": ["available", "regions"]
+        "required": [
+          "available",
+          "regions"
+        ]
       },
       "Region": {
         "type": "object",
@@ -602,7 +681,10 @@
             "description": "Human-readable region label."
           }
         },
-        "required": ["id", "name"]
+        "required": [
+          "id",
+          "name"
+        ]
       },
       "MarketplaceAppListResponse": {
         "type": "object",
@@ -614,7 +696,9 @@
             }
           }
         },
-        "required": ["apps"]
+        "required": [
+          "apps"
+        ]
       },
       "MarketplaceApp": {
         "type": "object",
@@ -661,7 +745,10 @@
                   "type": "string"
                 }
               },
-              "required": ["label", "url"]
+              "required": [
+                "label",
+                "url"
+              ]
             }
           },
           "sourceUrl": {
@@ -715,7 +802,13 @@
             "description": "App version an app piece runs, e.g. `1.123.60`; null for datastores (see `detail`) and apps Ownkube builds itself."
           }
         },
-        "required": ["ref", "kind", "title", "detail", "version"]
+        "required": [
+          "ref",
+          "kind",
+          "title",
+          "detail",
+          "version"
+        ]
       },
       "MarketplaceAppDetail": {
         "allOf": [
@@ -740,7 +833,10 @@
                 "description": "Variables the app gets set for you."
               }
             },
-            "required": ["inputs", "connections"]
+            "required": [
+              "inputs",
+              "connections"
+            ]
           }
         ]
       },
@@ -759,7 +855,12 @@
           },
           "type": {
             "type": "string",
-            "enum": ["string", "number", "boolean", "select"]
+            "enum": [
+              "string",
+              "number",
+              "boolean",
+              "select"
+            ]
           },
           "required": {
             "type": "boolean"
@@ -810,12 +911,20 @@
                   "type": "string"
                 }
               },
-              "required": ["label", "value"]
+              "required": [
+                "label",
+                "value"
+              ]
             },
             "description": "Allowed values for a `select` input."
           }
         },
-        "required": ["key", "label", "type", "required"]
+        "required": [
+          "key",
+          "label",
+          "type",
+          "required"
+        ]
       },
       "MarketplaceConnection": {
         "type": "object",
@@ -831,11 +940,20 @@
           },
           "source": {
             "type": "string",
-            "enum": ["wired", "input", "generated"],
+            "enum": [
+              "wired",
+              "input",
+              "generated"
+            ],
             "description": "`wired`: from the app's own database or cache. `input`: from your `inputs`. `generated`: a fresh secret per deploy."
           }
         },
-        "required": ["appRef", "envName", "label", "source"]
+        "required": [
+          "appRef",
+          "envName",
+          "label",
+          "source"
+        ]
       },
       "MarketplaceCheckResponse": {
         "type": "object",
@@ -851,7 +969,10 @@
             "description": "What to fix before deploying; empty when `ok`."
           }
         },
-        "required": ["ok", "errors"]
+        "required": [
+          "ok",
+          "errors"
+        ]
       },
       "MarketplaceCheckBody": {
         "type": "object",
@@ -932,7 +1053,11 @@
             }
           }
         },
-        "required": ["slug", "templateInstanceId", "deployments"]
+        "required": [
+          "slug",
+          "templateInstanceId",
+          "deployments"
+        ]
       },
       "MarketplaceDeployBody": {
         "type": "object",
@@ -1005,7 +1130,10 @@
             "description": "How many deployments were removed."
           }
         },
-        "required": ["success", "count"]
+        "required": [
+          "success",
+          "count"
+        ]
       },
       "WalletSummaryResponse": {
         "type": "object",
@@ -1029,7 +1157,12 @@
             "description": "Minimum custom wallet top-up amount, in USD."
           }
         },
-        "required": ["enabled", "balance", "loadedInByReason", "topUpMinUsd"]
+        "required": [
+          "enabled",
+          "balance",
+          "loadedInByReason",
+          "topUpMinUsd"
+        ]
       },
       "CreditBalance": {
         "type": "object",
@@ -1072,7 +1205,10 @@
             "$ref": "#/components/schemas/SpendControls"
           }
         },
-        "required": ["enabled", "controls"]
+        "required": [
+          "enabled",
+          "controls"
+        ]
       },
       "SpendControls": {
         "type": "object",
@@ -1085,7 +1221,10 @@
           },
           "budgetAction": {
             "type": "string",
-            "enum": ["notify", "pause"],
+            "enum": [
+              "notify",
+              "pause"
+            ],
             "description": "What happens at the budget cap: `notify` only alerts; `pause` suspends compute (data retained) like wallet exhaustion."
           },
           "alertsEnabled": {
@@ -1121,7 +1260,10 @@
           },
           "budgetAction": {
             "type": "string",
-            "enum": ["notify", "pause"],
+            "enum": [
+              "notify",
+              "pause"
+            ],
             "description": "At the cap: 'notify' alerts only; 'pause' suspends compute."
           },
           "alertsEnabled": {
@@ -1160,7 +1302,12 @@
             "description": "Largest top-up the plan allows right now, in USD (Pay as you go caps each top-up and the rolling 30 days). Null means no cap."
           }
         },
-        "required": ["enabled", "balance", "topUpMinUsd", "topUpMaxUsd"]
+        "required": [
+          "enabled",
+          "balance",
+          "topUpMinUsd",
+          "topUpMaxUsd"
+        ]
       },
       "RedeemPromoResponse": {
         "type": "object",
@@ -1206,7 +1353,9 @@
               "ended",
               "not_started",
               "claimed",
-              "existing_account"
+              "existing_account",
+              "unverified_email",
+              "other_offer"
             ],
             "description": "Why the code was refused (when not `ok`)."
           },
@@ -1215,7 +1364,9 @@
             "description": "A user-facing sentence for the refusal (when not `ok`)."
           }
         },
-        "required": ["ok"]
+        "required": [
+          "ok"
+        ]
       },
       "RedeemPromoBody": {
         "type": "object",
@@ -1227,7 +1378,9 @@
             "description": "The promo code, e.g. from a `/login?ref=<code>` link."
           }
         },
-        "required": ["code"]
+        "required": [
+          "code"
+        ]
       },
       "CheckoutUrlResponse": {
         "type": "object",
@@ -1237,18 +1390,25 @@
             "description": "Browser checkout URL. Open it to complete payment; the account updates once the payment settles."
           }
         },
-        "required": ["url"]
+        "required": [
+          "url"
+        ]
       },
       "SubscriptionCheckoutBody": {
         "type": "object",
         "properties": {
           "tier": {
             "type": "string",
-            "enum": ["personal", "team"],
+            "enum": [
+              "personal",
+              "team"
+            ],
             "description": "The plan to subscribe to: `personal` ($5/mo) or `team` ($20/mo). Each loads that much wallet credit every cycle."
           }
         },
-        "required": ["tier"]
+        "required": [
+          "tier"
+        ]
       },
       "TopUpCheckoutBody": {
         "type": "object",
@@ -1260,7 +1420,9 @@
             "description": "Amount to add to the wallet, in USD. Must be at least the top-up minimum (see `topUpMinUsd` on GET /v1/credit)."
           }
         },
-        "required": ["amountUsd"]
+        "required": [
+          "amountUsd"
+        ]
       },
       "CurrentUsageResponse": {
         "type": "object",
@@ -1391,7 +1553,12 @@
             "description": "Cost of that traffic, in USD."
           }
         },
-        "required": ["region", "label", "gb", "usd"]
+        "required": [
+          "region",
+          "label",
+          "gb",
+          "usd"
+        ]
       },
       "ProjectedMonthCostResponse": {
         "type": "object",
@@ -1480,7 +1647,12 @@
             "description": "True while the series covers the live month; false for a completed month."
           }
         },
-        "required": ["points", "periodStart", "periodEnd", "isCurrentMonth"]
+        "required": [
+          "points",
+          "periodStart",
+          "periodEnd",
+          "isCurrentMonth"
+        ]
       },
       "UsageHistoryPoint": {
         "type": "object",
@@ -1539,7 +1711,9 @@
             }
           }
         },
-        "required": ["projects"]
+        "required": [
+          "projects"
+        ]
       },
       "Project": {
         "type": "object",
@@ -1582,7 +1756,11 @@
             ]
           }
         },
-        "required": ["id", "name", "slug"]
+        "required": [
+          "id",
+          "name",
+          "slug"
+        ]
       },
       "CreateProjectBody": {
         "type": "object",
@@ -1604,7 +1782,13 @@
           },
           "color": {
             "type": "string",
-            "enum": ["amber", "green", "blue", "purple", "red"],
+            "enum": [
+              "amber",
+              "green",
+              "blue",
+              "purple",
+              "red"
+            ],
             "description": "Accent color. Defaults to `blue`."
           },
           "description": {
@@ -1613,7 +1797,10 @@
             "description": "Optional note."
           }
         },
-        "required": ["name", "slug"]
+        "required": [
+          "name",
+          "slug"
+        ]
       },
       "UpdateProjectBody": {
         "type": "object",
@@ -1626,7 +1813,13 @@
           },
           "color": {
             "type": "string",
-            "enum": ["amber", "green", "blue", "purple", "red"],
+            "enum": [
+              "amber",
+              "green",
+              "blue",
+              "purple",
+              "red"
+            ],
             "description": "New accent color."
           },
           "description": {
@@ -1643,7 +1836,9 @@
             "type": "boolean"
           }
         },
-        "required": ["success"]
+        "required": [
+          "success"
+        ]
       },
       "EnvironmentListResponse": {
         "type": "object",
@@ -1655,7 +1850,9 @@
             }
           }
         },
-        "required": ["environments"]
+        "required": [
+          "environments"
+        ]
       },
       "Environment": {
         "type": "object",
@@ -1696,7 +1893,10 @@
                   "type": "boolean"
                 }
               },
-              "required": ["name", "value"]
+              "required": [
+                "name",
+                "value"
+              ]
             }
           },
           "isDefault": {
@@ -1728,7 +1928,11 @@
             ]
           }
         },
-        "required": ["id", "name", "slug"]
+        "required": [
+          "id",
+          "name",
+          "slug"
+        ]
       },
       "CreateEnvironmentBody": {
         "type": "object",
@@ -1754,7 +1958,13 @@
           },
           "color": {
             "type": "string",
-            "enum": ["amber", "green", "blue", "purple", "red"],
+            "enum": [
+              "amber",
+              "green",
+              "blue",
+              "purple",
+              "red"
+            ],
             "description": "Accent color. Defaults to `blue`."
           },
           "description": {
@@ -1763,7 +1973,10 @@
             "description": "Optional note."
           }
         },
-        "required": ["name", "slug"]
+        "required": [
+          "name",
+          "slug"
+        ]
       },
       "UpdateEnvironmentBody": {
         "type": "object",
@@ -1776,7 +1989,13 @@
           },
           "color": {
             "type": "string",
-            "enum": ["amber", "green", "blue", "purple", "red"],
+            "enum": [
+              "amber",
+              "green",
+              "blue",
+              "purple",
+              "red"
+            ],
             "description": "New accent color."
           },
           "description": {
@@ -1802,7 +2021,11 @@
             "type": "number"
           }
         },
-        "required": ["env", "redeployed", "failed"]
+        "required": [
+          "env",
+          "redeployed",
+          "failed"
+        ]
       },
       "EnvVarInput": {
         "type": "object",
@@ -1822,7 +2045,10 @@
             "description": "The variable value. For secrets: reads blank secret values, so a secret you read back arrives with an empty value. Sending that empty value here KEEPS the previously saved secret (empty is the passthrough sentinel) rather than clearing it. To genuinely clear a secret, drop the variable from the set entirely; to change it, send the new plaintext."
           }
         },
-        "required": ["name", "value"]
+        "required": [
+          "name",
+          "value"
+        ]
       },
       "SetEnvVarsBody": {
         "type": "object",
@@ -1835,7 +2061,9 @@
             "description": "The full shared env-var set for the environment (replaces the existing set). Every cluster-bound app in the environment is redeployed to apply it."
           }
         },
-        "required": ["env"]
+        "required": [
+          "env"
+        ]
       },
       "DeleteEnvironmentResponse": {
         "type": "object",
@@ -1844,7 +2072,9 @@
             "type": "boolean"
           }
         },
-        "required": ["success"]
+        "required": [
+          "success"
+        ]
       },
       "RegistryListResponse": {
         "type": "object",
@@ -1856,7 +2086,9 @@
             }
           }
         },
-        "required": ["registries"]
+        "required": [
+          "registries"
+        ]
       },
       "Registry": {
         "type": "object",
@@ -1915,7 +2147,11 @@
             ]
           }
         },
-        "required": ["id", "provider", "account"]
+        "required": [
+          "id",
+          "provider",
+          "account"
+        ]
       },
       "DeploymentListResponse": {
         "type": "object",
@@ -1927,7 +2163,9 @@
             }
           }
         },
-        "required": ["deployments"]
+        "required": [
+          "deployments"
+        ]
       },
       "Deployment": {
         "type": "object",
@@ -1995,13 +2233,21 @@
             "properties": {
               "type": {
                 "type": "string",
-                "enum": ["git", "upload", "image"],
+                "enum": [
+                  "git",
+                  "upload",
+                  "image"
+                ],
                 "description": "git: built from a connected repository on every push. upload: built from uploaded source. image: runs a prebuilt image."
               },
               "provider": {
                 "type": "string",
                 "nullable": true,
-                "enum": ["github", "gitlab", null],
+                "enum": [
+                  "github",
+                  "gitlab",
+                  null
+                ],
                 "description": "The repository's host, for git sources."
               },
               "repository": {
@@ -2130,7 +2376,9 @@
             "type": "boolean"
           }
         },
-        "required": ["success"]
+        "required": [
+          "success"
+        ]
       },
       "DeploymentStatusResponse": {
         "type": "object",
@@ -2154,7 +2402,13 @@
             "nullable": true
           }
         },
-        "required": ["health", "sync", "status", "statusMessage", "urlReady"]
+        "required": [
+          "health",
+          "sync",
+          "status",
+          "statusMessage",
+          "urlReady"
+        ]
       },
       "DeploymentLogsResponse": {
         "type": "object",
@@ -2166,7 +2420,9 @@
             }
           }
         },
-        "required": ["entries"]
+        "required": [
+          "entries"
+        ]
       },
       "LogEntry": {
         "type": "object",
@@ -2180,7 +2436,11 @@
           },
           "level": {
             "type": "string",
-            "enum": ["error", "info", "warn"]
+            "enum": [
+              "error",
+              "info",
+              "warn"
+            ]
           },
           "fields": {
             "type": "object",
@@ -2190,7 +2450,12 @@
             "description": "Structured fields, keyed by their published label."
           }
         },
-        "required": ["timestampNs", "message", "level", "fields"]
+        "required": [
+          "timestampNs",
+          "message",
+          "level",
+          "fields"
+        ]
       },
       "ConnectionDetailsResponse": {
         "type": "object",
@@ -2206,7 +2471,10 @@
             "type": "string"
           }
         },
-        "required": ["details", "secretName"],
+        "required": [
+          "details",
+          "secretName"
+        ],
         "additionalProperties": {
           "nullable": true
         }
@@ -2225,7 +2493,10 @@
             "type": "string"
           }
         },
-        "required": ["details", "secretName"],
+        "required": [
+          "details",
+          "secretName"
+        ],
         "additionalProperties": {
           "nullable": true
         }
@@ -2240,7 +2511,9 @@
             }
           }
         },
-        "required": ["functions"]
+        "required": [
+          "functions"
+        ]
       },
       "FunctionSourceResponse": {
         "type": "object",
@@ -2255,7 +2528,9 @@
           },
           "language": {
             "type": "string",
-            "enum": ["javascript"],
+            "enum": [
+              "javascript"
+            ],
             "description": "Source language (Node/ESM — always `javascript` in v1)."
           },
           "sourceHash": {
@@ -2264,7 +2539,12 @@
             "description": "Content hash of the stored source, if recorded."
           }
         },
-        "required": ["code", "filename", "language", "sourceHash"]
+        "required": [
+          "code",
+          "filename",
+          "language",
+          "sourceHash"
+        ]
       },
       "ConnectSessionResult": {
         "type": "object",
@@ -2287,11 +2567,19 @@
           },
           "protocol": {
             "type": "string",
-            "enum": ["postgres"],
+            "enum": [
+              "postgres"
+            ],
             "description": "Wire protocol of the target (databases only)."
           }
         },
-        "required": ["sessionId", "ticket", "relayUrl", "expiresAt", "protocol"]
+        "required": [
+          "sessionId",
+          "ticket",
+          "relayUrl",
+          "expiresAt",
+          "protocol"
+        ]
       },
       "SshKeyList": {
         "type": "object",
@@ -2303,7 +2591,9 @@
             }
           }
         },
-        "required": ["keys"]
+        "required": [
+          "keys"
+        ]
       },
       "SshKey": {
         "type": "object",
@@ -2324,7 +2614,11 @@
           },
           "source": {
             "type": "string",
-            "enum": ["cli", "dashboard", "github"]
+            "enum": [
+              "cli",
+              "dashboard",
+              "github"
+            ]
           },
           "createdAt": {
             "type": "string"
@@ -2357,7 +2651,9 @@
                 "description": "False when the key was already registered to you."
               }
             },
-            "required": ["created"]
+            "required": [
+              "created"
+            ]
           }
         ]
       },
@@ -2368,7 +2664,9 @@
             "type": "boolean"
           }
         },
-        "required": ["removed"]
+        "required": [
+          "removed"
+        ]
       },
       "ConnectRegionList": {
         "type": "object",
@@ -2414,7 +2712,9 @@
             }
           }
         },
-        "required": ["regions"]
+        "required": [
+          "regions"
+        ]
       },
       "SshTarget": {
         "type": "object",
@@ -2427,7 +2727,11 @@
           },
           "kind": {
             "type": "string",
-            "enum": ["app", "database", "cache"]
+            "enum": [
+              "app",
+              "database",
+              "cache"
+            ]
           },
           "region": {
             "type": "string",
@@ -2455,7 +2759,10 @@
                   "type": "boolean"
                 }
               },
-              "required": ["index", "ready"]
+              "required": [
+                "index",
+                "ready"
+              ]
             }
           },
           "hostKeys": {
@@ -2482,7 +2789,10 @@
         "properties": {
           "resourceType": {
             "type": "string",
-            "enum": ["database", "cache"]
+            "enum": [
+              "database",
+              "cache"
+            ]
           },
           "host": {
             "type": "string",
@@ -2560,7 +2870,10 @@
             "type": "string"
           }
         },
-        "required": ["linked", "envVar"]
+        "required": [
+          "linked",
+          "envVar"
+        ]
       },
       "LinkDatastoreBody": {
         "type": "object",
@@ -2574,7 +2887,9 @@
             "description": "Environment variable to set. Defaults to DATABASE_URL for a database (MONGODB_URI for a MongoDB-compatible one) and REDIS_URL for a cache."
           }
         },
-        "required": ["datastoreId"]
+        "required": [
+          "datastoreId"
+        ]
       },
       "DeploymentActionResult": {
         "type": "object",
@@ -2686,13 +3001,21 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["git", "upload", "image"],
+            "enum": [
+              "git",
+              "upload",
+              "image"
+            ],
             "description": "git: built from a connected repository on every push. upload: built from uploaded source. image: runs a prebuilt image."
           },
           "provider": {
             "type": "string",
             "nullable": true,
-            "enum": ["github", "gitlab", null],
+            "enum": [
+              "github",
+              "gitlab",
+              null
+            ],
             "description": "The repository's host, for git sources."
           },
           "repository": {
@@ -2793,7 +3116,10 @@
                       "type": "string"
                     }
                   },
-                  "required": ["name", "value"]
+                  "required": [
+                    "name",
+                    "value"
+                  ]
                 }
               },
               "startCommand": {
@@ -2826,7 +3152,9 @@
                         "maxLength": 255
                       }
                     },
-                    "required": ["username"]
+                    "required": [
+                      "username"
+                    ]
                   },
                   "oauth": {
                     "type": "object",
@@ -2837,7 +3165,9 @@
                       },
                       "provider": {
                         "type": "string",
-                        "enum": ["google"],
+                        "enum": [
+                          "google"
+                        ],
                         "default": "google"
                       },
                       "allowedDomains": {
@@ -2900,7 +3230,9 @@
                         "maximum": 300
                       }
                     },
-                    "required": ["path"]
+                    "required": [
+                      "path"
+                    ]
                   },
                   "liveness": {
                     "type": "object",
@@ -2937,7 +3269,9 @@
                         "maximum": 300
                       }
                     },
-                    "required": ["path"]
+                    "required": [
+                      "path"
+                    ]
                   },
                   "readiness": {
                     "type": "object",
@@ -2974,7 +3308,9 @@
                         "maximum": 300
                       }
                     },
-                    "required": ["path"]
+                    "required": [
+                      "path"
+                    ]
                   }
                 }
               },
@@ -2993,7 +3329,11 @@
                         "minLength": 1
                       }
                     },
-                    "required": ["cpu", "memory"]
+                    "required": [
+                      "cpu",
+                      "memory"
+                    ],
+                    "description": "CPU and memory each replica is guaranteed. Settable only on your own cluster: on Ownkube Compute, Ownkube sets the requests and ignores any sent."
                   },
                   "limits": {
                     "type": "object",
@@ -3007,10 +3347,18 @@
                         "minLength": 1
                       }
                     },
-                    "required": ["cpu", "memory"]
+                    "required": [
+                      "cpu",
+                      "memory"
+                    ],
+                    "description": "CPU and memory each replica may use. On a metered Ownkube Compute app this is how you size it, up to the largest box; a reserved app, database or cache is sized by its box (skuId) instead."
                   }
                 },
-                "required": ["requests", "limits"]
+                "required": [
+                  "requests",
+                  "limits"
+                ],
+                "description": "Per-replica CPU and memory. On Ownkube Compute, a metered app sets limits only (Ownkube sets the requests); a reserved app, database or cache is sized by its box, so change skuId to resize. Requests and limits are both settable only on your own cluster."
               },
               "autoscaling": {
                 "type": "object",
@@ -3103,7 +3451,10 @@
                           ]
                         }
                       },
-                      "required": ["key", "effect"]
+                      "required": [
+                        "key",
+                        "effect"
+                      ]
                     },
                     "maxItems": 16
                   }
@@ -3111,13 +3462,20 @@
               },
               "billingMode": {
                 "type": "string",
-                "enum": ["metered", "reserved"]
+                "enum": [
+                  "metered",
+                  "reserved"
+                ],
+                "description": "Ownkube Compute only. metered (the default) bills measured CPU and memory; size it with resources.limits. reserved bills a flat box price per replica-hour and is sized by the box, so change skuId to resize. Ignored on your own cluster."
               },
               "skuId": {
-                "type": "string"
+                "type": "string",
+                "description": "Box id for billingMode reserved (a Spark or Core box, e.g. core-2). Required with reserved, rejected otherwise. Change it to resize a reserved app."
               }
             },
-            "required": ["port"],
+            "required": [
+              "port"
+            ],
             "description": "New config for a web/worker deployment."
           },
           "databaseConfig": {
@@ -3125,11 +3483,17 @@
             "properties": {
               "engine": {
                 "type": "string",
-                "enum": ["postgres", "mongodb"]
+                "enum": [
+                  "postgres",
+                  "mongodb"
+                ]
               },
               "version": {
                 "type": "string",
-                "enum": ["17", "18"]
+                "enum": [
+                  "17",
+                  "18"
+                ]
               },
               "instances": {
                 "type": "integer",
@@ -3139,10 +3503,15 @@
               },
               "billingMode": {
                 "type": "string",
-                "enum": ["metered", "reserved"]
+                "enum": [
+                  "metered",
+                  "reserved"
+                ],
+                "description": "Ownkube Compute only, and always reserved: the database runs as a box (skuId) that sets its CPU and memory. Ignored on your own cluster."
               },
               "skuId": {
-                "type": "string"
+                "type": "string",
+                "description": "Database box id from list_boxes (e.g. db-2). Required on Ownkube Compute; change it to resize the database."
               },
               "bootstrap": {
                 "type": "object",
@@ -3164,7 +3533,10 @@
                     }
                   }
                 },
-                "required": ["database", "owner"]
+                "required": [
+                  "database",
+                  "owner"
+                ]
               },
               "storage": {
                 "type": "object",
@@ -3179,7 +3551,9 @@
                     "default": "gp3"
                   }
                 },
-                "required": ["size"]
+                "required": [
+                  "size"
+                ]
               },
               "public": {
                 "type": "boolean"
@@ -3213,7 +3587,11 @@
                         "minLength": 1
                       }
                     },
-                    "required": ["cpu", "memory"]
+                    "required": [
+                      "cpu",
+                      "memory"
+                    ],
+                    "description": "CPU and memory each replica is guaranteed. Settable only on your own cluster: on Ownkube Compute, Ownkube sets the requests and ignores any sent."
                   },
                   "limits": {
                     "type": "object",
@@ -3227,10 +3605,18 @@
                         "minLength": 1
                       }
                     },
-                    "required": ["cpu", "memory"]
+                    "required": [
+                      "cpu",
+                      "memory"
+                    ],
+                    "description": "CPU and memory each replica may use. On a metered Ownkube Compute app this is how you size it, up to the largest box; a reserved app, database or cache is sized by its box (skuId) instead."
                   }
                 },
-                "required": ["requests", "limits"]
+                "required": [
+                  "requests",
+                  "limits"
+                ],
+                "description": "Per-replica CPU and memory. On Ownkube Compute, a metered app sets limits only (Ownkube sets the requests); a reserved app, database or cache is sized by its box, so change skuId to resize. Requests and limits are both settable only on your own cluster."
               },
               "pooler": {
                 "type": "object",
@@ -3246,11 +3632,17 @@
                   },
                   "type": {
                     "type": "string",
-                    "enum": ["rw", "ro"]
+                    "enum": [
+                      "rw",
+                      "ro"
+                    ]
                   },
                   "mode": {
                     "type": "string",
-                    "enum": ["session", "transaction"]
+                    "enum": [
+                      "session",
+                      "transaction"
+                    ]
                   },
                   "parameters": {
                     "type": "object",
@@ -3341,7 +3733,9 @@
                     "type": "boolean"
                   }
                 },
-                "required": ["enablePodMonitor"]
+                "required": [
+                  "enablePodMonitor"
+                ]
               },
               "backup": {
                 "type": "object",
@@ -3374,10 +3768,14 @@
                         "type": "boolean"
                       }
                     },
-                    "required": ["enabled"]
+                    "required": [
+                      "enabled"
+                    ]
                   }
                 },
-                "required": ["enabled"]
+                "required": [
+                  "enabled"
+                ]
               },
               "scheduledBackup": {
                 "type": "object",
@@ -3396,10 +3794,18 @@
                     "type": "boolean"
                   }
                 },
-                "required": ["enabled", "schedule"]
+                "required": [
+                  "enabled",
+                  "schedule"
+                ]
               }
             },
-            "required": ["engine", "version", "bootstrap", "storage"],
+            "required": [
+              "engine",
+              "version",
+              "bootstrap",
+              "storage"
+            ],
             "description": "New config for a database deployment."
           },
           "cacheConfig": {
@@ -3407,18 +3813,28 @@
             "properties": {
               "engine": {
                 "type": "string",
-                "enum": ["valkey"]
+                "enum": [
+                  "valkey"
+                ]
               },
               "version": {
                 "type": "string",
-                "enum": ["9.1", "8.1"]
+                "enum": [
+                  "9.1",
+                  "8.1"
+                ]
               },
               "billingMode": {
                 "type": "string",
-                "enum": ["metered", "reserved"]
+                "enum": [
+                  "metered",
+                  "reserved"
+                ],
+                "description": "Ownkube Compute only, and always reserved: the cache runs as a box (skuId) that sets its CPU and memory. Ignored on your own cluster."
               },
               "skuId": {
-                "type": "string"
+                "type": "string",
+                "description": "Cache box id from list_boxes (e.g. cache-1). Required on Ownkube Compute; change it to resize the cache."
               },
               "maxmemory": {
                 "type": "string",
@@ -3448,7 +3864,10 @@
                     "minLength": 1
                   }
                 },
-                "required": ["enabled", "size"]
+                "required": [
+                  "enabled",
+                  "size"
+                ]
               },
               "public": {
                 "type": "boolean"
@@ -3482,7 +3901,11 @@
                         "minLength": 1
                       }
                     },
-                    "required": ["cpu", "memory"]
+                    "required": [
+                      "cpu",
+                      "memory"
+                    ],
+                    "description": "CPU and memory each replica is guaranteed. Settable only on your own cluster: on Ownkube Compute, Ownkube sets the requests and ignores any sent."
                   },
                   "limits": {
                     "type": "object",
@@ -3496,13 +3919,24 @@
                         "minLength": 1
                       }
                     },
-                    "required": ["cpu", "memory"]
+                    "required": [
+                      "cpu",
+                      "memory"
+                    ],
+                    "description": "CPU and memory each replica may use. On a metered Ownkube Compute app this is how you size it, up to the largest box; a reserved app, database or cache is sized by its box (skuId) instead."
                   }
                 },
-                "required": ["requests", "limits"]
+                "required": [
+                  "requests",
+                  "limits"
+                ],
+                "description": "Per-replica CPU and memory. On Ownkube Compute, a metered app sets limits only (Ownkube sets the requests); a reserved app, database or cache is sized by its box, so change skuId to resize. Requests and limits are both settable only on your own cluster."
               }
             },
-            "required": ["engine", "version"],
+            "required": [
+              "engine",
+              "version"
+            ],
             "description": "New config for a cache deployment."
           },
           "jobConfig": {
@@ -3548,7 +3982,10 @@
                       "type": "string"
                     }
                   },
-                  "required": ["name", "value"]
+                  "required": [
+                    "name",
+                    "value"
+                  ]
                 }
               },
               "resources": {
@@ -3566,7 +4003,11 @@
                         "minLength": 1
                       }
                     },
-                    "required": ["cpu", "memory"]
+                    "required": [
+                      "cpu",
+                      "memory"
+                    ],
+                    "description": "CPU and memory each replica is guaranteed. Settable only on your own cluster: on Ownkube Compute, Ownkube sets the requests and ignores any sent."
                   },
                   "limits": {
                     "type": "object",
@@ -3580,10 +4021,18 @@
                         "minLength": 1
                       }
                     },
-                    "required": ["cpu", "memory"]
+                    "required": [
+                      "cpu",
+                      "memory"
+                    ],
+                    "description": "CPU and memory each replica may use. On a metered Ownkube Compute app this is how you size it, up to the largest box; a reserved app, database or cache is sized by its box (skuId) instead."
                   }
                 },
-                "required": ["requests", "limits"]
+                "required": [
+                  "requests",
+                  "limits"
+                ],
+                "description": "Per-replica CPU and memory. On Ownkube Compute, a metered app sets limits only (Ownkube sets the requests); a reserved app, database or cache is sized by its box, so change skuId to resize. Requests and limits are both settable only on your own cluster."
               },
               "schedule": {
                 "type": "object",
@@ -3598,7 +4047,11 @@
                   },
                   "concurrencyPolicy": {
                     "type": "string",
-                    "enum": ["Allow", "Forbid", "Replace"],
+                    "enum": [
+                      "Allow",
+                      "Forbid",
+                      "Replace"
+                    ],
                     "default": "Forbid"
                   },
                   "timeZone": {
@@ -3621,7 +4074,9 @@
                     "maximum": 100
                   }
                 },
-                "required": ["expression"]
+                "required": [
+                  "expression"
+                ]
               },
               "job": {
                 "type": "object",
@@ -3653,13 +4108,18 @@
                   },
                   "restartPolicy": {
                     "type": "string",
-                    "enum": ["Never", "OnFailure"],
+                    "enum": [
+                      "Never",
+                      "OnFailure"
+                    ],
                     "default": "Never"
                   }
                 }
               }
             },
-            "required": ["schedule"],
+            "required": [
+              "schedule"
+            ],
             "description": "New config for a job deployment."
           },
           "note": {
@@ -3691,7 +4151,10 @@
               },
               "architecture": {
                 "type": "string",
-                "enum": ["x86_64", "arm64"],
+                "enum": [
+                  "x86_64",
+                  "arm64"
+                ],
                 "default": "arm64"
               },
               "memoryMb": {
@@ -3728,7 +4191,10 @@
                       "type": "string"
                     }
                   },
-                  "required": ["name", "value"]
+                  "required": [
+                    "name",
+                    "value"
+                  ]
                 }
               },
               "triggers": {
@@ -3748,14 +4214,19 @@
                         "type": "string"
                       }
                     },
-                    "required": ["schedule"]
+                    "required": [
+                      "schedule"
+                    ]
                   },
                   "http": {
                     "type": "object",
                     "properties": {
                       "authType": {
                         "type": "string",
-                        "enum": ["none", "iam"],
+                        "enum": [
+                          "none",
+                          "iam"
+                        ],
                         "default": "none"
                       },
                       "cors": {
@@ -3792,10 +4263,17 @@
               },
               "substrate": {
                 "type": "string",
-                "enum": ["lambda", "ember"]
+                "enum": [
+                  "lambda",
+                  "ember"
+                ]
               }
             },
-            "required": ["runtime", "handler", "triggers"],
+            "required": [
+              "runtime",
+              "handler",
+              "triggers"
+            ],
             "description": "The new function config."
           },
           "note": {
@@ -3804,7 +4282,9 @@
             "description": "Optional revision note."
           }
         },
-        "required": ["config"]
+        "required": [
+          "config"
+        ]
       },
       "DeployFunctionBody": {
         "type": "object",
@@ -3824,7 +4304,10 @@
               },
               "architecture": {
                 "type": "string",
-                "enum": ["x86_64", "arm64"],
+                "enum": [
+                  "x86_64",
+                  "arm64"
+                ],
                 "default": "arm64"
               },
               "memoryMb": {
@@ -3861,7 +4344,10 @@
                       "type": "string"
                     }
                   },
-                  "required": ["name", "value"]
+                  "required": [
+                    "name",
+                    "value"
+                  ]
                 }
               },
               "triggers": {
@@ -3881,14 +4367,19 @@
                         "type": "string"
                       }
                     },
-                    "required": ["schedule"]
+                    "required": [
+                      "schedule"
+                    ]
                   },
                   "http": {
                     "type": "object",
                     "properties": {
                       "authType": {
                         "type": "string",
-                        "enum": ["none", "iam"],
+                        "enum": [
+                          "none",
+                          "iam"
+                        ],
                         "default": "none"
                       },
                       "cors": {
@@ -3925,10 +4416,17 @@
               },
               "substrate": {
                 "type": "string",
-                "enum": ["lambda", "ember"]
+                "enum": [
+                  "lambda",
+                  "ember"
+                ]
               }
             },
-            "required": ["runtime", "handler", "triggers"],
+            "required": [
+              "runtime",
+              "handler",
+              "triggers"
+            ],
             "description": "The function config to apply."
           },
           "code": {
@@ -3949,7 +4447,9 @@
             "description": "Optional revision note."
           }
         },
-        "required": ["config"]
+        "required": [
+          "config"
+        ]
       },
       "CopyDeploymentBody": {
         "type": "object",
@@ -3965,7 +4465,10 @@
             "maxLength": 200
           }
         },
-        "required": ["targetEnvironmentId", "targetClusterId"]
+        "required": [
+          "targetEnvironmentId",
+          "targetClusterId"
+        ]
       },
       "ResetPasswordResult": {
         "type": "object",
@@ -3974,7 +4477,9 @@
             "type": "string"
           }
         },
-        "required": ["password"]
+        "required": [
+          "password"
+        ]
       },
       "JobRunHistory": {
         "type": "object",
@@ -4011,7 +4516,11 @@
             }
           }
         },
-        "required": ["exists", "schedule", "runs"]
+        "required": [
+          "exists",
+          "schedule",
+          "runs"
+        ]
       },
       "TriggerJobRunResult": {
         "type": "object",
@@ -4020,7 +4529,9 @@
             "type": "string"
           }
         },
-        "required": ["jobName"]
+        "required": [
+          "jobName"
+        ]
       },
       "CancelJobRunResult": {
         "type": "object",
@@ -4029,7 +4540,9 @@
             "type": "boolean"
           }
         },
-        "required": ["canceled"]
+        "required": [
+          "canceled"
+        ]
       },
       "RestoreDatabaseResult": {
         "type": "object",
@@ -4038,7 +4551,9 @@
             "type": "boolean"
           }
         },
-        "required": ["started"]
+        "required": [
+          "started"
+        ]
       },
       "RestartResult": {
         "type": "object",
@@ -4052,7 +4567,10 @@
             "description": "The restart timestamp stamped on the pod template."
           }
         },
-        "required": ["restarted", "restartedAt"]
+        "required": [
+          "restarted",
+          "restartedAt"
+        ]
       },
       "ResyncResult": {
         "type": "object",
@@ -4061,7 +4579,9 @@
             "type": "boolean"
           }
         },
-        "required": ["resynced"]
+        "required": [
+          "resynced"
+        ]
       },
       "LifecycleDeploymentResult": {
         "type": "object",
@@ -4175,7 +4695,9 @@
             "description": "Whether auto-deploy should be on."
           }
         },
-        "required": ["enabled"]
+        "required": [
+          "enabled"
+        ]
       },
       "SetMaintenanceBody": {
         "type": "object",
@@ -4190,7 +4712,9 @@
             "description": "Optional line shown on the maintenance page. Ignored when disabling."
           }
         },
-        "required": ["enabled"]
+        "required": [
+          "enabled"
+        ]
       },
       "RenameDeploymentBody": {
         "type": "object",
@@ -4201,7 +4725,9 @@
             "description": "Cosmetic display label. Empty/whitespace clears it (falls back to the immutable name)."
           }
         },
-        "required": ["displayName"]
+        "required": [
+          "displayName"
+        ]
       },
       "MoveToProjectResult": {
         "type": "object",
@@ -4218,7 +4744,11 @@
             "description": "How many deployment rows moved (a marketplace app + its managed database/cache move together as one group)."
           }
         },
-        "required": ["success", "projectId", "moved"]
+        "required": [
+          "success",
+          "projectId",
+          "moved"
+        ]
       },
       "MoveToProjectBody": {
         "type": "object",
@@ -4228,7 +4758,9 @@
             "description": "The project to re-file this deployment under."
           }
         },
-        "required": ["targetProjectId"]
+        "required": [
+          "targetProjectId"
+        ]
       },
       "BuildArgsResult": {
         "type": "object",
@@ -4244,7 +4776,10 @@
             }
           }
         },
-        "required": ["deploymentId", "buildArgs"]
+        "required": [
+          "deploymentId",
+          "buildArgs"
+        ]
       },
       "BuildArgsBody": {
         "type": "object",
@@ -4258,7 +4793,9 @@
             "description": "Build arguments as a key/value map."
           }
         },
-        "required": ["buildArgs"]
+        "required": [
+          "buildArgs"
+        ]
       },
       "BuildContextResult": {
         "type": "object",
@@ -4271,7 +4808,10 @@
             "nullable": true
           }
         },
-        "required": ["deploymentId", "contextPath"]
+        "required": [
+          "deploymentId",
+          "contextPath"
+        ]
       },
       "BuildContextBody": {
         "type": "object",
@@ -4282,7 +4822,9 @@
             "description": "Root directory for the build, relative to the repo root. Empty string clears it."
           }
         },
-        "required": ["contextPath"]
+        "required": [
+          "contextPath"
+        ]
       },
       "BuilderSizeResult": {
         "type": "object",
@@ -4292,21 +4834,34 @@
           },
           "builderSize": {
             "type": "string",
-            "enum": ["small", "standard", "large"]
+            "enum": [
+              "small",
+              "standard",
+              "large"
+            ]
           }
         },
-        "required": ["deploymentId", "builderSize"]
+        "required": [
+          "deploymentId",
+          "builderSize"
+        ]
       },
       "BuilderSizeBody": {
         "type": "object",
         "properties": {
           "builderSize": {
             "type": "string",
-            "enum": ["small", "standard", "large"],
+            "enum": [
+              "small",
+              "standard",
+              "large"
+            ],
             "description": "The builder size preset."
           }
         },
-        "required": ["builderSize"]
+        "required": [
+          "builderSize"
+        ]
       },
       "CheckSubdomainResult": {
         "type": "object",
@@ -4328,7 +4883,13 @@
             "type": "string"
           }
         },
-        "required": ["available", "current", "hostname", "message", "subdomain"]
+        "required": [
+          "available",
+          "current",
+          "hostname",
+          "message",
+          "subdomain"
+        ]
       },
       "SuggestSubdomainsResult": {
         "type": "object",
@@ -4348,11 +4909,17 @@
                   "type": "string"
                 }
               },
-              "required": ["hostname", "subdomain", "kind"]
+              "required": [
+                "hostname",
+                "subdomain",
+                "kind"
+              ]
             }
           }
         },
-        "required": ["suggestions"]
+        "required": [
+          "suggestions"
+        ]
       },
       "ChangeSubdomainResult": {
         "type": "object",
@@ -4367,7 +4934,11 @@
             "$ref": "#/components/schemas/LifecycleDeploymentResult"
           }
         },
-        "required": ["changed", "hostname", "deployment"]
+        "required": [
+          "changed",
+          "hostname",
+          "deployment"
+        ]
       },
       "ChangeSubdomainBody": {
         "type": "object",
@@ -4377,7 +4948,9 @@
             "description": "The new address label to claim."
           }
         },
-        "required": ["subdomain"]
+        "required": [
+          "subdomain"
+        ]
       },
       "VcsConnections": {
         "type": "object",
@@ -4393,7 +4966,10 @@
             "description": "Dashboard page to connect GitHub or GitLab, or grant access to more repositories."
           }
         },
-        "required": ["connections", "connectUrl"]
+        "required": [
+          "connections",
+          "connectUrl"
+        ]
       },
       "VcsConnection": {
         "type": "object",
@@ -4404,7 +4980,10 @@
           },
           "provider": {
             "type": "string",
-            "enum": ["github", "gitlab"],
+            "enum": [
+              "github",
+              "gitlab"
+            ],
             "description": "The version control provider."
           },
           "account": {
@@ -4422,7 +5001,13 @@
             "description": "active when usable; anything else needs fixing in the dashboard."
           }
         },
-        "required": ["id", "provider", "account", "accountType", "status"]
+        "required": [
+          "id",
+          "provider",
+          "account",
+          "accountType",
+          "status"
+        ]
       },
       "VcsRepositories": {
         "type": "object",
@@ -4434,7 +5019,9 @@
             }
           }
         },
-        "required": ["repositories"]
+        "required": [
+          "repositories"
+        ]
       },
       "VcsRepository": {
         "type": "object",
@@ -4492,11 +5079,16 @@
                   "description": "ISO timestamp of the branch tip commit, when known."
                 }
               },
-              "required": ["name", "lastCommitAt"]
+              "required": [
+                "name",
+                "lastCommitAt"
+              ]
             }
           }
         },
-        "required": ["branches"]
+        "required": [
+          "branches"
+        ]
       },
       "SetDeploymentSourceResult": {
         "type": "object",
@@ -4506,7 +5098,10 @@
           },
           "provider": {
             "type": "string",
-            "enum": ["github", "gitlab"],
+            "enum": [
+              "github",
+              "gitlab"
+            ],
             "description": "The version control provider."
           },
           "repository": {
@@ -4591,7 +5186,10 @@
             "description": "Deploy this commit SHA instead of the branch tip. The branch is still tracked for later pushes."
           }
         },
-        "required": ["repository", "branch"]
+        "required": [
+          "repository",
+          "branch"
+        ]
       },
       "ClearDeploymentSourceResult": {
         "type": "object",
@@ -4600,7 +5198,9 @@
             "$ref": "#/components/schemas/LifecycleDeploymentResult"
           }
         },
-        "required": ["deployment"]
+        "required": [
+          "deployment"
+        ]
       },
       "AppVariables": {
         "type": "object",
@@ -4612,7 +5212,9 @@
             }
           }
         },
-        "required": ["variables"]
+        "required": [
+          "variables"
+        ]
       },
       "AppVariable": {
         "type": "object",
@@ -4629,7 +5231,10 @@
           },
           "source": {
             "type": "string",
-            "enum": ["environment", "app"],
+            "enum": [
+              "environment",
+              "app"
+            ],
             "description": "`environment` = shared by the app's environment (change it there); `app` = set on this app."
           },
           "overridesEnvironment": {
@@ -4672,7 +5277,12 @@
             "description": "Names that were removed."
           }
         },
-        "required": ["changed", "revisionId", "set", "unset"]
+        "required": [
+          "changed",
+          "revisionId",
+          "set",
+          "unset"
+        ]
       },
       "UpdateAppVariablesBody": {
         "type": "object",
@@ -4714,7 +5324,10 @@
             "description": "Store as a secret (never returned on reads). Omit to keep the variable's current flag; a new variable defaults to plain."
           }
         },
-        "required": ["name", "value"]
+        "required": [
+          "name",
+          "value"
+        ]
       },
       "ResolvedAppVariables": {
         "type": "object",
@@ -4735,11 +5348,17 @@
                   "type": "boolean"
                 }
               },
-              "required": ["name", "value", "secret"]
+              "required": [
+                "name",
+                "value",
+                "secret"
+              ]
             }
           }
         },
-        "required": ["variables"]
+        "required": [
+          "variables"
+        ]
       },
       "RevisionListResponse": {
         "type": "object",
@@ -4751,7 +5370,9 @@
             }
           }
         },
-        "required": ["revisions"]
+        "required": [
+          "revisions"
+        ]
       },
       "Revision": {
         "type": "object",
@@ -4768,7 +5389,9 @@
           },
           "imageSource": {
             "type": "string",
-            "enum": ["managed"],
+            "enum": [
+              "managed"
+            ],
             "description": "Set to managed when Ownkube built and stores the image; image is then null"
           },
           "tag": {
@@ -4813,7 +5436,10 @@
                 "nullable": true
               }
             },
-            "required": ["id", "name"]
+            "required": [
+              "id",
+              "name"
+            ]
           },
           "appConfig": {
             "nullable": true
@@ -4932,7 +5558,13 @@
             "description": "Whether this revision can still be rolled back to. Only the most recent builds are retained. Present on list results only."
           }
         },
-        "required": ["id", "deploymentId", "image", "tag", "status"]
+        "required": [
+          "id",
+          "deploymentId",
+          "image",
+          "tag",
+          "status"
+        ]
       },
       "RollbackBody": {
         "type": "object",
@@ -4957,7 +5589,9 @@
             "description": "Optional note recorded on the promotion."
           }
         },
-        "required": ["targetDeploymentId"]
+        "required": [
+          "targetDeploymentId"
+        ]
       },
       "RebuildResult": {
         "type": "object",
@@ -4972,7 +5606,11 @@
             "type": "string"
           }
         },
-        "required": ["revisionId", "gitSha", "branch"]
+        "required": [
+          "revisionId",
+          "gitSha",
+          "branch"
+        ]
       },
       "SourceUploadResponse": {
         "type": "object",
@@ -5056,12 +5694,20 @@
               },
               "portSource": {
                 "type": "string",
-                "enum": ["explicit", "dockerfile", "language", "fallback"],
+                "enum": [
+                  "explicit",
+                  "dockerfile",
+                  "language",
+                  "fallback"
+                ],
                 "description": "Where the port came from: the request, the Dockerfile's EXPOSE, the detected framework's default, or the 8080 fallback."
               },
               "resourceType": {
                 "type": "string",
-                "enum": ["web", "worker"]
+                "enum": [
+                  "web",
+                  "worker"
+                ]
               },
               "public": {
                 "type": "boolean"
@@ -5128,7 +5774,10 @@
           },
           "resourceType": {
             "type": "string",
-            "enum": ["web", "worker"],
+            "enum": [
+              "web",
+              "worker"
+            ],
             "description": "web (default, serves HTTP) or worker (background process)."
           },
           "public": {
@@ -5153,7 +5802,9 @@
             "description": "Redeploy this existing app from the upload. Omit to create a new app; the create-only fields below are rejected when it's set."
           }
         },
-        "required": ["uploadId"]
+        "required": [
+          "uploadId"
+        ]
       },
       "UpResult": {
         "type": "object",
@@ -5162,7 +5813,9 @@
             "type": "string"
           }
         },
-        "required": ["revisionId"]
+        "required": [
+          "revisionId"
+        ]
       },
       "UpBody": {
         "type": "object",
@@ -5177,7 +5830,9 @@
             "maxLength": 200
           }
         },
-        "required": ["uploadId"]
+        "required": [
+          "uploadId"
+        ]
       },
       "DeploymentTelemetry": {
         "type": "object",
@@ -5202,7 +5857,9 @@
             "nullable": true
           }
         },
-        "required": ["windowLabel"],
+        "required": [
+          "windowLabel"
+        ],
         "additionalProperties": {
           "nullable": true
         }
@@ -5237,7 +5894,11 @@
             "nullable": true
           }
         },
-        "required": ["windowLabel", "hasRequestData", "requestDataHint"],
+        "required": [
+          "windowLabel",
+          "hasRequestData",
+          "requestDataHint"
+        ],
         "additionalProperties": {
           "nullable": true
         }
@@ -5271,7 +5932,9 @@
             "nullable": true
           }
         },
-        "required": ["windowLabel"],
+        "required": [
+          "windowLabel"
+        ],
         "additionalProperties": {
           "nullable": true
         }
@@ -5302,7 +5965,9 @@
             "nullable": true
           }
         },
-        "required": ["windowLabel"],
+        "required": [
+          "windowLabel"
+        ],
         "additionalProperties": {
           "nullable": true
         }
@@ -5322,7 +5987,9 @@
             "type": "string"
           }
         },
-        "required": ["logs"]
+        "required": [
+          "logs"
+        ]
       },
       "AlertRuleListResponse": {
         "type": "object",
@@ -5334,7 +6001,9 @@
             }
           }
         },
-        "required": ["rules"]
+        "required": [
+          "rules"
+        ]
       },
       "AlertRule": {
         "type": "object",
@@ -5353,11 +6022,18 @@
           },
           "metric": {
             "type": "string",
-            "enum": ["cpu", "memory", "restarts"]
+            "enum": [
+              "cpu",
+              "memory",
+              "restarts"
+            ]
           },
           "comparator": {
             "type": "string",
-            "enum": ["gt", "lt"]
+            "enum": [
+              "gt",
+              "lt"
+            ]
           },
           "threshold": {
             "type": "string",
@@ -5372,7 +6048,10 @@
           },
           "severity": {
             "type": "string",
-            "enum": ["warning", "critical"]
+            "enum": [
+              "warning",
+              "critical"
+            ]
           },
           "enabled": {
             "type": "boolean"
@@ -5399,7 +6078,9 @@
             "type": "boolean"
           }
         },
-        "required": ["success"]
+        "required": [
+          "success"
+        ]
       },
       "AlertFiringListResponse": {
         "type": "object",
@@ -5411,7 +6092,9 @@
             }
           }
         },
-        "required": ["firings"]
+        "required": [
+          "firings"
+        ]
       },
       "AlertFiring": {
         "type": "object",
@@ -5435,15 +6118,25 @@
           },
           "metric": {
             "type": "string",
-            "enum": ["cpu", "memory", "restarts"]
+            "enum": [
+              "cpu",
+              "memory",
+              "restarts"
+            ]
           },
           "severity": {
             "type": "string",
-            "enum": ["warning", "critical"]
+            "enum": [
+              "warning",
+              "critical"
+            ]
           },
           "status": {
             "type": "string",
-            "enum": ["firing", "resolved"]
+            "enum": [
+              "firing",
+              "resolved"
+            ]
           },
           "summary": {
             "type": "string",
@@ -5515,7 +6208,10 @@
             }
           }
         },
-        "required": ["linked", "availableParents"]
+        "required": [
+          "linked",
+          "availableParents"
+        ]
       },
       "LinkedCustomDomain": {
         "type": "object",
@@ -5581,7 +6277,10 @@
           },
           "routingRecordType": {
             "type": "string",
-            "enum": ["A", "CNAME"]
+            "enum": [
+              "A",
+              "CNAME"
+            ]
           },
           "routingTarget": {
             "type": "string",
@@ -5609,7 +6308,11 @@
             "type": "string"
           }
         },
-        "required": ["certId", "wildcardDomain", "certStatus"],
+        "required": [
+          "certId",
+          "wildcardDomain",
+          "certStatus"
+        ],
         "additionalProperties": {
           "nullable": true
         }
@@ -5621,7 +6324,9 @@
             "$ref": "#/components/schemas/LinkedCustomDomain"
           }
         },
-        "required": ["domain"]
+        "required": [
+          "domain"
+        ]
       },
       "LinkCustomDomainBody": {
         "type": "object",
@@ -5632,7 +6337,9 @@
             "description": "The host to link — a subdomain or the apex of a parent."
           }
         },
-        "required": ["hostname"]
+        "required": [
+          "hostname"
+        ]
       },
       "VerifyCustomDomainResponse": {
         "type": "object",
@@ -5641,7 +6348,9 @@
             "type": "string"
           }
         },
-        "required": ["certStatus"]
+        "required": [
+          "certStatus"
+        ]
       },
       "UnlinkCustomDomainResponse": {
         "type": "object",
@@ -5650,7 +6359,9 @@
             "type": "boolean"
           }
         },
-        "required": ["removed"]
+        "required": [
+          "removed"
+        ]
       }
     },
     "parameters": {},
@@ -5666,7 +6377,9 @@
   "paths": {
     "/v1/info": {
       "get": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "summary": "Get authenticated user info",
         "description": "Returns the profile of the user associated with the provided API key.",
         "security": [
@@ -5700,7 +6413,9 @@
     },
     "/v1/organizations": {
       "get": {
-        "tags": ["Organizations"],
+        "tags": [
+          "Organizations"
+        ],
         "summary": "List organizations the API key's user belongs to",
         "description": "Use the returned `id` as the `x-ownkube-organization` header on subsequent requests when your account belongs to more than one org.",
         "security": [
@@ -5804,7 +6519,9 @@
     },
     "/v1/aws/connect": {
       "post": {
-        "tags": ["AWS Onboarding"],
+        "tags": [
+          "AWS Onboarding"
+        ],
         "summary": "Start connecting an AWS account",
         "description": "Mints a cross-account access request and returns the CloudFormation artifacts. Reuses this org's in-flight (unproven) row, so repeated calls do not pile up records. Poll GET /v1/aws/accounts/{accountId} until status is `verified` or `failed`.",
         "security": [
@@ -5908,7 +6625,9 @@
     },
     "/v1/aws/accounts": {
       "get": {
-        "tags": ["AWS Onboarding"],
+        "tags": [
+          "AWS Onboarding"
+        ],
         "summary": "List connected AWS accounts",
         "security": [
           {
@@ -6011,7 +6730,9 @@
     },
     "/v1/aws/accounts/{accountId}": {
       "get": {
-        "tags": ["AWS Onboarding"],
+        "tags": [
+          "AWS Onboarding"
+        ],
         "summary": "Get one AWS account's status",
         "security": [
           {
@@ -6124,7 +6845,9 @@
         }
       },
       "delete": {
-        "tags": ["AWS Onboarding"],
+        "tags": [
+          "AWS Onboarding"
+        ],
         "summary": "Remove an AWS account",
         "description": "Blocked while any cluster still references the account (the cross-account role is required to tear infra down). Destroy those clusters first.",
         "security": [
@@ -6240,7 +6963,9 @@
     },
     "/v1/aws/accounts/{accountId}/verify": {
       "post": {
-        "tags": ["AWS Onboarding"],
+        "tags": [
+          "AWS Onboarding"
+        ],
         "summary": "Verify an AWS connection",
         "description": "Normally the stack's phone-home finalizes the connection automatically. Call this to force a verify, optionally passing `awsAccountId` to assume the role directly before the callback arrives.",
         "security": [
@@ -6367,7 +7092,9 @@
     },
     "/v1/aws/accounts/{accountId}/reconnect": {
       "post": {
-        "tags": ["AWS Onboarding"],
+        "tags": [
+          "AWS Onboarding"
+        ],
         "summary": "Re-arm an account whose access stack was removed",
         "description": "Re-arms the existing row in place (same external ID and account ID) and returns a fresh CloudFormation link. Re-running the stack recreates the role and re-verifies the same account, so no duplicate is created.",
         "security": [
@@ -6483,7 +7210,9 @@
     },
     "/v1/aws/accounts/{accountId}/resync": {
       "post": {
-        "tags": ["AWS Onboarding"],
+        "tags": [
+          "AWS Onboarding"
+        ],
         "summary": "Re-run account setup on a verified account",
         "description": "Re-applies the shared roles and policies for an already-verified account. Safe to call to pick up an available upgrade (`needsUpgrade: true`).",
         "security": [
@@ -6599,7 +7328,9 @@
     },
     "/v1/clusters": {
       "get": {
-        "tags": ["Clusters"],
+        "tags": [
+          "Clusters"
+        ],
         "summary": "List clusters in the current organization",
         "security": [
           {
@@ -6700,7 +7431,9 @@
         }
       },
       "post": {
-        "tags": ["Clusters"],
+        "tags": [
+          "Clusters"
+        ],
         "summary": "Create a cluster",
         "description": "Provisions a Starter cluster (the self-hosted shape) into a verified AWS account (`cloudAccountId`). Returns immediately with a `clusterId` and `status: creating`; poll `/v1/clusters/{clusterId}/status` until it reports `active` or `failed`. Production (`clusterType: eks`) is not self-serve — contact us to enable a Production cluster.",
         "security": [
@@ -6720,11 +7453,21 @@
                   },
                   "provider": {
                     "type": "string",
-                    "enum": ["aws", "gcp", "azure", "hetzner"]
+                    "enum": [
+                      "aws",
+                      "gcp",
+                      "azure",
+                      "hetzner"
+                    ]
                   },
                   "clusterType": {
                     "type": "string",
-                    "enum": ["eks", "gke", "aks", "k3s"]
+                    "enum": [
+                      "eks",
+                      "gke",
+                      "aks",
+                      "k3s"
+                    ]
                   },
                   "clusterName": {
                     "type": "string",
@@ -6768,7 +7511,11 @@
                   },
                   "workerCapacityType": {
                     "type": "string",
-                    "enum": ["on-demand", "spot", "prefer-spot"],
+                    "enum": [
+                      "on-demand",
+                      "spot",
+                      "prefer-spot"
+                    ],
                     "default": "on-demand"
                   },
                   "telemetryRetentionDays": {
@@ -6809,7 +7556,11 @@
                         "maximum": 20
                       }
                     },
-                    "required": ["name", "repository", "tag"]
+                    "required": [
+                      "name",
+                      "repository",
+                      "tag"
+                    ]
                   },
                   "initialTemplate": {
                     "type": "object",
@@ -6819,7 +7570,9 @@
                         "minLength": 1
                       }
                     },
-                    "required": ["slug"]
+                    "required": [
+                      "slug"
+                    ]
                   }
                 },
                 "required": [
@@ -6930,7 +7683,9 @@
     },
     "/v1/clusters/{clusterId}": {
       "get": {
-        "tags": ["Clusters"],
+        "tags": [
+          "Clusters"
+        ],
         "summary": "Get a cluster by ID",
         "security": [
           {
@@ -7043,7 +7798,9 @@
         }
       },
       "delete": {
-        "tags": ["Clusters"],
+        "tags": [
+          "Clusters"
+        ],
         "summary": "Destroy a cluster",
         "description": "Tears the cluster down. Blocked when the cluster still has active deployments unless `force=true` is passed.",
         "security": [
@@ -7065,7 +7822,10 @@
           {
             "schema": {
               "type": "string",
-              "enum": ["true", "false"],
+              "enum": [
+                "true",
+                "false"
+              ],
               "description": "Destroy even when the cluster still has active deployments. Defaults to false."
             },
             "required": false,
@@ -7170,7 +7930,9 @@
     },
     "/v1/clusters/{clusterId}/status": {
       "get": {
-        "tags": ["Clusters"],
+        "tags": [
+          "Clusters"
+        ],
         "summary": "Get a cluster's live provisioning status",
         "description": "Lightweight poll target during create/destroy: status, message, and provisioning progress without the full row.",
         "security": [
@@ -7286,7 +8048,9 @@
     },
     "/v1/clusters/{clusterId}/cancel": {
       "post": {
-        "tags": ["Clusters"],
+        "tags": [
+          "Clusters"
+        ],
         "summary": "Cancel an in-flight cluster creation",
         "description": "Valid only while the cluster is still `creating`.",
         "security": [
@@ -7402,7 +8166,9 @@
     },
     "/v1/boxes": {
       "get": {
-        "tags": ["Regions"],
+        "tags": [
+          "Regions"
+        ],
         "summary": "List Ownkube Compute box sizes",
         "description": "Lists the fixed-size boxes and their monthly prices. Databases and caches on Ownkube Compute must name a box as `skuId` (with `billingMode: \"reserved\"`) on create; boxes can be upgraded later but not downsized.",
         "security": [
@@ -7506,7 +8272,9 @@
     },
     "/v1/regions": {
       "get": {
-        "tags": ["Regions"],
+        "tags": [
+          "Regions"
+        ],
         "summary": "List Ownkube Compute regions",
         "description": "Lists the regions available for deploying on Ownkube Compute (the managed, no-cluster path). Use a returned region `id` as the `region` field on `POST /v1/deployments` while omitting `clusterId`. `available: false` (empty `regions`) means the Compute path is off.",
         "security": [
@@ -7610,7 +8378,9 @@
     },
     "/v1/marketplace/apps": {
       "get": {
-        "tags": ["Marketplace"],
+        "tags": [
+          "Marketplace"
+        ],
         "summary": "List marketplace apps",
         "description": "Every app in the marketplace catalog, each flagged `deployable` or not.",
         "security": [
@@ -7714,7 +8484,9 @@
     },
     "/v1/marketplace/apps/{slug}": {
       "get": {
-        "tags": ["Marketplace"],
+        "tags": [
+          "Marketplace"
+        ],
         "summary": "Get a marketplace app",
         "description": "One app's detail, including the `inputs` it needs before deploy.",
         "security": [
@@ -7831,7 +8603,9 @@
     },
     "/v1/marketplace/apps/{slug}/check": {
       "post": {
-        "tags": ["Marketplace"],
+        "tags": [
+          "Marketplace"
+        ],
         "summary": "Check a marketplace deploy",
         "description": "Validates `inputs` and the name prefix without creating anything.",
         "security": [
@@ -7958,7 +8732,9 @@
     },
     "/v1/marketplace/apps/{slug}/deploy": {
       "post": {
-        "tags": ["Marketplace"],
+        "tags": [
+          "Marketplace"
+        ],
         "summary": "Deploy a marketplace app",
         "description": "Creates every piece of the app (app, database, cache) in one call. Target an Ownkube Compute `region` or your own `clusterId`. On Ownkube Compute the wallet must have credit, and a bundled database or cache needs a box (`dbSkuId` / `cacheSkuId`).",
         "security": [
@@ -8085,7 +8861,9 @@
     },
     "/v1/marketplace/installs/{templateInstanceId}": {
       "delete": {
-        "tags": ["Marketplace"],
+        "tags": [
+          "Marketplace"
+        ],
         "summary": "Delete a deployed marketplace app",
         "description": "Removes every deployment one marketplace deploy created, including its database and cache and their data. Owners and admins only.",
         "security": [
@@ -8202,7 +8980,9 @@
     },
     "/v1/wallet": {
       "get": {
-        "tags": ["Billing"],
+        "tags": [
+          "Billing"
+        ],
         "summary": "Get the prepaid wallet balance",
         "description": "Returns the live wallet balance (granted, consumed, remaining) plus how much credit was loaded by inflow reason. Check this before deploying on Ownkube Compute — a deploy needs a positive balance.",
         "security": [
@@ -8306,7 +9086,9 @@
     },
     "/v1/spend-controls": {
       "get": {
-        "tags": ["Billing"],
+        "tags": [
+          "Billing"
+        ],
         "summary": "Get spend controls (budget cap + alerts)",
         "description": "Returns the org's optional monthly budget cap, what happens at the cap, and the spend-alert thresholds.",
         "security": [
@@ -8408,7 +9190,9 @@
         }
       },
       "put": {
-        "tags": ["Billing"],
+        "tags": [
+          "Billing"
+        ],
         "summary": "Set spend controls (budget cap + alerts)",
         "description": "Creates or updates the monthly budget cap and spend alerts. Set `budgetAction: pause` to actually cap the bill (suspends compute, data retained, at the cap); `notify` only alerts. Only the fields you pass are changed.",
         "security": [
@@ -8522,7 +9306,9 @@
     },
     "/v1/credit": {
       "get": {
-        "tags": ["Billing"],
+        "tags": [
+          "Billing"
+        ],
         "summary": "Get account credit status",
         "description": "Returns whether Ownkube Compute is available, the live wallet balance, and the wallet top-up minimum.",
         "security": [
@@ -8626,7 +9412,9 @@
     },
     "/v1/promo/redeem": {
       "post": {
-        "tags": ["Billing"],
+        "tags": [
+          "Billing"
+        ],
         "summary": "Redeem a promo code",
         "description": "Adds a promo campaign's credit to the wallet. Each organization and each user can redeem a campaign once. A refusal (unknown code, offer full or ended, already claimed, existing account) returns `200` with `ok: false`, a `reason`, and a user-facing `message`.",
         "security": [
@@ -8740,7 +9528,9 @@
     },
     "/v1/portal": {
       "post": {
-        "tags": ["Billing"],
+        "tags": [
+          "Billing"
+        ],
         "summary": "Open the billing customer portal",
         "description": "Creates a customer-portal session and returns a browser `url` to manage payment method, invoices, and subscription. A `412` means the org has no billing account yet (start a plan first).",
         "security": [
@@ -8844,7 +9634,9 @@
     },
     "/v1/checkout/subscription": {
       "post": {
-        "tags": ["Billing"],
+        "tags": [
+          "Billing"
+        ],
         "summary": "Start a plan subscription checkout",
         "description": "Creates a checkout for a monthly plan (Personal or Team). Returns a browser `url` to complete payment; the subscription loads wallet credit each cycle once active.",
         "security": [
@@ -8958,7 +9750,9 @@
     },
     "/v1/checkout/top-up": {
       "post": {
-        "tags": ["Billing"],
+        "tags": [
+          "Billing"
+        ],
         "summary": "Top up the prepaid wallet",
         "description": "Creates a checkout to add a custom amount of credit to the organization's prepaid wallet. Returns a browser `url` to complete payment; the balance updates once the payment settles. A `400` means the amount is below the top-up minimum.",
         "security": [
@@ -9072,7 +9866,9 @@
     },
     "/v1/usage/current": {
       "get": {
-        "tags": ["Usage"],
+        "tags": [
+          "Usage"
+        ],
         "summary": "Get the live burn rate",
         "description": "Current metered vCPU + memory in use and the resulting hourly cost across everything the org runs.",
         "security": [
@@ -9176,7 +9972,9 @@
     },
     "/v1/usage/month-to-date": {
       "get": {
-        "tags": ["Usage"],
+        "tags": [
+          "Usage"
+        ],
         "summary": "Get month-to-date usage and cost",
         "description": "Usage totals (vCPU-hours, memory-GiB-hours, egress) and the gross cost drawn from the wallet so far this calendar month.",
         "security": [
@@ -9280,7 +10078,9 @@
     },
     "/v1/usage/projected": {
       "get": {
-        "tags": ["Usage"],
+        "tags": [
+          "Usage"
+        ],
         "summary": "Get the projected month cost",
         "description": "Naive straight-line projection of the month's wallet draw (month-to-date cost scaled to the full month). Volatile early in the month.",
         "security": [
@@ -9384,7 +10184,9 @@
     },
     "/v1/usage/history": {
       "get": {
-        "tags": ["Usage"],
+        "tags": [
+          "Usage"
+        ],
         "summary": "Get the daily usage series",
         "description": "Per-day usage and cost for the current calendar month, zero-filled for a continuous series.",
         "security": [
@@ -9488,7 +10290,9 @@
     },
     "/v1/projects": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "List projects in the current organization",
         "description": "A `Default` project is auto-seeded for orgs that have none yet, so this endpoint always returns at least one row.",
         "security": [
@@ -9590,7 +10394,9 @@
         }
       },
       "post": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "Create a project",
         "security": [
           {
@@ -9703,7 +10509,9 @@
     },
     "/v1/projects/{projectId}": {
       "get": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "Get a project by ID",
         "security": [
           {
@@ -9816,7 +10624,9 @@
         }
       },
       "patch": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "Update a project's name, color, or description",
         "security": [
           {
@@ -9939,7 +10749,9 @@
         }
       },
       "delete": {
-        "tags": ["Projects"],
+        "tags": [
+          "Projects"
+        ],
         "summary": "Delete a project",
         "description": "Soft-deletes the project. The Default project can't be deleted (`412`), and a project with a live deployment is blocked (`412`) until it's removed. A project holding only environments deletes; its environments are removed with it.",
         "security": [
@@ -10055,7 +10867,9 @@
     },
     "/v1/environments": {
       "get": {
-        "tags": ["Environments"],
+        "tags": [
+          "Environments"
+        ],
         "summary": "List environments in the current organization",
         "description": "Default `Development` and `Production` environments are auto-seeded for orgs that have none yet, so this endpoint always returns at least two rows.",
         "security": [
@@ -10157,7 +10971,9 @@
         }
       },
       "post": {
-        "tags": ["Environments"],
+        "tags": [
+          "Environments"
+        ],
         "summary": "Create an environment",
         "security": [
           {
@@ -10270,7 +11086,9 @@
     },
     "/v1/environments/{environmentId}": {
       "get": {
-        "tags": ["Environments"],
+        "tags": [
+          "Environments"
+        ],
         "summary": "Get an environment by ID",
         "security": [
           {
@@ -10383,7 +11201,9 @@
         }
       },
       "patch": {
-        "tags": ["Environments"],
+        "tags": [
+          "Environments"
+        ],
         "summary": "Update an environment's name, color, or description",
         "security": [
           {
@@ -10506,7 +11326,9 @@
         }
       },
       "delete": {
-        "tags": ["Environments"],
+        "tags": [
+          "Environments"
+        ],
         "summary": "Delete an environment",
         "description": "Soft-deletes the environment. Blocked with `412` if any deployments still reference it.",
         "security": [
@@ -10622,7 +11444,9 @@
     },
     "/v1/environments/{environmentId}/env": {
       "put": {
-        "tags": ["Environments"],
+        "tags": [
+          "Environments"
+        ],
         "summary": "Replace an environment's shared env vars",
         "description": "Replaces the environment's shared env-var set and redeploys every cluster-bound app that inherits them so the change takes effect immediately.",
         "security": [
@@ -10748,7 +11572,9 @@
     },
     "/v1/registries": {
       "get": {
-        "tags": ["Registries"],
+        "tags": [
+          "Registries"
+        ],
         "summary": "List container registry connections",
         "security": [
           {
@@ -10851,7 +11677,9 @@
     },
     "/v1/registries/{registryId}": {
       "get": {
-        "tags": ["Registries"],
+        "tags": [
+          "Registries"
+        ],
         "summary": "Get a registry by ID",
         "security": [
           {
@@ -10966,7 +11794,9 @@
     },
     "/v1/deployments": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "List deployments",
         "description": "Pass `environmentId` to scope to one environment, `clusterId` to scope to one cluster, or `projectId` to scope to one project (across every cluster and region). Omit all three to list the organization's Ownkube Compute deployments (the managed, no-cluster deploy path). Passing more than one is an error.",
         "security": [
@@ -11100,7 +11930,9 @@
         }
       },
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Create a deployment",
         "description": "Creates a deployment. The body is a discriminated union on `resourceType` (`web`, `worker`, `job`, `database`, `function`); each type carries its own `config` block. Omit `clusterId` on a cluster-bound type to deploy onto Ownkube Compute. With a `github` source, omit `config.repository` and `config.tag`; the image is built from the repository.",
         "security": [
@@ -11119,7 +11951,9 @@
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": ["web"]
+                        "enum": [
+                          "web"
+                        ]
                       },
                       "clusterId": {
                         "type": "string"
@@ -11169,7 +12003,10 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": ["dockerfile", "kiln"]
+                            "enum": [
+                              "dockerfile",
+                              "kiln"
+                            ]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -11195,7 +12032,11 @@
                             }
                           }
                         },
-                        "required": ["owner", "repo", "branch"]
+                        "required": [
+                          "owner",
+                          "repo",
+                          "branch"
+                        ]
                       },
                       "config": {
                         "type": "object",
@@ -11239,7 +12080,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["name", "value"]
+                              "required": [
+                                "name",
+                                "value"
+                              ]
                             }
                           },
                           "startCommand": {
@@ -11272,7 +12116,9 @@
                                     "maxLength": 255
                                   }
                                 },
-                                "required": ["username"]
+                                "required": [
+                                  "username"
+                                ]
                               },
                               "oauth": {
                                 "type": "object",
@@ -11283,7 +12129,9 @@
                                   },
                                   "provider": {
                                     "type": "string",
-                                    "enum": ["google"],
+                                    "enum": [
+                                      "google"
+                                    ],
                                     "default": "google"
                                   },
                                   "allowedDomains": {
@@ -11346,7 +12194,9 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": ["path"]
+                                "required": [
+                                  "path"
+                                ]
                               },
                               "liveness": {
                                 "type": "object",
@@ -11383,7 +12233,9 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": ["path"]
+                                "required": [
+                                  "path"
+                                ]
                               },
                               "readiness": {
                                 "type": "object",
@@ -11420,7 +12272,9 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": ["path"]
+                                "required": [
+                                  "path"
+                                ]
                               }
                             }
                           },
@@ -11439,7 +12293,11 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["cpu", "memory"]
+                                "required": [
+                                  "cpu",
+                                  "memory"
+                                ],
+                                "description": "CPU and memory each replica is guaranteed. Settable only on your own cluster: on Ownkube Compute, Ownkube sets the requests and ignores any sent."
                               },
                               "limits": {
                                 "type": "object",
@@ -11453,10 +12311,18 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["cpu", "memory"]
+                                "required": [
+                                  "cpu",
+                                  "memory"
+                                ],
+                                "description": "CPU and memory each replica may use. On a metered Ownkube Compute app this is how you size it, up to the largest box; a reserved app, database or cache is sized by its box (skuId) instead."
                               }
                             },
-                            "required": ["requests", "limits"]
+                            "required": [
+                              "requests",
+                              "limits"
+                            ],
+                            "description": "Per-replica CPU and memory. On Ownkube Compute, a metered app sets limits only (Ownkube sets the requests); a reserved app, database or cache is sized by its box, so change skuId to resize. Requests and limits are both settable only on your own cluster."
                           },
                           "autoscaling": {
                             "type": "object",
@@ -11549,7 +12415,10 @@
                                       ]
                                     }
                                   },
-                                  "required": ["key", "effect"]
+                                  "required": [
+                                    "key",
+                                    "effect"
+                                  ]
                                 },
                                 "maxItems": 16
                               }
@@ -11557,23 +12426,36 @@
                           },
                           "billingMode": {
                             "type": "string",
-                            "enum": ["metered", "reserved"]
+                            "enum": [
+                              "metered",
+                              "reserved"
+                            ],
+                            "description": "Ownkube Compute only. metered (the default) bills measured CPU and memory; size it with resources.limits. reserved bills a flat box price per replica-hour and is sized by the box, so change skuId to resize. Ignored on your own cluster."
                           },
                           "skuId": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Box id for billingMode reserved (a Spark or Core box, e.g. core-2). Required with reserved, rejected otherwise. Change it to resize a reserved app."
                           }
                         },
-                        "required": ["port"]
+                        "required": [
+                          "port"
+                        ]
                       }
                     },
-                    "required": ["resourceType", "name", "config"]
+                    "required": [
+                      "resourceType",
+                      "name",
+                      "config"
+                    ]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": ["worker"]
+                        "enum": [
+                          "worker"
+                        ]
                       },
                       "clusterId": {
                         "type": "string"
@@ -11623,7 +12505,10 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": ["dockerfile", "kiln"]
+                            "enum": [
+                              "dockerfile",
+                              "kiln"
+                            ]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -11649,7 +12534,11 @@
                             }
                           }
                         },
-                        "required": ["owner", "repo", "branch"]
+                        "required": [
+                          "owner",
+                          "repo",
+                          "branch"
+                        ]
                       },
                       "config": {
                         "type": "object",
@@ -11693,7 +12582,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["name", "value"]
+                              "required": [
+                                "name",
+                                "value"
+                              ]
                             }
                           },
                           "startCommand": {
@@ -11726,7 +12618,9 @@
                                     "maxLength": 255
                                   }
                                 },
-                                "required": ["username"]
+                                "required": [
+                                  "username"
+                                ]
                               },
                               "oauth": {
                                 "type": "object",
@@ -11737,7 +12631,9 @@
                                   },
                                   "provider": {
                                     "type": "string",
-                                    "enum": ["google"],
+                                    "enum": [
+                                      "google"
+                                    ],
                                     "default": "google"
                                   },
                                   "allowedDomains": {
@@ -11800,7 +12696,9 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": ["path"]
+                                "required": [
+                                  "path"
+                                ]
                               },
                               "liveness": {
                                 "type": "object",
@@ -11837,7 +12735,9 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": ["path"]
+                                "required": [
+                                  "path"
+                                ]
                               },
                               "readiness": {
                                 "type": "object",
@@ -11874,7 +12774,9 @@
                                     "maximum": 300
                                   }
                                 },
-                                "required": ["path"]
+                                "required": [
+                                  "path"
+                                ]
                               }
                             }
                           },
@@ -11893,7 +12795,11 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["cpu", "memory"]
+                                "required": [
+                                  "cpu",
+                                  "memory"
+                                ],
+                                "description": "CPU and memory each replica is guaranteed. Settable only on your own cluster: on Ownkube Compute, Ownkube sets the requests and ignores any sent."
                               },
                               "limits": {
                                 "type": "object",
@@ -11907,10 +12813,18 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["cpu", "memory"]
+                                "required": [
+                                  "cpu",
+                                  "memory"
+                                ],
+                                "description": "CPU and memory each replica may use. On a metered Ownkube Compute app this is how you size it, up to the largest box; a reserved app, database or cache is sized by its box (skuId) instead."
                               }
                             },
-                            "required": ["requests", "limits"]
+                            "required": [
+                              "requests",
+                              "limits"
+                            ],
+                            "description": "Per-replica CPU and memory. On Ownkube Compute, a metered app sets limits only (Ownkube sets the requests); a reserved app, database or cache is sized by its box, so change skuId to resize. Requests and limits are both settable only on your own cluster."
                           },
                           "autoscaling": {
                             "type": "object",
@@ -12003,7 +12917,10 @@
                                       ]
                                     }
                                   },
-                                  "required": ["key", "effect"]
+                                  "required": [
+                                    "key",
+                                    "effect"
+                                  ]
                                 },
                                 "maxItems": 16
                               }
@@ -12011,23 +12928,36 @@
                           },
                           "billingMode": {
                             "type": "string",
-                            "enum": ["metered", "reserved"]
+                            "enum": [
+                              "metered",
+                              "reserved"
+                            ],
+                            "description": "Ownkube Compute only. metered (the default) bills measured CPU and memory; size it with resources.limits. reserved bills a flat box price per replica-hour and is sized by the box, so change skuId to resize. Ignored on your own cluster."
                           },
                           "skuId": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Box id for billingMode reserved (a Spark or Core box, e.g. core-2). Required with reserved, rejected otherwise. Change it to resize a reserved app."
                           }
                         },
-                        "required": ["port"]
+                        "required": [
+                          "port"
+                        ]
                       }
                     },
-                    "required": ["resourceType", "name", "config"]
+                    "required": [
+                      "resourceType",
+                      "name",
+                      "config"
+                    ]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": ["job"]
+                        "enum": [
+                          "job"
+                        ]
                       },
                       "clusterId": {
                         "type": "string"
@@ -12077,7 +13007,10 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": ["dockerfile", "kiln"]
+                            "enum": [
+                              "dockerfile",
+                              "kiln"
+                            ]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -12103,7 +13036,11 @@
                             }
                           }
                         },
-                        "required": ["owner", "repo", "branch"]
+                        "required": [
+                          "owner",
+                          "repo",
+                          "branch"
+                        ]
                       },
                       "config": {
                         "type": "object",
@@ -12150,7 +13087,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["name", "value"]
+                              "required": [
+                                "name",
+                                "value"
+                              ]
                             }
                           },
                           "resources": {
@@ -12168,7 +13108,11 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["cpu", "memory"]
+                                "required": [
+                                  "cpu",
+                                  "memory"
+                                ],
+                                "description": "CPU and memory each replica is guaranteed. Settable only on your own cluster: on Ownkube Compute, Ownkube sets the requests and ignores any sent."
                               },
                               "limits": {
                                 "type": "object",
@@ -12182,10 +13126,18 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["cpu", "memory"]
+                                "required": [
+                                  "cpu",
+                                  "memory"
+                                ],
+                                "description": "CPU and memory each replica may use. On a metered Ownkube Compute app this is how you size it, up to the largest box; a reserved app, database or cache is sized by its box (skuId) instead."
                               }
                             },
-                            "required": ["requests", "limits"]
+                            "required": [
+                              "requests",
+                              "limits"
+                            ],
+                            "description": "Per-replica CPU and memory. On Ownkube Compute, a metered app sets limits only (Ownkube sets the requests); a reserved app, database or cache is sized by its box, so change skuId to resize. Requests and limits are both settable only on your own cluster."
                           },
                           "schedule": {
                             "type": "object",
@@ -12200,7 +13152,11 @@
                               },
                               "concurrencyPolicy": {
                                 "type": "string",
-                                "enum": ["Allow", "Forbid", "Replace"],
+                                "enum": [
+                                  "Allow",
+                                  "Forbid",
+                                  "Replace"
+                                ],
                                 "default": "Forbid"
                               },
                               "timeZone": {
@@ -12223,7 +13179,9 @@
                                 "maximum": 100
                               }
                             },
-                            "required": ["expression"]
+                            "required": [
+                              "expression"
+                            ]
                           },
                           "job": {
                             "type": "object",
@@ -12255,23 +13213,34 @@
                               },
                               "restartPolicy": {
                                 "type": "string",
-                                "enum": ["Never", "OnFailure"],
+                                "enum": [
+                                  "Never",
+                                  "OnFailure"
+                                ],
                                 "default": "Never"
                               }
                             }
                           }
                         },
-                        "required": ["schedule"]
+                        "required": [
+                          "schedule"
+                        ]
                       }
                     },
-                    "required": ["resourceType", "name", "config"]
+                    "required": [
+                      "resourceType",
+                      "name",
+                      "config"
+                    ]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": ["database"]
+                        "enum": [
+                          "database"
+                        ]
                       },
                       "clusterId": {
                         "type": "string"
@@ -12296,11 +13265,17 @@
                         "properties": {
                           "engine": {
                             "type": "string",
-                            "enum": ["postgres", "mongodb"]
+                            "enum": [
+                              "postgres",
+                              "mongodb"
+                            ]
                           },
                           "version": {
                             "type": "string",
-                            "enum": ["17", "18"]
+                            "enum": [
+                              "17",
+                              "18"
+                            ]
                           },
                           "instances": {
                             "type": "integer",
@@ -12310,10 +13285,15 @@
                           },
                           "billingMode": {
                             "type": "string",
-                            "enum": ["metered", "reserved"]
+                            "enum": [
+                              "metered",
+                              "reserved"
+                            ],
+                            "description": "Ownkube Compute only, and always reserved: the database runs as a box (skuId) that sets its CPU and memory. Ignored on your own cluster."
                           },
                           "skuId": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Database box id from list_boxes (e.g. db-2). Required on Ownkube Compute; change it to resize the database."
                           },
                           "bootstrap": {
                             "type": "object",
@@ -12335,7 +13315,10 @@
                                 }
                               }
                             },
-                            "required": ["database", "owner"]
+                            "required": [
+                              "database",
+                              "owner"
+                            ]
                           },
                           "storage": {
                             "type": "object",
@@ -12350,7 +13333,9 @@
                                 "default": "gp3"
                               }
                             },
-                            "required": ["size"]
+                            "required": [
+                              "size"
+                            ]
                           },
                           "public": {
                             "type": "boolean"
@@ -12384,7 +13369,11 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["cpu", "memory"]
+                                "required": [
+                                  "cpu",
+                                  "memory"
+                                ],
+                                "description": "CPU and memory each replica is guaranteed. Settable only on your own cluster: on Ownkube Compute, Ownkube sets the requests and ignores any sent."
                               },
                               "limits": {
                                 "type": "object",
@@ -12398,10 +13387,18 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["cpu", "memory"]
+                                "required": [
+                                  "cpu",
+                                  "memory"
+                                ],
+                                "description": "CPU and memory each replica may use. On a metered Ownkube Compute app this is how you size it, up to the largest box; a reserved app, database or cache is sized by its box (skuId) instead."
                               }
                             },
-                            "required": ["requests", "limits"]
+                            "required": [
+                              "requests",
+                              "limits"
+                            ],
+                            "description": "Per-replica CPU and memory. On Ownkube Compute, a metered app sets limits only (Ownkube sets the requests); a reserved app, database or cache is sized by its box, so change skuId to resize. Requests and limits are both settable only on your own cluster."
                           },
                           "pooler": {
                             "type": "object",
@@ -12417,11 +13414,17 @@
                               },
                               "type": {
                                 "type": "string",
-                                "enum": ["rw", "ro"]
+                                "enum": [
+                                  "rw",
+                                  "ro"
+                                ]
                               },
                               "mode": {
                                 "type": "string",
-                                "enum": ["session", "transaction"]
+                                "enum": [
+                                  "session",
+                                  "transaction"
+                                ]
                               },
                               "parameters": {
                                 "type": "object",
@@ -12512,7 +13515,9 @@
                                 "type": "boolean"
                               }
                             },
-                            "required": ["enablePodMonitor"]
+                            "required": [
+                              "enablePodMonitor"
+                            ]
                           },
                           "backup": {
                             "type": "object",
@@ -12545,10 +13550,14 @@
                                     "type": "boolean"
                                   }
                                 },
-                                "required": ["enabled"]
+                                "required": [
+                                  "enabled"
+                                ]
                               }
                             },
-                            "required": ["enabled"]
+                            "required": [
+                              "enabled"
+                            ]
                           },
                           "scheduledBackup": {
                             "type": "object",
@@ -12567,7 +13576,10 @@
                                 "type": "boolean"
                               }
                             },
-                            "required": ["enabled", "schedule"]
+                            "required": [
+                              "enabled",
+                              "schedule"
+                            ]
                           }
                         },
                         "required": [
@@ -12578,14 +13590,20 @@
                         ]
                       }
                     },
-                    "required": ["resourceType", "name", "config"]
+                    "required": [
+                      "resourceType",
+                      "name",
+                      "config"
+                    ]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": ["cache"]
+                        "enum": [
+                          "cache"
+                        ]
                       },
                       "clusterId": {
                         "type": "string"
@@ -12610,18 +13628,28 @@
                         "properties": {
                           "engine": {
                             "type": "string",
-                            "enum": ["valkey"]
+                            "enum": [
+                              "valkey"
+                            ]
                           },
                           "version": {
                             "type": "string",
-                            "enum": ["9.1", "8.1"]
+                            "enum": [
+                              "9.1",
+                              "8.1"
+                            ]
                           },
                           "billingMode": {
                             "type": "string",
-                            "enum": ["metered", "reserved"]
+                            "enum": [
+                              "metered",
+                              "reserved"
+                            ],
+                            "description": "Ownkube Compute only, and always reserved: the cache runs as a box (skuId) that sets its CPU and memory. Ignored on your own cluster."
                           },
                           "skuId": {
-                            "type": "string"
+                            "type": "string",
+                            "description": "Cache box id from list_boxes (e.g. cache-1). Required on Ownkube Compute; change it to resize the cache."
                           },
                           "maxmemory": {
                             "type": "string",
@@ -12651,7 +13679,10 @@
                                 "minLength": 1
                               }
                             },
-                            "required": ["enabled", "size"]
+                            "required": [
+                              "enabled",
+                              "size"
+                            ]
                           },
                           "public": {
                             "type": "boolean"
@@ -12685,7 +13716,11 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["cpu", "memory"]
+                                "required": [
+                                  "cpu",
+                                  "memory"
+                                ],
+                                "description": "CPU and memory each replica is guaranteed. Settable only on your own cluster: on Ownkube Compute, Ownkube sets the requests and ignores any sent."
                               },
                               "limits": {
                                 "type": "object",
@@ -12699,23 +13734,40 @@
                                     "minLength": 1
                                   }
                                 },
-                                "required": ["cpu", "memory"]
+                                "required": [
+                                  "cpu",
+                                  "memory"
+                                ],
+                                "description": "CPU and memory each replica may use. On a metered Ownkube Compute app this is how you size it, up to the largest box; a reserved app, database or cache is sized by its box (skuId) instead."
                               }
                             },
-                            "required": ["requests", "limits"]
+                            "required": [
+                              "requests",
+                              "limits"
+                            ],
+                            "description": "Per-replica CPU and memory. On Ownkube Compute, a metered app sets limits only (Ownkube sets the requests); a reserved app, database or cache is sized by its box, so change skuId to resize. Requests and limits are both settable only on your own cluster."
                           }
                         },
-                        "required": ["engine", "version"]
+                        "required": [
+                          "engine",
+                          "version"
+                        ]
                       }
                     },
-                    "required": ["resourceType", "name", "config"]
+                    "required": [
+                      "resourceType",
+                      "name",
+                      "config"
+                    ]
                   },
                   {
                     "type": "object",
                     "properties": {
                       "resourceType": {
                         "type": "string",
-                        "enum": ["function"]
+                        "enum": [
+                          "function"
+                        ]
                       },
                       "cloudAccountId": {
                         "type": "string"
@@ -12765,7 +13817,10 @@
                           },
                           "buildMethod": {
                             "type": "string",
-                            "enum": ["dockerfile", "kiln"]
+                            "enum": [
+                              "dockerfile",
+                              "kiln"
+                            ]
                           },
                           "dockerfilePath": {
                             "type": "string",
@@ -12791,7 +13846,11 @@
                             }
                           }
                         },
-                        "required": ["owner", "repo", "branch"]
+                        "required": [
+                          "owner",
+                          "repo",
+                          "branch"
+                        ]
                       },
                       "source": {
                         "type": "object",
@@ -12807,7 +13866,10 @@
                             "maxLength": 256000
                           }
                         },
-                        "required": ["filename", "code"]
+                        "required": [
+                          "filename",
+                          "code"
+                        ]
                       },
                       "config": {
                         "type": "object",
@@ -12824,7 +13886,10 @@
                           },
                           "architecture": {
                             "type": "string",
-                            "enum": ["x86_64", "arm64"],
+                            "enum": [
+                              "x86_64",
+                              "arm64"
+                            ],
                             "default": "arm64"
                           },
                           "memoryMb": {
@@ -12861,7 +13926,10 @@
                                   "type": "string"
                                 }
                               },
-                              "required": ["name", "value"]
+                              "required": [
+                                "name",
+                                "value"
+                              ]
                             }
                           },
                           "triggers": {
@@ -12881,14 +13949,19 @@
                                     "type": "string"
                                   }
                                 },
-                                "required": ["schedule"]
+                                "required": [
+                                  "schedule"
+                                ]
                               },
                               "http": {
                                 "type": "object",
                                 "properties": {
                                   "authType": {
                                     "type": "string",
-                                    "enum": ["none", "iam"],
+                                    "enum": [
+                                      "none",
+                                      "iam"
+                                    ],
                                     "default": "none"
                                   },
                                   "cors": {
@@ -12925,13 +13998,24 @@
                           },
                           "substrate": {
                             "type": "string",
-                            "enum": ["lambda", "ember"]
+                            "enum": [
+                              "lambda",
+                              "ember"
+                            ]
                           }
                         },
-                        "required": ["runtime", "handler", "triggers"]
+                        "required": [
+                          "runtime",
+                          "handler",
+                          "triggers"
+                        ]
                       }
                     },
-                    "required": ["resourceType", "name", "config"]
+                    "required": [
+                      "resourceType",
+                      "name",
+                      "config"
+                    ]
                   }
                 ]
               }
@@ -13034,7 +14118,9 @@
     },
     "/v1/deployments/{deploymentId}": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Get a deployment by ID",
         "security": [
           {
@@ -13148,7 +14234,9 @@
         }
       },
       "delete": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Delete a deployment",
         "description": "Soft-deletes the deployment and tears down its cluster resources. Functions hand off to an async teardown and report `deleting` until it finalizes.",
         "security": [
@@ -13263,7 +14351,9 @@
         }
       },
       "patch": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Update a deployment's configuration",
         "description": "Updates a cluster-bound deployment (web/worker/job/database/cache) and records a revision. Send the config block matching the deployment's type: `appConfig` for web/worker, `jobConfig` for job, `databaseConfig` for database, `cacheConfig` for cache. Use the function update endpoint for functions.",
         "security": [
@@ -13390,7 +14480,9 @@
     },
     "/v1/deployments/{deploymentId}/status": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Get live rollout status",
         "security": [
           {
@@ -13506,7 +14598,9 @@
     },
     "/v1/deployments/{deploymentId}/logs": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Tail recent log lines",
         "description": "Reads log lines from the in-cluster logs backend over the requested window. `filter` accepts a LogsQL regex matched against the message body.",
         "security": [
@@ -13685,7 +14779,9 @@
     },
     "/v1/deployments/{deploymentId}/connection": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Get database connection details",
         "description": "Returns the host, port, credentials, and connection URI for a database deployment. Only valid for `resourceType: database`.",
         "security": [
@@ -13802,7 +14898,9 @@
     },
     "/v1/deployments/{deploymentId}/cache-connection": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Get cache connection details",
         "description": "Returns the host, port, password, and connection URI for a cache deployment. Only valid for `resourceType: cache`.",
         "security": [
@@ -13919,7 +15017,9 @@
     },
     "/v1/functions": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "List Ownkube Compute functions",
         "description": "Lists the organization's `function`-type deployments. Functions are cluster-less (they attach to a cloud account + region, not a cluster) so they never appear under `clusterId`; this is the dedicated function listing.",
         "security": [
@@ -14023,7 +15123,9 @@
     },
     "/v1/deployments/{deploymentId}/function/source": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Get a Compute function's inline source",
         "description": "Returns the stored inline source file for an Ownkube Compute function. Only valid for a Compute (`ember`) function; own-cloud functions and non-functions return `404`. A freshly-created function whose upload hasn't landed yet also returns `404`.",
         "security": [
@@ -14140,7 +15242,9 @@
     },
     "/v1/deployments/{deploymentId}/connect-session": {
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Open a direct connection session to a database",
         "description": "Mints a single-use, short-lived ticket for a direct tunnel to a managed database deployment. Databases only. Present the ticket to the returned relay URL to establish the connection.",
         "security": [
@@ -14254,7 +15358,9 @@
     },
     "/v1/ssh-keys": {
       "get": {
-        "tags": ["SSH"],
+        "tags": [
+          "SSH"
+        ],
         "summary": "List your SSH keys",
         "description": "Lists the SSH public keys registered to your account.",
         "security": [
@@ -14356,7 +15462,9 @@
         }
       },
       "post": {
-        "tags": ["SSH"],
+        "tags": [
+          "SSH"
+        ],
         "summary": "Add an SSH key",
         "description": "Registers an SSH public key. Idempotent for your own key (`created: false`). Errors: `SSH_KEY_INVALID`, `SSH_KEY_IN_USE` (registered to another account), `SSH_KEY_LIMIT`.",
         "security": [
@@ -14383,7 +15491,9 @@
                     "description": "OpenSSH public key line, e.g. `ssh-ed25519 AAAA... me@laptop`."
                   }
                 },
-                "required": ["publicKey"]
+                "required": [
+                  "publicKey"
+                ]
               }
             }
           }
@@ -14484,7 +15594,9 @@
     },
     "/v1/ssh-keys/github": {
       "post": {
-        "tags": ["SSH"],
+        "tags": [
+          "SSH"
+        ],
         "summary": "Import SSH keys from GitHub",
         "description": "Registers the public keys published on a GitHub account. Keys registered to another account, and keys too weak to accept, are skipped.",
         "security": [
@@ -14607,7 +15719,9 @@
     },
     "/v1/ssh-keys/{id}": {
       "delete": {
-        "tags": ["SSH"],
+        "tags": [
+          "SSH"
+        ],
         "summary": "Remove an SSH key",
         "description": "Removes one of your SSH keys. Open sessions using it end within a few minutes.",
         "security": [
@@ -14721,7 +15835,9 @@
     },
     "/v1/connect/regions": {
       "get": {
-        "tags": ["SSH"],
+        "tags": [
+          "SSH"
+        ],
         "summary": "List regions with shell access",
         "description": "Regions where SSH and the browser shell are enabled, with their pinned host keys.",
         "security": [
@@ -14825,7 +15941,9 @@
     },
     "/v1/deployments/{deploymentId}/ssh-target": {
       "get": {
-        "tags": ["SSH"],
+        "tags": [
+          "SSH"
+        ],
         "summary": "Resolve where to SSH for a deployment",
         "description": "Host, username, host keys, and instances for `okctl ssh`. Owners and admins only, on Ownkube Compute. Refused with `SSH_NOT_AVAILABLE` otherwise.",
         "security": [
@@ -14939,7 +16057,9 @@
     },
     "/v1/deployments/{deploymentId}/connection-info": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Get database or cache connection info",
         "description": "Returns the full connection info of a database or cache: host, port, database name, username, password, and connection string for apps in the same environment, plus the public endpoint and its connection string when public access is on. Use `link` to give an app the credential as a secret variable.",
         "security": [
@@ -15055,7 +16175,9 @@
     },
     "/v1/deployments/{deploymentId}/link": {
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Link a database or cache to an app",
         "description": "Writes the database or cache connection string into the app's environment as a secret variable and redeploys the app. The credential is never returned. Both must be in the same environment. An existing variable with the same name is replaced.",
         "security": [
@@ -15181,7 +16303,9 @@
     },
     "/v1/deployments/{deploymentId}/function": {
       "patch": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Update a function's configuration",
         "description": "Updates a `function`-type deployment's config (handler, runtime, env, triggers) and records a revision.",
         "security": [
@@ -15308,7 +16432,9 @@
     },
     "/v1/deployments/{deploymentId}/function/deploy": {
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Deploy code and settings to a Compute function",
         "description": "Ships a new revision of an Ownkube Compute (`ember`) function: applies the `config` knobs (env, timeout, triggers) and — when `code` is given — uploads the new inline source, folding both into ONE revision. Omit `code` to change settings only. Not valid for own-cloud (Lambda) functions; use the function update endpoint for those.",
         "security": [
@@ -15435,7 +16561,9 @@
     },
     "/v1/deployments/{deploymentId}/copy": {
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Copy a deployment to another environment",
         "description": "Clones this deployment's current config into `targetEnvironmentId` on `targetClusterId`, creating a new deployment. Not valid for functions.",
         "security": [
@@ -15562,7 +16690,9 @@
     },
     "/v1/deployments/{deploymentId}/reset-password": {
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Reset a database deployment's password",
         "description": "Rotates the owner-role password of a `database`-type deployment and returns the new password. The response intentionally contains the live credential.",
         "security": [
@@ -15679,7 +16809,9 @@
     },
     "/v1/deployments/{deploymentId}/job-runs": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "List a scheduled job's recent runs",
         "description": "Reads the CronJob and its spawned runs live from the cluster. Non-job deployments return an empty, non-existent history rather than erroring.",
         "security": [
@@ -15794,7 +16926,9 @@
         }
       },
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Trigger a scheduled job now",
         "description": "Spawns a one-off run of a `job`-type deployment off-schedule and returns the created Job name.",
         "security": [
@@ -15911,7 +17045,9 @@
     },
     "/v1/deployments/{deploymentId}/job-runs/{jobName}": {
       "delete": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Cancel an in-flight job run",
         "description": "Deletes the named run's Job (terminating its Pods). The named Job must belong to this deployment's CronJob.",
         "security": [
@@ -16037,7 +17173,9 @@
     },
     "/v1/deployments/{deploymentId}/restore": {
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Recover a database to an earlier point in time",
         "description": "Destructive, in-place point-in-time recovery of a `database`-type deployment: WIPES the current volume and rebuilds the database from its own automated backups at `targetTime` (omit for the latest point). Requires backups to be enabled. This cannot be undone.",
         "security": [
@@ -16164,7 +17302,9 @@
     },
     "/v1/deployments/{deploymentId}/restart": {
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Restart a deployment",
         "description": "Rollout-restarts a running web or worker deployment (replaces every pod with the same image). Not a rebuild and not a new revision. Only valid for web/worker deployments that are already live.",
         "security": [
@@ -16280,7 +17420,9 @@
     },
     "/v1/deployments/{deploymentId}/resync": {
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Resync a deployment",
         "description": "Re-applies the deployment's current settings to its cluster with no config change and no new revision. Use it to recover a rollout that stalled on a transient error, including databases and caches. Not valid for functions.",
         "security": [
@@ -16396,7 +17538,9 @@
     },
     "/v1/deployments/{deploymentId}/auto-deploy": {
       "put": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Turn auto-deploy on or off",
         "description": "Enables or disables auto-deploy on a source-backed deployment. Reuses the branch captured at create time. Rejected for deployments without a source repository.",
         "security": [
@@ -16522,7 +17666,9 @@
     },
     "/v1/deployments/{deploymentId}/maintenance": {
       "put": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Turn maintenance mode on or off",
         "description": "Diverts a public web deployment's URL to a branded maintenance page (the workload keeps running). Only valid once public access is on and the first build has completed.",
         "security": [
@@ -16648,7 +17794,9 @@
     },
     "/v1/deployments/{deploymentId}/name": {
       "put": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Set a deployment's display name",
         "description": "Sets (or clears) the cosmetic display label. Never touches the immutable name / cluster identity, cuts no revision, and does not re-sync.",
         "security": [
@@ -16774,7 +17922,9 @@
     },
     "/v1/deployments/{deploymentId}/project": {
       "put": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Move a deployment to another project",
         "description": "Re-files a deployment under a different project. A project is a purely organizational grouping, so this is a control-plane-only change: it cuts no revision, doesn't re-sync the cluster, and keeps the environment, namespace, address, and running workloads exactly where they are. A marketplace app and its managed database/cache move together as one group.",
         "security": [
@@ -16900,7 +18050,9 @@
     },
     "/v1/deployments/{deploymentId}/build-args": {
       "put": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Set custom build arguments",
         "description": "Replaces the custom build-time arguments for a deployment that builds on your cluster. Applies on the next build. An empty map clears them.",
         "security": [
@@ -17026,7 +18178,9 @@
     },
     "/v1/deployments/{deploymentId}/build-context": {
       "put": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Set the build root directory",
         "description": "Sets the root directory (build context) for a deployment that builds on your cluster — how a monorepo app in a subdirectory gets built. Applies on the next build. Empty string clears it.",
         "security": [
@@ -17152,7 +18306,9 @@
     },
     "/v1/deployments/{deploymentId}/builder-size": {
       "put": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Set the builder size",
         "description": "Sets the build pod's size (small / standard / large) for a deployment that builds on your cluster. Applies on the next build. On Ownkube Compute, `large` requires the Team plan.",
         "security": [
@@ -17278,7 +18434,9 @@
     },
     "/v1/deployments/{deploymentId}/subdomain/check": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Check if an address label is available",
         "description": "Checks whether an address label is legal and free right now for this deployment. `current: true` means it's the label the deployment already holds.",
         "security": [
@@ -17404,7 +18562,9 @@
     },
     "/v1/deployments/{deploymentId}/subdomain/suggest": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Suggest available address labels",
         "description": "Returns a handful of address labels that are free right now, seeded from the deployment name (or the `desired` seed) and namespaced with the environment and organization when they read well.",
         "security": [
@@ -17542,7 +18702,9 @@
     },
     "/v1/deployments/{deploymentId}/subdomain": {
       "put": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Change a deployment's public address",
         "description": "Moves a public web app to a chosen address label and re-syncs its route. The old address stops resolving. Not valid for databases (their certificate is issued for the hostname).",
         "security": [
@@ -17668,7 +18830,9 @@
     },
     "/v1/vcs/connections": {
       "get": {
-        "tags": ["Version control"],
+        "tags": [
+          "Version control"
+        ],
         "summary": "List connected version control accounts",
         "description": "Lists the GitHub and GitLab accounts connected to the organization. Connecting a new account happens in the dashboard at `connectUrl`.",
         "security": [
@@ -17772,7 +18936,9 @@
     },
     "/v1/vcs/repos": {
       "get": {
-        "tags": ["Version control"],
+        "tags": [
+          "Version control"
+        ],
         "summary": "List repositories the connected accounts can see",
         "description": "Lists repositories visible to the organization's connected GitHub and GitLab accounts, optionally for one connection.",
         "security": [
@@ -17889,7 +19055,9 @@
     },
     "/v1/vcs/branches": {
       "get": {
-        "tags": ["Version control"],
+        "tags": [
+          "Version control"
+        ],
         "summary": "List a repository's branches",
         "description": "Lists a repository's branches, most recently committed first, through the connected account that can see it.",
         "security": [
@@ -18017,7 +19185,9 @@
     },
     "/v1/deployments/{deploymentId}/source": {
       "put": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Connect or switch an app's repository",
         "description": "Connects a repository and branch to an existing web app, worker or job, or switches its repository or branch, then builds and deploys it. Settings, secrets, linked databases, address and resources are kept; the running version keeps serving until the new build is live. Later pushes to the branch deploy automatically.",
         "security": [
@@ -18141,7 +19311,9 @@
         }
       },
       "delete": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Disconnect an app's repository",
         "description": "Disconnects the app's repository: pushes stop deploying and the app goes back to deploying from uploaded source. The running version keeps serving; nothing is rebuilt.",
         "security": [
@@ -18257,7 +19429,9 @@
     },
     "/v1/deployments/{deploymentId}/variables": {
       "get": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "List an app's variables",
         "description": "Returns the app's effective variables: the environment's shared ones with the app's own on top. Secret values are always empty.",
         "security": [
@@ -18371,7 +19545,9 @@
         }
       },
       "patch": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Set or remove an app's variables",
         "description": "Adds, changes and removes the app's own variables in one save, which rolls out as one revision. Untouched variables, secrets included, keep their values. Sending only values that already match changes nothing.",
         "security": [
@@ -18497,7 +19673,9 @@
     },
     "/v1/deployments/{deploymentId}/variables/resolve": {
       "post": {
-        "tags": ["Deployments"],
+        "tags": [
+          "Deployments"
+        ],
         "summary": "Resolve an app's variables for a local command",
         "description": "Returns the app's full effective variables WITH secret values, for injecting into a local process (`okctl run`, `okctl shell`). Every call is audit-logged. Never print or store the result.",
         "security": [
@@ -18519,7 +19697,10 @@
           {
             "schema": {
               "type": "string",
-              "enum": ["run", "shell"],
+              "enum": [
+                "run",
+                "shell"
+              ],
               "description": "What the values are for: `run` for a single local command, `shell` for an interactive local shell. Recorded in the audit log."
             },
             "required": true,
@@ -18624,7 +19805,9 @@
     },
     "/v1/deployments/{deploymentId}/revisions": {
       "get": {
-        "tags": ["Revisions"],
+        "tags": [
+          "Revisions"
+        ],
         "summary": "List revisions for a deployment (newest first)",
         "security": [
           {
@@ -18739,7 +19922,9 @@
     },
     "/v1/deployments/{deploymentId}/revisions/{revisionId}/rollback": {
       "post": {
-        "tags": ["Revisions"],
+        "tags": [
+          "Revisions"
+        ],
         "summary": "Roll a deployment back to a prior revision",
         "description": "Restores the config snapshot from `revisionId` onto the deployment and records a new revision. Returns the new revision. Only the most recent builds are retained: rolling back to an older build is rejected with 400 (check `canRollback` on the revision list).",
         "security": [
@@ -18875,7 +20060,9 @@
     },
     "/v1/deployments/{deploymentId}/promote": {
       "post": {
-        "tags": ["Revisions"],
+        "tags": [
+          "Revisions"
+        ],
         "summary": "Promote a deployment's config to another deployment",
         "description": "Copies this deployment's current config into `targetDeploymentId`, records a revision there, and links it back to this deployment's latest revision. Returns the new revision on the target.",
         "security": [
@@ -19001,7 +20188,9 @@
     },
     "/v1/deployments/{deploymentId}/rebuild": {
       "post": {
-        "tags": ["Revisions"],
+        "tags": [
+          "Revisions"
+        ],
         "summary": "Rebuild a deployment from source",
         "description": "Rebuilds an in-cluster deployment from the current head of its tracked branch (or a pinned `commit`) — the manual counterpart to the push trigger. Queues a build and supersedes any in-flight one. Only valid for deployments that build from source.",
         "security": [
@@ -19139,7 +20328,9 @@
     },
     "/v1/source-uploads": {
       "post": {
-        "tags": ["Revisions"],
+        "tags": [
+          "Revisions"
+        ],
         "summary": "Presign an upload slot for local source",
         "description": "Mints a short-lived upload slot: returns an `uploadId` plus a pre-signed URL to PUT a gzipped tarball of the source to (files at the archive root, at most `maxBytes`). Pass the `uploadId` to POST /v1/source-deploys to build and deploy it. Refuses up front when the wallet has no credit (new apps and Ownkube Compute redeploys).",
         "security": [
@@ -19255,7 +20446,9 @@
     },
     "/v1/source-deploys": {
       "post": {
-        "tags": ["Revisions"],
+        "tags": [
+          "Revisions"
+        ],
         "summary": "Build and deploy uploaded source (create or redeploy)",
         "description": "Builds source uploaded via POST /v1/source-uploads. Without `deploymentId`, creates a new Ownkube Compute app and resolves every omitted field server-side (name from `nameHint`, made unique; the org's existing region, else the default; port from the Dockerfile's EXPOSE, else the detected framework's default, else 8080; public for web; the default project and environment), returning what it chose in `defaults`. With `deploymentId`, rebuilds that app from the upload (create-only fields are rejected). Returns the build's `revisionId`.",
         "security": [
@@ -19369,7 +20562,9 @@
     },
     "/v1/deployments/{deploymentId}/up": {
       "post": {
-        "tags": ["Revisions"],
+        "tags": [
+          "Revisions"
+        ],
         "summary": "Build and deploy previously uploaded local source",
         "description": "Builds an existing app from source uploaded via POST /v1/source-uploads and rolls it out. Supersedes any in-flight build. Equivalent to POST /v1/source-deploys with `deploymentId`; kept for older CLI versions.",
         "security": [
@@ -19495,7 +20690,9 @@
     },
     "/v1/deployments/{deploymentId}/telemetry": {
       "get": {
-        "tags": ["Telemetry"],
+        "tags": [
+          "Telemetry"
+        ],
         "summary": "Get overview telemetry (CPU, memory, requests, latency, network)",
         "description": "Reads the overview telemetry tiles — CPU, memory, request rate, p95 latency, and network in/out — over the requested window. `network` is pod network traffic in and out (bytes/sec rate plus a window total in bytes); it counts all traffic, including traffic between your services, so it reads higher than billed bandwidth. `network` is `null` for Compute functions. Returns `null` when the cluster isn't reachable yet.",
         "security": [
@@ -19637,7 +20834,9 @@
     },
     "/v1/deployments/{deploymentId}/observability": {
       "get": {
-        "tags": ["Telemetry"],
+        "tags": [
+          "Telemetry"
+        ],
         "summary": "Get expanded observability series",
         "description": "Reads the expanded observability panel — per-status-class request rate, latency percentiles, CPU/memory time-series, and network in/out series — over the requested window. `network` is pod network traffic in and out (bytes/sec rate plus a window total in bytes); it counts all traffic, including traffic between your services, so it reads higher than billed bandwidth. `network` is `null` for Compute functions. `hasRequestData` is false for workloads whose gateway doesn't report per-deployment request telemetry. Returns `null` when the cluster isn't reachable yet.",
         "security": [
@@ -19779,7 +20978,9 @@
     },
     "/v1/deployments/{deploymentId}/telemetry/database": {
       "get": {
-        "tags": ["Telemetry"],
+        "tags": [
+          "Telemetry"
+        ],
         "summary": "Get database telemetry",
         "description": "Reads database-shaped telemetry — connections, disk usage, database size, CPU, memory, transaction rate, and network in/out. `network` is pod network traffic in and out (bytes/sec rate plus a window total in bytes); it counts all traffic, including traffic between your services, so it reads higher than billed bandwidth. Returns `null` for non-database deployments or when the cluster isn't reachable yet.",
         "security": [
@@ -19921,7 +21122,9 @@
     },
     "/v1/deployments/{deploymentId}/telemetry/cache": {
       "get": {
-        "tags": ["Telemetry"],
+        "tags": [
+          "Telemetry"
+        ],
         "summary": "Get cache telemetry",
         "description": "Reads cache-shaped telemetry — connected clients, memory, ops/sec, hit rate, CPU, and network in/out. `network` is pod network traffic in and out (bytes/sec rate plus a window total in bytes); it counts all traffic, including traffic between your services, so it reads higher than billed bandwidth. Returns `null` for non-cache deployments or when the cluster isn't reachable yet.",
         "security": [
@@ -20063,7 +21266,9 @@
     },
     "/v1/deployments/{deploymentId}/telemetry/function": {
       "get": {
-        "tags": ["Telemetry"],
+        "tags": [
+          "Telemetry"
+        ],
         "summary": "Get function telemetry",
         "description": "Reads invocation-shaped telemetry — invocations, errors, duration, throttles, and concurrency — for a function deployment. Returns `null` for non-function deployments or when the function isn't provisioned yet.",
         "security": [
@@ -20205,7 +21410,9 @@
     },
     "/v1/deployments/{deploymentId}/revisions/{revisionId}/build-logs": {
       "get": {
-        "tags": ["Telemetry"],
+        "tags": [
+          "Telemetry"
+        ],
         "summary": "Get a revision's build log",
         "description": "Reads the build output for one revision — the live build pod while a build is in flight, else the durable log store once the build settles. Best-effort: returns an empty log rather than erroring when no build output is available.",
         "security": [
@@ -20344,7 +21551,9 @@
     },
     "/v1/deployments/{deploymentId}/alerts": {
       "get": {
-        "tags": ["Alerts"],
+        "tags": [
+          "Alerts"
+        ],
         "summary": "List alert rules for a deployment (newest first)",
         "security": [
           {
@@ -20457,7 +21666,9 @@
         }
       },
       "post": {
-        "tags": ["Alerts"],
+        "tags": [
+          "Alerts"
+        ],
         "summary": "Create an alert rule",
         "description": "Creates a metric alert rule on an Ownkube Compute deployment. `metric` is `cpu`/`memory` (percent of the app's limit, threshold ≤ 100) or `restarts` (a raw count). Only valid for Ownkube Compute deployments.",
         "security": [
@@ -20492,12 +21703,19 @@
                   },
                   "metric": {
                     "type": "string",
-                    "enum": ["cpu", "memory", "restarts"],
+                    "enum": [
+                      "cpu",
+                      "memory",
+                      "restarts"
+                    ],
                     "description": "cpu/memory compare a percent of the app's limit; restarts is a raw count."
                   },
                   "comparator": {
                     "type": "string",
-                    "enum": ["gt", "lt"],
+                    "enum": [
+                      "gt",
+                      "lt"
+                    ],
                     "default": "gt",
                     "description": "Fire when the value is greater-than (gt) or less-than (lt)."
                   },
@@ -20523,12 +21741,19 @@
                   },
                   "severity": {
                     "type": "string",
-                    "enum": ["warning", "critical"],
+                    "enum": [
+                      "warning",
+                      "critical"
+                    ],
                     "default": "warning",
                     "description": "warning (default) or critical."
                   }
                 },
-                "required": ["name", "metric", "threshold"]
+                "required": [
+                  "name",
+                  "metric",
+                  "threshold"
+                ]
               }
             }
           }
@@ -20629,7 +21854,9 @@
     },
     "/v1/alert-rules/{ruleId}": {
       "patch": {
-        "tags": ["Alerts"],
+        "tags": [
+          "Alerts"
+        ],
         "summary": "Update an alert rule",
         "description": "Edits an alert rule's fields or toggles `enabled`. All body fields are optional; percent metrics still cap the threshold at 100.",
         "security": [
@@ -20664,12 +21891,19 @@
                   },
                   "metric": {
                     "type": "string",
-                    "enum": ["cpu", "memory", "restarts"],
+                    "enum": [
+                      "cpu",
+                      "memory",
+                      "restarts"
+                    ],
                     "description": "cpu/memory compare a percent of the app's limit; restarts is a raw count."
                   },
                   "comparator": {
                     "type": "string",
-                    "enum": ["gt", "lt"],
+                    "enum": [
+                      "gt",
+                      "lt"
+                    ],
                     "default": "gt",
                     "description": "Fire when the value is greater-than (gt) or less-than (lt)."
                   },
@@ -20695,7 +21929,10 @@
                   },
                   "severity": {
                     "type": "string",
-                    "enum": ["warning", "critical"],
+                    "enum": [
+                      "warning",
+                      "critical"
+                    ],
                     "default": "warning",
                     "description": "warning (default) or critical."
                   },
@@ -20802,7 +22039,9 @@
         }
       },
       "delete": {
-        "tags": ["Alerts"],
+        "tags": [
+          "Alerts"
+        ],
         "summary": "Delete an alert rule",
         "security": [
           {
@@ -20917,7 +22156,9 @@
     },
     "/v1/alert-firings": {
       "get": {
-        "tags": ["Alerts"],
+        "tags": [
+          "Alerts"
+        ],
         "summary": "List recent alert firings (newest first)",
         "description": "Lists recent alert firings for the organization, optionally scoped to one deployment. A firing is recorded when a rule starts breaching and updated to `resolved` when it recovers.",
         "security": [
@@ -21046,7 +22287,9 @@
     },
     "/v1/deployments/{deploymentId}/custom-domains": {
       "get": {
-        "tags": ["Custom Domains"],
+        "tags": [
+          "Custom Domains"
+        ],
         "summary": "List a deployment's linked custom domains",
         "description": "Lists the hosts linked to this web app plus the parent domains registered on its cluster that are available to link. Each linked host carries the DNS record the customer sets to route it.",
         "security": [
@@ -21160,7 +22403,9 @@
         }
       },
       "post": {
-        "tags": ["Custom Domains"],
+        "tags": [
+          "Custom Domains"
+        ],
         "summary": "Link a custom domain to a deployment",
         "description": "Links a host (a subdomain like `app.customer.com`, or the apex `customer.com`) to a public web app. The host's parent domain must already be registered on the app's cluster. Returns the linked host with the DNS record to create.",
         "security": [
@@ -21286,7 +22531,9 @@
     },
     "/v1/custom-domains/{domainId}/verify": {
       "post": {
-        "tags": ["Custom Domains"],
+        "tags": [
+          "Custom Domains"
+        ],
         "summary": "Recheck a linked custom domain",
         "description": "Re-runs the reconcile for a linked host and reports the parent certificate status. The host goes live once its routing record resolves and the certificate is active.",
         "security": [
@@ -21402,7 +22649,9 @@
     },
     "/v1/custom-domains/{domainId}": {
       "delete": {
-        "tags": ["Custom Domains"],
+        "tags": [
+          "Custom Domains"
+        ],
         "summary": "Unlink a custom domain",
         "description": "Detaches a host from its deployment. The parent domain stays registered on the cluster for other apps.",
         "security": [

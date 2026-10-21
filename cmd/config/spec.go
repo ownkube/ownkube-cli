@@ -39,11 +39,12 @@ var heldBack = map[string]string{
 // dashboard does. "" when ownkube.yaml sets all of it.
 func sizedElsewhere(resourceType string, cfg map[string]any) (path, why string) {
 	box, _ := cfg["skuId"].(string)
+	datastore := resourceType == "database" || resourceType == "cache"
 	switch {
+	case datastore && (box != "" || cfg["billingMode"] == "reserved"):
+		return "resources", "its size comes from its box; change skuId"
 	case cfg["billingMode"] == "reserved":
 		return "resources", "a reserved app's size comes from its box; change skuId, or set billingMode to metered"
-	case box != "" && (resourceType == "database" || resourceType == "cache"):
-		return "resources", "its size comes from its box; change skuId"
 	case cfg["billingMode"] == "metered":
 		return "resources.requests", "Ownkube sets a metered app's requests; set resources.limits"
 	}

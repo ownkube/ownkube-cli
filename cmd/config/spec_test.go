@@ -259,6 +259,10 @@ func TestBoxSizesADatastore(t *testing.T) {
 		if path, _ := sizedElsewhere(typ, map[string]any{"skuId": "box-1"}); path != "resources" {
 			t.Errorf("%s with a box: %q", typ, path)
 		}
+		path, why := sizedElsewhere(typ, map[string]any{"billingMode": "reserved"})
+		if path != "resources" || strings.Contains(why, "metered") {
+			t.Errorf("reserved %s: %q, %q", typ, path, why)
+		}
 		if path, _ := sizedElsewhere(typ, map[string]any{}); path != "" {
 			t.Errorf("%s without a box: %q", typ, path)
 		}
