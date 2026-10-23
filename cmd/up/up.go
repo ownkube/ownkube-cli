@@ -16,6 +16,7 @@ import (
 
 	"github.com/ownkube/okctl/cmd/internal/ux"
 	"github.com/ownkube/okctl/internal/client"
+	"github.com/ownkube/okctl/internal/sourcearchive"
 	"github.com/spf13/cobra"
 )
 
@@ -45,9 +46,9 @@ func New() *cobra.Command {
 			"it chose, and links the directory so the next 'up' redeploys it. --name, " +
 			"--region, --port, --type, --public, --project and --environment override " +
 			"those defaults.\n\n" +
-			"Files ignored by .gitignore are never uploaded. The command follows the " +
-			"build until it goes live; pass --no-follow to return as soon as the build " +
-			"is queued.\n\n" +
+			"Files ignored by .gitignore are never uploaded, nor are .git, node_modules " +
+			"and .env* files. The command follows the build until it goes live; pass " +
+			"--no-follow to return as soon as the build is queued.\n\n" +
 			"--repo/--branch switch an existing app to build from a connected " +
 			"repository instead (nothing is uploaded; later pushes deploy it), the " +
 			"same as 'okctl deploy source'. Either one alone is filled in from this " +
@@ -126,19 +127,18 @@ func New() *cobra.Command {
 			if !structured {
 				fmt.Fprintln(out, "Packaging source...")
 			}
-			archivePath, size, err := archiveWorkingTree(ctx, dir)
+			archivePath, size, err := sourcearchive.Create(ctx, dir)
 			if err != nil {
 				return err
 			}
 			defer os.Remove(archivePath)
-			if limit := int64(slot.MaxBytes); limit > 0 && size > limit {
-				return fmt.Errorf("source is %s; the limit is %s. Add build output, dependencies, and other large files to .gitignore, then retry",
-					humanBytes(size), humanBytes(limit))
+			if err := sourcearchive.CheckSize(size, int64(slot.MaxBytes)); err != nil {
+				return err
 			}
 
 			// 3. Upload it straight to object storage via the pre-signed URL.
 			if !structured {
-				fmt.Fprintf(out, "Uploading source (%s)...\n", humanBytes(size))
+				fmt.Fprintf(out, "Uploading source (%s)...\n", sourcearchive.HumanBytes(size))
 			}
 			f, err := os.Open(archivePath)
 			if err != nil {
@@ -210,18 +210,4 @@ func New() *cobra.Command {
 	cmd.Flags().BoolVar(&ciFlag, "ci", false, "Same as --json, for CI pipelines")
 	create.register(cmd)
 	return cmd
-}
-
-// humanBytes formats a byte count for the upload progress line.
-func humanBytes(n int64) string {
-	const unit = 1024
-	if n < unit {
-		return fmt.Sprintf("%d B", n)
-	}
-	div, exp := int64(unit), 0
-	for m := n / unit; m >= unit; m /= unit {
-		div *= unit
-		exp++
-	}
-	return fmt.Sprintf("%.1f %cB", float64(n)/float64(div), "KMGTPE"[exp])
 }

@@ -1,4 +1,6 @@
-package up
+// Package sourcearchive packages a local working tree as a gzipped tarball for
+// upload, the source behind `okctl up`.
+package sourcearchive
 
 import (
 	"archive/tar"
@@ -14,12 +16,12 @@ import (
 	"strings"
 )
 
-// archiveWorkingTree writes a gzipped tarball of dir to a temp file and returns
-// its path and byte size. The caller owns the file and must remove it. File
-// selection honours .gitignore when dir is a git work tree (via `git ls-files`),
-// so ignored paths — node_modules, .env, build output — never leave the machine;
-// outside a repo it falls back to walking the tree minus the .git directory.
-func archiveWorkingTree(ctx context.Context, dir string) (string, int64, error) {
+// Create writes a gzipped tarball of dir to a temp file and returns its path
+// and byte size. The caller owns the file and must remove it. File selection
+// honours .gitignore when dir is a git work tree (via `git ls-files`); outside
+// a repo it walks the tree. Either way .git, node_modules and .env* files are
+// always left out (see Excluded).
+func Create(ctx context.Context, dir string) (string, int64, error) {
 	files, err := collectFiles(ctx, dir)
 	if err != nil {
 		return "", 0, err
@@ -28,7 +30,7 @@ func archiveWorkingTree(ctx context.Context, dir string) (string, int64, error) 
 		return "", 0, fmt.Errorf("no files to deploy in %s", dir)
 	}
 
-	tmp, err := os.CreateTemp("", "okctl-up-*.tar.gz")
+	tmp, err := os.CreateTemp("", "okctl-source-*.tar.gz")
 	if err != nil {
 		return "", 0, fmt.Errorf("creating archive: %w", err)
 	}
@@ -66,13 +68,32 @@ func archiveWorkingTree(ctx context.Context, dir string) (string, int64, error) 
 	return tmp.Name(), size, nil
 }
 
+// Excluded reports whether a path relative to the archive root is always left
+// out, whatever .gitignore says: anything under a .git or node_modules
+// directory (dependencies are installed by the build, not uploaded) and any
+// .env* file (local secrets stay on this machine).
+func Excluded(rel string) bool {
+	parts := strings.Split(filepath.ToSlash(rel), "/")
+	for _, p := range parts[:len(parts)-1] {
+		if excludedDir(p) {
+			return true
+		}
+	}
+	base := parts[len(parts)-1]
+	return excludedDir(base) || strings.HasPrefix(base, ".env")
+}
+
+func excludedDir(name string) bool {
+	return name == ".git" || name == "node_modules"
+}
+
 // writeEntries adds each relative path (plus its parent directories, once) to
 // the tar writer. Directory entries keep extractors that don't auto-create
 // parents happy; files are streamed with their on-disk mode.
 func writeEntries(tw *tar.Writer, dir string, rel []string) error {
 	seenDir := map[string]bool{}
 	for _, r := range rel {
-		if err := writeParentDirs(tw, dir, r, seenDir); err != nil {
+		if err := writeParentDirs(tw, r, seenDir); err != nil {
 			return err
 		}
 		if err := writeFile(tw, dir, r); err != nil {
@@ -82,7 +103,7 @@ func writeEntries(tw *tar.Writer, dir string, rel []string) error {
 	return nil
 }
 
-func writeParentDirs(tw *tar.Writer, dir, rel string, seen map[string]bool) error {
+func writeParentDirs(tw *tar.Writer, rel string, seen map[string]bool) error {
 	parent := filepath.Dir(rel)
 	if parent == "." || parent == "/" {
 		return nil
@@ -146,13 +167,21 @@ func writeFile(tw *tar.Writer, dir, rel string) error {
 
 // collectFiles returns the working-tree files to archive, relative to dir. It
 // prefers `git ls-files` (tracked + untracked-not-ignored) so .gitignore is
-// honoured; outside a git work tree it walks the directory minus .git.
+// honoured; outside a git work tree it walks the directory. Excluded paths
+// are dropped either way.
 func collectFiles(ctx context.Context, dir string) ([]string, error) {
-	if files, ok := gitTrackedFiles(ctx, dir); ok {
-		sort.Strings(files)
-		return files, nil
+	files, ok := gitTrackedFiles(ctx, dir)
+	if !ok {
+		return walkFiles(dir)
 	}
-	return walkFiles(dir)
+	kept := files[:0]
+	for _, f := range files {
+		if !Excluded(f) {
+			kept = append(kept, f)
+		}
+	}
+	sort.Strings(kept)
+	return kept, nil
 }
 
 // gitTrackedFiles lists the working tree via git, honouring the ignore rules.
@@ -180,7 +209,7 @@ func gitTrackedFiles(ctx context.Context, dir string) ([]string, bool) {
 }
 
 // walkFiles is the non-git fallback: every regular file under dir except the
-// .git directory, as paths relative to dir.
+// excluded ones, as paths relative to dir.
 func walkFiles(dir string) ([]string, error) {
 	var files []string
 	err := filepath.WalkDir(dir, func(path string, d fs.DirEntry, err error) error {
@@ -188,7 +217,7 @@ func walkFiles(dir string) ([]string, error) {
 			return err
 		}
 		if d.IsDir() {
-			if d.Name() == ".git" {
+			if path != dir && excludedDir(d.Name()) {
 				return filepath.SkipDir
 			}
 			return nil
@@ -197,7 +226,9 @@ func walkFiles(dir string) ([]string, error) {
 		if err != nil {
 			return err
 		}
-		files = append(files, rel)
+		if !Excluded(rel) {
+			files = append(files, rel)
+		}
 		return nil
 	})
 	if err != nil {

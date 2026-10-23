@@ -169,9 +169,8 @@ Or run it without installing (after copying the spec):
     existing list/get reads. Imports `internal/link` aliased as `linkstore`.
   - `cmd/up/`: top-level `up` (exports `New()`). Builds + deploys the current
     directory's LOCAL working tree (uncommitted edits included), not a committed
-    git revision. Flow: presign an upload slot → tar+gzip the tree (`archive.go`;
-    honours `.gitignore` via `git ls-files -co --exclude-standard`, else walks
-    minus `.git`) → PUT to the pre-signed URL → trigger build → follow streams
+    git revision. Flow: presign an upload slot → tar+gzip the tree
+    (`internal/sourcearchive`) → PUT to the pre-signed URL → trigger build → follow streams
     build logs + revision status to a terminal state (`ux.FollowRevision`). Target deployment from
     `--service` or this directory's link; `--note`, `--path`, `--no-follow`.
     Unlinked + no `--service` → `create.go`: presign with no deployment (server
@@ -258,6 +257,10 @@ Or run it without installing (after copying the spec):
   and switch to generated calls. `checkError` also returns `*APIError`, so
   `IsAPICode` works for every endpoint. `mcp.go` (`MCP`, `MCPEndpoint`) is the
   one non-`/api/cli` call.
+- **internal/sourcearchive/**: the tar.gz behind `up` (`Create`,
+  `CheckSize`, `HumanBytes`). Honours `.gitignore` via `git ls-files -co
+  --exclude-standard`, else walks; `.git`, `node_modules` and `.env*` are
+  always excluded (`Excluded`).
 - **internal/agents/**: AI-agent setup shared by `mcp install`, `skills
   install` and `setup agent`: detection (`Select`; CLI on PATH or config dir,
   honouring `CLAUDE_CONFIG_DIR`/`CODEX_HOME`), `InstallMCP` (Claude Code via

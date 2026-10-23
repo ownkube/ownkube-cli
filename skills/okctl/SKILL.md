@@ -35,7 +35,7 @@ Production (`https://app.ownkube.io`) needs only the key from `okctl login`. `OK
 
 If the agent is already connected to the Ownkube MCP server (`https://app.ownkube.io/api/mcp`), use its tools for most operations. Reach for okctl when:
 
-- deploying the **local working directory** (`okctl up` uploads it, honouring `.gitignore`)
+- deploying the **local working directory** (`okctl up` uploads it, honouring `.gitignore`; `.git`, `node_modules` and `.env*` files are never uploaded)
 - the user needs **live credentials** (`deploy connection-info`, `deploy reset-password`) or a **point-in-time restore**: run these only when the user asks, and show the output to them rather than copying secrets into files or chat
 - running a **local command with the app's variables** (`okctl run`), or a shell on the app (`okctl ssh`)
 - scripting in CI, or no MCP connection is set up
