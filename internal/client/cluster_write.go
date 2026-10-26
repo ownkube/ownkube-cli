@@ -34,7 +34,7 @@ func (c *Client) CreateCluster(ctx context.Context, body api.PostV1ClustersJSONR
 func (c *Client) DestroyCluster(ctx context.Context, id string, force bool) (*api.DestroyClusterResponse, error) {
 	params := &api.DeleteV1ClustersClusterIdParams{}
 	if force {
-		f := api.True
+		f := api.DeleteV1ClustersClusterIdParamsForceTrue
 		params.Force = &f
 	}
 	resp, err := c.inner.DeleteV1ClustersClusterIdWithResponse(ctx, id, params)

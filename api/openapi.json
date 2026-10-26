@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Ownkube CLI API",
-    "version": "1.13.0",
+    "version": "1.14.0",
     "description": "API for the Ownkube CLI tool. Authenticate via browser-based flow, then use x-api-key header for subsequent requests."
   },
   "servers": [
@@ -558,20 +558,9 @@
           },
           "monthlyUsd": {
             "type": "number"
-          },
-          "dedicatedCpu": {
-            "type": "boolean",
-            "description": "True when the box's full vCPU is dedicated to it."
           }
         },
-        "required": [
-          "id",
-          "label",
-          "vcpu",
-          "memoryGiB",
-          "monthlyUsd",
-          "dedicatedCpu"
-        ]
+        "required": ["id", "label", "vcpu", "memoryGiB", "monthlyUsd"]
       },
       "RegionListResponse": {
         "type": "object",
@@ -1321,7 +1310,7 @@
           },
           "storageGbHours": {
             "type": "number",
-            "description": "Database storage, in GB-hours."
+            "description": "Database and workspace storage, in GB-hours."
           },
           "costUsd": {
             "type": "number",
@@ -3121,7 +3110,7 @@
               },
               "skuId": {
                 "type": "string",
-                "description": "Box id for billingMode reserved (a Spark or Core box, e.g. core-2). Required with reserved, rejected otherwise. Change it to resize a reserved app."
+                "description": "Box id for billingMode reserved (a Spark box, e.g. spark-4). Required with reserved, rejected otherwise. Change it to resize a reserved app."
               }
             },
             "required": ["port"],
@@ -5671,6 +5660,100 @@
           }
         },
         "required": ["removed"]
+      },
+      "AgentFeedbackResult": {
+        "type": "object",
+        "properties": {
+          "received": {
+            "type": "boolean",
+            "enum": [true]
+          },
+          "reference": {
+            "type": "string",
+            "description": "Reference for this report, e.g. `fb_3f9a1c2b7d4e`. Give it to the user if they want to follow up."
+          }
+        },
+        "required": ["received", "reference"]
+      },
+      "AgentFeedbackBody": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "failed",
+              "missing_capability",
+              "bug",
+              "confusing",
+              "docs_gap",
+              "suggestion",
+              "worked_well"
+            ],
+            "description": "What kind of report this is. failed: a tool call or task did not complete (error, timeout, stuck status). missing_capability: what the user asked for has no tool, input, or option here. bug: something completed but the result is wrong or inconsistent (status says healthy but the app is down, a value didn't stick). confusing: a tool name, description, input, error, or output misled you or made you guess. docs_gap: instructions or docs were missing, wrong, or out of date. suggestion: an improvement idea. worked_well: something that went smoothly and should stay that way."
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["blocker", "degraded", "minor"],
+            "description": "Impact on the user's task. blocker: the task could not be finished. degraded: finished only partly, or with a workaround. minor: an annoyance that did not change the result. Omit for suggestion and worked_well."
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 200,
+            "description": "One line a person can triage without reading the rest, e.g. 'create_deployment rejects a Dockerfile in a subfolder with no hint about set_build_context'."
+          },
+          "goal": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "What the user asked for, or what you were trying to accomplish, in plain words. Paraphrase; don't paste the whole conversation."
+          },
+          "attempted": {
+            "type": "string",
+            "maxLength": 4000,
+            "description": "The steps you took, in order: which tools you called, with the inputs that mattered, and anything else you tried (retries, alternatives). Never include passwords, tokens, keys, or connection strings."
+          },
+          "outcome": {
+            "type": "string",
+            "maxLength": 4000,
+            "description": "What actually happened: the exact error message and code, the status or field values you saw, how long you waited. Quote errors verbatim (with secrets removed); they are the most useful part of a report."
+          },
+          "expected": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "What you expected instead, or what would have let you finish (a tool, an input, a clearer error, a doc)."
+          },
+          "workaround": {
+            "type": "string",
+            "maxLength": 2000,
+            "description": "How you got around it, if you did, or what you told the user to do by hand (for example, use the dashboard)."
+          },
+          "tools": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "maxItems": 20,
+            "description": "Names of the tools involved, most relevant first, e.g. ['create_deployment', 'get_build_logs']."
+          },
+          "resourceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "maxItems": 20,
+            "description": "Ids of the deployments, clusters, projects, environments, or revisions involved, so the team can look at the exact resource."
+          },
+          "client": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Your client and model, e.g. 'Claude Code, claude-opus-5-5', so reports can be grouped by agent."
+          }
+        },
+        "required": ["category", "summary"]
       }
     },
     "parameters": {},
@@ -11585,7 +11668,7 @@
                           },
                           "skuId": {
                             "type": "string",
-                            "description": "Box id for billingMode reserved (a Spark or Core box, e.g. core-2). Required with reserved, rejected otherwise. Change it to resize a reserved app."
+                            "description": "Box id for billingMode reserved (a Spark box, e.g. spark-4). Required with reserved, rejected otherwise. Change it to resize a reserved app."
                           }
                         },
                         "required": ["port"]
@@ -12044,7 +12127,7 @@
                           },
                           "skuId": {
                             "type": "string",
-                            "description": "Box id for billingMode reserved (a Spark or Core box, e.g. core-2). Required with reserved, rejected otherwise. Change it to resize a reserved app."
+                            "description": "Box id for billingMode reserved (a Spark box, e.g. spark-4). Required with reserved, rejected otherwise. Change it to resize a reserved app."
                           }
                         },
                         "required": ["port"]
@@ -21472,6 +21555,120 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UnlinkCustomDomainResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "412": {
+            "description": "Precondition failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited; retry after the Retry-After header's seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/feedback": {
+      "post": {
+        "tags": ["Feedback"],
+        "summary": "Send agent feedback",
+        "description": "Reports what an agent or script tried to do and what went wrong or was missing: a failed call, a missing capability, a wrong result, confusing errors, a docs gap, or a suggestion. Changes nothing in the account. Limited to 30 reports per organization per hour (`429` past that).",
+        "security": [
+          {
+            "apiKey": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentFeedbackBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Feedback received",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgentFeedbackResult"
                 }
               }
             }

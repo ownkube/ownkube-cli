@@ -54,13 +54,9 @@ func listCmd() *cobra.Command {
 					return
 				}
 				for _, b := range boxes {
-					vcpu := fmt.Sprintf("%g", b.Vcpu)
-					if b.DedicatedCpu {
-						vcpu += " (dedicated)"
-					}
 					rows = append(rows, []string{
 						k, b.Id, b.Label,
-						vcpu,
+						fmt.Sprintf("%g", b.Vcpu),
 						fmt.Sprintf("%g GiB", b.MemoryGiB),
 						fmt.Sprintf("$%.2f", b.MonthlyUsd),
 					})
