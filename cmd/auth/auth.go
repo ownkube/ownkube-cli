@@ -71,6 +71,13 @@ func Whoami() *cobra.Command {
 			}
 
 			info, err := c.GetUserInfo(cmd.Context())
+			if err != nil && client.IsAPICode(err, "WORKSPACE_FORBIDDEN") {
+				fmt.Fprintln(cmd.OutOrStdout(), "Signed in as this Ownkube workspace ("+config.APIKeyEnv+").")
+				return nil
+			}
+			if err != nil && creds.FromEnv {
+				return fmt.Errorf("the key in %s is invalid or expired", config.APIKeyEnv)
+			}
 			if err != nil {
 				fmt.Fprintln(cmd.OutOrStdout(), "Logged in locally but API key is invalid or expired.")
 				fmt.Fprintln(cmd.OutOrStdout(), "Run 'okctl login' to re-authenticate.")

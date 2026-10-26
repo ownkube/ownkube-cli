@@ -73,7 +73,21 @@ type APIError struct {
 }
 
 func (e *APIError) Error() string {
+	if plainMessageCodes[e.Code] && e.Message != "" {
+		return e.Message
+	}
 	return fmt.Sprintf("API error %d (%s): %s", e.Status, e.Code, e.Message)
+}
+
+// plainMessageCodes are refusals whose server message is written for whoever
+// runs okctl inside an Ownkube workspace (or the agent there), so it prints as is.
+var plainMessageCodes = map[string]bool{
+	"APPROVAL_PENDING":     true,
+	"APPROVAL_DENIED":      true,
+	"NO_ACTIVE_TASK":       true,
+	"WORKSPACE_ACCESS_OFF": true,
+	"WORKSPACE_FORBIDDEN":  true,
+	"WORKSPACE_READ_ONLY":  true,
 }
 
 // IsAPICode reports whether err is an APIError carrying the given code.

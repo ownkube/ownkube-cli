@@ -30,7 +30,13 @@ type Credentials struct {
 	UserName      string `yaml:"user_name"`
 	UserEmail     string `yaml:"user_email"`
 	EmailVerified bool   `yaml:"email_verified"`
+	// FromEnv is set when the key came from OKCTL_API_KEY, not the file.
+	FromEnv bool `yaml:"-"`
 }
+
+// APIKeyEnv names the env var whose key wins over credentials.yaml (an Ownkube
+// workspace sets it to the workspace's own key).
+const APIKeyEnv = "OKCTL_API_KEY"
 
 // Manager handles reading and writing config/credentials files.
 type Manager struct {
@@ -95,8 +101,12 @@ func (m *Manager) SaveConfig(cfg *Config) error {
 	return os.WriteFile(m.configPath(), data, 0644)
 }
 
-// LoadCredentials reads credentials.yaml, returning nil if it doesn't exist.
+// LoadCredentials returns the OKCTL_API_KEY key when set, else reads
+// credentials.yaml, returning nil if it doesn't exist.
 func (m *Manager) LoadCredentials() (*Credentials, error) {
+	if key := os.Getenv(APIKeyEnv); key != "" {
+		return &Credentials{APIKey: key, FromEnv: true}, nil
+	}
 	data, err := os.ReadFile(m.credentialsPath())
 	if err != nil {
 		if os.IsNotExist(err) {

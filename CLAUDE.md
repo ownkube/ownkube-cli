@@ -310,6 +310,10 @@ Or run it without installing (after copying the spec):
   `cmd/root.go`).
 - `OKCTL_BASIC_AUTH=user:pass` adds HTTP Basic auth on every request, for an
   API URL served behind it.
+- `OKCTL_API_KEY` wins over `credentials.yaml` (`config.LoadCredentials`). An
+  Ownkube workspace sets it to its `okws_` key: org routes only, approval
+  refusals (`APPROVAL_PENDING` etc., `plainMessageCodes` in `client/raw.go`)
+  print the server's message as is.
 - Auth: browser-based flow — CLI opens browser to `/cli-authorize`, receives
   API key via local callback.
 - Use `cmd.OutOrStdout()` for command output (testable).
