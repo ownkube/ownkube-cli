@@ -417,9 +417,6 @@
           "infrastructureUpgradeAvailable": {
             "type": "boolean"
           },
-          "platformUpgradeAvailable": {
-            "type": "boolean"
-          },
           "upgradeAvailable": {
             "type": "boolean"
           },
@@ -551,7 +548,8 @@
             "type": "string"
           },
           "vcpu": {
-            "type": "number"
+            "type": "number",
+            "description": "vCPU of a web or database box. Absent on cache boxes."
           },
           "memoryGiB": {
             "type": "number"
@@ -560,7 +558,7 @@
             "type": "number"
           }
         },
-        "required": ["id", "label", "vcpu", "memoryGiB", "monthlyUsd"]
+        "required": ["id", "label", "memoryGiB", "monthlyUsd"]
       },
       "RegionListResponse": {
         "type": "object",
@@ -1197,7 +1195,9 @@
               "claimed",
               "existing_account",
               "unverified_email",
-              "other_offer"
+              "other_offer",
+              "card_required",
+              "card_used"
             ],
             "description": "Why the code was refused (when not `ok`)."
           },
@@ -5522,9 +5522,16 @@
             "items": {
               "$ref": "#/components/schemas/AvailableCustomDomainParent"
             }
+          },
+          "perHost": {
+            "type": "boolean",
+            "description": "True on Ownkube Compute: link any host directly, no parent domain needed."
+          },
+          "hostUsage": {
+            "$ref": "#/components/schemas/CustomDomainHostUsage"
           }
         },
-        "required": ["linked", "availableParents"]
+        "required": ["linked", "availableParents", "perHost", "hostUsage"]
       },
       "LinkedCustomDomain": {
         "type": "object",
@@ -5590,7 +5597,7 @@
           },
           "routingRecordType": {
             "type": "string",
-            "enum": ["A", "CNAME"]
+            "enum": ["A", "ALIAS", "CNAME"]
           },
           "routingTarget": {
             "type": "string",
@@ -5622,6 +5629,23 @@
         "additionalProperties": {
           "nullable": true
         }
+      },
+      "CustomDomainHostUsage": {
+        "type": "object",
+        "nullable": true,
+        "properties": {
+          "cap": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Hosts the plan includes. `null` means no cap."
+          },
+          "inUse": {
+            "type": "integer",
+            "description": "Hosts connected across the org."
+          }
+        },
+        "required": ["cap", "inUse"],
+        "description": "The plan's custom-domain allowance on Ownkube Compute, else null."
       },
       "LinkCustomDomainResponse": {
         "type": "object",
@@ -8731,7 +8755,7 @@
       "post": {
         "tags": ["Billing"],
         "summary": "Redeem a promo code",
-        "description": "Adds a promo campaign's credit to the wallet. Each organization and each user can redeem a campaign once. A refusal (unknown code, offer full or ended, already claimed, existing account) returns `200` with `ok: false`, a `reason`, and a user-facing `message`.",
+        "description": "Adds a promo campaign's credit to the wallet. Each organization and each user can redeem a campaign once. Claiming needs a card on file (added in the dashboard, never charged), and a card claims credit for one organization only. A refusal (unknown code, offer full or ended, already claimed, existing account, no card on file, card already used) returns `200` with `ok: false`, a `reason`, and a user-facing `message`.",
         "security": [
           {
             "apiKey": []
@@ -21174,7 +21198,7 @@
       "get": {
         "tags": ["Custom Domains"],
         "summary": "List a deployment's linked custom domains",
-        "description": "Lists the hosts linked to this web app plus the parent domains registered on its cluster that are available to link. Each linked host carries the DNS record the customer sets to route it.",
+        "description": "Lists the hosts linked to this web app. On Ownkube Compute it also returns the plan's custom-domain allowance; on a Starter cluster, the parent domains connected on the cluster. Each linked host carries the DNS records the customer sets.",
         "security": [
           {
             "apiKey": []
@@ -21288,7 +21312,7 @@
       "post": {
         "tags": ["Custom Domains"],
         "summary": "Link a custom domain to a deployment",
-        "description": "Links a host (a subdomain like `app.customer.com`, or the apex `customer.com`) to a public web app. The host's parent domain must already be registered on the app's cluster. Returns the linked host with the DNS record to create.",
+        "description": "Links a host (a subdomain like `app.customer.com`, or the apex `customer.com`) to a public web app. On Ownkube Compute any host can be linked directly and each counts toward the plan's custom-domain allowance; on a Starter cluster the parent domain must already be connected on the cluster. Returns the linked host with the DNS records to create.",
         "security": [
           {
             "apiKey": []
@@ -21414,7 +21438,7 @@
       "post": {
         "tags": ["Custom Domains"],
         "summary": "Recheck a linked custom domain",
-        "description": "Re-runs the reconcile for a linked host and reports the parent certificate status. The host goes live once its routing record resolves and the certificate is active.",
+        "description": "Re-runs the reconcile for a linked host and reports its certificate status. The host goes live once its routing record resolves and the certificate is active.",
         "security": [
           {
             "apiKey": []
@@ -21530,7 +21554,7 @@
       "delete": {
         "tags": ["Custom Domains"],
         "summary": "Unlink a custom domain",
-        "description": "Detaches a host from its deployment. The parent domain stays registered on the cluster for other apps.",
+        "description": "Detaches a host from its deployment. On Ownkube Compute its certificate is removed too; on a Starter cluster the parent domain stays connected for other apps.",
         "security": [
           {
             "apiKey": []

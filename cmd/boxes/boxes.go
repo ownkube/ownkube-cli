@@ -54,9 +54,14 @@ func listCmd() *cobra.Command {
 					return
 				}
 				for _, b := range boxes {
+					// A cache box has no vCPU: caches are sized by memory alone.
+					vcpu := ""
+					if b.Vcpu != nil {
+						vcpu = fmt.Sprintf("%g", *b.Vcpu)
+					}
 					rows = append(rows, []string{
 						k, b.Id, b.Label,
-						fmt.Sprintf("%g", b.Vcpu),
+						vcpu,
 						fmt.Sprintf("%g GiB", b.MemoryGiB),
 						fmt.Sprintf("$%.2f", b.MonthlyUsd),
 					})
