@@ -1937,6 +1937,11 @@
             "type": "string",
             "nullable": true
           },
+          "region": {
+            "type": "string",
+            "nullable": true,
+            "description": "The Ownkube Compute region this deployment runs in (an id from list_regions, e.g. `europe`). Null when it runs on your own cluster."
+          },
           "environmentId": {
             "type": "string",
             "nullable": true
@@ -2584,6 +2589,11 @@
             "type": "string",
             "nullable": true
           },
+          "region": {
+            "type": "string",
+            "nullable": true,
+            "description": "The Ownkube Compute region this deployment runs in (an id from list_regions, e.g. `europe`). Null when it runs on your own cluster."
+          },
           "environmentId": {
             "type": "string",
             "nullable": true
@@ -2766,7 +2776,8 @@
                 "type": "integer",
                 "minimum": 0,
                 "maximum": 20,
-                "default": 1
+                "default": 1,
+                "description": "Copies running at once; 0 stops the app. On Ownkube Compute this is the fixed count (each copy is sized automatically), capped by your plan."
               },
               "env": {
                 "type": "array",
@@ -3035,7 +3046,8 @@
                     "minimum": 1,
                     "maximum": 100
                   }
-                }
+                },
+                "description": "Your own cluster only. Adds copies under CPU or memory load, between minReplicas and maxReplicas. Refused on Ownkube Compute; set replicas there instead."
               },
               "scaleToZero": {
                 "type": "object",
@@ -3967,14 +3979,20 @@
             "type": "string"
           },
           "targetClusterId": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
+          },
+          "targetRegion": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
           },
           "note": {
             "type": "string",
             "maxLength": 200
           }
         },
-        "required": ["targetEnvironmentId", "targetClusterId"]
+        "required": ["targetEnvironmentId"]
       },
       "ResetPasswordResult": {
         "type": "object",
@@ -4088,6 +4106,11 @@
           "clusterId": {
             "type": "string",
             "nullable": true
+          },
+          "region": {
+            "type": "string",
+            "nullable": true,
+            "description": "The Ownkube Compute region this deployment runs in (an id from list_regions, e.g. `europe`). Null when it runs on your own cluster."
           },
           "environmentId": {
             "type": "string",
@@ -5033,7 +5056,7 @@
           "clusterId": {
             "type": "string",
             "nullable": true,
-            "description": "The new app's cluster id. Null on a redeploy."
+            "description": "Always null: uploaded source runs on Ownkube Compute, which is placed by region (see `defaults.region`). Kept for older CLI versions."
           },
           "environmentId": {
             "type": "string",
@@ -11348,7 +11371,8 @@
                             "type": "integer",
                             "minimum": 0,
                             "maximum": 20,
-                            "default": 1
+                            "default": 1,
+                            "description": "Copies running at once; 0 stops the app. On Ownkube Compute this is the fixed count (each copy is sized automatically), capped by your plan."
                           },
                           "env": {
                             "type": "array",
@@ -11617,7 +11641,8 @@
                                 "minimum": 1,
                                 "maximum": 100
                               }
-                            }
+                            },
+                            "description": "Your own cluster only. Adds copies under CPU or memory load, between minReplicas and maxReplicas. Refused on Ownkube Compute; set replicas there instead."
                           },
                           "scaleToZero": {
                             "type": "object",
@@ -11807,7 +11832,8 @@
                             "type": "integer",
                             "minimum": 0,
                             "maximum": 20,
-                            "default": 1
+                            "default": 1,
+                            "description": "Copies running at once; 0 stops the app. On Ownkube Compute this is the fixed count (each copy is sized automatically), capped by your plan."
                           },
                           "env": {
                             "type": "array",
@@ -12076,7 +12102,8 @@
                                 "minimum": 1,
                                 "maximum": 100
                               }
-                            }
+                            },
+                            "description": "Your own cluster only. Adds copies under CPU or memory load, between minReplicas and maxReplicas. Refused on Ownkube Compute; set replicas there instead."
                           },
                           "scaleToZero": {
                             "type": "object",
@@ -15587,7 +15614,7 @@
       "post": {
         "tags": ["Deployments"],
         "summary": "Copy a deployment to another environment",
-        "description": "Clones this deployment's current config into `targetEnvironmentId` on `targetClusterId`, creating a new deployment. Not valid for functions.",
+        "description": "Clones this deployment's current config into `targetEnvironmentId`, creating a new deployment. Lands on your own cluster `targetClusterId`, or the Ownkube Compute region `targetRegion`; omit both to stay where the source runs. Not valid for functions.",
         "security": [
           {
             "apiKey": []

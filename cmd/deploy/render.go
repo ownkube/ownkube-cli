@@ -21,6 +21,24 @@ func manifestToJSON(raw []byte) ([]byte, error) {
 	return json.Marshal(doc)
 }
 
+// location is where a deployment runs: its Ownkube Compute region, else the id
+// of the cluster it runs on.
+func location(clusterID string, region *string) string {
+	if r := ux.Deref(region); r != "" {
+		return r
+	}
+	return clusterID
+}
+
+// locationRow is the field-table row for location: "Region" on Ownkube
+// Compute, "Cluster" on your own cluster.
+func locationRow(clusterID string, region *string) []string {
+	if r := ux.Deref(region); r != "" {
+		return []string{"Region", r}
+	}
+	return []string{"Cluster", clusterID}
+}
+
 // renderActionResult prints a DeploymentActionResult as a field table, or the
 // raw object when structured output is requested.
 func renderActionResult(cmd *cobra.Command, r *api.DeploymentActionResult) error {
@@ -35,7 +53,7 @@ func renderActionResult(cmd *cobra.Command, r *api.DeploymentActionResult) error
 		{"Type", string(r.ResourceType)},
 		{"Status", r.Status},
 		{"Status Message", r.StatusMessage},
-		{"Cluster", r.ClusterId},
+		locationRow(r.ClusterId, r.Region),
 		{"Environment", r.EnvironmentId},
 		{"Public Hostname", ux.Deref(r.PublicHostname)},
 	})
@@ -53,7 +71,7 @@ func renderCreated(cmd *cobra.Command, r *api.CreateDeploymentResponse) error {
 		{"Type", string(r.ResourceType)},
 		{"Status", r.Status},
 		{"Status Message", r.StatusMessage},
-		{"Cluster", r.ClusterId},
+		locationRow(r.ClusterId, r.Region),
 		{"Environment", r.EnvironmentId},
 		{"Public Hostname", r.PublicHostname},
 	})

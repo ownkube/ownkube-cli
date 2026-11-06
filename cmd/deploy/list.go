@@ -64,10 +64,10 @@ lists every project's deployments.`,
 				return nil
 			}
 
-			rows := [][]string{{"ID", "NAME", "TYPE", "STATUS", "CLUSTER", "HOSTNAME"}}
+			rows := [][]string{{"ID", "NAME", "TYPE", "STATUS", "LOCATION", "HOSTNAME"}}
 			for _, d := range deps {
 				rows = append(rows, []string{
-					d.Id, d.Name, string(d.ResourceType), d.Status, d.ClusterId, d.PublicHostname,
+					d.Id, d.Name, string(d.ResourceType), d.Status, location(d.ClusterId, d.Region), d.PublicHostname,
 				})
 			}
 			return ux.Print(cmd.OutOrStdout(), rows)

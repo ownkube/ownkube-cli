@@ -35,7 +35,7 @@ func getCmd() *cobra.Command {
 				{"Type", string(d.ResourceType)},
 				{"Status", d.Status},
 				{"Status Message", d.StatusMessage},
-				{"Cluster", d.ClusterId},
+				locationRow(d.ClusterId, d.Region),
 				{"Environment", d.EnvironmentId},
 				{"Public Hostname", d.PublicHostname},
 				{"Workflow PR", ux.Deref(d.WorkflowPullRequestUrl)},

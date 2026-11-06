@@ -120,9 +120,10 @@ func createApp(ctx context.Context, cmd *cobra.Command, cl *client.Client, f *cr
 		return nil, err
 	}
 
+	// An uploaded app runs on Ownkube Compute, which has no cluster to link
+	// (`clusterId` is always null), so the binding records no cluster.
 	binding := linkstore.Binding{
 		OrganizationID: organizationID(ctx, cl),
-		ClusterID:      result.ClusterId,
 		EnvironmentID:  result.EnvironmentId,
 		DeploymentID:   result.DeploymentId,
 	}

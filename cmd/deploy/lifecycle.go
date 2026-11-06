@@ -18,7 +18,7 @@ func renderLifecycle(cmd *cobra.Command, d *api.LifecycleDeploymentResult) error
 		{"Display Name", ux.Deref(d.DisplayName)},
 		{"Status", d.Status},
 		{"Message", d.StatusMessage},
-		{"Cluster", d.ClusterId},
+		locationRow(d.ClusterId, d.Region),
 		{"Environment", d.EnvironmentId},
 		{"Public Hostname", ux.Deref(d.PublicHostname)},
 	})
