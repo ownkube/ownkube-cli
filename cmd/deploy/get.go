@@ -38,7 +38,6 @@ func getCmd() *cobra.Command {
 				locationRow(d.ClusterId, d.Region),
 				{"Environment", d.EnvironmentId},
 				{"Public Hostname", d.PublicHostname},
-				{"Workflow PR", ux.Deref(d.WorkflowPullRequestUrl)},
 			}
 			rows = append(rows, sourceRows(d)...)
 			// Best-effort: the details still print when revisions can't be read.

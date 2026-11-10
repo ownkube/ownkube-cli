@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Ownkube CLI API",
-    "version": "1.14.0",
+    "version": "1.15.0",
     "description": "API for the Ownkube CLI tool. Authenticate via browser-based flow, then use x-api-key header for subsequent requests."
   },
   "servers": [
@@ -1144,7 +1144,7 @@
           "topUpMaxUsd": {
             "type": "number",
             "nullable": true,
-            "description": "Largest top-up the plan allows right now, in USD (Pay as you go caps each top-up and the rolling 30 days). Null means no cap."
+            "description": "Largest top-up the plan allows right now, in USD (Pay as you go caps the credit added per rolling 30 days). Null means no cap."
           }
         },
         "required": ["enabled", "balance", "topUpMinUsd", "topUpMaxUsd"]
@@ -1977,14 +1977,6 @@
             "type": "boolean",
             "nullable": true
           },
-          "autoDeployTagRegex": {
-            "type": "string",
-            "nullable": true
-          },
-          "githubRepository": {
-            "type": "string",
-            "nullable": true
-          },
           "source": {
             "type": "object",
             "nullable": true,
@@ -2055,10 +2047,6 @@
               "watchPaths"
             ],
             "description": "Where the code comes from (repository, upload or image). Null for databases, caches and functions."
-          },
-          "workflowPullRequestUrl": {
-            "type": "string",
-            "nullable": true
           },
           "templateInstanceId": {
             "type": "string",
@@ -2629,20 +2617,8 @@
             "type": "boolean",
             "nullable": true
           },
-          "autoDeployTagRegex": {
-            "type": "string",
-            "nullable": true
-          },
-          "githubRepository": {
-            "type": "string",
-            "nullable": true
-          },
           "source": {
             "$ref": "#/components/schemas/DeploymentSource"
-          },
-          "workflowPullRequestUrl": {
-            "type": "string",
-            "nullable": true
           },
           "appConfig": {
             "nullable": true
@@ -4147,20 +4123,8 @@
             "type": "boolean",
             "nullable": true
           },
-          "autoDeployTagRegex": {
-            "type": "string",
-            "nullable": true
-          },
-          "githubRepository": {
-            "type": "string",
-            "nullable": true
-          },
           "source": {
             "$ref": "#/components/schemas/DeploymentSource"
-          },
-          "workflowPullRequestUrl": {
-            "type": "string",
-            "nullable": true
           },
           "appConfig": {
             "nullable": true
@@ -4860,10 +4824,6 @@
             "type": "string",
             "nullable": true
           },
-          "workflowRunUrl": {
-            "type": "string",
-            "nullable": true
-          },
           "createdAt": {
             "anyOf": [
               {
@@ -4890,20 +4850,6 @@
             ]
           },
           "buildStartedAt": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "string",
-                "format": "date-time"
-              },
-              {
-                "nullable": true
-              }
-            ]
-          },
-          "imagePushedAt": {
             "anyOf": [
               {
                 "type": "string"
@@ -5374,9 +5320,6 @@
           "id": {
             "type": "string"
           },
-          "organizationId": {
-            "type": "string"
-          },
           "deploymentId": {
             "type": "string"
           },
@@ -5412,7 +5355,6 @@
         },
         "required": [
           "id",
-          "organizationId",
           "deploymentId",
           "name",
           "metric",
@@ -5449,9 +5391,6 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
-          },
-          "organizationId": {
             "type": "string"
           },
           "alertRuleId": {
@@ -5518,7 +5457,6 @@
         },
         "required": [
           "id",
-          "organizationId",
           "alertRuleId",
           "deploymentId",
           "ruleName",
